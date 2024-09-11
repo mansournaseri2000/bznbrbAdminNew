@@ -8,7 +8,7 @@ type AppTextProps = React.ComponentProps<typeof Text> & {
 
 const AppText = React.forwardRef<HTMLSpanElement, AppTextProps>(
   ({ children, ...props }: AppTextProps, forwardedRef: ForwardedRef<HTMLSpanElement>) => (
-    <Text ref={forwardedRef} {...props}>
+    <Text size={'2'} ref={forwardedRef} {...props}>
       {children}
     </Text>
   )

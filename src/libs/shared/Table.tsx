@@ -1,0 +1,77 @@
+'use client';
+
+import { Table } from '@radix-ui/themes';
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+
+import { Data } from '@/types/point';
+
+/**
+ * props
+ * _______________________________________________________________________________
+ */
+
+type Props = {
+  columns: ColumnDef<Data>[];
+  data: Data[];
+};
+
+const TableComponent = ({ columns, data }: Props) => {
+  /**
+   * const and variables
+   * _______________________________________________________________________________
+   */
+
+  /**
+   * useEffect
+   * _______________________________________________________________________________
+   */
+
+  /**
+   * hooks and methods
+   * _______________________________________________________________________________
+   */
+
+  const table = useReactTable({
+    data: data ? data : [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  /**
+   * template
+   * _______________________________________________________________________________
+   */
+  return (
+    <Table.Root style={{ width: '100%' }} variant='surface'>
+      <Table.Header>
+        {table.getHeaderGroups().map(headerGroup => (
+          <Table.Row key={headerGroup.id}>
+            {headerGroup.headers.map(header => (
+              <Table.ColumnHeaderCell style={{ textAlign: 'right' }} key={header.id}>
+                {flexRender(header.column.columnDef.header, header.getContext())}
+              </Table.ColumnHeaderCell>
+            ))}
+          </Table.Row>
+        ))}
+      </Table.Header>
+      <Table.Body>
+        {table.getRowModel().rows.map(row => (
+          <Table.Row key={row.id}>
+            {row.getVisibleCells().map(cell => (
+              <Table.Cell style={{ textAlign: 'right' }} key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </Table.Cell>
+            ))}
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table.Root>
+  );
+};
+
+export default TableComponent;
+
+/**
+ * styled-component
+ * _______________________________________________________________________________
+ */
