@@ -3,7 +3,12 @@
 import React from 'react';
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
-import { Button, Flex, Select, Slider, TextArea, TextField } from '@/libs/primitives';
+import Image, { StaticImageData } from 'next/image';
+
+import { Button, Flex, Grid, Select, Slider, TextArea, TextField } from '@/libs/primitives';
+import { ImagePicker } from '@/libs/shared';
+
+import image1 from '../../../public/image/popup-image.png';
 
 type fomrData = {
   pointName: string;
@@ -11,6 +16,8 @@ type fomrData = {
   summary_of_the_description: string;
   province: string;
   rait: number[];
+  images: { path: string | StaticImageData; id: number }[];
+  uploadImage: File | null;
 };
 
 const PointPage = ({ params }: { params: { slug: string } }) => {
@@ -25,6 +32,21 @@ const PointPage = ({ params }: { params: { slug: string } }) => {
       summary_of_the_description: '',
       province: '',
       rait: [0],
+      images: [
+        {
+          path: image1,
+          id: 2450,
+        },
+        {
+          path: image1,
+          id: 1560,
+        },
+        {
+          path: image1,
+          id: 2650,
+        },
+      ],
+      uploadImage: null,
     },
   });
   console.log(params, 'params');
@@ -40,11 +62,13 @@ const PointPage = ({ params }: { params: { slug: string } }) => {
       id: 2,
     },
   ];
-  const { control, handleSubmit } = methods;
+  const { control, handleSubmit, watch } = methods;
 
   const onSubmit: SubmitHandler<fomrData> = data => {
     console.log(data);
   };
+
+  console.log(watch());
 
   /**
    * template
@@ -120,6 +144,26 @@ const PointPage = ({ params }: { params: { slug: string } }) => {
                 )}
               />
             </Flex>
+            <Grid gap={'16px'}>
+              <Flex>
+                <ImagePicker name='uploadImage' errorText=''>
+                  <Button>اپلود عکس</Button>
+                </ImagePicker>
+              </Flex>
+              <Flex gap={'20px'}>
+                {watch('images').map(item => {
+                  return (
+                    <Flex direction={'column'} align={'center'} gap={'10px'} key={item.id} justify={'center'}>
+                      <Image width={60} height={60} alt='' src={item.path} />
+                      <Flex gap={'4px'}>
+                        <Button>edit</Button>
+                        <Button>remove</Button>
+                      </Flex>
+                    </Flex>
+                  );
+                })}
+              </Flex>
+            </Grid>
             <Button size={'4'} variant='outline'>
               ثبت تغییرات
             </Button>
