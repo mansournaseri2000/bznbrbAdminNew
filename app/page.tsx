@@ -2,20 +2,31 @@
 
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import ResponsivePagination from 'react-responsive-pagination';
 import 'react-responsive-pagination/themes/classic.css';
 
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
+import { Spinner } from '@radix-ui/themes';
+import { useQuery } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { TableData } from '@/constants/table';
-import { useDebounce } from '@/libs/hooks/useDebounce';
-import useFilteredData from '@/libs/hooks/UseGetFilterTable';
-import { Button, Flex, Text, TextField } from '@/libs/primitives';
-import { Table } from '@/libs/shared';
-import { Data } from '@/types/point';
+import { getAllPlces } from '@/api/auth';
+import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
+import { Button, Flex, Grid, Text, TextField } from '@/libs/primitives';
+import { updateUrlWithPageNumber } from '@/libs/utils';
+import { Picture, PlaceDetail } from '@/types/point';
+
+const ResponsivePagination = dynamic(
+  () => import('react-responsive-pagination').then(madule => madule.default),
+  { ssr: false }
+);
+
+const Table = dynamic(() => import('@/libs/shared/Table'), {
+  ssr: false,
+  loading: () => <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />,
+});
 
 /**
  * props
@@ -23,36 +34,58 @@ import { Data } from '@/types/point';
  */
 
 interface SearchFormInputs {
-  searchText: string;
+  plcaeName: string;
+  province: string;
+  city: string;
 }
 
-export default function Home() {
+const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams: { page: string } }) => {
   /**
    * const and variables
    * _______________________________________________________________________________
    */
-  const [page, setPage] = useState(0);
-  const { control, watch } = useForm<SearchFormInputs>({
-    defaultValues: { searchText: '' },
-  });
-  const searchText = watch('searchText');
   const { push } = useRouter();
-  const columns: ColumnDef<Data>[] = [
+  const [page, setPage] = useState(Number(searchParams.page));
+  const { control, watch } = useForm<SearchFormInputs>({
+    defaultValues: { plcaeName: '', city: '', province: '' },
+  });
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ['all-places', page],
+    queryFn: async () => getAllPlces(page),
+  });
+
+  const debouncedPlaceName = useDebounce(watch('plcaeName') || '', 300);
+  const debouncedProvince = useDebounce(watch('province') || '', 300);
+  const debouncedCity = useDebounce(watch('city') || '', 300);
+
+  // Create debounced search criteria object
+  const debouncedSearchCriteria = {
+    placeName: debouncedPlaceName,
+    province: debouncedProvince,
+    city: debouncedCity,
+  };
+
+  const columns: ColumnDef<PlaceDetail>[] = [
     {
-      accessorKey: 'image',
+      accessorKey: 'pictrues',
       header: 'تصویر',
-      cell: info => (
-        <Image
-          src={info.getValue() as string}
-          alt='profile'
-          width={50}
-          height={50}
-          style={{ borderRadius: '4px' }}
-        />
-      ),
+      cell: info => {
+        const pictures = info.getValue<Picture[]>();
+        const imageUrl = pictures.length > 0 ? `http://37.32.8.14/${pictures[0].path}` : '/placeholder.jpg';
+        return (
+          <Image
+            loading='lazy'
+            src={imageUrl}
+            alt='profile'
+            width={50}
+            height={50}
+            style={{ borderRadius: '4px' }}
+          />
+        );
+      },
     },
     {
-      accessorKey: 'pointName',
+      accessorKey: 'name',
       header: 'نام نقطه',
       cell: info => (
         <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
@@ -61,58 +94,32 @@ export default function Home() {
       ),
     },
     {
-      accessorKey: 'category',
-      header: 'دسته‌بندی',
-      cell: info => (
-        <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
-          {info.getValue() as string}
-        </Text>
-      ),
-    },
-    {
-      accessorKey: 'status',
-      header: 'وضعیت',
+      accessorKey: 'province',
+      header: 'استان',
       cell: info => {
-        const status = info.getValue() as 'complete' | 'incomplete';
+        const value = info.getValue() as string | null;
         return (
-          <Text
-            style={{
-              display: 'flex',
-              height: '100%',
-              alignItems: 'center',
-              color: status === 'complete' ? 'green' : 'red',
-            }}
-          >
-            {status === 'complete' ? 'تکمیل شده' : 'ناتمام'}
-          </Text>
+          <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</Text>
         );
       },
     },
     {
-      accessorKey: 'province',
-      header: 'استان',
-      cell: info => (
-        <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
-          {info.getValue() as string}
-        </Text>
-      ),
-    },
-    {
       accessorKey: 'city',
       header: 'شهر',
-      cell: info => (
-        <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
-          {info.getValue() as string}
-        </Text>
-      ),
+      cell: info => {
+        const value = info.getValue() as string | null;
+        return (
+          <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</Text>
+        );
+      },
     },
     {
       id: 'details',
       header: 'جزییات بیشتر',
       cell: ({ row }) => {
-        const item = row.original; // Access the row's original data
+        const item = row.original;
         const handleClick = () => {
-          push(`/point/${item.pointID}`); // Use pointName or another unique field for routing
+          push(`/point/${item.id}`);
         };
         return (
           <Flex height={'100%'} align={'center'}>
@@ -123,45 +130,102 @@ export default function Home() {
         );
       },
     },
+    {
+      id: 'trash',
+      header: 'پاک کردن',
+      cell: ({ row }) => {
+        const item = row.original;
+        const handleClick = () => {
+          console.log(item.id);
+        };
+        return (
+          <Flex height={'100%'} align={'center'}>
+            <Button variant='outline' onClick={handleClick}>
+              حذف کردن
+            </Button>
+          </Flex>
+        );
+      },
+    },
   ];
-  const debouncedSearchText = useDebounce(searchText, 500);
-  const newData = useFilteredData(debouncedSearchText, TableData);
+  const newData = UseGetFilterTable(debouncedSearchCriteria, data ? data?.placesDetail : []);
 
   /**
    * template
    * _______________________________________________________________________________
    */
   return (
-    <Flex p={'48px'} height={'100vh'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
+    <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
       <Flex
-        gap={'16px'}
+        gap={'10px'}
         direction={'column'}
         p={'16px'}
         width={'100%'}
-        minHeight={'600px'}
         maxWidth={'1000px'}
         style={{
           borderRadius: '8px',
         }}
       >
-        <Button type='button' style={{ width: 'fit-content' }}>
-          {' '}
-          اضافه کردن
-        </Button>
-        <Controller
-          name='searchText'
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              placeholder='نام نقطه مورد نظرتان را وارد کنید ...'
-              aria-label='Search field'
+        <Flex gap={'20px'}>
+          <Button type='button' style={{ width: 'fit-content', minHeight: '45px', paddingInline: '20px' }}>
+            اضافه کردن
+          </Button>
+          <Grid style={{ flex: 1 }} gap={'10px'} columns={'3'}>
+            <Controller
+              name='plcaeName'
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  placeholder='نام نقطه مورد نظرتان را وارد کنید ...'
+                  aria-label='Search field'
+                />
+              )}
             />
-          )}
+            <Controller
+              name='province'
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  placeholder='نام استان مورد نظرتان را وارد کنید ...'
+                  aria-label='Search field'
+                />
+              )}
+            />
+            <Controller
+              name='city'
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  placeholder='نام شهر مورد نظرتان را وارد کنید ...'
+                  aria-label='Search field'
+                />
+              )}
+            />
+          </Grid>
+        </Flex>
+
+        {isError ? (
+          <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
+        ) : isLoading ? (
+          <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
+        ) : (
+          <Table columns={columns as any} data={newData} />
+        )}
+
+        <ResponsivePagination
+          current={page}
+          total={data?.totalPages as number}
+          onPageChange={p => {
+            setPage(p);
+            updateUrlWithPageNumber(p);
+          }}
         />
-        <Table columns={columns} data={newData} />
-        <ResponsivePagination current={page} total={30} onPageChange={p => setPage(p)} />
       </Flex>
     </Flex>
   );
-}
+};
+
+export default LandingPage;

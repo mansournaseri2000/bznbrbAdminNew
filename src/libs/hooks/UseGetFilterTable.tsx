@@ -1,20 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
-import { Data } from '@/types/point';
+import { PlaceDetail } from '@/types/point';
 
-const useFilteredData = (searchText: string, data: Data[]) => {
-  const [filteredData, setFilteredData] = useState<Data[]>([]);
+// Define a type for search criteria
+interface SearchCriteria {
+  placeName?: string; // Optional type
+  province?: string; // Optional type
+  city?: string; // Optional type
+}
 
-  useEffect(() => {
-    if (searchText) {
-      // Filter data based on the search text
-      const newData = data.filter(item => item.pointName.includes(searchText));
-      setFilteredData(newData);
-    } else {
-      // If no search text is provided, return all data
-      setFilteredData(data);
-    }
-  }, [searchText, data]);
+const useFilteredData = (searchCriteria: SearchCriteria, data: PlaceDetail[]): PlaceDetail[] => {
+  const { placeName = '', province = '', city = '' } = searchCriteria; // Provide default values to avoid undefined
+
+  const filteredData = useMemo(() => {
+    return data.filter(item => {
+      // Check each filter criterion and apply filtering
+      const matchesPlaceName = placeName.trim() === '' || item.name.includes(placeName.trim());
+      const matchesProvince =
+        province.trim() === '' || (item.province && item.province.includes(province.trim()));
+      const matchesCity = city.trim() === '' || (item.city && item.city.includes(city.trim()));
+
+      return matchesPlaceName && matchesProvince && matchesCity;
+    });
+  }, [placeName, province, city, data]);
 
   return filteredData;
 };

@@ -9,6 +9,11 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: '37.32.8.14',
+      },
+      { hostname: '37.32.8.14', protocol: 'http' }
     ],
   },
   output: 'standalone',

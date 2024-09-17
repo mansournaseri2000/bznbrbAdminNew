@@ -1,17 +1,16 @@
 import { Suspense } from 'react';
 
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 
 import { Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 
 import RootLayout from '@/layout/RootLayout';
-import { ReactQueryProvider, StyledComponentsRegistry } from '@/libs/providers';
+import { AuthProvider, ReactQueryProvider, StyledComponentsRegistry } from '@/libs/providers';
+import Toast from '@/libs/shared/toast/Toast';
+import { Yekan } from '@/theme/font.config';
 import '@/theme/globals.css';
 import '@/theme/theme.config.css';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -24,15 +23,18 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='fa' dir='rtl'>
-      <body className={inter.className}>
+    <html className={Yekan.variable} lang='fa' dir='rtl'>
+      <body>
         <ReactQueryProvider>
           <StyledComponentsRegistry>
             <Theme radius='large' scaling='100%'>
               <Suspense>
-                <RootLayout>{children}</RootLayout>
+                <AuthProvider>
+                  <RootLayout>{children}</RootLayout>
+                </AuthProvider>
               </Suspense>
             </Theme>
+            <Toast />
           </StyledComponentsRegistry>
         </ReactQueryProvider>
       </body>

@@ -1,9 +1,11 @@
 'use client';
 
-import { Table } from '@radix-ui/themes';
+import { memo } from 'react';
+
+import { Table, Text } from '@radix-ui/themes';
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
-import { Data } from '@/types/point';
+import { PlaceDetail } from '@/types/point';
 
 /**
  * props
@@ -11,8 +13,8 @@ import { Data } from '@/types/point';
  */
 
 type Props = {
-  columns: ColumnDef<Data>[];
-  data: Data[];
+  columns: ColumnDef<PlaceDetail>[];
+  data: PlaceDetail[];
 };
 
 const TableComponent = ({ columns, data }: Props) => {
@@ -37,6 +39,8 @@ const TableComponent = ({ columns, data }: Props) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  if (data.length === 0) return <Text>دیتایی موجود نیست</Text>;
+
   /**
    * template
    * _______________________________________________________________________________
@@ -56,7 +60,7 @@ const TableComponent = ({ columns, data }: Props) => {
       </Table.Header>
       <Table.Body>
         {table.getRowModel().rows.map(row => (
-          <Table.Row key={row.id}>
+          <Table.Row style={{ height: '80px' }} key={row.id}>
             {row.getVisibleCells().map(cell => (
               <Table.Cell style={{ textAlign: 'right' }} key={cell.id}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -69,7 +73,7 @@ const TableComponent = ({ columns, data }: Props) => {
   );
 };
 
-export default TableComponent;
+export default memo(TableComponent);
 
 /**
  * styled-component

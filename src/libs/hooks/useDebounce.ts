@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
-export function useDebounce(value: string, delay: number) {
+// Custom hook for debouncing a value
+const useDebounce = <T>(value: T, delay: number): T => {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
@@ -8,10 +9,13 @@ export function useDebounce(value: string, delay: number) {
       setDebouncedValue(value);
     }, delay);
 
+    // Cleanup function to clear timeout if the effect re-runs
     return () => {
       clearTimeout(handler);
     };
   }, [value, delay]);
 
   return debouncedValue;
-}
+};
+
+export default useDebounce;

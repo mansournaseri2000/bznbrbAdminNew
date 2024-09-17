@@ -1,0 +1,75 @@
+.radix-themes {
+  --default-font-family: var(--yekan-font) !important;
+  font-family: var(--yekan-font) !important;
+
+  --cursor-button: pointer !important;
+
+  --font-weight-regular: 400 !important;
+  --font-weight-medium: 500 !important;
+  --font-weight-bold: 700 !important;
+
+  --font-size-1: 18px !important;
+  --font-size-2: 16px !important;
+  --font-size-3: 14px !important;
+  --font-size-4: 12px !important;
+  --font-size-5: 10px !important;
+  --font-size-6: 22px !important;
+  --font-size-7: 24px !important;
+  --font-size-8: 32px !important;
+  --font-size-9: 40px !important;
+
+  --line-height-1: auto !important;
+  --line-height-2: auto !important;
+  --line-height-3: 25px !important;
+  --line-height-4: auto !important;
+  --line-height-5: auto !important;
+  --line-height-6: auto !important;
+  --line-height-7: auto !important;
+  --line-height-8: auto !important;
+  --line-height-9: auto !important;
+
+  /* Heading */
+
+  .rt-Heading {
+    font-family: var(--yekan-font);
+    font-style: normal;
+
+    &:where(.rt-r-size-1) {
+      font-size: 48px;
+      --line-height: auto;
+      font-weight: 700;
+    }
+    &:where(.rt-r-size-2) {
+      font-size: 44px;
+      --line-height: auto;
+      font-weight: 700;
+    }
+    &:where(.rt-r-size-3) {
+      font-size: 40px;
+      --line-height: auto;
+      font-weight: 700;
+    }
+    &:where(.rt-r-size-4) {
+      font-size: 20px;
+      --line-height: auto;
+      font-weight: 700;
+    }
+    &:where(.rt-r-size-5) {
+      font-size: 20px;
+      --line-height: auto;
+      font-weight: 400;
+    }
+    &:where(.rt-r-size-6) {
+      font-size: 18px;
+      --line-height: auto;
+      font-weight: 400;
+    }
+  }
+
+  .rt-BaseCheckboxRoot:where(.rt-variant-surface):where(
+      [data-state='checked'],
+      [data-state='indeterminate']
+    )::before {
+    background-color: rgba(0, 156, 155, 1);
+  }
+}
