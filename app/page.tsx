@@ -9,12 +9,12 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
-import { useQuery } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { getAllPlces } from '@/api/auth';
+import { useGetAllPlaces, useRemovePlace } from '@/api/place';
+import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
-import { Button, Flex, Grid, Text, TextField } from '@/libs/primitives';
+import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
 import { updateUrlWithPageNumber } from '@/libs/utils';
 import { Picture, PlaceDetail } from '@/types/point';
 
@@ -44,27 +44,6 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
    * const and variables
    * _______________________________________________________________________________
    */
-  const { push } = useRouter();
-  const [page, setPage] = useState(Number(searchParams.page));
-  const { control, watch } = useForm<SearchFormInputs>({
-    defaultValues: { plcaeName: '', city: '', province: '' },
-  });
-  const { data, isError, isLoading } = useQuery({
-    queryKey: ['all-places', page],
-    queryFn: async () => getAllPlces(page),
-  });
-
-  const debouncedPlaceName = useDebounce(watch('plcaeName') || '', 300);
-  const debouncedProvince = useDebounce(watch('province') || '', 300);
-  const debouncedCity = useDebounce(watch('city') || '', 300);
-
-  // Create debounced search criteria object
-  const debouncedSearchCriteria = {
-    placeName: debouncedPlaceName,
-    province: debouncedProvince,
-    city: debouncedCity,
-  };
-
   const columns: ColumnDef<PlaceDetail>[] = [
     {
       accessorKey: 'pictrues',
@@ -136,7 +115,9 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
       cell: ({ row }) => {
         const item = row.original;
         const handleClick = () => {
-          console.log(item.id);
+          console.log(item);
+          setPlaceItem(item);
+          setIsOpen(true);
         };
         return (
           <Flex height={'100%'} align={'center'}>
@@ -148,83 +129,121 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
       },
     },
   ];
+  const [isOpen, setIsOpen] = useState(false);
+  const { push } = useRouter();
+  const [page, setPage] = useState(Number(searchParams.page));
+  const { data, isError, isLoading } = useGetAllPlaces({ page: page });
+
+  const { control, watch } = useForm<SearchFormInputs>({
+    defaultValues: { plcaeName: '', city: '', province: '' },
+  });
+
+  const debouncedPlaceName = useDebounce(watch('plcaeName') || '', 300);
+  const debouncedProvince = useDebounce(watch('province') || '', 300);
+  const debouncedCity = useDebounce(watch('city') || '', 300);
+
+  // Create debounced search criteria object
+  const debouncedSearchCriteria = {
+    placeName: debouncedPlaceName,
+    province: debouncedProvince,
+    city: debouncedCity,
+  };
+
   const newData = UseGetFilterTable(debouncedSearchCriteria, data ? data?.placesDetail : []);
+  const [placeItem, setPlaceItem] = useState<PlaceDetail>(newData[0]);
+  const { removePlaceIsPending, removePlaceMutate } = useRemovePlace({ id: placeItem?.id });
 
   /**
    * template
    * _______________________________________________________________________________
    */
   return (
-    <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
-      <Flex
-        gap={'10px'}
-        direction={'column'}
-        p={'16px'}
-        width={'100%'}
-        maxWidth={'1000px'}
-        style={{
-          borderRadius: '8px',
-        }}
-      >
-        <Flex gap={'20px'}>
-          <Button type='button' style={{ width: 'fit-content', minHeight: '45px', paddingInline: '20px' }}>
-            اضافه کردن
-          </Button>
-          <Grid style={{ flex: 1 }} gap={'10px'} columns={'3'}>
-            <Controller
-              name='plcaeName'
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  placeholder='نام نقطه مورد نظرتان را وارد کنید ...'
-                  aria-label='Search field'
-                />
-              )}
-            />
-            <Controller
-              name='province'
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  placeholder='نام استان مورد نظرتان را وارد کنید ...'
-                  aria-label='Search field'
-                />
-              )}
-            />
-            <Controller
-              name='city'
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  placeholder='نام شهر مورد نظرتان را وارد کنید ...'
-                  aria-label='Search field'
-                />
-              )}
-            />
-          </Grid>
-        </Flex>
-
-        {isError ? (
-          <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
-        ) : isLoading ? (
-          <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
-        ) : (
-          <Table columns={columns as any} data={newData} />
-        )}
-
-        <ResponsivePagination
-          current={page}
-          total={data?.totalPages as number}
-          onPageChange={p => {
-            setPage(p);
-            updateUrlWithPageNumber(p);
+    <>
+      <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
+        <Flex
+          gap={'10px'}
+          direction={'column'}
+          p={'16px'}
+          width={'100%'}
+          maxWidth={'1000px'}
+          style={{
+            borderRadius: '8px',
           }}
-        />
+        >
+          <SearchAllPlaces />
+          <Flex gap={'20px'}>
+            <Button type='button' style={{ width: 'fit-content', minHeight: '45px', paddingInline: '20px' }}>
+              اضافه کردن
+            </Button>
+            <Grid style={{ flex: 1 }} gap={'10px'} columns={'3'}>
+              <Controller
+                name='plcaeName'
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    placeholder='نام نقطه مورد نظرتان را وارد کنید ...'
+                    aria-label='Search field'
+                  />
+                )}
+              />
+              <Controller
+                name='province'
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    placeholder='نام استان مورد نظرتان را وارد کنید ...'
+                    aria-label='Search field'
+                  />
+                )}
+              />
+              <Controller
+                name='city'
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    placeholder='نام شهر مورد نظرتان را وارد کنید ...'
+                    aria-label='Search field'
+                  />
+                )}
+              />
+            </Grid>
+          </Flex>
+
+          {isError ? (
+            <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
+          ) : isLoading ? (
+            <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
+          ) : (
+            <Table columns={columns as any} data={newData} />
+          )}
+
+          <ResponsivePagination
+            current={page}
+            total={data?.totalPages as number}
+            onPageChange={p => {
+              setPage(p);
+              updateUrlWithPageNumber(p);
+            }}
+          />
+        </Flex>
       </Flex>
-    </Flex>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Grid gap={'24px'}>
+          <Text>{`آیا از حذف ${placeItem?.name} مطمین هستید ؟`}</Text>
+          <Grid gap={'10px'} columns={'2'}>
+            <Button onClick={() => removePlaceMutate()} variant='soft' size={'4'}>
+              <Text>{removePlaceIsPending ? <Spinner /> : 'بله'}</Text>
+            </Button>
+            <Button type='button' onClick={() => setIsOpen(false)} variant='solid' size={'4'}>
+              خیر
+            </Button>
+          </Grid>
+        </Grid>
+      </Modal>
+    </>
   );
 };
 

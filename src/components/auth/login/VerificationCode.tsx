@@ -4,18 +4,15 @@ import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Spinner } from '@radix-ui/themes';
-import { useMutation } from '@tanstack/react-query';
 import styled from 'styled-components';
 import Cookies from 'universal-cookie';
 import * as Yup from 'yup';
 
-import { checkOtp, mobileRegister } from '@/api/auth';
+import { useGetCheckOtp, useGetMobileRegister } from '@/api/auth';
 import { Button, Flex, Grid, Text, TextField } from '@/libs/primitives';
-import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import AuthLogo from '@/public/image/auth-log.png';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
@@ -46,7 +43,6 @@ const VerificationCode = () => {
    */
   const cookie = new Cookies(null, { path: '/' });
   const mobileNumber = cookie.get('mobile-number');
-  const { push } = useRouter();
   const [isEnd, setIsEnd] = useState(false);
   const {
     register,
@@ -65,32 +61,11 @@ const VerificationCode = () => {
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const { mutate: checkOtpMutate, isPending: checkOtpPending } = useMutation({
-    mutationFn: async ({ mobile, otp }: { mobile: string; otp: string }) =>
-      checkOtp({ mobile: mobile, otp: otp }),
-    onSuccess: async data => {
-      if (data.status === true) {
-        cookie.set('token', data.data);
-        cookie.remove('mobile-number');
-        ToastSuccess('شما با موفقیت وارد پنل شدید');
-        push('/?page=1');
-      } else {
-        ToastError('لطفا بعد از چند دقیقه دوباره امتحان نمایید');
-      }
-    },
-    onError: err => {
-      console.log(err);
-    },
-  });
 
-  const { mutate: mobileRegisterMutate, isPending: mobileRegisterPending } = useMutation({
-    mutationFn: async () => mobileRegister({ mobile: mobileNumber }),
-    onSuccess: async () => {
-      ToastSuccess('مجددا کد برای شما ارسال شد');
-    },
-    onError: () => {
-      ToastError('لطفا بعد از چند دقیقه دوباره امتحان نمایید');
-    },
+  const { checkOtpMutate, checkOtpIsPending } = useGetCheckOtp({ cookies: cookie });
+  const { mobileRegisterMutate, mobileRegisterIsPending } = useGetMobileRegister({
+    mobileNumber: mobileNumber,
+    cookies: cookie,
   });
 
   const onSubmit: SubmitHandler<IFormInput> = data => {
@@ -140,7 +115,7 @@ const VerificationCode = () => {
             />
             <Grid gap={'16px'}>
               <Button variant='soft' size={'4'}>
-                {checkOtpPending ? (
+                {checkOtpIsPending ? (
                   <Spinner />
                 ) : (
                   <Text {...typoVariant.body1} style={{ color: colorPalette.gray[1] }}>
@@ -151,7 +126,7 @@ const VerificationCode = () => {
               <Button
                 onClick={() => {
                   if (isEnd) {
-                    mobileRegisterMutate();
+                    mobileRegisterMutate(mobileNumber);
                   }
                 }}
                 type='button'
@@ -160,12 +135,12 @@ const VerificationCode = () => {
               >
                 <Flex gap={'5px'}>
                   {!isEnd && <Timer handleEndTime={handleEndTime} />}
-                  {isEnd && !mobileRegisterPending && (
+                  {isEnd && !mobileRegisterIsPending && (
                     <Text {...typoVariant.body1} style={{ color: colorPalette.turquoise[11] }}>
                       ارسال مجدد
                     </Text>
                   )}
-                  {mobileRegisterPending && <Spinner />}
+                  {mobileRegisterIsPending && <Spinner />}
                 </Flex>
               </Button>
             </Grid>

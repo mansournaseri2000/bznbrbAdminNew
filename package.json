@@ -37,6 +37,7 @@
     "react-responsive-pagination": "^2.7.1",
     "react-spring-bottom-sheet": "^3.4.1",
     "react-toastify": "^10.0.5",
+    "sharp": "^0.33.5",
     "styled-components": "6.1.12",
     "universal-cookie": "^7.2.0",
     "yup": "1.4.0"

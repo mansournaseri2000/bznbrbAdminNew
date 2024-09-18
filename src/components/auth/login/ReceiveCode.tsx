@@ -8,12 +8,11 @@ import { useRouter } from 'next/navigation';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Spinner } from '@radix-ui/themes';
-import { useMutation } from '@tanstack/react-query';
 import styled from 'styled-components';
 import Cookies from 'universal-cookie';
 import * as yup from 'yup';
 
-import { mobileRegister } from '@/api/auth';
+import { useGetMobileRegister } from '@/api/auth';
 import { Button, Flex, Text, TextField } from '@/libs/primitives';
 import AuthLogo from '@/public/image/auth-log.png';
 import { colorPalette } from '@/theme';
@@ -24,7 +23,6 @@ import { typoVariant } from '@/theme/typo-variants';
  * _______________________________________________________________________________
  */
 const iranianMobileNumberRegex = /^(\+98|0|۰)?[9۹][0-9۰-۹]{9}$/;
-
 const validationSchema = yup.object().shape({
   mobileNumber: yup
     .string()
@@ -36,7 +34,6 @@ const validationSchema = yup.object().shape({
  * props
  * _______________________________________________________________________________
  */
-
 interface LoginFormInputs {
   mobileNumber: string;
 }
@@ -46,7 +43,7 @@ const ReceiveCode = () => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const cookie = new Cookies();
+  const cookie = new Cookies(null, { path: '/' });
   const { push } = useRouter();
 
   /**
@@ -58,17 +55,6 @@ const ReceiveCode = () => {
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (val: string) => mobileRegister({ mobile: val }),
-    onSuccess: async data => {
-      console.log('run', data);
-      cookie.set('mobile-number', watch('mobileNumber'));
-    },
-    onError: err => {
-      console.log(err);
-    },
-  });
-
   const {
     watch,
     register,
@@ -78,9 +64,13 @@ const ReceiveCode = () => {
     resolver: yupResolver(validationSchema),
   });
 
+  const { mobileRegisterMutate, mobileRegisterIsPending } = useGetMobileRegister({
+    mobileNumber: watch('mobileNumber'),
+    cookies: cookie,
+  });
   const onSubmit = (data: LoginFormInputs) => {
     console.log(data);
-    mutate(data.mobileNumber);
+    mobileRegisterMutate(data.mobileNumber);
     push('/auth/login/verificationCode');
   };
 
@@ -122,7 +112,7 @@ const ReceiveCode = () => {
               placeholder='شماره تماس'
             />
             <Button variant='soft' disabled={errors.mobileNumber ? true : false} type='submit' size={'4'}>
-              {isPending ? (
+              {mobileRegisterIsPending ? (
                 <Spinner />
               ) : (
                 <Text {...typoVariant.body1} style={{ color: colorPalette.gray[1] }}>
