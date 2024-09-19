@@ -7,7 +7,7 @@ export const middleware = async (request: NextRequest) => {
   const response = NextResponse.next();
 
   if (!token) {
-    return NextResponse.redirect(new URL('/auth/login/receiveCode', request.url).toString());
+    // return NextResponse.redirect(new URL('/auth/login/receiveCode', request.url).toString());
   }
 
   return response;

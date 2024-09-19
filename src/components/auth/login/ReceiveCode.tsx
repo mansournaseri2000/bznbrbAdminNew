@@ -4,7 +4,6 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Spinner } from '@radix-ui/themes';
@@ -44,8 +43,6 @@ const ReceiveCode = () => {
    * _______________________________________________________________________________
    */
   const cookie = new Cookies(null, { path: '/' });
-  const { push } = useRouter();
-
   /**
    * useEffect
    * _______________________________________________________________________________
@@ -71,7 +68,6 @@ const ReceiveCode = () => {
   const onSubmit = (data: LoginFormInputs) => {
     console.log(data);
     mobileRegisterMutate(data.mobileNumber);
-    push('/auth/login/verificationCode');
   };
 
   /**

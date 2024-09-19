@@ -25,14 +25,16 @@ export const useGetMobileRegister = ({
   mobileNumber: string;
   cookies: Cookies;
 }) => {
+  const { push } = useRouter();
   const { mutate: mobileRegisterMutate, isPending: mobileRegisterIsPending } = useMutation({
     mutationFn: async (val: string) => mobileRegister({ mobile: val }),
-    onSuccess: async data => {
-      console.log('run', data);
+    onSuccess: async () => {
       cookies.set('mobile-number', mobileNumber);
+      push('/auth/login/verificationCode');
     },
     onError: err => {
-      console.log(err);
+      ToastError('مشکلی پیش آمده لطفا دوباره امتحان نمایید');
+      console.log(err, 'mobile-register services');
     },
   });
 
@@ -67,7 +69,7 @@ export const useGetCheckOtp = ({ cookies }: { cookies: Cookies }) => {
       }
     },
     onError: err => {
-      console.log(err);
+      console.log(err, 'check-otp services');
     },
   });
 

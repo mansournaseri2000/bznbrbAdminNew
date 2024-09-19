@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Popover } from '@radix-ui/themes';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import styled from 'styled-components';
 
 import { getAllPlacesByName } from '@/api/place';
 import { Button, Flex, Grid, Text, TextField } from '@/libs/primitives';
@@ -47,7 +47,7 @@ const SearchAllPlaces = () => {
         fetchNextPage();
       }
     },
-    [fetchNextPage, hasNextPage]
+    [fetchNextPage]
   );
 
   useEffect(() => {
@@ -72,9 +72,7 @@ const SearchAllPlaces = () => {
         observer.unobserve(element);
       }
     };
-  }, [handleObserver, fetchNextPage, hasNextPage]);
-
-  console.log(data, 'data');
+  }, [handleObserver]);
 
   console.log(watch());
 
@@ -88,66 +86,46 @@ const SearchAllPlaces = () => {
    * _______________________________________________________________________________
    */
   return (
-    <Grid>
-      <Popover.Root>
-        <Popover.Trigger>
-          <Grid>
-            <TextField
-              autoFocus
-              {...register('searchText')}
-              color='red'
-              placeholder='نام نقطه مورد نظرتان را وارد کنید ...'
-              aria-label='Search field'
-              style={{ backgroundColor: '#ffff' }}
-            />
-          </Grid>
-        </Popover.Trigger>
-        <Popover.Content
-          style={{
-            maxHeight: '500px',
-            overflowY: 'auto', // Enable scrolling in the popover content
-            border: '1px solid red',
-            padding: '10px',
-            position: 'relative',
-          }}
-        >
-          {/* Main content */}
-          <Grid style={{ minHeight: '1000px' }}>
-            {isSuccess &&
-              data?.pages.map((page, index) =>
-                !page?.placesDetail?.length ? (
-                  <Flex key={index} style={{ width: '100%', height: '80px' }}>
-                    دیتایی باقت نشد
-                  </Flex>
-                ) : (
-                  <Grid key={index} gap={'16px'}>
-                    {page?.placesDetail?.map((item: any) => (
-                      <Flex key={item} p={'24px'} style={{ border: '1px solid red' }}>
-                        data
-                      </Flex>
-                    ))}
-                  </Grid>
-                )
-              )}
-          </Grid>
-
-          {/* Loading element */}
-          <div
-            ref={observerElem}
-            style={{
-              height: '50px',
-              border: '1px dashed grey',
-              marginTop: '10px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+    <Grid position={'relative'}>
+      <TextField
+        autoFocus
+        {...register('searchText')}
+        placeholder='نام نقطه مورد نظرتان را وارد کنید ...'
+        aria-label='Search field'
+        style={{ backgroundColor: '#ffff' }}
+      />
+      <SearchContainer
+        top={'55px'}
+        right={'0px'}
+        left={'0px'}
+        position={'absolute'}
+        isShow={watch('searchText').length > 0}
+      >
+        <Grid position={'relative'} p={'16px'} className='wrapper'>
+          {isSuccess &&
+            data?.pages.map((page, index) =>
+              !page?.placesDetail?.length ? (
+                <Flex key={index} style={{ width: '100%', height: '80px' }}>
+                  دیتایی باقت نشد
+                </Flex>
+              ) : (
+                <Grid key={index} gap={'16px'}>
+                  {page?.placesDetail?.map((item: any) => (
+                    <Flex key={item} p={'24px'} style={{ border: '1px solid red' }}>
+                      data
+                    </Flex>
+                  ))}
+                </Grid>
+              )
+            )}
+          <ObserverElement ref={observerElem}>
             {isFetchingNextPage && hasNextPage && <Text>loading</Text>}
-          </div>
-          {isSuccess && data?.pages[0]?.placesDetail?.length !== 0 && <Button>show more</Button>}
-        </Popover.Content>
-      </Popover.Root>
+          </ObserverElement>
+          {isSuccess && data?.pages[0]?.placesDetail?.length !== 0 && (
+            <Button style={{ border: '1px solid blue' }}>show more</Button>
+          )}
+        </Grid>
+      </SearchContainer>
     </Grid>
   );
 };
@@ -158,3 +136,28 @@ export default SearchAllPlaces;
  * styled-component
  * _______________________________________________________________________________
  */
+
+const SearchContainer = styled(Grid)<{ isShow: boolean }>`
+  opacity: ${({ isShow }) => (isShow ? 1 : 0)} !important;
+  height: ${({ isShow }) => (isShow ? '500px' : '0px')} !important;
+  transition: all 0.3s;
+  border-radius: 8px;
+  background-color: #fff;
+  border: 1px solid #00000048;
+  z-index: 1000;
+  max-height: 500px;
+  overflow: auto;
+
+  .wrapper {
+    min-height: 1000px;
+  }
+`;
+
+const ObserverElement = styled(Grid)`
+  height: 50px;
+  border: 1px solid red;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  left: 10px;
+`;

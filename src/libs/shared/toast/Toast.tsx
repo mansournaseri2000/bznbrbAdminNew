@@ -9,7 +9,7 @@ import { ToastContainer } from './toast.style';
 const Toast = () => {
   return (
     <ToastContainer
-      position='bottom-right'
+      position='top-center'
       autoClose={2000}
       hideProgressBar={false}
       newestOnTop={true}
