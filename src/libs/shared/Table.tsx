@@ -5,7 +5,7 @@ import { memo } from 'react';
 import { Table, Text } from '@radix-ui/themes';
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
-import { PlaceDetail } from '@/types/point';
+import { PlaceDetail } from '@/types/place';
 
 /**
  * props

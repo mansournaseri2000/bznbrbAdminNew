@@ -8,3 +8,19 @@ body {
 * {
   direction: rtl;
 }
+
+a {
+  display: flex;
+  align-items: center;
+  text-decoration: none; /* Removes the underline */
+  color: inherit; /* Inherits the color from the parent element */
+  cursor: pointer; /* Ensures the cursor stays as a pointer */
+  background: none; /* Removes any background color */
+  border: none; /* Removes any border */
+  padding: 0; /* Resets padding */
+  margin: 0; /* Resets margin */
+  font: inherit; /* Inherits the font settings from the parent element */
+  line-height: inherit; /* Inherits the line-height */
+  text-align: inherit; /* Inherits the text alignment */
+  text-transform: none; /* Ensures no text transformation */
+}

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { PlaceDetail } from '@/types/point';
+import { PlaceDetail } from '@/types/place';
 
 // Define a type for search criteria
 interface SearchCriteria {

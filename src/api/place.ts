@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { ApiManager } from '@/libs/utils/axios.config';
-import { PlacesDetailResponse } from '@/types/point';
+import { AllPlaceConstant, PlacesDetailResponse } from '@/types/place';
 
 import { ApiData } from './types';
 
@@ -64,4 +64,24 @@ export const useRemovePlace = ({ id }: { id: number }) => {
   });
 
   return { removePlaceMutate, removePlaceIsPending };
+};
+
+/**
+ * all-constants services
+ * _______________________________________________________________________________
+ */
+
+export const getAllPlacesConstants = async () => {
+  const res = await ApiManager.get<ApiData<AllPlaceConstant>>(`places/create-data`);
+
+  return res.data.data;
+};
+
+export const useGetAllPlacesConstants = () => {
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ['place-constant'],
+    queryFn: async () => getAllPlacesConstants(),
+  });
+
+  return { data, isError, isLoading };
 };

@@ -6,6 +6,7 @@ import { Slider as RadixSlider } from '@radix-ui/themes';
 import styled from 'styled-components';
 
 import { ErrorText } from '@/libs/shared';
+import { colorPalette } from '@/theme';
 
 import { Flex } from '../index';
 
@@ -34,18 +35,18 @@ const StyledSlider = styled(RadixSlider)`
   width: -webkit-fill-available;
   --slider-thumb-size: 16px;
   --slider-track-height: 4px;
-  --slider-track-color: #e2e8f0;
-  --slider-thumb-color: #fcfcfd;
+  --slider-track-color: red;
+  --slider-thumb-color: red;
   --slider-thumb-border-radius: 50%;
-  --slider-thumb-border: 2px solid #1a202c;
+  --slider-thumb-border: 2px solid red;
 
   .rt-SliderTrack {
-    background-color: var(--slider-track-color);
-    height: var(--slider-track-height);
+    height: 8px;
+    background-color: ${colorPalette.gray[1]};
   }
 
   .rt-SliderThumb {
-    background-color: var(--slider-thumb-color);
+    background-color: red;
     border: var(--slider-thumb-border);
     border-radius: var(--slider-thumb-border-radius);
     width: var(--slider-thumb-size);
@@ -54,5 +55,17 @@ const StyledSlider = styled(RadixSlider)`
 
   &.rt-Slider:where(.rt-variant-surface) {
     --slider-focus-color: none;
+  }
+
+  & .rt-SliderThumb {
+    border: 1px solid red;
+    color: red;
+  }
+
+  .rt-SliderThumb::after {
+    background-color: ${colorPalette.amber[6]};
+  }
+  &.rt-SliderRoot:where(.rt-variant-surface) :where(.rt-SliderRange) {
+    background-color: ${colorPalette.turquoise[9]};
   }
 `;

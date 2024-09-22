@@ -9,14 +9,16 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { useGetAllPlaces, useRemovePlace } from '@/api/place';
+import { removePlace, useGetAllPlaces } from '@/api/place';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
+import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { updateUrlWithPageNumber } from '@/libs/utils';
-import { Picture, PlaceDetail } from '@/types/point';
+import { picture, PlaceDetail } from '@/types/place';
 
 const ResponsivePagination = dynamic(
   () => import('react-responsive-pagination').then(madule => madule.default),
@@ -44,12 +46,13 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
    * const and variables
    * _______________________________________________________________________________
    */
+  const queryClient = useQueryClient();
   const columns: ColumnDef<PlaceDetail>[] = [
     {
       accessorKey: 'pictrues',
       header: 'تصویر',
       cell: info => {
-        const pictures = info.getValue<Picture[]>();
+        const pictures = info.getValue<picture[]>();
         const imageUrl = pictures.length > 0 ? `http://37.32.8.14/${pictures[0].path}` : '/placeholder.jpg';
         return (
           <Image
@@ -98,7 +101,7 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
       cell: ({ row }) => {
         const item = row.original;
         const handleClick = () => {
-          push(`/point/${item.id}`);
+          push(`/place/${item.id}`);
         };
         return (
           <Flex height={'100%'} align={'center'}>
@@ -151,7 +154,21 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
 
   const newData = UseGetFilterTable(debouncedSearchCriteria, data ? data?.placesDetail : []);
   const [placeItem, setPlaceItem] = useState<PlaceDetail>(newData[0]);
-  const { removePlaceIsPending, removePlaceMutate } = useRemovePlace({ id: placeItem?.id });
+  const { mutate: removePlaceMutate, isPending: removePlaceIsPending } = useMutation({
+    mutationFn: async () => removePlace(placeItem.id),
+    onSuccess: async data => {
+      if (data.status === true) {
+        queryClient.invalidateQueries({ queryKey: ['all-places'] });
+        ToastSuccess('مکان مورد نظر با موفقیت حذف شد');
+        setIsOpen(false);
+      } else {
+        ToastError('لطفا دوباره امتحان نمایید');
+      }
+    },
+    onError: err => {
+      console.log(err, 'useRemovePlace');
+    },
+  });
 
   /**
    * template

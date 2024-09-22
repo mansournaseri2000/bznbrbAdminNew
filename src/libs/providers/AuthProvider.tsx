@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (!user?.token) {
-      // router.push('/auth/login/receiveCode');
+      router.push('/auth/login/receiveCode');
     }
   }, [user?.token, router]);
 

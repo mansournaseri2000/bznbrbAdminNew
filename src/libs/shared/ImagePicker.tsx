@@ -35,7 +35,7 @@ const ImagePicker = ({ name, children, errorText }: Props) => {
       name={name}
       control={control}
       render={({ field }) => (
-        <Flex position={'relative'} direction={'column'} pb='10px'>
+        <Flex height={'fit-content'} width={'fit-content'} position={'relative'} direction={'column'}>
           <Dropzone
             onDrop={files => onDrop(files, field.onChange)}
             accept={{
@@ -45,9 +45,7 @@ const ImagePicker = ({ name, children, errorText }: Props) => {
             {({ getRootProps, getInputProps }) => (
               <div {...getRootProps()}>
                 <input {...getInputProps()} />
-                <Flex gap={'2'} justify={'center'} direction={'column'} align={'center'}>
-                  {children}
-                </Flex>
+                <Flex>{children}</Flex>
               </div>
             )}
           </Dropzone>

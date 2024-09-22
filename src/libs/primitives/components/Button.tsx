@@ -24,6 +24,7 @@ AppButton.displayName = 'Button';
 export default AppButton;
 
 const ButtonStyle = styled(Button)`
+  cursor: pointer;
   &.rt-Button:where(.rt-r-size-4):where(.rt-variant-soft) {
     border-radius: 12px;
     background-color: ${colorPalette.turquoise[9]} !important;

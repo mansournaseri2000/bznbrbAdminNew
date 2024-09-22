@@ -3,11 +3,15 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { Spinner } from '@radix-ui/themes';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import { getAllPlacesByName } from '@/api/place';
-import { Button, Flex, Grid, Text, TextField } from '@/libs/primitives';
+import { Flex, Grid, TextField } from '@/libs/primitives';
+import { PlaceDetail } from '@/types/place';
+
+import SearchPlaceCard from './SearchPlaceCard';
 
 /**
  * props
@@ -31,7 +35,7 @@ const SearchAllPlaces = () => {
   });
 
   const { data, isSuccess, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<any>({
-    queryKey: ['search-all-places'],
+    queryKey: ['search-all-places', watch('searchText')],
     queryFn: ({ pageParam = 1 }) => getAllPlacesByName(pageParam, watch('searchText')),
     getNextPageParam: (lastPage: any, allPages: any) => {
       const nextPage = allPages.length + 1;
@@ -47,7 +51,7 @@ const SearchAllPlaces = () => {
         fetchNextPage();
       }
     },
-    [fetchNextPage]
+    [fetchNextPage, hasNextPage]
   );
 
   useEffect(() => {
@@ -72,9 +76,9 @@ const SearchAllPlaces = () => {
         observer.unobserve(element);
       }
     };
-  }, [handleObserver]);
+  }, [handleObserver, fetchNextPage, hasNextPage]);
 
-  console.log(watch());
+  console.log(data);
 
   /**
    * hooks and methods
@@ -101,29 +105,35 @@ const SearchAllPlaces = () => {
         position={'absolute'}
         isShow={watch('searchText').length > 0}
       >
-        <Grid position={'relative'} p={'16px'} className='wrapper'>
+        <Grid position={'relative'} p={'16px'} className='wrapper' height={'auto'}>
           {isSuccess &&
             data?.pages.map((page, index) =>
-              !page?.placesDetail?.length ? (
+              data.pages.length === 1 ? (
                 <Flex key={index} style={{ width: '100%', height: '80px' }}>
                   دیتایی باقت نشد
                 </Flex>
               ) : (
-                <Grid key={index} gap={'16px'}>
-                  {page?.placesDetail?.map((item: any) => (
-                    <Flex key={item} p={'24px'} style={{ border: '1px solid red' }}>
-                      data
-                    </Flex>
+                <Grid key={index} gap={'16px'} mb={'10px'}>
+                  {page?.placesDetail?.map((item: PlaceDetail) => (
+                    <SearchPlaceCard
+                      key={item.id}
+                      city={item.city}
+                      name={item.name}
+                      pictures={item.pictures}
+                      province={item.province}
+                      id={item.id}
+                    />
                   ))}
                 </Grid>
               )
             )}
           <ObserverElement ref={observerElem}>
-            {isFetchingNextPage && hasNextPage && <Text>loading</Text>}
+            {isFetchingNextPage && hasNextPage && (
+              <Flex justify={'center'}>
+                <Spinner style={{ scale: 2 }} />
+              </Flex>
+            )}
           </ObserverElement>
-          {isSuccess && data?.pages[0]?.placesDetail?.length !== 0 && (
-            <Button style={{ border: '1px solid blue' }}>show more</Button>
-          )}
         </Grid>
       </SearchContainer>
     </Grid>
@@ -149,15 +159,13 @@ const SearchContainer = styled(Grid)<{ isShow: boolean }>`
   overflow: auto;
 
   .wrapper {
-    min-height: 1000px;
   }
 `;
 
 const ObserverElement = styled(Grid)`
   height: 50px;
-  border: 1px solid red;
   position: absolute;
-  bottom: 10px;
+  bottom: 0px;
   right: 10px;
   left: 10px;
 `;

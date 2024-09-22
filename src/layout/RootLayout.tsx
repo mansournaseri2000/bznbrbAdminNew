@@ -5,7 +5,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
     <>
       {/* <DesktopHeader />
       <MobileHeader /> */}
-      <main>{children}</main>
+      <main style={{ paddingBlock: '24px' }}>{children}</main>
       {/* <BottomNavigation />
       <Footer /> */}
     </>
