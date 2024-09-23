@@ -14,6 +14,7 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
 import { SearchAllPlaces } from '@/components/place';
+import Menu from '@/layout/Menu';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
@@ -246,7 +247,9 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
             }}
           />
         </Flex>
+        <Menu />
       </Flex>
+      {/* Menu */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <Grid gap={'24px'}>
           <Text>{`آیا از حذف ${placeItem?.name} مطمین هستید ؟`}</Text>
