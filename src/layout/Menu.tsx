@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Link from 'next/link';
+
 import { Flex, Text } from '@radix-ui/themes';
 import styled from 'styled-components';
 
@@ -13,13 +15,17 @@ const Menu = () => {
         <>
           {option.type === 'collapse' ? (
             <ItemWrapper key={index} p={'2'}>
-              <Text>{option.label}</Text>
+              <Link style={{ width: '100%' }} href={option.path ? option.path : ''}>
+                <Text>{option.label}</Text>
+              </Link>
             </ItemWrapper>
           ) : option.type === 'expand' ? (
             <Accordion key={index} triggerText={option.label}>
               {option.items?.map((item, i) => (
                 <Flex p={'2'} pr={'5'} mt={'2'} key={i}>
-                  <Text>{item.label}</Text>
+                  <Link style={{ width: '100%' }} href={item.path ? item.path : ''}>
+                    <Text>{item.label}</Text>
+                  </Link>
                 </Flex>
               ))}
             </Accordion>
