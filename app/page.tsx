@@ -16,6 +16,7 @@ import { removePlace, useGetAllPlaces } from '@/api/place';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
+import CardDetail from '@/libs/shared/shared-components/card-detail/CardDetail';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { updateUrlWithPageNumber } from '@/libs/utils';
 import { picture, PlaceDetail } from '@/types/place';
@@ -170,6 +171,8 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     },
   });
 
+  const badgeOptions = ['بوم گردی', 'کوهستانی', 'مناسب کمپ'];
+
   /**
    * template
    * _______________________________________________________________________________
@@ -177,6 +180,22 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
   return (
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
+        <Flex width={'100%'} justify={'center'}>
+          <CardDetail
+            hero='ثبت بنر آگهی'
+            submitButtonText='تایید و انتشار'
+            rejectButtonText='حذف دیدگاه'
+            title='نام و عنوان point'
+            location='تهران / سه راه تهرانپارس'
+            badge={badgeOptions}
+            username='نام کاربر'
+            date='24 فروردین'
+            question='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
+            profileImg=''
+            answer=''
+            rate={0}
+          />
+        </Flex>
         <Flex
           gap={'10px'}
           direction={'column'}
@@ -247,6 +266,7 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
           />
         </Flex>
       </Flex>
+
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <Grid gap={'24px'}>
           <Text>{`آیا از حذف ${placeItem?.name} مطمین هستید ؟`}</Text>
