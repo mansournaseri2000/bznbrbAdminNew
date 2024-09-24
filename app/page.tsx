@@ -16,7 +16,7 @@ import { removePlace, useGetAllPlaces } from '@/api/place';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
-import Comment from '@/libs/shared/shared-components/comment/Comment';
+import UserInfo from '@/libs/shared/shared-components/user-info/UserInfo';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { updateUrlWithPageNumber } from '@/libs/utils';
 import { picture, PlaceDetail } from '@/types/place';
@@ -179,12 +179,14 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <Comment
+          <UserInfo
             profileImg=''
-            username='نام کاربر'
-            date='24 فروردین'
-            comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-            rate={0}
+            birthday='1379/01/24'
+            email='example@gmail.com'
+            firstName='پویان'
+            lastName='احمدی'
+            mobile={91212345678}
+            sex='مرد'
           />
         </Flex>
         <Flex
