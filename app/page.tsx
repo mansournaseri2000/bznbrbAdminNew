@@ -16,7 +16,7 @@ import { removePlace, useGetAllPlaces } from '@/api/place';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
-import UserInfo from '@/libs/shared/shared-components/user-info/UserInfo';
+import ReceiptInfo from '@/libs/shared/shared-components/receipt-info/ReceiptInfo';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { updateUrlWithPageNumber } from '@/libs/utils';
 import { picture, PlaceDetail } from '@/types/place';
@@ -179,14 +179,14 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <UserInfo
-            profileImg=''
-            birthday='1379/01/24'
-            email='example@gmail.com'
-            firstName='پویان'
-            lastName='احمدی'
-            mobile={91212345678}
-            sex='مرد'
+          <ReceiptInfo
+            date='24 فروردین 1403'
+            gateWay='سامان'
+            paidAmount='24.000.000 ريال'
+            payableAmount='24.000.000 ريال'
+            status={false}
+            time='16:40'
+            trackingNumber={877}
           />
         </Flex>
         <Flex
