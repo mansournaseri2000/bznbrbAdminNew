@@ -2,7 +2,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { ApiManager } from '@/libs/utils/axios.config';
-import { AllPlaceConstant, PlacesDetailResponse } from '@/types/place';
+import { AllPlaceConstant, PlaceResponse, PlacesDetailResponse } from '@/types/place';
+import { CreatePlace } from '@/types/place/create-place';
 
 import { ApiData } from './types';
 
@@ -84,4 +85,49 @@ export const useGetAllPlacesConstants = () => {
   });
 
   return { data, isError, isLoading };
+};
+
+export type UploadImageParams = {
+  type: string;
+  placeId: number;
+  files: File;
+};
+
+/**
+ * upload-image services
+ * _______________________________________________________________________________
+ */
+
+export const UploadImage = async (params: UploadImageParams) => {
+  const formData = new FormData();
+
+  formData.append('type', params.type);
+  formData.append('placeId', params.placeId.toString());
+  formData.append('files', params.files);
+
+  const res = await ApiManager.post<ApiData<{ data: string }>>('upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return res.data;
+};
+
+export const getPlace = async (id: number) => {
+  const res = await ApiManager.get<ApiData<PlaceResponse>>(`places/id/${id}`);
+
+  return res.data.data;
+};
+
+export const createPlace = async (params: CreatePlace) => {
+  const res = await ApiManager.post<ApiData<PlaceResponse>>('places/create', params);
+
+  return res.data;
+};
+
+export const removeImage = async (id: number) => {
+  const res = await ApiManager.delete<ApiData<{ message: string }>>(`upload/${id}`);
+
+  return res.data;
 };

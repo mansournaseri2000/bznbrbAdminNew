@@ -47,9 +47,9 @@ const SeoSettingsRoot = () => {
     processStringToTags(watch('metakeywords'))
   );
 
-  console.log(watch('metakeywords'), 'run');
+  console.log(watch('metakeywords'), 'metakeywordsmetakeywordsmetakeywords');
 
-  console.log(metaTagList, 'metaTagList');
+  console.log(metaTagList, 'metaTagListmetaTagList');
 
   /**
    * useEffect
@@ -65,23 +65,25 @@ const SeoSettingsRoot = () => {
     hookformStore,
     inputStore,
     localStore,
+    updateLocalStore,
   }: {
     hookformStore: string;
     inputStore: string;
     localStore: any;
+    updateLocalStore: any;
   }) => {
     const pointName = watch(inputStore).trim();
 
     if (!pointName) return;
 
     const newTagObject = {
-      id: tagList.length > 0 ? Math.max(...tagList.map(tag => tag.id)) + 1 : 1,
+      id: localStore.length > 0 ? new Date().getTime() : 1,
       label: pointName,
     };
 
-    const updatedTagList = [...tagList, newTagObject];
+    const updatedTagList = [...localStore, newTagObject];
     const tagsAsString = convertTagsToString(updatedTagList); // Convert to comma-separated string
-    localStore(updatedTagList);
+    updateLocalStore(updatedTagList);
     setValue(hookformStore, tagsAsString);
     setValue(inputStore, '');
     setIsOpen(false);
@@ -215,7 +217,12 @@ const SeoSettingsRoot = () => {
               <Button
                 type='button'
                 onClick={() => {
-                  addTag({ inputStore: 'keyword', hookformStore: 'keywords', localStore: setTagList });
+                  addTag({
+                    inputStore: 'keyword',
+                    hookformStore: 'keywords',
+                    localStore: tagList,
+                    updateLocalStore: setTagList,
+                  });
                   setIsOpen(false);
                 }}
                 variant='soft'
@@ -235,7 +242,9 @@ const SeoSettingsRoot = () => {
             <Controller
               name='metakeyword'
               control={control}
-              render={({ field }) => <TextField {...field} placeholder='نام عنوان' aria-label='textFiled' />}
+              render={({ field }) => (
+                <TextField autoFocus {...field} placeholder='نام عنوان' aria-label='textFiled' />
+              )}
             />
             <Grid gap={'16px'} columns={'2'}>
               <Button
@@ -243,7 +252,8 @@ const SeoSettingsRoot = () => {
                   addTag({
                     inputStore: 'metakeyword',
                     hookformStore: 'metakeywords',
-                    localStore: setMetaTagList,
+                    localStore: metaTagList,
+                    updateLocalStore: setMetaTagList,
                   });
                   setIsOpen(false);
                 }}

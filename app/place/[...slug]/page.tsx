@@ -55,6 +55,8 @@ type fomrData = {
   meta_title: string;
   metakeywords: string;
   metakeyword: string;
+  cityID: null | number;
+  isLoading: boolean;
 
   pointName: string;
   description_of_the_point: string;
@@ -75,6 +77,7 @@ const PlacePage = ({ params }: { params: { slug: string } }) => {
    */
   const methods = useForm<fomrData>({
     defaultValues: {
+      cityID: null,
       name: 'مرحله تست',
       description: 'توضیحات اضافه',
       website: 'www.bzn.com',
@@ -101,6 +104,7 @@ const PlacePage = ({ params }: { params: { slug: string } }) => {
       meta_description: '',
       meta_title: '',
       metakeyword: '',
+      isLoading: false,
 
       train: null,
       features: [
@@ -202,7 +206,7 @@ const PlacePage = ({ params }: { params: { slug: string } }) => {
             Categories={data?.categories ? data.categories : []}
           />
           <SeoSettingsRoot />
-          <Description />
+          <Description details={data ? data.details : []} key={'Description'} />
           <TravelTime />
           <Button size={'4'} variant='outline'>
             ثبت تغییرات
