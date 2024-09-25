@@ -6,6 +6,8 @@ import { Text } from '@/libs/primitives';
 import AppButton from '@/libs/primitives/components/Button';
 
 type ReceiptInfoProps = {
+  start: string;
+  end: string;
   date: string;
   time: string;
   gateWay: string;
@@ -16,7 +18,7 @@ type ReceiptInfoProps = {
 };
 
 const ReceiptInfo = (props: ReceiptInfoProps) => {
-  const { date, time, gateWay, payableAmount, paidAmount, status, trackingNumber } = props;
+  const { date, time, gateWay, payableAmount, paidAmount, status, trackingNumber, start, end } = props;
   return (
     <Flex direction={'column'} style={{ width: '100%', maxWidth: 640 }}>
       <Flex
@@ -28,6 +30,10 @@ const ReceiptInfo = (props: ReceiptInfoProps) => {
         <Flex width={'100%'} justify={'between'} align={'end'} py={'4'}>
           <Text as='label'>مشخصات بلیط</Text>
           <AppButton size={'3'}>مشاهده بلیط</AppButton>
+        </Flex>
+        <Flex width={'100%'} justify={'between'} align={'center'} py={'4'}>
+          <Text as='label'>{start}</Text>
+          <Text as='label'>{end}</Text>
         </Flex>
         <Flex width={'100%'} justify={'between'} py={'4'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <Text as='label'>تاریخ پرداخت</Text>

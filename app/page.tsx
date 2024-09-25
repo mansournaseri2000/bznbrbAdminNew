@@ -180,6 +180,8 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
           <ReceiptInfo
+            start='14:45'
+            end='04:50'
             date='24 فروردین 1403'
             gateWay='سامان'
             paidAmount='24.000.000 ريال'
