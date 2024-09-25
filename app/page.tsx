@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
-import TripDetailsCard from '@/components/develope/plans/trip-details-card/TripDetailsCard';
+import Residence from '@/components/develope/plans/residence/Residence';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -179,14 +179,12 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <TripDetailsCard
-            fromCity='تهران'
-            toCity='مشهد'
-            travelDuration='۱۲ ساعت'
-            departureTime='8 صبح '
-            arrivalTime='8 عصر'
-            passengers={4}
-            type='رفت'
+          <Residence
+            name='هتل آسیا'
+            RoomsNumbers={0}
+            PassengerNumbers={0}
+            cost={0}
+            deliveryDate='تحویل 25 فروردین'
           />
         </Flex>
         <Flex
