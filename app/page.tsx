@@ -13,8 +13,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
+import TripDetailsCard from '@/components/develope/plans/trip-details-card/TripDetailsCard';
 import { SearchAllPlaces } from '@/components/place';
-import Menu from '@/layout/Menu';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
@@ -178,6 +178,17 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
   return (
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
+        <Flex width={'100%'} justify={'center'}>
+          <TripDetailsCard
+            fromCity='تهران'
+            toCity='مشهد'
+            travelDuration='۱۲ ساعت'
+            departureTime='8 صبح '
+            arrivalTime='8 عصر'
+            passengers={4}
+            type='رفت'
+          />
+        </Flex>
         <Flex
           gap={'10px'}
           direction={'column'}
@@ -247,7 +258,6 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
             }}
           />
         </Flex>
-        <Menu />
       </Flex>
       {/* Menu */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
