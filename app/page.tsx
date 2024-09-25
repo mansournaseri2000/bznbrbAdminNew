@@ -16,7 +16,7 @@ import { removePlace, useGetAllPlaces } from '@/api/place';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
-import ReceiptInfo from '@/libs/shared/shared-components/receipt-info/ReceiptInfo';
+import TicketInfo from '@/libs/shared/shared-components/ticket-info/TicketInfo';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { updateUrlWithPageNumber } from '@/libs/utils';
 import { picture, PlaceDetail } from '@/types/place';
@@ -175,20 +175,30 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
    * template
    * _______________________________________________________________________________
    */
+  const list = [
+    { userName: 'مسافر اول', ticketNumber: 43412313123 },
+    { userName: 'مسافر اول', ticketNumber: 43412313123 },
+    { userName: 'مسافر اول', ticketNumber: 43412313123 },
+    { userName: 'مسافر اول', ticketNumber: 43412313123 },
+    { userName: 'مسافر اول', ticketNumber: 43412313123 },
+    { userName: 'مسافر اول', ticketNumber: 43412313123 },
+  ];
   return (
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <ReceiptInfo
-            start='14:45'
-            end='04:50'
-            date='24 فروردین 1403'
-            gateWay='سامان'
-            paidAmount='24.000.000 ريال'
-            payableAmount='24.000.000 ريال'
-            status={false}
-            time='16:40'
-            trackingNumber={877}
+          <TicketInfo
+            startPointTime='14:45'
+            endPointTime='04:50'
+            startPointCity='تهران'
+            endPointCity='مشهد'
+            startPointDay='شنبه'
+            endPointDay='یکشنبه'
+            startPointDate='24 فروردین'
+            endPointDate='25 فروردین'
+            PassengersList={list}
+            ticketUrl='https://780.ir/tourism/train/passengers'
+            ticketQRCode=''
           />
         </Flex>
         <Flex
