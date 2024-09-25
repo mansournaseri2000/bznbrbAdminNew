@@ -26,7 +26,7 @@ const GeographicalLocationRoot = ({ province }: Props) => {
    */
 
   const { control, watch } = useFormContext();
-  const city = province.filter(item => item.id === watch('province'))[0]?.Cities;
+  const city = province.filter(item => item.id === watch('provinceId'))[0]?.Cities;
 
   /**
    * useEffect
@@ -53,22 +53,22 @@ const GeographicalLocationRoot = ({ province }: Props) => {
         <Grid columns={'3'} gap={'20px'}>
           <Select
             errorText={''}
-            selected={province.find(item => item.id === watch('province'))?.name}
+            selected={province.find(item => item.id === watch('provinceId'))?.name}
             items={province}
             placeholder={'استان'}
-            store='province'
+            store='provinceId'
             lable='استان'
           />
           <Select
             errorText={''}
-            selected={city.find(item => item.id === watch('city'))?.name}
+            selected={city?.find(item => item.id === watch('cityID'))?.name}
             items={city}
             placeholder={'شهر'}
-            store='city'
+            store='cityID'
             lable='شهر'
           />
           <Controller
-            name='pointName'
+            name='area'
             control={control}
             render={({ field }) => (
               <TextField
@@ -88,7 +88,7 @@ const GeographicalLocationRoot = ({ province }: Props) => {
             render={({ field }) => <TextField {...field} placeholder='تلفن' aria-label='textFiled' />}
           />
           <Controller
-            name='pointName'
+            name='website'
             control={control}
             render={({ field }) => (
               <TextField disabled {...field} placeholder='وب سایت' aria-label='textFiled' />

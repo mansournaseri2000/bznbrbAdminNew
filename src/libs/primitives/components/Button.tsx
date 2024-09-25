@@ -13,7 +13,7 @@ type AppButtonProps = React.ComponentProps<typeof Button> & {
 
 const AppButton = React.forwardRef<HTMLButtonElement, AppButtonProps>(
   ({ children, ...props }: AppButtonProps, forwardedRef: ForwardedRef<HTMLButtonElement>) => (
-    <ButtonStyle ref={forwardedRef} {...props}>
+    <ButtonStyle ref={forwardedRef as any} {...props}>
       {children}
     </ButtonStyle>
   )

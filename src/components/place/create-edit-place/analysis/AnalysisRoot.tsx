@@ -104,7 +104,6 @@ const AnalysisRoot = ({ tripDatas, Categories, seasons, tripLimitations }: Props
               const tripType = TripTypesItems.find(
                 (item: { tripTypeId: number }) => item.tripTypeId === trip.id
               );
-
               return (
                 <Grid gap={'8px'} key={trip.id} mb='20px'>
                   <Text as='label'>{trip.name}</Text>

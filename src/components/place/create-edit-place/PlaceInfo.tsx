@@ -24,6 +24,9 @@ const PlaceInfo = ({ categoris }: Props) => {
   const { control, watch } = useFormContext();
   const subCategory = categoris.filter(item => item.id === watch('categoryId'))[0]?.children;
 
+  console.log(categoris,"subCategorysubCategory");
+  
+
   /**
    * useEffect
    * _______________________________________________________________________________
@@ -48,14 +51,14 @@ const PlaceInfo = ({ categoris }: Props) => {
         />
         <Flex gap={'20px'}>
           <Select
-            selected={categoris.find(item => item.id === watch('categoryId'))?.name}
+            selected={categoris?.find(item => item.id === watch('categoryId'))?.name}
             errorText={''}
             items={categoris ? categoris : []}
             placeholder={'دسته بندی'}
             store={'categoryId'}
           />
           <Select
-            selected={subCategory.find(item => item.id === watch('subCategoryId'))?.name}
+            selected={subCategory?.find(item => item.id === watch('subCategoryId'))?.name}
             errorText={''}
             items={subCategory ? subCategory : []}
             placeholder={'زیر دسته بندی'}
@@ -68,12 +71,12 @@ const PlaceInfo = ({ categoris }: Props) => {
           render={({ field }) => <TextField {...field} placeholder='Custom URL' aria-label='textFiled' />}
         />
         <Controller
-          name='description'
+          name='basicInfoDescription'
           control={control}
           render={({ field }) => <TextArea {...field} placeholder='توضیحات نقطه' aria-label='TextArea' />}
         />
         <Controller
-          name='summary'
+          name='basicInfosummary'
           control={control}
           render={({ field }) => <TextArea {...field} placeholder='خلاصه توضیحات' aria-label='TextArea' />}
         />

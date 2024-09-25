@@ -48,8 +48,6 @@ const ImageGallery = () => {
     },
   });
 
-  console.log(imageGalleryData, 'imageGalleryDataimageGalleryData');
-
   /**
    * useEffect
    * _______________________________________________________________________________

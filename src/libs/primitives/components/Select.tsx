@@ -62,7 +62,7 @@ const SelectCompnent = forwardRef<
           <Select.Trigger placeholder={placeholder} />
           <Select.Content position='popper' style={{ maxHeight: '200px' }}>
             <Select.Group style={{ width: '100%' }}>
-              {items.map((item: any) => (
+              {items?.map((item: any) => (
                 <Select.Item key={item.id} value={item.name}>
                   <Text {...typoVariant.body1}>{item.name}</Text>
                 </Select.Item>

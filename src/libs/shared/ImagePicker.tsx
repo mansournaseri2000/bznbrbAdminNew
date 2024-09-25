@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import Dropzone from 'react-dropzone';
 import { Controller, useFormContext } from 'react-hook-form';
 
@@ -26,7 +26,6 @@ export const urlToObject = async (image: string) => {
 
 const ImagePicker = ({ name, children, errorText }: Props) => {
   const { control, setValue } = useFormContext();
-  const [image, setImage] = useState<File | null>(null);
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
@@ -35,7 +34,7 @@ const ImagePicker = ({ name, children, errorText }: Props) => {
       if (data.status === true) {
         ToastSuccess('عکس مورد نظر با موفقیت ثبت شد.');
         queryClient.invalidateQueries({ queryKey: ['image-gallery'] });
-        setValue('isLoading', true);
+        setValue('isLoading', false);
       } else {
         ToastError(' امتحان نمایید');
       }
@@ -72,14 +71,12 @@ const ImagePicker = ({ name, children, errorText }: Props) => {
     if (files && files[0]) {
       const selectedImage = files[0];
       onChange(selectedImage);
-      setImage(selectedImage);
-      mutate({
-        files: image as File,
+     mutate({
+        files: selectedImage as File,
         placeId: 13849,
         type: 'GALLERY',
       });
       setValue('isLoading', true);
-      // createPlaceMutate();
     }
   };
 
