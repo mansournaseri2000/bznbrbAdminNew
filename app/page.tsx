@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
-import Residence from '@/components/develope/plans/residence/Residence';
+import UserInfoCard from '@/components/develope/users/user-info-Card/UserInfoCard';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -179,12 +179,15 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <Residence
-            name='هتل آسیا'
-            RoomsNumbers={0}
-            PassengerNumbers={0}
-            cost={0}
-            deliveryDate='تحویل 25 فروردین'
+          <UserInfoCard
+            birthDate='1379/01/24'
+            email='example@gmail.com'
+            firstName='پویان'
+            lastName='احمدی'
+            mobile='091212345678'
+            profileImg=''
+            sex='مرد'
+            userRole='تورلیدر'
           />
         </Flex>
         <Flex
