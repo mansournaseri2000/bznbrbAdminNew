@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
-import UserInfoCard from '@/components/develope/users/user-info-Card/UserInfoCard';
+import TourLeader from '@/components/develope/users/tour-leader/TourLeader';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -179,15 +179,16 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <UserInfoCard
-            birthDate='1379/01/24'
-            email='example@gmail.com'
-            firstName='پویان'
-            lastName='احمدی'
-            mobile='091212345678'
-            profileImg=''
-            sex='مرد'
-            userRole='تورلیدر'
+          <TourLeader
+            experienceYears={4}
+            state='تهران'
+            city='تهران'
+            specialties={'آشنا به طبیعت، آشنا به تاریخ'}
+            cardIssueDate='1379/01/24'
+            cardExpiryDate='1403/05/20'
+            about='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
+            languages={'انگلیسی، فرانسه'}
+            image=''
           />
         </Flex>
         <Flex
