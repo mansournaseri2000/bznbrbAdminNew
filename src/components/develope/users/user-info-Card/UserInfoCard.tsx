@@ -42,27 +42,27 @@ const UserInfoCard = (props: UserInfoCardProps) => {
       <AppGrid columns={'2'} style={{ gridTemplateColumns: '1fr 1fr' }}>
         <AppFlex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>نام</AppText>
-          <AppText as='label'>{firstName}</AppText>
+          <AppText as='p'>{firstName}</AppText>
         </AppFlex>
         <AppFlex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>نام خانوادگی</AppText>
-          <AppText as='label'>{lastName}</AppText>
+          <AppText as='p'>{lastName}</AppText>
         </AppFlex>
         <AppFlex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>جنسیت</AppText>
-          <AppText as='label'>{sex}</AppText>
+          <AppText as='p'>{sex}</AppText>
         </AppFlex>
         <AppFlex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>تاریخ تولد</AppText>
-          <AppText as='label'>{birthDate}</AppText>
+          <AppText as='p'>{birthDate}</AppText>
         </AppFlex>
         <AppFlex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>ایمیل</AppText>
-          <AppText as='label'>{email}</AppText>
+          <AppText as='p'>{email}</AppText>
         </AppFlex>
         <AppFlex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>شماره تماس</AppText>
-          <AppText as='label'>{mobile}</AppText>
+          <AppText as='p'>{mobile}</AppText>
         </AppFlex>
       </AppGrid>
       <AppButton size={'3'}>ویرایش اطلاعات</AppButton>

@@ -22,23 +22,23 @@ const TeamDetail = (props: TeamDetailProps) => {
       <AppGrid columns={'2'} style={{ gridTemplateColumns: '1fr 1fr' }}>
         <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>نام تیم</AppText>
-          <AppText as='label'>{name}</AppText>
+          <AppText as='p'>{name}</AppText>
         </AppFlex>
         <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>مسئول تیم</AppText>
-          <AppText as='label'>{teamManager}</AppText>
+          <AppText as='p'>{teamManager}</AppText>
         </AppFlex>
         <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>ایمیل مسئول</AppText>
-          <AppText as='label'>{managerEmail}</AppText>
+          <AppText as='p'>{managerEmail}</AppText>
         </AppFlex>
         <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>تعداد پرسنل</AppText>
-          <AppText as='label'>{personnelNumber}</AppText>
+          <AppText as='p'>{personnelNumber}</AppText>
         </AppFlex>
         <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>دسترسی های تیم</AppText>
-          <AppText as='label'>{teamAccess}</AppText>
+          <AppText as='p'>{teamAccess}</AppText>
         </AppFlex>
         <AppFlex style={{ borderBottom: '1px solid #D4D4D4' }}>{''}</AppFlex>
       </AppGrid>
