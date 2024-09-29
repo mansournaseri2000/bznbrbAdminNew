@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
-import TourLeader from '@/components/develope/users/tour-leader/TourLeader';
+import Residence from '@/components/develope/plans/residence/Residence';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -179,16 +179,12 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <TourLeader
-            experienceYears={4}
-            state='تهران'
-            city='تهران'
-            specialties={'آشنا به طبیعت، آشنا به تاریخ'}
-            cardIssueDate='1379/01/24'
-            cardExpiryDate='1403/05/20'
-            about='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-            languages={'انگلیسی، فرانسه'}
-            image=''
+          <Residence
+            PassengerNumbers={2}
+            RoomsNumbers={2}
+            cost={4545}
+            deliveryDate='23 فروردین ۱۴۰۴'
+            name='آقا کاظم'
           />
         </Flex>
         <Flex
