@@ -1,9 +1,7 @@
 import React from 'react';
 
-import { Flex } from '@radix-ui/themes';
-import styled from 'styled-components';
-
-import { Text } from '@/libs/primitives';
+import AppFlex from '@/libs/primitives/layout/Flex';
+import AppText from '@/libs/primitives/typography/Text';
 
 type TripDetailsCardProps = {
   fromCity: string;
@@ -18,36 +16,34 @@ type TripDetailsCardProps = {
 const TripDetailsCard = (props: TripDetailsCardProps) => {
   const { fromCity, travelDuration, toCity, departureTime, arrivalTime, passengers, type } = props;
   return (
-    <CardWrapper direction={'column'} gap={'2'} p={'4'}>
-      <Flex width={'100%'} justify={'between'} align={'center'}>
-        <Text as='p'>{fromCity}</Text>
+    <AppFlex
+      direction={'column'}
+      gap={'2'}
+      p={'4'}
+      style={{ width: '100%', maxWidth: 640, border: ' 1px solid #6a6a6a', borderRadius: '1rem' }}
+    >
+      <AppFlex width={'100%'} justify={'between'} align={'center'}>
+        <AppText as='p'>{fromCity}</AppText>
         {/* TODO: Icon */}
-        <Text as='p'>{toCity}</Text>
-      </Flex>
-      <Flex
+        <AppText as='p'>{toCity}</AppText>
+      </AppFlex>
+      <AppFlex
         width={'100%'}
         justify={'between'}
         pb={'2'}
         align={'center'}
         style={{ borderBottom: '1px solid #D4D4D4' }}
       >
-        <Text as='p'>{departureTime}</Text>
-        <Text as='p'>{travelDuration}</Text>
-        <Text as='p'>{arrivalTime}</Text>
-      </Flex>
-      <Flex width={'100%'} justify={'between'} align={'center'}>
-        <Text as='p'>برای {passengers} نفر</Text>
-        <Text as='p'>{type}</Text>
-      </Flex>
-    </CardWrapper>
+        <AppText as='p'>{departureTime}</AppText>
+        <AppText as='p'>{travelDuration}</AppText>
+        <AppText as='p'>{arrivalTime}</AppText>
+      </AppFlex>
+      <AppFlex width={'100%'} justify={'between'} align={'center'}>
+        <AppText as='p'>برای {passengers} نفر</AppText>
+        <AppText as='p'>{type}</AppText>
+      </AppFlex>
+    </AppFlex>
   );
 };
 
 export default TripDetailsCard;
-
-const CardWrapper = styled(Flex)`
-  width: 100%;
-  max-width: 640px;
-  border: 1px solid #6a6a6a;
-  border-radius: 1rem;
-`;
