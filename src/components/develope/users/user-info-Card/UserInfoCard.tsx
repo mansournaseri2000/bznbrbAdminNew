@@ -2,10 +2,11 @@ import React from 'react';
 
 import Image from 'next/image';
 
-import { Box, Flex, Grid } from '@radix-ui/themes';
-
-import { Text } from '@/libs/primitives';
 import AppButton from '@/libs/primitives/components/Button';
+import AppBox from '@/libs/primitives/layout/Box';
+import AppFlex from '@/libs/primitives/layout/Flex';
+import AppGrid from '@/libs/primitives/layout/Grid';
+import AppText from '@/libs/primitives/typography/Text';
 
 type UserInfoCardProps = {
   firstName: string;
@@ -22,9 +23,9 @@ type UserInfoCardProps = {
 const UserInfoCard = (props: UserInfoCardProps) => {
   const { profileImg, userRole, firstName, lastName, sex, birthDate, email, mobile } = props;
   return (
-    <Grid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '0.5fr 3fr 1fr' }}>
-      <Flex width={'100%'} gap={'2'} direction={'column'} align={'center'}>
-        <Box
+    <AppGrid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '0.5fr 3fr 1fr' }}>
+      <AppFlex width={'100%'} gap={'2'} direction={'column'} align={'center'}>
+        <AppBox
           style={{
             width: 120,
             height: 120,
@@ -33,39 +34,39 @@ const UserInfoCard = (props: UserInfoCardProps) => {
           }}
         >
           <Image src={profileImg} alt='' fill style={{ borderRadius: '50%' }} />
-        </Box>
-        <Text as='p' style={{ padding: '4px 8px', backgroundColor: '#D4D4D4', borderRadius: 4 }}>
+        </AppBox>
+        <AppText as='p' style={{ padding: '4px 8px', backgroundColor: '#D4D4D4', borderRadius: 4 }}>
           {userRole}
-        </Text>
-      </Flex>
-      <Grid columns={'2'} style={{ gridTemplateColumns: '1fr 1fr' }}>
-        <Flex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <Text as='label'>نام</Text>
-          <Text as='label'>{firstName}</Text>
-        </Flex>
-        <Flex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <Text as='label'>نام خانوادگی</Text>
-          <Text as='label'>{lastName}</Text>
-        </Flex>
-        <Flex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <Text as='label'>جنسیت</Text>
-          <Text as='label'>{sex}</Text>
-        </Flex>
-        <Flex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <Text as='label'>تاریخ تولد</Text>
-          <Text as='label'>{birthDate}</Text>
-        </Flex>
-        <Flex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <Text as='label'>ایمیل</Text>
-          <Text as='label'>{email}</Text>
-        </Flex>
-        <Flex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <Text as='label'>شماره تماس</Text>
-          <Text as='label'>{mobile}</Text>
-        </Flex>
-      </Grid>
+        </AppText>
+      </AppFlex>
+      <AppGrid columns={'2'} style={{ gridTemplateColumns: '1fr 1fr' }}>
+        <AppFlex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+          <AppText as='label'>نام</AppText>
+          <AppText as='label'>{firstName}</AppText>
+        </AppFlex>
+        <AppFlex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+          <AppText as='label'>نام خانوادگی</AppText>
+          <AppText as='label'>{lastName}</AppText>
+        </AppFlex>
+        <AppFlex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+          <AppText as='label'>جنسیت</AppText>
+          <AppText as='label'>{sex}</AppText>
+        </AppFlex>
+        <AppFlex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+          <AppText as='label'>تاریخ تولد</AppText>
+          <AppText as='label'>{birthDate}</AppText>
+        </AppFlex>
+        <AppFlex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+          <AppText as='label'>ایمیل</AppText>
+          <AppText as='label'>{email}</AppText>
+        </AppFlex>
+        <AppFlex align={'center'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+          <AppText as='label'>شماره تماس</AppText>
+          <AppText as='label'>{mobile}</AppText>
+        </AppFlex>
+      </AppGrid>
       <AppButton size={'3'}>ویرایش اطلاعات</AppButton>
-    </Grid>
+    </AppGrid>
   );
 };
 

@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
-import TripDetailsCard from '@/components/develope/plans/trip-details-card/TripDetailsCard';
+import UserInfoCard from '@/components/develope/users/user-info-Card/UserInfoCard';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -179,14 +179,15 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <TripDetailsCard
-            arrivalTime='۵ عصر'
-            departureTime='۶ صبح'
-            fromCity='تهران'
-            toCity='مشهد'
-            passengers={12}
-            travelDuration='12 ساعت'
-            type='رفت'
+          <UserInfoCard
+            birthDate='۱۳ فروردین ۱۳۷۳'
+            email='example@gmail.com'
+            firstName='پویان'
+            mobile='091212345678'
+            lastName='احمدی'
+            profileImg=''
+            sex='زن'
+            userRole='تورلیدر'
           />
         </Flex>
         <Flex
