@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
-import UserInfoCard from '@/components/develope/users/user-info-Card/UserInfoCard';
+import TeamDetail from '@/components/develope/teams-and-employers/team-detail/TeamDetail';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -179,15 +179,12 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <UserInfoCard
-            birthDate='۱۳ فروردین ۱۳۷۳'
-            email='example@gmail.com'
-            firstName='پویان'
-            mobile='091212345678'
-            lastName='احمدی'
-            profileImg=''
-            sex='زن'
-            userRole='تورلیدر'
+          <TeamDetail
+            name='تیم مدیریت محتوا'
+            managerEmail='long.example.123@gmail.com'
+            personnelNumber={0}
+            teamAccess={'دسترسی اصلی 1، دسترسی اصلی 2'}
+            teamManager='حامد احمدی'
           />
         </Flex>
         <Flex
