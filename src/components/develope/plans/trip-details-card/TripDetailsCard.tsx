@@ -13,7 +13,7 @@ type TripDetailsCardProps = {
   type: 'رفت' | 'برگشت';
 };
 
-const TripDetailsCard = (props: TripDetailsCardProps) => {
+const TripDetailsCard: React.FC<TripDetailsCardProps> = React.memo((props: TripDetailsCardProps) => {
   const { fromCity, travelDuration, toCity, departureTime, arrivalTime, passengers, type } = props;
   return (
     <AppFlex
@@ -44,6 +44,6 @@ const TripDetailsCard = (props: TripDetailsCardProps) => {
       </AppFlex>
     </AppFlex>
   );
-};
+});
 
 export default TripDetailsCard;
