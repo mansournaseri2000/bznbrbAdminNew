@@ -13,6 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
+import BannerItem from '@/components/develope/web-content/banner-item/BannerItem';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -179,7 +180,7 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          k
+          <BannerItem title='پویان' owner='شرکت پویان' expirationDate='01 فروردین 1403' />
         </Flex>
         <Flex
           gap={'10px'}
