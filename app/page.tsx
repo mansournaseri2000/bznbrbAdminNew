@@ -13,6 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
+import EmployDetail from '@/components/develope/teams-and-employers/employ-detail/EmployDetail';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -179,7 +180,22 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          l
+          <EmployDetail
+            firstName='پویان'
+            lastName='احمدی'
+            nationalId='00112345678'
+            fatherName='میثم'
+            birthDate='1379/01/24'
+            personalEmail='long.example.123@gmail.com'
+            mobile='091212345678'
+            orgEmail='long.example.123@BznmBrn.ir'
+            accountCreatedAt='01 فروردین 1403'
+            accountOwner='حامد احمدی'
+            lastSeen='15:35 - 01 فروردین 1403 '
+            bankAccountNumber='IR 120 1548 7000 0002 1234 43021'
+            address='تهران- خیابان ولیعصر- میدان ولیعصر- بلوار کشاورز- خیابان فلسطین- سرای خلاق- طبقه چهار- دفتر بامداد فصل رویش'
+            profileImg=''
+          />
         </Flex>
         <Flex
           gap={'10px'}
