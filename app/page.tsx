@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
-import MemberDetail from '@/components/develope/teams-and-employers/member-detail/MemberDetail';
+import Residence from '@/components/develope/plans/residence/Residence';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -179,18 +179,12 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <MemberDetail
-            birthDate='1379/01/24'
-            firstName='پویان'
-            lastName='احمدی'
-            lastSeen='15:35 - 01 فروردین 1403 '
-            managerName='حامد احمدی'
-            mobile='091212345678'
-            nationalId='00112345678'
-            orgEmail='long.example.123@BznmBrn.ir'
-            position='دبیر محتوا'
-            profileImg=''
-            teamName='مدیریت محتوا'
+          <Residence
+            PassengerNumbers={1}
+            RoomsNumbers={2}
+            cost={12313}
+            deliveryDate='15 شهریور'
+            name='آفاق'
           />
         </Flex>
         <Flex
