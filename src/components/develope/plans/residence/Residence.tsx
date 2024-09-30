@@ -13,7 +13,7 @@ type ResidenceProps = {
   cost: number;
   deliveryDate: string;
 };
-const Residence: React.FC<ResidenceProps> = React.memo((props: ResidenceProps) => {
+const Residence: React.FC<ResidenceProps> = (props: ResidenceProps) => {
   const { name, RoomsNumbers, PassengerNumbers, cost, deliveryDate } = props;
   return (
     <AppFlex
@@ -37,7 +37,7 @@ const Residence: React.FC<ResidenceProps> = React.memo((props: ResidenceProps) =
       </AppFlex>
     </AppFlex>
   );
-});
+};
 
 const InfoBox = ({
   label,
