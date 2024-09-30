@@ -13,7 +13,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
-import TourLeader from '@/components/develope/users/tour-leader/TourLeader';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -175,21 +174,12 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
    * template
    * _______________________________________________________________________________
    */
+
   return (
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <TourLeader
-            about='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-            cardExpiryDate='1403/05/20'
-            cardIssueDate='1379/01/24'
-            city='تهران'
-            experienceYears={1}
-            image=''
-            languages={[]}
-            specialties={[]}
-            state='تهران'
-          />
+          l
         </Flex>
         <Flex
           gap={'10px'}
