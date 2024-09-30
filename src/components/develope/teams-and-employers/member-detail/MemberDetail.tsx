@@ -2,6 +2,8 @@ import React from 'react';
 
 import Image from 'next/image';
 
+import styled from 'styled-components';
+
 import AppButton from '@/libs/primitives/components/Button';
 import AppBox from '@/libs/primitives/layout/Box';
 import AppFlex from '@/libs/primitives/layout/Flex';
@@ -23,7 +25,7 @@ type MemberDetailProps = {
   //   onRemoveFromTeam: () => void;
 };
 
-const MemberDetail = (props: MemberDetailProps) => {
+const MemberDetail: React.FC<MemberDetailProps> = (props: MemberDetailProps) => {
   const {
     firstName,
     lastName,
@@ -48,33 +50,67 @@ const MemberDetail = (props: MemberDetailProps) => {
             borderRadius: '50%',
           }}
         >
-          <Image src={profileImg} alt='' fill style={{ borderRadius: '50%' }} />
+          <Image src={profileImg} alt='تصویر کاربر' fill style={{ borderRadius: '50%' }} />
         </AppBox>
         <AppGrid columns={'2'} style={{ gridTemplateColumns: '1fr 1fr' }}>
-          <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-            <AppText as='label'>نام</AppText>
-            <AppText as='p'>{firstName}</AppText>
-          </AppFlex>
-
-          <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-            <AppText as='label'>نام خانوادگی</AppText>
-            <AppText as='p'>{lastName}</AppText>
-          </AppFlex>
-
-          <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-            <AppText as='label'>کدملی</AppText>
-            <AppText as='p'>{nationalId}</AppText>
-          </AppFlex>
-
-          <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-            <AppText as='label'>تاریخ تولد</AppText>
-            <AppText as='p'>{birthDate}</AppText>
-          </AppFlex>
+          <Item label='نام' value={firstName} />
+          <Item label='نام خانوادگی' value={lastName} />
+          <Item label='کدملی' value={nationalId} />
+          <Item label='تاریخ تولد' value={birthDate} />
         </AppGrid>
         <AppButton size={'3'}>حذف از تیم</AppButton>
       </AppGrid>
       <AppGrid columns={'3'} style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
-        <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+        <Item label='شماره تماس' value={mobile} />
+        <Item label='ایمیل سازمانی' value={orgEmail} />
+        <Item label='آخرین بازدید' value={lastSeen} />
+        <Item label='تیم' value={teamName} />
+        <Item label='سمت اجرایی' value={position} />
+        <Item label='مسئول' value={managerName} />
+      </AppGrid>
+    </AppBox>
+  );
+};
+
+export default MemberDetail;
+
+const Item = ({ label, value }: { label: string; value: string }) => (
+  <ItemWrapper>
+    <AppText as='label'>{label}</AppText>
+    <AppText as='p'>{value}</AppText>
+  </ItemWrapper>
+);
+
+const ItemWrapper = styled(AppFlex).attrs(() => ({
+  align: 'center',
+  py: '4',
+  gap: '2',
+}))`
+  border-bottom: 1px solid #d4d4d4;
+`;
+
+// <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+// <AppText as='label'>نام</AppText>
+// <AppText as='p'>{firstName}</AppText>
+// </AppFlex>
+
+// <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+// <AppText as='label'>نام خانوادگی</AppText>
+// <AppText as='p'>{lastName}</AppText>
+// </AppFlex>
+
+// <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+// <AppText as='label'>کدملی</AppText>
+// <AppText as='p'>{nationalId}</AppText>
+// </AppFlex>
+
+// <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+// <AppText as='label'>تاریخ تولد</AppText>
+// <AppText as='p'>{birthDate}</AppText>
+// </AppFlex>
+
+{
+  /* <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>شماره تماس</AppText>
           <AppText as='p'>{mobile}</AppText>
         </AppFlex>
@@ -101,10 +137,5 @@ const MemberDetail = (props: MemberDetailProps) => {
         <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
           <AppText as='label'>مسئول</AppText>
           <AppText as='p'>{managerName}</AppText>
-        </AppFlex>
-      </AppGrid>
-    </AppBox>
-  );
-};
-
-export default MemberDetail;
+        </AppFlex> */
+}
