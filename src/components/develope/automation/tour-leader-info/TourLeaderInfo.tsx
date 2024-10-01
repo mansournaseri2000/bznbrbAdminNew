@@ -84,7 +84,7 @@ const TourLeaderInfo: React.FC<TourLeaderInfoProps> = (props: TourLeaderInfoProp
               borderRadius: 8,
             }}
           >
-            <Image alt='' src={image} style={{ borderRadius: 8 }} />
+            <Image alt='' src={image} fill style={{ borderRadius: 8 }} />
           </AppBox>
         </AppBox>
       </AppFlex>
