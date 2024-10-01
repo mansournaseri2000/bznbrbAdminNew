@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
-import AutomationBanner from '@/components/develope/automation/automation-banner/AutomationBanner';
+import QuestionCard from '@/components/develope/support/question-card/QuestionCard';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -180,12 +180,11 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <AutomationBanner
-            header='بنر اول'
-            expiryDate='01 فروردین 1403'
-            adOwner='شرکت پویان'
-            imageUrl=''
-            title='پویان'
+          <QuestionCard
+            profileImg=''
+            username='نام کاربر'
+            mobile='شماره تماس'
+            question='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
           />
         </Flex>
         <Flex
