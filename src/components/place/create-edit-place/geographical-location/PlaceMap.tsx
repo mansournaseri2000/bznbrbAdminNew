@@ -15,8 +15,6 @@ type Props = {
 };
 
 const PlaceMap = ({ location }: Props) => {
-  console.log(location, 'locationlocation');
-
   return (
     <MapContainer
       doubleClickZoom={false}
@@ -26,12 +24,9 @@ const PlaceMap = ({ location }: Props) => {
       zoom={5}
       style={{ height: '400px', width: '100%', borderRadius: '8px', zIndex: 1 }}
     >
-      <TileLayer
-        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
+      <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' />
       <Marker key={'index'} position={location as any}>
-        <Popup>df</Popup>
+        <Popup>{`${location}`}</Popup>
       </Marker>
     </MapContainer>
   );

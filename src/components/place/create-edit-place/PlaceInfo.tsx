@@ -1,9 +1,9 @@
 'use client';
 
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import { Flex, Grid, Select, TextArea, TextField } from '@/libs/primitives';
-import { Category } from '@/types/place';
+import { Category } from '@/types/place/place-constant';
 
 import Container from './Container';
 
@@ -21,16 +21,10 @@ const PlaceInfo = ({ categoris }: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const { control, watch } = useFormContext();
-  const subCategory = categoris.filter(item => item.id === watch('categoryId'))[0]?.children;
-
-  console.log(categoris,"subCategorysubCategory");
-  
-
-  /**
-   * useEffect
-   * _______________________________________________________________________________
-   */
+  const { control } = useFormContext();
+  const categoryId = useWatch({ name: 'category_id' });
+  const subCategoryId = useWatch({ name: 'sub_category_id' });
+  const subCategory = categoris.find(item => item.id === categoryId)?.children;
 
   /**
    * hooks and methods
@@ -44,42 +38,14 @@ const PlaceInfo = ({ categoris }: Props) => {
   return (
     <Container height='auto' title='اطلاعات اولیه'>
       <Grid height={'max-content'} gap={'16px'}>
-        <Controller
-          name='name'
-          control={control}
-          render={({ field }) => <TextField {...field} placeholder='نام عنوان' aria-label='textFiled' />}
-        />
+        <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='نام عنوان' aria-label='textFiled' />} />
         <Flex gap={'20px'}>
-          <Select
-            selected={categoris?.find(item => item.id === watch('categoryId'))?.name}
-            errorText={''}
-            items={categoris ? categoris : []}
-            placeholder={'دسته بندی'}
-            store={'categoryId'}
-          />
-          <Select
-            selected={subCategory?.find(item => item.id === watch('subCategoryId'))?.name}
-            errorText={''}
-            items={subCategory ? subCategory : []}
-            placeholder={'زیر دسته بندی'}
-            store={'subCategoryId'}
-          />
+          <Select selected={categoris.find(item => item.id === categoryId)?.name} errorText={''} items={categoris || []} placeholder={'دسته بندی'} store={'category_id'} />
+          <Select selected={subCategory?.find(item => item.id === subCategoryId)?.name} errorText={''} items={subCategory || []} placeholder={'زیر دسته بندی'} store={'sub_category_id'} />
         </Flex>
-        <Controller
-          name='website'
-          control={control}
-          render={({ field }) => <TextField {...field} placeholder='Custom URL' aria-label='textFiled' />}
-        />
-        <Controller
-          name='basicInfoDescription'
-          control={control}
-          render={({ field }) => <TextArea {...field} placeholder='توضیحات نقطه' aria-label='TextArea' />}
-        />
-        <Controller
-          name='basicInfosummary'
-          control={control}
-          render={({ field }) => <TextArea {...field} placeholder='خلاصه توضیحات' aria-label='TextArea' />}
-        />
+        <Controller name='website' control={control} disabled render={({ field }) => <TextField {...field} placeholder='Custom URL' aria-label='textFiled' />} />
+        <Controller name='basicInfoDescription' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات نقطه' aria-label='TextArea' />} />
+        <Controller name='basicInfosummary' control={control} render={({ field }) => <TextArea {...field} placeholder='خلاصه توضیحات' aria-label='TextArea' />} />
       </Grid>
     </Container>
   );

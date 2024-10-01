@@ -8,8 +8,9 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import { getAllPlacesByName } from '@/api/place';
-import { Flex, Grid, TextField } from '@/libs/primitives';
-import { PlaceDetail } from '@/types/place';
+import { useDebounce } from '@/libs/hooks';
+import { Flex, Grid, Text, TextField } from '@/libs/primitives';
+import { PlacesDetail } from '@/types/place/search-place';
 
 import SearchPlaceCard from './SearchPlaceCard';
 
@@ -30,24 +31,25 @@ const SearchAllPlaces = () => {
    * _______________________________________________________________________________
    */
 
-  const { register, watch } = useForm<{ searchText: string }>({
+  const { register, watch, setValue } = useForm<{ searchText: string }>({
     defaultValues: { searchText: '' },
   });
 
+  const searchTextDibounce = useDebounce(watch('searchText') || '', 300);
   const { data, isSuccess, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<any>({
-    queryKey: ['search-all-places', watch('searchText')],
+    queryKey: ['search-all-places', searchTextDibounce],
     queryFn: ({ pageParam = 1 }) => getAllPlacesByName(pageParam, watch('searchText')),
     getNextPageParam: (lastPage: any, allPages: any) => {
       const nextPage = allPages.length + 1;
       return lastPage?.placesDetail?.length !== 0 ? nextPage : undefined;
     },
+    enabled: searchTextDibounce.length > 0,
   } as any);
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries;
       if (entry.isIntersecting) {
-        console.log('Observer is intersecting');
         fetchNextPage();
       }
     },
@@ -78,8 +80,6 @@ const SearchAllPlaces = () => {
     };
   }, [handleObserver, fetchNextPage, hasNextPage]);
 
-  console.log(data);
-
   /**
    * hooks and methods
    * _______________________________________________________________________________
@@ -91,20 +91,15 @@ const SearchAllPlaces = () => {
    */
   return (
     <Grid position={'relative'}>
-      <TextField
-        autoFocus
-        {...register('searchText')}
-        placeholder='نام نقطه مورد نظرتان را وارد کنید ...'
-        aria-label='Search field'
-        style={{ backgroundColor: '#ffff' }}
-      />
-      <SearchContainer
-        top={'55px'}
-        right={'0px'}
-        left={'0px'}
-        position={'absolute'}
-        isShow={watch('searchText').length > 0}
-      >
+      <Flex position={'relative'}>
+        {searchTextDibounce.length > 0 && (
+          <Text onClick={() => setValue('searchText', '')} style={{ position: 'absolute', top: '12px', cursor: 'pointer', left: '20px', zIndex: 10, scale: 1.5, color: '#000000b0' }}>
+            x
+          </Text>
+        )}
+        <TextField autoFocus {...register('searchText')} placeholder='نام نقطه مورد نظرتان را وارد کنید ...' aria-label='Search field' style={{ backgroundColor: '#ffff' }} />
+      </Flex>
+      <SearchContainer top={'55px'} right={'0px'} left={'0px'} position={'absolute'} isShow={watch('searchText').length > 0}>
         <Grid position={'relative'} p={'16px'} className='wrapper' height={'auto'}>
           {isSuccess &&
             data?.pages.map((page, index) =>
@@ -113,17 +108,8 @@ const SearchAllPlaces = () => {
                   دیتایی باقت نشد
                 </Flex>
               ) : (
-                <Grid key={index} gap={'16px'} mb={'10px'}>
-                  {page?.placesDetail?.map((item: PlaceDetail) => (
-                    <SearchPlaceCard
-                      key={item.id}
-                      city={item.city}
-                      name={item.name}
-                      pictures={item.pictures}
-                      province={item.province}
-                      id={item.id}
-                    />
-                  ))}
+                <Grid height={'max-content'} align={'start'} key={index} gap={'16px'} mb={'10px'}>
+                  {page?.placesDetail?.map((item: PlacesDetail) => <SearchPlaceCard key={item.id} city={item.city} name={item.name} pictures={item.pictures} province={item.province} id={item.id} />)}
                 </Grid>
               )
             )}

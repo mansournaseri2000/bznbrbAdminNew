@@ -42,7 +42,7 @@ const Root = styled(RadixTextField.Root)`
   border: 1px solid ${colorPalette.gray[3]};
   background-color: ${colorPalette.gray[1]};
   border-radius: 8px;
-  color: ${colorPalette.gray[9]};
+  color: ${colorPalette.gray[12]};
 
   &.rt-TextFieldRoot:where(.rt-variant-surface) {
     --text-field-focus-color: none;

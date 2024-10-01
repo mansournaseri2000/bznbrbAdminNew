@@ -1,42 +1,4 @@
-type Feature = {
-  featureId: number;
-};
-
-type PlaceDetail = {
-  detailId: number;
-  descriptions: string;
-};
-
-type TripType = {
-  tripTypeId: number;
-  score: number;
-};
-
-type PlaceWorkTime = {
-  dayOfWeek: string;
-  firstOpenTime: string;
-  secondOpenTime: string;
-  firstCloseTime: string;
-  secondCloseTime: string;
-};
-
-type PlaceCategorie = {
-  categoryId: number;
-  score: number;
-};
-
-type PlaceTripLimitation = {
-  tripLimitationId: number;
-  score: number;
-};
-
-type PlaceTripSeason = {
-  tripSeasonId: number;
-  score: number;
-  timing: number;
-};
-
-export type CreatePlace = {
+export interface CreatePlaceResponse {
   name: string;
   slug: string;
   description: string;
@@ -72,7 +34,7 @@ export type CreatePlace = {
   bus: string;
   car: string;
   hike: string;
-  ship: string | null;
+  ship: any;
   subway: string;
   taxi: string;
   train: string;
@@ -82,7 +44,49 @@ export type CreatePlace = {
   PlaceDetails: PlaceDetail[];
   TripTypes: TripType[];
   PlaceWorkTimes: PlaceWorkTime[];
-  PlaceCategories: PlaceCategorie[];
+  PlaceCategories: PlaceCategory[];
   PlaceTripLimitations: PlaceTripLimitation[];
   PlaceTripSeasons: PlaceTripSeason[];
-};
+  area: string;
+
+  cost: string;
+  renown: string;
+}
+
+export interface Feature {
+  featureId: number;
+}
+
+export interface PlaceDetail {
+  detailId: number;
+  descriptions: string;
+}
+
+export interface TripType {
+  tripTypeId: number;
+  score: number;
+}
+
+export interface PlaceWorkTime {
+  dayOfWeek: string;
+  firstOpenTime: string;
+  secondOpenTime: string;
+  firstCloseTime: string;
+  secondCloseTime: string;
+}
+
+export interface PlaceCategory {
+  categoryId: number;
+  score: number;
+}
+
+export interface PlaceTripLimitation {
+  tripLimitationId: number;
+  score: number;
+}
+
+export interface PlaceTripSeason {
+  tripSeasonId: number;
+  score: number;
+  timing: number;
+}

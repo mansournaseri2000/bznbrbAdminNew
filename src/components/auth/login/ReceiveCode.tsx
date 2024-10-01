@@ -66,7 +66,6 @@ const ReceiveCode = () => {
     cookies: cookie,
   });
   const onSubmit = (data: LoginFormInputs) => {
-    console.log(data);
     mobileRegisterMutate(data.mobileNumber);
   };
 

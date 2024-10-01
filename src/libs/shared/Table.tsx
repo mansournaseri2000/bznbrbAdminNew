@@ -2,10 +2,10 @@
 
 import { memo } from 'react';
 
-import { Table, Text } from '@radix-ui/themes';
+import { Flex, Table, Text } from '@radix-ui/themes';
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
-import { PlaceDetail } from '@/types/place';
+import { PlacesDetail } from '@/types/place/place-list';
 
 /**
  * props
@@ -13,8 +13,8 @@ import { PlaceDetail } from '@/types/place';
  */
 
 type Props = {
-  columns: ColumnDef<PlaceDetail>[];
-  data: PlaceDetail[];
+  columns: ColumnDef<PlacesDetail>[];
+  data: PlacesDetail[];
 };
 
 const TableComponent = ({ columns, data }: Props) => {
@@ -39,7 +39,12 @@ const TableComponent = ({ columns, data }: Props) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (data.length === 0) return <Text>دیتایی موجود نیست</Text>;
+  if (data.length === 0)
+    return (
+      <Flex justify={'center'} p={'40px'}>
+        <Text>دیتایی موجود نیست</Text>
+      </Flex>
+    );
 
   /**
    * template

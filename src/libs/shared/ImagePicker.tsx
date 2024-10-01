@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import Dropzone from 'react-dropzone';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -15,6 +15,8 @@ type Props = {
   children: ReactNode;
   defaultImage?: string;
   errorText?: string;
+  placeID: number;
+  type: 'MAIN' | 'GALLERY';
 };
 
 export const urlToObject = async (image: string) => {
@@ -24,7 +26,7 @@ export const urlToObject = async (image: string) => {
   return file;
 };
 
-const ImagePicker = ({ name, children, errorText }: Props) => {
+const ImagePicker = ({ name, children, errorText, placeID, type = 'GALLERY' }: Props) => {
   const { control, setValue } = useFormContext();
   const queryClient = useQueryClient();
 
@@ -33,7 +35,7 @@ const ImagePicker = ({ name, children, errorText }: Props) => {
     onSuccess: async data => {
       if (data.status === true) {
         ToastSuccess('عکس مورد نظر با موفقیت ثبت شد.');
-        queryClient.invalidateQueries({ queryKey: ['image-gallery'] });
+        await Promise.all([queryClient.invalidateQueries({ queryKey: ['image-gallery'] }), queryClient.invalidateQueries({ queryKey: ['all-places'] })]);
         setValue('isLoading', false);
       } else {
         ToastError(' امتحان نمایید');
@@ -42,40 +44,20 @@ const ImagePicker = ({ name, children, errorText }: Props) => {
     onError: err => {
       console.log(err, 'useRemovePlace');
     },
+    retry: 5,
   });
-
-  // const { mutate: createPlaceMutate, isPending: createPlaceIsPending } = useMutation({
-  //   mutationFn: async () => createPlace({ name: watch('name') } as any),
-  //   onSuccess: async data => {
-  //     if (data.status === true) {
-  //       const cityID = data.data.id;
-
-  //       if (cityID) {
-  //         setValue('cityId', cityID);
-  //         mutate({
-  //           files: image as File,
-  //           placeId: 13849,
-  //           type: 'GALLERY',
-  //         });
-  //       }
-  //     } else {
-  //       ToastError('لطفا دوباره امتحان نمایید');
-  //     }
-  //   },
-  //   onError: err => {
-  //     console.log(err, 'useRemovePlace');
-  //   },
-  // });
 
   const onDrop = (files: File[], onChange: (value: File) => void) => {
     if (files && files[0]) {
       const selectedImage = files[0];
       onChange(selectedImage);
-     mutate({
+      setValue('uploadImage', selectedImage);
+      mutate({
         files: selectedImage as File,
-        placeId: 13849,
-        type: 'GALLERY',
+        placeId: placeID,
+        type: type,
       });
+
       setValue('isLoading', true);
     }
   };

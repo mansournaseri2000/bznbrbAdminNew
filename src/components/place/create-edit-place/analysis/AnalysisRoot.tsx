@@ -1,11 +1,14 @@
 'use client';
 
-import { useFormContext } from 'react-hook-form';
+import { useCallback } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import { Slider } from '@radix-ui/themes';
+import { RadioGroup, Slider } from '@radix-ui/themes';
 
-import { Flex, Grid, Text } from '@/libs/primitives';
-import { Category, Season, TripData, TripLimitation } from '@/types/place';
+import { categoriesConstants, cost, renownLevel } from '@/constants/place';
+import { Flex, Grid, Text, TextField } from '@/libs/primitives';
+import { Divider } from '@/libs/shared';
+import { Category, Season, TripData, TripLimitation } from '@/types/place/place-constant';
 
 import Container from '../Container';
 
@@ -21,17 +24,25 @@ type Props = {
   tripLimitations: TripLimitation[];
 };
 
-const AnalysisRoot = ({ tripDatas, Categories, seasons, tripLimitations }: Props) => {
+const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
   /**
    * const and variables
    * _______________________________________________________________________________
    */
-  const { setValue, watch } = useFormContext();
-  const TripTypesItems = watch('TripTypes');
-  const placeCategoryItems = watch('PlaceCategories');
-  const placeTripSeasonsItems = watch('PlaceTripSeasons');
-  const tripLimitationsItems = watch('tripLimitations');
+  const { setValue ,watch } = useFormContext();
 
+  const TripTypesItems = useWatch({ name: 'TripTypes' });
+  const placeCategoryItems = useWatch({ name: 'PlaceCategories' });
+  const placeTripSeasonsItems = useWatch({ name: 'PlaceTripSeasons' });
+  const tripLimitationsItems = useWatch({ name: 'tripLimitations' });
+  const rating = useWatch({ name: 'rating' });
+  const trip_value = useWatch({ name: 'trip_value' });
+  const costValue = useWatch({ name: 'cost' });
+  const renownValue = useWatch({ name: 'renown' });
+
+  console.log(watch(), 'watch');
+
+  /**
   /**
    * useEffect
    * _______________________________________________________________________________
@@ -41,49 +52,60 @@ const AnalysisRoot = ({ tripDatas, Categories, seasons, tripLimitations }: Props
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const handleSliderChange = (tripTypeId: number, value: number) => {
-    const tripTypes = watch('TripTypes');
+  const handleSliderChange = useCallback(
+    (tripTypeId: number, value: number) => {
+      setValue(
+        'TripTypes',
+        TripTypesItems.map((item: { id: number }) => (item.id === tripTypeId ? { ...item, score: value } : item)),
+        { shouldDirty: true, shouldValidate: true }
+      );
+    },
+    [TripTypesItems, setValue]
+  );
 
-    setValue(
-      'TripTypes',
-      tripTypes.map((item: { tripTypeId: number }) =>
-        item.tripTypeId === tripTypeId ? { ...item, score: value } : item
-      )
-    );
-  };
+  const handleCategorySliderChange = useCallback(
+    (id: number, value: number) => {
+      setValue(
+        'PlaceCategories',
+        placeCategoryItems.map((item: { categoryId: number }) => (item.categoryId === id ? { ...item, score: value } : item)),
+        { shouldDirty: true, shouldValidate: true }
+      );
+    },
+    [placeCategoryItems, setValue]
+  );
 
-  const handleCategorySliderChange = (id: number, value: number) => {
-    const categoryTypes = watch('PlaceCategories');
+  const handlePlaceTripSeasonsSliderChange = useCallback(
+    (id: number, value: number) => {
+      setValue(
+        'PlaceTripSeasons',
+        placeTripSeasonsItems.map((item: { tripSeasonId: number }) => (item.tripSeasonId === id ? { ...item, score: value } : item)),
+        { shouldDirty: true, shouldValidate: true }
+      );
+    },
+    [placeTripSeasonsItems, setValue]
+  );
 
-    setValue(
-      'PlaceCategories',
-      categoryTypes.map((item: { categoryId: number }) =>
-        item.categoryId === id ? { ...item, score: value } : item
-      )
-    );
-  };
+  const handlePlaceTripSeasonsTimingChange = useCallback(
+    (id: number, value: number) => {
+      setValue(
+        'PlaceTripSeasons',
+        placeTripSeasonsItems.map((item: { tripSeasonId: number }) => (item.tripSeasonId === id ? { ...item, timing: value } : item)),
+        { shouldDirty: true, shouldValidate: true }
+      );
+    },
+    [placeTripSeasonsItems, setValue]
+  );
 
-  const handlePlaceTripSeasonsSliderChange = (id: number, value: number) => {
-    const PlaceTripSeasons = watch('PlaceTripSeasons');
-
-    setValue(
-      'PlaceTripSeasons',
-      PlaceTripSeasons.map((item: { tripSeasonId: number }) =>
-        item.tripSeasonId === id ? { ...item, score: value } : item
-      )
-    );
-  };
-
-  const handleTripLimitationsSliderChange = (id: number, value: number) => {
-    const tripLimitationsItems = watch('tripLimitations');
-
-    setValue(
-      'tripLimitations',
-      tripLimitationsItems.map((item: { tripLimitationId: number }) =>
-        item.tripLimitationId === id ? { ...item, score: value } : item
-      )
-    );
-  };
+  const handleTripLimitationsSliderChange = useCallback(
+    (id: number, value: number) => {
+      setValue(
+        'tripLimitations',
+        tripLimitationsItems.map((item: { tripLimitationId: number }) => (item.tripLimitationId === id ? { ...item, score: value } : item)),
+        { shouldDirty: true, shouldValidate: true }
+      );
+    },
+    [tripLimitationsItems, setValue]
+  );
 
   /**
    * template
@@ -93,17 +115,76 @@ const AnalysisRoot = ({ tripDatas, Categories, seasons, tripLimitations }: Props
     <Container height='auto' title='تحلیل بزنیم بیرون'>
       <Grid pb={'24px'} gap={'24px'} height={'max-content'}>
         {/* AmountOfCashCost _______________________________________________________________________________*/}
+        <Grid gap={'24px'} height={'max-content'}>
+          <Text>میزان هزینه نقدی</Text>
+          <RadioGroup.Root
+            defaultValue={costValue}
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: '24px',
+            }}
+            name='cost'
+            onValueChange={value => {
+              setValue('cost', value);
+            }}
+          >
+            {cost.map(item => {
+              return (
+                <RadioGroup.Item key={item.id} value={item.id} style={{ cursor: 'pointer' }}>
+                  <Text>{item.name}</Text>
+                </RadioGroup.Item>
+              );
+            })}
+          </RadioGroup.Root>
+          <Divider />
+        </Grid>
 
         {/* DegreeOfFame _______________________________________________________________________________*/}
+        <Grid gap={'24px'} height={'max-content'}>
+          <Text>میزان شهرت</Text>
+          <RadioGroup.Root
+            defaultValue={renownValue}
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: '24px',
+            }}
+            name='renown'
+            onValueChange={value => {
+              setValue('renown', value);
+            }}
+          >
+            {renownLevel.map(item => {
+              return (
+                <RadioGroup.Item key={item.id} value={String(item.id)} style={{ cursor: 'pointer' }}>
+                  <Text>{item.name}</Text>
+                </RadioGroup.Item>
+              );
+            })}
+          </RadioGroup.Root>
+          <Divider />
+        </Grid>
+
+        <Grid columns={'2'} gap={"24px"}>
+          <Flex direction={'column'} gap={'16px'}>
+            <Text>میزان اهمیت نقطه</Text>
+            <Slider defaultValue={[0]} value={[trip_value]} onValueChange={value => setValue('trip_value', value)} max={100} step={1} style={{ width: '100%' }} />
+          </Flex>
+          <Flex direction={'column'} gap={'16px'}>
+            <Text>رتبه بندی</Text>
+            <Slider defaultValue={[0]} value={[rating]} onValueChange={value => setValue('rating', value)} max={100} step={1} style={{ width: '100%' }} />
+          </Flex>
+        </Grid>
 
         {/* TypeOfTrip _______________________________________________________________________________*/}
         <Grid gap={'16px'}>
           <Text>نوع سفر</Text>
-          <Grid gap={'0px 100px'} columns={'2'}>
+          <Grid gap={'0px 30px'} columns={'2'}>
             {tripDatas.map(trip => {
-              const tripType = TripTypesItems.find(
-                (item: { tripTypeId: number }) => item.tripTypeId === trip.id
-              );
+              const tripType = TripTypesItems.find((item: { id: number }) => item.id === trip.id);
               return (
                 <Grid gap={'8px'} key={trip.id} mb='20px'>
                   <Text as='label'>{trip.name}</Text>
@@ -116,6 +197,7 @@ const AnalysisRoot = ({ tripDatas, Categories, seasons, tripLimitations }: Props
                       max={100}
                       step={1}
                       style={{ width: '100%' }}
+                      disabled={!tripType}
                     />
                   </Flex>
                 </Grid>
@@ -123,16 +205,12 @@ const AnalysisRoot = ({ tripDatas, Categories, seasons, tripLimitations }: Props
             })}
           </Grid>
         </Grid>
-        {/* Categories _______________________________________________________________________________*/}
-
+        {/* PlaceCategories _______________________________________________________________________________*/}
         <Grid gap={'16px'}>
           <Text>دسته‌بندی‌ها</Text>
-          <Grid gap={'0px 100px'} columns={'2'}>
-            {Categories.map(trip => {
-              const category = placeCategoryItems.find(
-                (item: { categoryId: number }) => item.categoryId === trip.id
-              );
-
+          <Grid gap={'0px 30px'} columns={'2'}>
+            {categoriesConstants.map(trip => {
+              const category = placeCategoryItems?.find((item: { categoryId: number }) => item.categoryId === trip.id);
               return (
                 <Grid gap={'8px'} key={trip.id} mb='20px'>
                   <Text as='label'>{trip.name}</Text>
@@ -153,31 +231,41 @@ const AnalysisRoot = ({ tripDatas, Categories, seasons, tripLimitations }: Props
           </Grid>
         </Grid>
 
-        {/* Categories _______________________________________________________________________________*/}
-
+        {/* tripSeasond _______________________________________________________________________________*/}
         <Grid gap={'16px'}>
           <Text>بهترین فصل , زمان شروع و مدت اقامت در هر فصل</Text>
-          <Grid columns={'2'}>
-            <Grid gap={'0px 100px'} columns={'2'}>
+          <Grid columns={'1'}>
+            <Grid gap={'0px 30px'} columns={'1'}>
               {seasons.map(trip => {
-                const tripSeasond = placeTripSeasonsItems.find(
-                  (item: { tripSeasonId: number }) => item.tripSeasonId === trip.id
-                );
+                const tripSeasond = placeTripSeasonsItems?.find((item: { tripSeasonId: number }) => item.tripSeasonId === trip.id);
 
                 return (
-                  <Grid gap={'8px'} key={trip.id} mb='20px'>
-                    <Text as='label'>{trip.name}</Text>
-                    <Flex gap={'10px'} align={'center'}>
-                      <Text>{tripSeasond?.score ?? 0}%</Text>
-                      <Slider
-                        defaultValue={[tripSeasond?.score ?? 0]}
-                        value={[tripSeasond?.score ?? 0]}
-                        onValueChange={value => handlePlaceTripSeasonsSliderChange(trip.id, Number(value))}
-                        max={100}
-                        step={1}
-                        style={{ width: '100%' }}
-                      />
-                    </Flex>
+                  <Grid columns={'2'} gap={'24px'} key={trip.id} mb='20px'>
+                    <Grid>
+                      <Text as='label'>{trip.name}</Text>
+                      <Flex gap={'10px'} align={'center'}>
+                        <Text>{tripSeasond?.score ?? 0}%</Text>
+                        <Slider
+                          defaultValue={[tripSeasond?.score ?? 0]}
+                          value={[tripSeasond?.score ?? 0]}
+                          onValueChange={value => handlePlaceTripSeasonsSliderChange(trip.id, Number(value))}
+                          max={100}
+                          step={1}
+                          style={{ width: '100%' }}
+                          disabled={!tripSeasond}
+                        />
+                      </Flex>
+                    </Grid>
+                    <Grid>
+                      {
+                        <TextField
+                          type='number'
+                          value={tripSeasond?.timing}
+                          placeholder={'مدت اقامت پیشنهادی'}
+                          onChange={e => handlePlaceTripSeasonsTimingChange(tripSeasond.tripSeasonId, Number(e.target.value))}
+                        />
+                      }
+                    </Grid>
                   </Grid>
                 );
               })}
@@ -185,34 +273,29 @@ const AnalysisRoot = ({ tripDatas, Categories, seasons, tripLimitations }: Props
           </Grid>
         </Grid>
 
-        {/* Categories _______________________________________________________________________________*/}
+        {/* tripLimitationsItem _______________________________________________________________________________*/}
         <Grid gap={'16px'}>
           <Text>محدودیت ها</Text>
-          <Grid columns={'2'}>
-            <Grid gap={'0px 100px'} columns={'2'}>
-              {tripLimitations.map(trip => {
-                const tripLimitationsItem = tripLimitationsItems.find(
-                  (item: { tripLimitationId: number }) => item.tripLimitationId === trip.id
-                );
-
-                return (
-                  <Grid gap={'8px'} key={trip.id} mb='20px'>
-                    <Text as='label'>{trip.name}</Text>
-                    <Flex gap={'10px'} align={'center'}>
-                      <Text>{tripLimitationsItem?.score ?? 0}%</Text>
-                      <Slider
-                        defaultValue={[tripLimitationsItem?.score ?? 0]}
-                        value={[tripLimitationsItem?.score ?? 0]}
-                        onValueChange={value => handleTripLimitationsSliderChange(trip.id, Number(value))}
-                        max={100}
-                        step={1}
-                        style={{ width: '100%' }}
-                      />
-                    </Flex>
-                  </Grid>
-                );
-              })}
-            </Grid>
+          <Grid gap={'0px 30px'} columns={'2'}>
+            {tripLimitations.map(trip => {
+              const tripLimitationsItem = tripLimitationsItems?.find((item: { tripLimitationId: number }) => item.tripLimitationId === trip.id);
+              return (
+                <Grid gap={'8px'} key={trip.id} mb='20px'>
+                  <Text as='label'>{trip.name}</Text>
+                  <Flex gap={'10px'} align={'center'}>
+                    <Text>{tripLimitationsItem?.score ?? 0}%</Text>
+                    <Slider
+                      defaultValue={[tripLimitationsItem?.score ?? 0]}
+                      value={[tripLimitationsItem?.score ?? 0]}
+                      onValueChange={value => handleTripLimitationsSliderChange(trip.id, Number(value))}
+                      max={100}
+                      step={1}
+                      style={{ width: '100%' }}
+                    />
+                  </Flex>
+                </Grid>
+              );
+            })}
           </Grid>
         </Grid>
       </Grid>
@@ -226,81 +309,3 @@ export default AnalysisRoot;
  * styled-component
  * _______________________________________________________________________________
  */
-
-{
-  /* <Grid gap={'24px'}>
-          <Text>بهترین فصل , زمان شروع و مدت اقامت در هر فصل</Text>
-          <Grid columns={'2'} gap={'24px 100px'}>
-            <Grid gap={'24px'}>
-              {BestSeason.map(item => {
-                return <CustomSlider key={item.id} lable={item.lable} />;
-              })}
-            </Grid>
-            <Grid align={'center'} columns={'2'} gap={'16px'}>
-              <Grid gap={'20px'}>
-                <Select errorText={''} items={LengthOfStay} placeholder={'دسته بندی'} store='province' />
-                <Select errorText={''} items={LengthOfStay} placeholder={'دسته بندی'} store='province' />
-                <Select errorText={''} items={LengthOfStay} placeholder={'دسته بندی'} store='province' />
-                <Select errorText={''} items={LengthOfStay} placeholder={'دسته بندی'} store='province' />
-              </Grid>
-              <Grid>
-                <TimePicker errorText={''} name='startTime' inputMode='none' placeholder='ساعت شروع' />
-                <TimePicker errorText={''} name='startTime' inputMode='none' placeholder='ساعت شروع' />
-                <TimePicker errorText={''} name='startTime' inputMode='none' placeholder='ساعت شروع' />
-                <TimePicker errorText={''} name='startTime' inputMode='none' placeholder='ساعت شروع' />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Divider />
-        </Grid> */
-}
-
-{
-  /* <Grid gap={'24px'} height={'max-content'}>
-          <Text>میزان هزینه نقدی</Text>
-          <RadioGroup.Root
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: '24px',
-            }}
-            defaultValue='1'
-            name='example'
-          >
-            {AmountOfCashCost.map(item => {
-              return (
-                <RadioGroup.Item key={item.id} value={String(item.id)} style={{ cursor: 'pointer' }}>
-                  <Text>{item.name}</Text>
-                </RadioGroup.Item>
-              );
-            })}
-          </RadioGroup.Root>
-          <Divider />
-        </Grid> */
-}
-
-{
-  /* <Grid gap={'24px'} height={'max-content'}>
-          <Text>میزان هزینه نقدی</Text>
-          <RadioGroup.Root
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: '24px',
-            }}
-            defaultValue='1'
-            name='example'
-          >
-            {DegreeOfFame.map(item => {
-              return (
-                <RadioGroup.Item key={item.id} value={String(item.id)} style={{ cursor: 'pointer' }}>
-                  <Text>{item.name}</Text>
-                </RadioGroup.Item>
-              );
-            })}
-          </RadioGroup.Root>
-          <Divider />
-        </Grid> */
-}

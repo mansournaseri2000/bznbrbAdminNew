@@ -2,180 +2,125 @@
 
 import { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
 
-import { convertToRaw, EditorState, RawDraftContentState } from 'draft-js';
+import { Spinner } from '@radix-ui/themes';
+import { ContentState, convertFromHTML, convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 
-import { Button, Flex, Grid, Modal, Text, TextArea, TextField } from '@/libs/primitives';
-import { details } from '@/types/place';
+import { Button, Flex, Grid, Text } from '@/libs/primitives';
+import { Detail } from '@/types/place/place-constant';
 
 import Container from '../Container';
 
-const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), { ssr: false });
-
-interface SubmittedData {
-  detailId: number;
-  descriptions: string;
-}
-
-const editorFields = [
-  { id: 5, name: 'زمان مناسب بازدید' },
-  { id: 13, name: 'نکات منفی' },
-  { id: 2, name: 'تاریخچه ' },
-  { id: 14, name: 'منبع' },
-  { id: 7, name: 'پیشنهاد ویژه' },
-  { id: 9, name: 'امکانات ویژه' },
-  { id: 3, name: 'ویژگی‌ها' },
-  { id: 10, name: 'وسایل مورد نیاز' },
-  { id: 12, name: 'نکات مثبت' },
-  { id: 1, name: 'مشخصات' },
-  { id: 6, name: 'سانس‌ها ' },
-  { id: 4, name: 'سیمای عمومی' },
-  { id: 11, name: 'سایر اطلاعات' },
-];
+const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), {
+  ssr: false,
+  loading: () => <Spinner />,
+});
 
 type Props = {
-  details: details[];
+  details: Detail[];
 };
 
 const Description = ({ details }: Props) => {
-  const [editorStates, setEditorStates] = useState<Record<number, EditorState>>(
-    editorFields.reduce(
+  const { setValue } = useFormContext();
+  const PlaceDetails = useWatch({ name: 'PlaceDetails' });
+  const [key, setKey] = useState<{ id: number; name: string }>(details[0]);
+
+  const [editorStates, setEditorStates] = useState(
+    details.reduce(
       (acc, field) => {
-        acc[field.id] = EditorState.createEmpty();
+        const detail = PlaceDetails.find((detail: { id: number }) => detail.id === field.id);
+
+        if (detail && detail.description) {
+          const blocksFromHTML = convertFromHTML(detail.description);
+          const contentState = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
+          acc[field.id] = EditorState.createWithContent(contentState);
+        } else {
+          acc[field.id] = EditorState.createEmpty();
+        }
+
         return acc;
       },
-      {} as Record<number, EditorState>
+      {} as { [key: number]: EditorState }
     )
   );
-  console.log(details);
 
-  const [descriptionItems, setDescriptionItems] = useState([
-    { id: 1, title: 'عنوان', description: 'لورم اپیسوم متن ساختگی' },
-    { id: 2, title: 'عنوان', description: 'لورم اپیسوم متن ساختگی' },
-  ]);
-  const [isOpen, setIsOpen] = useState(false);
-  const { control } = useFormContext();
-
+  // Function to handle editor state change
   const handleEditorStateChange = (id: number, newState: EditorState) => {
-    setEditorStates(prevStates => ({
-      ...prevStates,
+    setEditorStates({
+      ...editorStates,
       [id]: newState,
-    }));
-  };
-
-  console.log(descriptionItems);
-
-  const handleRemoveItem = (id: number) => {
-    setDescriptionItems(prevItems => prevItems.filter(item => item.id !== id));
-    // Optionally, you can also clear the editor state for the removed item
-    setEditorStates(prevStates => {
-      const newStates = { ...prevStates };
-      delete newStates[id]; // Remove editor state for the deleted item
-      return newStates;
     });
   };
 
+  // Function to handle form submission
   const handleSubmit = () => {
-    const data: SubmittedData[] = editorFields.reduce<SubmittedData[]>((acc, field) => {
-      const rawContent: RawDraftContentState = convertToRaw(
-        editorStates[field.id]?.getCurrentContent() || EditorState.createEmpty().getCurrentContent()
-      );
-      const htmlContent: string = draftToHtml(rawContent);
-      const isEmpty = !rawContent.blocks.some(block => block.text.trim() !== '');
+    const PlaceDetails = details
+      .map(field => {
+        const contentState = editorStates[field.id].getCurrentContent();
+        const descriptions = draftToHtml(convertToRaw(contentState)).trim(); // Convert to HTML and trim spaces
 
-      if (!isEmpty) {
-        acc.push({
-          detailId: field.id,
-          descriptions: htmlContent,
-        });
-      }
+        // Return only if descriptions is not an empty string
+        if (descriptions !== '<p></p>' && descriptions !== '') {
+          return {
+            detailId: field.id,
+            descriptions,
+          };
+        }
 
-      return acc;
-    }, []);
+        return null;
+      })
+      .filter(detail => detail !== null);
 
-    console.log(data);
+    setValue('PlaceDetails', PlaceDetails);
   };
 
   return (
     <>
-      <Container height='auto' title='توضیحات'>
-        <Grid height={'max-content'} gap={'16px'}>
-          {/* <Button style={{ width: 'max-content' }} variant='soft' size={'4'} onClick={() => setIsOpen(true)}>
-            <Text>افزودن توضیح</Text>
-          </Button> */}
-          <Grid gap={'16px'}>
-            {editorFields.map(field => (
-              <Grid
-                overflow={'hidden'}
-                p={'16px'}
-                gap={'16px'}
-                key={field.id}
-                style={{ border: '1px solid #000', borderRadius: '8px' }}
-              >
-                <Flex align={'center'} justify={'between'}>
-                  <Text>{field.name}</Text>
-                  <Button size={'4'} variant='soft' type='button' onClick={() => handleRemoveItem(field.id)}>
-                    حذف مورد
-                  </Button>
-                </Flex>
-                <Editor
-                  editorStyle={{ minHeight: '200px', overflow: 'auto' }}
-                  editorState={editorStates[field.id]}
-                  toolbarClassName='toolbarClassName'
-                  wrapperClassName='wrapperClassName'
-                  editorClassName='editorClassName'
-                  onEditorStateChange={newState => handleEditorStateChange(field.id, newState)}
-                />
-              </Grid>
+      <Container height='max-content' title='توضیحات'>
+        <Grid height={'max-content'} gap={'16px'} pb={'20px'}>
+          {/* Render the tabs for editor fields */}
+          <Flex py={'24px'} gap={'16px'} overflowX={'auto'}>
+            {details.map(item => (
+              <Button type='button' key={item.id} onClick={() => setKey(item)} variant={key.name === item.name ? 'soft' : 'solid'} size={'4'}>
+                <Text>{item.name}</Text>
+              </Button>
             ))}
+          </Flex>
+
+          {/* Render the selected editor */}
+          <Grid gap={'16px'}>
+            <Flex justify={'between'} align={'center'}>
+              <Text>{key.name}</Text>
+              <Button style={{ width: 'max-content', minWidth: '150px' }} variant='soft' size={'4'} type='button' onClick={handleSubmit}>
+                <Text>ثبت</Text>
+              </Button>
+            </Flex>
+            <Editor
+              editorStyle={{
+                minHeight: '150px',
+                overflow: 'auto',
+                border: '1px solid #00000046',
+                borderRadius: '8px',
+                padding: '8px',
+                position: 'static',
+                height: 'fit-content',
+              }}
+              editorState={editorStates[key.id]} // Set the correct editor state for the selected key
+              toolbarClassName='toolbarClassName'
+              wrapperClassName='wrapperClassName'
+              editorClassName='editorClassName'
+              onEditorStateChange={newState => handleEditorStateChange(key.id, newState)}
+              placeholder={key.name}
+            />
           </Grid>
-          <Button variant='soft' size={'4'} type='button' onClick={handleSubmit}>
-            <Text>ثبت</Text>
-          </Button>
         </Grid>
       </Container>
-
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <Grid gap={'8px'}>
-          <Controller
-            name='pointName'
-            control={control}
-            render={({ field }) => <TextField {...field} placeholder='نام عنوان' aria-label='textFiled' />}
-          />
-          <Controller
-            name='summary_of_the_description'
-            control={control}
-            render={({ field }) => <TextArea {...field} placeholder='خلاصه توضیحات' aria-label='TextArea' />}
-          />
-          <Grid gap={'16px'} columns={'2'}>
-            <Button variant='soft' size={'4'}>
-              <Text>ثبت</Text>
-            </Button>
-            <Button type='button' onClick={() => setIsOpen(false)} variant='solid' size={'4'}>
-              <Text>انصراف</Text>
-            </Button>
-          </Grid>
-        </Grid>
-      </Modal>
     </>
   );
 };
 
 export default Description;
-
-/**
- * styled-component
- * _______________________________________________________________________________
- */
-
-{
-  /* <Grid gap={'16px'}>
-{descriptionItems.map(item => (
-  <DescriptionCard key={item.id} title={item.title} description={item.description} />
-))}
-</Grid> */
-}

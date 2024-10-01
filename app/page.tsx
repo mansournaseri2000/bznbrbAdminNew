@@ -6,24 +6,22 @@ import 'react-responsive-pagination/themes/classic.css';
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { removePlace, useGetAllPlaces } from '@/api/place';
-import { SearchAllPlaces } from '@/components/place';
+import { getAllPlacesConstants, removePlace, useGetAllPlaces } from '@/api/place';
+import { SearchAllPlaces, SearchByCity } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { updateUrlWithPageNumber } from '@/libs/utils';
-import { picture, PlaceDetail } from '@/types/place';
+import { Pictrue, PlacesDetail } from '@/types/place/place-list';
 
-const ResponsivePagination = dynamic(
-  () => import('react-responsive-pagination').then(madule => madule.default),
-  { ssr: false }
-);
+const ResponsivePagination = dynamic(() => import('react-responsive-pagination').then(madule => madule.default), { ssr: false });
 
 const Table = dynamic(() => import('@/libs/shared/Table'), {
   ssr: false,
@@ -47,42 +45,27 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
    * _______________________________________________________________________________
    */
   const queryClient = useQueryClient();
-  const columns: ColumnDef<PlaceDetail>[] = [
+  const columns: ColumnDef<PlacesDetail>[] = [
     {
       accessorKey: 'pictrues',
       header: 'تصویر',
       cell: info => {
-        const pictures = info.getValue<picture[]>();
+        const pictures = info.getValue<Pictrue[]>();
         const imageUrl = pictures.length > 0 ? `http://37.32.8.14/${pictures[0].path}` : '/placeholder.jpg';
-        return (
-          <Image
-            loading='lazy'
-            src={imageUrl}
-            alt='profile'
-            width={50}
-            height={50}
-            style={{ borderRadius: '4px' }}
-          />
-        );
+        return <Image loading='lazy' src={imageUrl} alt='profile' width={50} height={50} style={{ borderRadius: '4px' }} />;
       },
     },
     {
       accessorKey: 'name',
       header: 'نام نقطه',
-      cell: info => (
-        <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
-          {info.getValue() as string}
-        </Text>
-      ),
+      cell: info => <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{info.getValue() as string}</Text>,
     },
     {
       accessorKey: 'province',
       header: 'استان',
       cell: info => {
         const value = info.getValue() as string | null;
-        return (
-          <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</Text>
-        );
+        return <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</Text>;
       },
     },
     {
@@ -90,9 +73,7 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
       header: 'شهر',
       cell: info => {
         const value = info.getValue() as string | null;
-        return (
-          <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</Text>
-        );
+        return <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</Text>;
       },
     },
     {
@@ -101,11 +82,11 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
       cell: ({ row }) => {
         const item = row.original;
         const handleClick = () => {
-          push(`/place/${item.id}`);
+          push(`/place/edit/${item.id}`);
         };
         return (
           <Flex height={'100%'} align={'center'}>
-            <Button variant='outline' onClick={handleClick}>
+            <Button variant='soft' size={'4'} onClick={handleClick}>
               جزییات بیشتر
             </Button>
           </Flex>
@@ -118,13 +99,12 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
       cell: ({ row }) => {
         const item = row.original;
         const handleClick = () => {
-          console.log(item);
           setPlaceItem(item);
           setIsOpen(true);
         };
         return (
           <Flex height={'100%'} align={'center'}>
-            <Button variant='outline' onClick={handleClick}>
+            <Button variant='soft' size={'4'} onClick={handleClick}>
               حذف کردن
             </Button>
           </Flex>
@@ -152,8 +132,13 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     city: debouncedCity,
   };
 
+  const { data: constantData, isLoading: constantDataLoading } = useQuery({
+    queryKey: ['constant'],
+    queryFn: async () => getAllPlacesConstants(),
+  });
+
   const newData = UseGetFilterTable(debouncedSearchCriteria, data ? data?.placesDetail : []);
-  const [placeItem, setPlaceItem] = useState<PlaceDetail>(newData[0]);
+  const [placeItem, setPlaceItem] = useState<PlacesDetail>(newData[0]);
   const { mutate: removePlaceMutate, isPending: removePlaceIsPending } = useMutation({
     mutationFn: async () => removePlace(placeItem.id),
     onSuccess: async data => {
@@ -169,6 +154,8 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
       console.log(err, 'useRemovePlace');
     },
   });
+
+  if (constantDataLoading || !constantData) return <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />;
 
   /**
    * template
@@ -187,47 +174,20 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
             borderRadius: '8px',
           }}
         >
-          <SearchAllPlaces />
           <Flex gap={'20px'}>
-            <Button type='button' style={{ width: 'fit-content', minHeight: '45px', paddingInline: '20px' }}>
-              اضافه کردن
-            </Button>
+            <Link href={'/place/create'}>
+              <Button type='button' size={'4'} variant='soft' style={{ width: '150px', minHeight: '45px', paddingInline: '20px', marginBottom: '10px' }}>
+                اضافه کردن
+              </Button>
+            </Link>
             <Grid style={{ flex: 1 }} gap={'10px'} columns={'3'}>
-              <Controller
-                name='plcaeName'
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    placeholder='نام نقطه مورد نظرتان را وارد کنید ...'
-                    aria-label='Search field'
-                  />
-                )}
-              />
-              <Controller
-                name='province'
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    placeholder='نام استان مورد نظرتان را وارد کنید ...'
-                    aria-label='Search field'
-                  />
-                )}
-              />
-              <Controller
-                name='city'
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    placeholder='نام شهر مورد نظرتان را وارد کنید ...'
-                    aria-label='Search field'
-                  />
-                )}
-              />
+              <Controller name='plcaeName' control={control} render={({ field }) => <TextField {...field} placeholder='نام نقطه مورد نظرتان را وارد کنید ...' aria-label='Search field' />} />
+              <Controller name='province' control={control} render={({ field }) => <TextField {...field} placeholder='نام استان مورد نظرتان را وارد کنید ...' aria-label='Search field' />} />
+              <Controller name='city' control={control} render={({ field }) => <TextField {...field} placeholder='نام شهر مورد نظرتان را وارد کنید ...' aria-label='Search field' />} />
             </Grid>
           </Flex>
+          <SearchAllPlaces />
+          <SearchByCity province={constantData?.provinces} />
 
           {isError ? (
             <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>

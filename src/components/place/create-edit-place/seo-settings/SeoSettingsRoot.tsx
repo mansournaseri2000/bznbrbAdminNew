@@ -40,16 +40,8 @@ const SeoSettingsRoot = () => {
   const { control, watch, setValue } = useFormContext();
   const [isOpen, setIsOpen] = useState(false);
   const [key, setKey] = useState<'meta' | 'tag'>('tag');
-  const [tagList, setTagList] = useState<{ id: number; label: string }[]>(
-    processStringToTags(watch('keywords'))
-  );
-  const [metaTagList, setMetaTagList] = useState<{ id: number; label: string }[]>(
-    processStringToTags(watch('metakeywords'))
-  );
-
-  console.log(watch('metakeywords'), 'metakeywordsmetakeywordsmetakeywords');
-
-  console.log(metaTagList, 'metaTagListmetaTagList');
+  const [tagList, setTagList] = useState<{ id: number; label: string }[]>(processStringToTags(watch('keywords')));
+  const [metaTagList, setMetaTagList] = useState<{ id: number; label: string }[]>(processStringToTags(watch('metakeywords')));
 
   /**
    * useEffect
@@ -61,17 +53,7 @@ const SeoSettingsRoot = () => {
    * _______________________________________________________________________________
    */
 
-  const addTag = ({
-    hookformStore,
-    inputStore,
-    localStore,
-    updateLocalStore,
-  }: {
-    hookformStore: string;
-    inputStore: string;
-    localStore: any;
-    updateLocalStore: any;
-  }) => {
+  const addTag = ({ hookformStore, inputStore, localStore, updateLocalStore }: { hookformStore: string; inputStore: string; localStore: any; updateLocalStore: any }) => {
     const pointName = watch(inputStore).trim();
 
     if (!pointName) return;
@@ -89,17 +71,7 @@ const SeoSettingsRoot = () => {
     setIsOpen(false);
   };
 
-  const removeTag = ({
-    id,
-    localStore,
-    setLocalStore,
-    hookformStore,
-  }: {
-    id: number;
-    localStore: any;
-    setLocalStore: any;
-    hookformStore: string;
-  }) => {
+  const removeTag = ({ id, localStore, setLocalStore, hookformStore }: { id: number; localStore: any; setLocalStore: any; hookformStore: string }) => {
     const updatedTagList = localStore.filter((tag: { id: number }) => tag.id !== id);
     setLocalStore(updatedTagList);
     const tagsAsString = convertTagsToString(updatedTagList);
@@ -150,18 +122,8 @@ const SeoSettingsRoot = () => {
             })}
           </Flex>
           <Divider />
-          <Controller
-            name='meta_title'
-            control={control}
-            render={({ field }) => (
-              <TextField {...field} placeholder='عنوان صفحه ( متا تایتل )' aria-label='textFiled' />
-            )}
-          />
-          <Controller
-            name='meta_description'
-            control={control}
-            render={({ field }) => <TextArea {...field} placeholder='توضیحات متا' aria-label='TextArea' />}
-          />
+          <Controller name='meta_title' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان صفحه ( متا تایتل )' aria-label='textFiled' />} />
+          <Controller name='meta_description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات متا' aria-label='TextArea' />} />
           <Divider />
           <Button
             type='button'
@@ -206,13 +168,7 @@ const SeoSettingsRoot = () => {
         {key === 'tag' && (
           <Grid gap={'24px'}>
             <Text>افزودن تگ</Text>
-            <Controller
-              name='keyword'
-              control={control}
-              render={({ field }) => (
-                <TextField autoFocus {...field} placeholder='نام عنوان' aria-label='textFiled' />
-              )}
-            />
+            <Controller name='keyword' control={control} render={({ field }) => <TextField autoFocus {...field} placeholder='نام عنوان' aria-label='textFiled' />} />
             <Grid gap={'16px'} columns={'2'}>
               <Button
                 type='button'
@@ -230,7 +186,7 @@ const SeoSettingsRoot = () => {
               >
                 <Text>ثبت</Text>
               </Button>
-              <Button onClick={() => setIsOpen(false)} variant='solid' size={'4'}>
+              <Button type='button' onClick={() => setIsOpen(false)} variant='solid' size={'4'}>
                 <Text>انصراف</Text>
               </Button>
             </Grid>
@@ -239,15 +195,10 @@ const SeoSettingsRoot = () => {
         {key === 'meta' && (
           <Grid gap={'24px'}>
             <Text>افزودن متا تگ</Text>
-            <Controller
-              name='metakeyword'
-              control={control}
-              render={({ field }) => (
-                <TextField autoFocus {...field} placeholder='نام عنوان' aria-label='textFiled' />
-              )}
-            />
+            <Controller name='metakeyword' control={control} render={({ field }) => <TextField autoFocus {...field} placeholder='نام عنوان' aria-label='textFiled' />} />
             <Grid gap={'16px'} columns={'2'}>
               <Button
+                type='button'
                 onClick={() => {
                   addTag({
                     inputStore: 'metakeyword',
@@ -262,7 +213,7 @@ const SeoSettingsRoot = () => {
               >
                 <Text>ثبت</Text>
               </Button>
-              <Button onClick={() => setIsOpen(false)} variant='solid' size={'4'}>
+              <Button type='button' onClick={() => setIsOpen(false)} variant='solid' size={'4'}>
                 <Text>انصراف</Text>
               </Button>
             </Grid>
