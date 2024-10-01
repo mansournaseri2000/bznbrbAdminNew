@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import styled from 'styled-components';
 
-import AppButton from '@/libs/primitives/components/Button';
+import AppIconButton from '@/libs/primitives/components/IconButton';
 import AppBox from '@/libs/primitives/layout/Box';
 import AppFlex from '@/libs/primitives/layout/Flex';
 import AppGrid from '@/libs/primitives/layout/Grid';
@@ -41,10 +41,10 @@ const UserDetail: React.FC<UserDetailProps> = (props: UserDetailProps) => {
         style={{ borderBottom: '1px solid #D4D4D4' }}
       >
         <AppHeading>اطلاعات کاربر</AppHeading>
-        {/* TODO: add icon and fix border radius */}
-        <AppButton size={'3'} radius='full'>
+        {/* TODO: add icon */}
+        <AppIconButton size={'3'} radius='full'>
           icon
-        </AppButton>
+        </AppIconButton>
       </AppFlex>
       <AppFlex direction={'column'} gap={'4'} align={'center'}>
         <AppFlex direction={'column'} gap={'3'} align={'center'}>
