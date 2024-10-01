@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
-import GeographicInfo from '@/components/develope/automation/geographic-info/GeographicInfo';
+import AutomationProfile from '@/components/develope/automation/profile/AutomationProfile';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -180,9 +180,13 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <GeographicInfo
-            companyName='فرودگاه دشت ناز '
-            description='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
+          <AutomationProfile
+            user='حامد احمدی'
+            type=''
+            teamName='محتوا'
+            status=''
+            changeDate='چهارشنبه 10 فروردین 1401'
+            profileImg=''
           />
         </Flex>
         <Flex
