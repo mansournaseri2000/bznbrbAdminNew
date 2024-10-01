@@ -13,7 +13,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace, useGetAllPlaces } from '@/api/place';
-import UserAutomation from '@/components/develope/automation/user-automation/UserAutomation';
 import { SearchAllPlaces } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
@@ -180,14 +179,7 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     <>
       <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
         <Flex width={'100%'} justify={'center'}>
-          <UserAutomation
-            operatorName='حامد احمدی'
-            date='چهارشنبه 10 فروردین 1401'
-            status='در انتظار تایید'
-            type='ثبت کاربر + تورلیدر'
-            operatedOn='میثم مطیعی'
-            team='منابع انسانی'
-          />
+          k
         </Flex>
         <Flex
           gap={'10px'}
