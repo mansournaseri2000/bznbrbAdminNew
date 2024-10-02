@@ -25,12 +25,12 @@ type Props = {
   placeID: number;
 };
 
-const ImageGallery = ({ placeID, status }: Props) => {
+const ImageGallery = ({ placeID }: Props) => {
   /**
    * const and variables
    * _______________________________________________________________________________
    */
-  const { setValue, watch } = useFormContext();
+  const { setValue } = useFormContext();
   const isLoading = useWatch({ name: 'isLoading' });
   const [isOpen, setIsOpen] = useState(false);
   const [imageID, setImageID] = useState<null | number>(null);

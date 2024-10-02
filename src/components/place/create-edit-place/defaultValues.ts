@@ -1,5 +1,3 @@
-import { serializeFeatures } from '@/libs/utils';
-
 // Example data
 export const placeCategories = [
   { id: 3, name: 'هنرگردی', score: 0 },

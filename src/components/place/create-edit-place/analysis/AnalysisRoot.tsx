@@ -29,7 +29,7 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const { setValue, watch, control } = useFormContext();
+  const { setValue, control } = useFormContext();
 
   const TripTypesItems = useWatch({ name: 'TripTypes' });
   const placeCategoryItems = useWatch({ name: 'PlaceCategories' });

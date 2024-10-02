@@ -3,7 +3,6 @@
 import { useState } from 'react';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
@@ -32,7 +31,6 @@ const SearchPlaceCard = ({ city, name, pictures, province, id }: Props) => {
   const queryClient = useQueryClient();
   const { push } = useRouter();
   const imageUrl = pictures.length > 0 ? `http://37.32.8.14/${pictures[0].path}` : '/placeholder.jpg';
-  
 
   /**
    * useEffect

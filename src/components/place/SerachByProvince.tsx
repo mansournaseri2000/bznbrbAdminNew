@@ -4,10 +4,10 @@ import { useCallback, useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Spinner } from '@radix-ui/themes';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { styled } from 'styled-components';
 
-import { getAllPlacesByCityID, getAllPlacesByProvinceID } from '@/api/place';
+import { getAllPlacesByProvinceID } from '@/api/place';
 import { Button, Flex, Grid, Select, Text } from '@/libs/primitives';
 import { Province } from '@/types/place/place-constant';
 
@@ -37,7 +37,7 @@ const SerachByProvince = ({ province }: Props) => {
     },
   });
 
-  const { handleSubmit, watch, setValue } = methods;
+  const { watch, setValue } = methods;
   const ProvinceID = watch('province');
   const observerElem = useRef<HTMLDivElement | null>(null);
 

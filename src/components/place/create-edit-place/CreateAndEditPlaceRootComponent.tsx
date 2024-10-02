@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
@@ -17,7 +16,6 @@ import { placeWorkTimeSchedule, seasons } from '@/constants/place';
 import { Button, Grid, Heading, Text } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { serializeCategories, serializeFeatures, serializePlaceWorkTimeSchedule, serializeTripLimitations, serializeTripSeasons } from '@/libs/utils';
-import { serializePlaceWorkTime } from '@/libs/utils/place/place-seryalizer';
 import { Boxshadow } from '@/theme';
 import { PlaceConstantResponse, PlaceResponse } from '@/types/place';
 import { PlaceCategory } from '@/types/place/create-place';
@@ -166,7 +164,7 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const { handleSubmit, reset, watch, setValue } = methods;
+  const { handleSubmit } = methods;
 
   const { mutate: editPlaceMutate, isPending: editPlaceIspending } = useMutation({
     mutationFn: async (params: fomrData) => editPlace(params, placeID),

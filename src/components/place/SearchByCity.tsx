@@ -39,7 +39,7 @@ const SearchByCity = ({ province }: Props) => {
     },
   });
 
-  const { handleSubmit, watch, setValue } = methods;
+  const { watch, setValue } = methods;
   const city = province.filter(item => item.id === Number(watch('province')))[0]?.Cities;
   const cityID = watch('city');
   const observerElem = useRef<HTMLDivElement | null>(null);

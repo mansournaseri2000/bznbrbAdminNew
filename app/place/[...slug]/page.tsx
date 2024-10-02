@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 
 import { Spinner } from '@radix-ui/themes';
-import { useQueries, useQuery } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 
 import { getAllPlacesConstants, getPlace } from '@/api/place';
 import { PlaceResponse } from '@/types/place';
@@ -37,8 +37,8 @@ const CreateAndEditPlacePage = ({ params }: { params: { slug: string } }) => {
     ],
   });
   const [constantResult, editPlaceResult] = results;
-  const { data: constantData, isError: constantError, isLoading: constantLoading } = constantResult;
-  const { data: placeData, isError: placeError, isLoading: placeIsLoading } = editPlaceResult;
+  const { data: constantData } = constantResult;
+  const { data: placeData, isLoading: placeIsLoading } = editPlaceResult;
 
   if (!constantData || placeIsLoading) return <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />;
 

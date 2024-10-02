@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { fomrData, placeCategories, placeTripLimitations, placeTripSeasons, placeTripTypes } from '@/components/place/create-edit-place/defaultValues';
+import { fomrData } from '@/components/place/create-edit-place/defaultValues';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { serializeTripType } from '@/libs/utils';
 import { ApiManager } from '@/libs/utils/axios.config';
