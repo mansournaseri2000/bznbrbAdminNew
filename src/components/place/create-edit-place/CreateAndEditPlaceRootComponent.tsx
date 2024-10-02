@@ -92,6 +92,7 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
             renown: placeData?.renown,
             rating: placeData?.rating,
             trip_value: placeData?.trip_value,
+            suggested_time: placeData?.suggested_time,
 
             features: serializeFeatures(placeData.features),
             TripTypes: placeData.Place_TripType,
@@ -128,6 +129,7 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
             renown: 'LOW',
             rating: 0,
             trip_value: 0,
+            suggested_time: 0,
 
             airplane: null,
             bus: null,

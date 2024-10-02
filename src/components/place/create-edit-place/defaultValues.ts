@@ -123,6 +123,7 @@ export type fomrData = {
   renown: string;
   rating: number;
   trip_value: number;
+  suggested_time: number;
 
   PlaceCategories: { categoryId: number; score: number }[];
   PlaceTripSeasons: { tripSeasonId: number; score: number; timing: number }[];

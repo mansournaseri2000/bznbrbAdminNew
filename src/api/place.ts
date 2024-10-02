@@ -52,7 +52,6 @@ export const getAllPlacesByCityID = async (pageNumber: number, cityID: number) =
   return res.data.data;
 };
 
-
 /**
  * search all-places by provinceID services
  * _______________________________________________________________________________
@@ -203,6 +202,7 @@ export const createPlace = async (params: fomrData) => {
     area,
     trip_value,
     rating,
+    suggested_time,
   } = params;
   const res = await ApiManager.post<ApiData<PlaceResponse>>('places/create', {
     name: name,
@@ -242,6 +242,7 @@ export const createPlace = async (params: fomrData) => {
     area: area,
     rating: Number(rating),
     trip_value: Number(trip_value),
+    suggested_time: suggested_time,
   });
   return res.data;
 };
@@ -300,6 +301,7 @@ export const editPlace = async (params: fomrData, id: number) => {
     area,
     rating,
     trip_value,
+    suggested_time,
   } = params;
 
   const res = await ApiManager.put<ApiData<PlaceResponse>>(`places/update/${id}`, {
@@ -340,6 +342,7 @@ export const editPlace = async (params: fomrData, id: number) => {
     area: area,
     rating: Number(rating),
     trip_value: Number(trip_value),
+    suggested_time: suggested_time,
   });
 
   return res.data;

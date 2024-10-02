@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import { RadioGroup, Slider } from '@radix-ui/themes';
 
@@ -29,7 +29,7 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const { setValue, watch } = useFormContext();
+  const { setValue, watch, control } = useFormContext();
 
   const TripTypesItems = useWatch({ name: 'TripTypes' });
   const placeCategoryItems = useWatch({ name: 'PlaceCategories' });
@@ -39,8 +39,6 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
   const trip_value = useWatch({ name: 'trip_value' });
   const costValue = useWatch({ name: 'cost' });
   const renownValue = useWatch({ name: 'renown' });
-
-  console.log(watch(), 'watch');
 
   /**
   /**
@@ -235,6 +233,11 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
               );
             })}
           </Grid>
+        </Grid>
+
+        <Grid gap={'16px'} maxWidth={'50%'}>
+          <Text>مدت زمان بازدید از این جا‌ذبه</Text>
+          <Controller name='suggested_time' control={control} render={({ field }) => <TextField {...field} placeholder='مدت زمان بازدید از این جا‌ذبه' aria-label='' />} />
         </Grid>
 
         {/* tripSeasond _______________________________________________________________________________*/}
