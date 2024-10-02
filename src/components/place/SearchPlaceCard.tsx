@@ -19,8 +19,11 @@ import { PlacesDetail } from '@/types/place/search-place';
  * props
  * _______________________________________________________________________________
  */
+type Props = {
+  index: number;
+} & PlacesDetail;
 
-const SearchPlaceCard = ({ city, name, pictures, province, id }: PlacesDetail) => {
+const SearchPlaceCard = ({ city, name, pictures, province, id }: Props) => {
   /**
    * const and variables
    * _______________________________________________________________________________
@@ -29,6 +32,7 @@ const SearchPlaceCard = ({ city, name, pictures, province, id }: PlacesDetail) =
   const queryClient = useQueryClient();
   const { push } = useRouter();
   const imageUrl = pictures.length > 0 ? `http://37.32.8.14/${pictures[0].path}` : '/placeholder.jpg';
+  
 
   /**
    * useEffect
@@ -77,6 +81,7 @@ const SearchPlaceCard = ({ city, name, pictures, province, id }: PlacesDetail) =
         style={{ border: '1px solid #00000029', borderRadius: '8px', cursor: 'pointer' }}
       >
         <Flex gap={'24px'} align={'center'}>
+          <Text>{id}</Text>
           <Image style={{ borderRadius: '8px' }} src={imageUrl} width={50} height={50} alt='search-image' />
           <Text>{name}</Text>
           <Text>{province}</Text>

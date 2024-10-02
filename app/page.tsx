@@ -14,7 +14,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { getAllPlacesConstants, removePlace, useGetAllPlaces } from '@/api/place';
-import { SearchAllPlaces, SearchByCity } from '@/components/place';
+import { SearchAllPlaces, SearchByCity, SerachByProvince } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
@@ -46,6 +46,16 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
    */
   const queryClient = useQueryClient();
   const columns: ColumnDef<PlacesDetail>[] = [
+    {
+      accessorKey: 'index',
+      header: 'ردیف',
+      cell: info => <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{info.row.index + 1}</Text>,
+    },
+    {
+      accessorKey: 'id',
+      header: 'شناسه',
+      cell: info => <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{info.getValue() as any}</Text>,
+    },
     {
       accessorKey: 'pictrues',
       header: 'تصویر',
@@ -187,6 +197,7 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
             </Grid>
           </Flex>
           <SearchAllPlaces />
+          <SerachByProvince province={constantData?.provinces} />
           <SearchByCity province={constantData?.provinces} />
 
           {isError ? (

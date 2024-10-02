@@ -1,5 +1,6 @@
 export { default as SearchAllPlaces } from './SearchAllPlaces';
 export { default as SearchByCity } from './SearchByCity';
+export { default as SerachByProvince } from './SerachByProvince';
 export { default as CreateAndEditPlaceRootComponent } from './create-edit-place/CreateAndEditPlaceRootComponent';
 export { default as Container } from './create-edit-place/Container';
 export { default as PlaceInfo } from './create-edit-place/PlaceInfo';

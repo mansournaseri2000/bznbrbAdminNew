@@ -29,7 +29,7 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const { setValue ,watch } = useFormContext();
+  const { setValue, watch } = useFormContext();
 
   const TripTypesItems = useWatch({ name: 'TripTypes' });
   const placeCategoryItems = useWatch({ name: 'PlaceCategories' });
@@ -168,14 +168,20 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
           <Divider />
         </Grid>
 
-        <Grid columns={'2'} gap={"24px"}>
+        <Grid columns={'2'} gap={'24px'}>
           <Flex direction={'column'} gap={'16px'}>
             <Text>میزان اهمیت نقطه</Text>
-            <Slider defaultValue={[0]} value={[trip_value]} onValueChange={value => setValue('trip_value', value)} max={100} step={1} style={{ width: '100%' }} />
+            <Flex gap={'10px'} align={'center'}>
+              <Text>{trip_value ?? 0}%</Text>
+              <Slider defaultValue={[0]} value={[trip_value]} onValueChange={value => setValue('trip_value', value)} max={100} step={1} style={{ width: '100%' }} />
+            </Flex>
           </Flex>
           <Flex direction={'column'} gap={'16px'}>
             <Text>رتبه بندی</Text>
-            <Slider defaultValue={[0]} value={[rating]} onValueChange={value => setValue('rating', value)} max={100} step={1} style={{ width: '100%' }} />
+            <Flex gap={'10px'} align={'center'}>
+              <Text>{rating ?? 0}%</Text>
+              <Slider defaultValue={[0]} value={[rating]} onValueChange={value => setValue('rating', value)} max={100} step={1} style={{ width: '100%' }} />
+            </Flex>
           </Flex>
         </Grid>
 

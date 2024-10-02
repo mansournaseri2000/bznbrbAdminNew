@@ -46,9 +46,19 @@ export const getAllPlacesByName = async (pageNumber: number, searchText: string)
  * search all-places by cityID services
  * _______________________________________________________________________________
  */
-
 export const getAllPlacesByCityID = async (pageNumber: number, cityID: number) => {
   const res = await ApiManager.get<ApiData<SearchPlaceResponse>>(`cities/search?page=${pageNumber}&id=${cityID}&limit=30`);
+
+  return res.data.data;
+};
+
+
+/**
+ * search all-places by provinceID services
+ * _______________________________________________________________________________
+ */
+export const getAllPlacesByProvinceID = async (pageNumber: number, ProvniceID: number) => {
+  const res = await ApiManager.get<ApiData<SearchPlaceResponse>>(`provinces/search?page=${pageNumber}&id=${ProvniceID}&limit=30`);
 
   return res.data.data;
 };

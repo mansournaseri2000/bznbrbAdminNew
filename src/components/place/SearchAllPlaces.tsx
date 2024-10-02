@@ -90,7 +90,8 @@ const SearchAllPlaces = () => {
    * _______________________________________________________________________________
    */
   return (
-    <Grid position={'relative'}>
+    <Grid gap={'16px'} p={'16px'} position={'relative'} style={{ boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}>
+      <Text>جستجو بر نام مکان</Text>
       <Flex position={'relative'}>
         {searchTextDibounce.length > 0 && (
           <Text onClick={() => setValue('searchText', '')} style={{ position: 'absolute', top: '12px', cursor: 'pointer', left: '20px', zIndex: 10, scale: 1.5, color: '#000000b0' }}>
@@ -99,7 +100,7 @@ const SearchAllPlaces = () => {
         )}
         <TextField autoFocus {...register('searchText')} placeholder='نام نقطه مورد نظرتان را وارد کنید ...' aria-label='Search field' style={{ backgroundColor: '#ffff' }} />
       </Flex>
-      <SearchContainer top={'55px'} right={'0px'} left={'0px'} position={'absolute'} isShow={watch('searchText').length > 0}>
+      <SearchContainer top={'110px'} right={'0px'} left={'0px'} position={'absolute'} isShow={watch('searchText').length > 0}>
         <Grid position={'relative'} p={'16px'} className='wrapper' height={'auto'}>
           {isSuccess &&
             data?.pages.map((page, index) =>
@@ -109,7 +110,9 @@ const SearchAllPlaces = () => {
                 </Flex>
               ) : (
                 <Grid height={'max-content'} align={'start'} key={index} gap={'16px'} mb={'10px'}>
-                  {page?.placesDetail?.map((item: PlacesDetail) => <SearchPlaceCard key={item.id} city={item.city} name={item.name} pictures={item.pictures} province={item.province} id={item.id} />)}
+                  {page?.placesDetail?.map((item: PlacesDetail, index: number) => (
+                    <SearchPlaceCard index={index} key={item.id} city={item.city} name={item.name} pictures={item.pictures} province={item.province} id={item.id} />
+                  ))}
                 </Grid>
               )
             )}
