@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import Image from 'next/image';
@@ -50,7 +52,12 @@ const MemberDetail: React.FC<MemberDetailProps> = (props: MemberDetailProps) => 
             borderRadius: '50%',
           }}
         >
-          <Image src={profileImg} alt='تصویر کاربر' fill style={{ borderRadius: '50%' }} />
+          <Image
+            src={profileImg}
+            alt='تصویر کاربر'
+            fill
+            style={{ borderRadius: '50%', border: '1px solid #d4d4d4' }}
+          />
         </AppBox>
         <AppGrid columns={'2'} style={{ gridTemplateColumns: '1fr 1fr' }}>
           <Item label='نام' value={firstName} />
@@ -88,54 +95,3 @@ const ItemWrapper = styled(AppFlex).attrs(() => ({
 }))`
   border-bottom: 1px solid #d4d4d4;
 `;
-
-// <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-// <AppText as='label'>نام</AppText>
-// <AppText as='p'>{firstName}</AppText>
-// </AppFlex>
-
-// <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-// <AppText as='label'>نام خانوادگی</AppText>
-// <AppText as='p'>{lastName}</AppText>
-// </AppFlex>
-
-// <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-// <AppText as='label'>کدملی</AppText>
-// <AppText as='p'>{nationalId}</AppText>
-// </AppFlex>
-
-// <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-// <AppText as='label'>تاریخ تولد</AppText>
-// <AppText as='p'>{birthDate}</AppText>
-// </AppFlex>
-
-{
-  /* <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <AppText as='label'>شماره تماس</AppText>
-          <AppText as='p'>{mobile}</AppText>
-        </AppFlex>
-        <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <AppText as='label'>ایمیل سازمانی</AppText>
-          <AppText as='p'>{orgEmail}</AppText>
-        </AppFlex>
-
-        <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <AppText as='label'>آخرین بازدید</AppText>
-          <AppText as='p'>{lastSeen}</AppText>
-        </AppFlex>
-
-        <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <AppText as='label'>تیم</AppText>
-          <AppText as='p'>{teamName}</AppText>
-        </AppFlex>
-
-        <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <AppText as='label'>سمت اجرایی</AppText>
-          <AppText as='p'>{position}</AppText>
-        </AppFlex>
-
-        <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <AppText as='label'>مسئول</AppText>
-          <AppText as='p'>{managerName}</AppText>
-        </AppFlex> */
-}

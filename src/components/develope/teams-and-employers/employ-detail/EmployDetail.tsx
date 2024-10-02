@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import Image from 'next/image';
@@ -48,7 +50,7 @@ const EmployDetail: React.FC<EmployDetailProps> = (props: EmployDetailProps) => 
   } = props;
   return (
     <AppBox width={'100%'}>
-      <AppGrid columns={'3'} gapX={'5'} style={{ gridTemplateColumns: '0.4fr 5fr 0.6fr' }}>
+      <AppGrid columns={'3'} gapX={'5'} style={{ gridTemplateColumns: '0.4fr 5fr 0.7fr' }}>
         <AppBox
           style={{
             width: 100,
@@ -57,7 +59,12 @@ const EmployDetail: React.FC<EmployDetailProps> = (props: EmployDetailProps) => 
             borderRadius: '50%',
           }}
         >
-          <Image src={profileImg} alt='تصویر کاربر' fill style={{ borderRadius: '50%' }} />
+          <Image
+            src={profileImg}
+            alt='تصویر کاربر'
+            fill
+            style={{ borderRadius: '50%', border: '1px solid #d4d4d4' }}
+          />
         </AppBox>
         <AppFlex direction={'column'} gap={'1'}>
           <AppGrid columns={'2'}>

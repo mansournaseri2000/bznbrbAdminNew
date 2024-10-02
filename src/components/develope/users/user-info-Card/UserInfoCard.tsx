@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import Image from 'next/image';
@@ -35,7 +37,12 @@ const UserInfoCard: React.FC<UserInfoCardProps> = (props: UserInfoCardProps) => 
             borderRadius: '50%',
           }}
         >
-          <Image src={profileImg} alt='تصویر کاربر' fill style={{ borderRadius: '50%' }} />
+          <Image
+            src={profileImg}
+            alt='تصویر کاربر'
+            fill
+            style={{ borderRadius: '50%', border: '1px solid #D4D4D4' }}
+          />
         </AppBox>
         <AppText as='p' style={{ padding: '4px 8px', backgroundColor: '#D4D4D4', borderRadius: 4 }}>
           {userRole}

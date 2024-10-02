@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import styled from 'styled-components';
@@ -27,6 +29,7 @@ const TeamDetail: React.FC<TeamDetailProps> = (props: TeamDetailProps) => {
         <Item label='ایمیل مسئول' value={managerEmail} />
         <Item label='تعداد پرسنل' value={personnelNumber.toString()} />
         <Item label='دسترسی های تیم' value={Array.isArray(teamAccess) ? teamAccess.join(', ') : teamAccess} />
+        <Item label='' value='' />
       </AppGrid>
       <AppFlex direction={'column'} gap={'2'}>
         <AppButton size={'3'}>ویرایش اطلاعات</AppButton>

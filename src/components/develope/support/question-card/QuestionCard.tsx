@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { Avatar } from '@radix-ui/themes';
+import Image from 'next/image';
 
 import AppButton from '@/libs/primitives/components/Button';
+import AppBox from '@/libs/primitives/layout/Box';
 import AppFlex from '@/libs/primitives/layout/Flex';
 import AppText from '@/libs/primitives/typography/Text';
 
@@ -26,7 +27,19 @@ const QuestionCard: React.FC<QuestionCardProps> = (props: QuestionCardProps) => 
       style={{ border: '1px solid #D4D4D4', borderRadius: 4 }}
     >
       <AppFlex align={'center'} gap={'10px'}>
-        <Avatar fallback='T' size={'2'} src={profileImg} style={{ borderRadius: '50%' }} />
+        <AppBox
+          style={{
+            width: 32,
+            height: 32,
+            position: 'relative',
+            border: '1px solid #D4D4D4',
+            borderRadius: '50%',
+          }}
+        >
+          <Image alt='تصویر آگهی' src={profileImg} fill style={{ borderRadius: '50%' }} />
+        </AppBox>
+
+        {/* <Avatar fallback='T' size={'2'} src={profileImg} style={{ borderRadius: '50%' }} /> */}
         <AppFlex direction={'column'} gap={'1'}>
           <AppText>{username}</AppText>
           <AppText>{mobile}</AppText>

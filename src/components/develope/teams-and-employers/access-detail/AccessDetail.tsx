@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AppButton from '@/libs/primitives/components/Button';
+import AppIconButton from '@/libs/primitives/components/IconButton';
 import AppFlex from '@/libs/primitives/layout/Flex';
 import AppGrid from '@/libs/primitives/layout/Grid';
 import AppHeading from '@/libs/primitives/typography/Heading';
@@ -9,7 +9,7 @@ import AppText from '@/libs/primitives/typography/Text';
 type AccessDetailProps = {
   title: string;
   badge: string[];
-  backButton: boolean;
+  backButton?: boolean;
   //   onBack: () => void;
 };
 
@@ -31,16 +31,16 @@ const AccessDetail: React.FC<AccessDetailProps> = (props: AccessDetailProps) => 
         style={{ gridTemplateColumns: '6fr 0.5fr' }}
       >
         <AppFlex align={'center'} gap={'4'} wrap={'wrap'}>
-          {badge.map((item, index) => (
+          {badge?.map((item, index) => (
             <AppText as='p' key={index}>
               {item}
             </AppText>
           ))}
         </AppFlex>
         {backButton && (
-          <AppButton size={'3'} radius='large'>
+          <AppIconButton size={'3'} radius='large'>
             lo
-          </AppButton>
+          </AppIconButton>
         )}
       </AppGrid>
     </AppFlex>

@@ -27,7 +27,7 @@ const GeographicInfo: React.FC<GeographicInfoProps> = (props: GeographicInfoProp
         py={'2'}
         style={{ borderBottom: '1px solid #D4D4D4' }}
       >
-        <AppHeading>اطلاعات تورلیدری</AppHeading>
+        <AppHeading>مشخصات نقطه</AppHeading>
         {/* TODO: add icon */}
         <AppIconButton size={'3'} radius='full'>
           icon

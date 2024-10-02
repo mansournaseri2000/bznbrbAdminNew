@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 
 import AppButton from '@/libs/primitives/components/Button';
+import AppIconButton from '@/libs/primitives/components/IconButton';
 import AppFlex from '@/libs/primitives/layout/Flex';
 import AppGrid from '@/libs/primitives/layout/Grid';
 import AppText from '@/libs/primitives/typography/Text';
@@ -38,8 +41,8 @@ const UserAutomation = (props: UserAutomationProps) => {
       <AppFlex width={'100%'} justify={'between'}>
         <AppFlex gap={'5'}>
           {/* TODO: define icons for this buttons */}
-          <AppButton size={'3'}>icon</AppButton>
-          <AppButton size={'3'}>icon</AppButton>
+          <AppIconButton size={'3'}>icon</AppIconButton>
+          <AppIconButton size={'3'}>icon</AppIconButton>
         </AppFlex>
         <AppButton size={'3'}>اطلاعات بیشتر</AppButton>
       </AppFlex>
