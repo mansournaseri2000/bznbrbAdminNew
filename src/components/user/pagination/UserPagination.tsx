@@ -1,20 +1,17 @@
-import React from 'react';
+'use client';
 
-import AppFlex from '@/libs/primitives/layout/Flex';
-import AppHeading from '@/libs/primitives/typography/Heading';
+import React from 'react';
+import 'react-responsive-pagination/themes/classic.css';
+
+import dynamic from 'next/dynamic';
+
+const ResponsivePagination = dynamic(
+  () => import('react-responsive-pagination').then(module => module.default),
+  { ssr: false }
+);
 
 const UserPagination = () => {
-  return (
-    <AppFlex
-      width={'100%'}
-      height={'48px'}
-      justify={'center'}
-      align={'center'}
-      style={{ border: '1px solid #D4D4D4' }}
-    >
-      <AppHeading>UserPagination</AppHeading>
-    </AppFlex>
-  );
+  return <ResponsivePagination current={1} total={4} onPageChange={() => 0} />;
 };
 
 export default UserPagination;

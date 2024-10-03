@@ -90,7 +90,7 @@ const UserList = () => {
     },
   ];
   return (
-    <AppBox width={'100%'} style={{ border: '1px solid #D4D4D4', overflow: 'scroll' }}>
+    <AppBox width={'100%'} style={{ overflow: 'scroll' }}>
       {/* <AppHeading>User List</AppHeading> */}
       <Table columns={columns as any} data={TableData as any} />
     </AppBox>
