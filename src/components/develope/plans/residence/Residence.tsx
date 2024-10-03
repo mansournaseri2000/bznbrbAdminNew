@@ -20,10 +20,11 @@ const Residence: React.FC<ResidenceProps> = (props: ResidenceProps) => {
   return (
     <AppFlex
       direction={'column'}
+      width={'100%'}
       px={'4'}
       py={'2'}
       gap={'2'}
-      style={{ width: '100%', maxWidth: 640, border: '1px solid #6a6a6a', borderRadius: 8 }}
+      style={{ border: '1px solid #6a6a6a', borderRadius: 8 }}
     >
       <AppFlex width={'100%'} justify={'between'} align={'center'}>
         <AppText as='p'>{name}</AppText>

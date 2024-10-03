@@ -39,10 +39,11 @@ const TourLeaderInfo: React.FC<TourLeaderInfoProps> = (props: TourLeaderInfoProp
   } = props;
   return (
     <AppFlex
+      width={'100%'}
       direction={'column'}
       gap={'5'}
       py={'4'}
-      style={{ width: '100%', maxWidth: 608, border: '1px solid #D4D4D4', borderRadius: 8 }}
+      style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}
     >
       <AppFlex
         width={'100%'}

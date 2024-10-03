@@ -25,10 +25,11 @@ const AutomationProfile: React.FC<AutomationProfileProps> = (props: AutomationPr
   return (
     <AppFlex
       direction={'column'}
+      width={'100%'}
       gap={'4'}
       py={'4'}
       align={'center'}
-      style={{ width: '100%', maxWidth: 308, border: '1px solid #D4D4D4', borderRadius: 8 }}
+      style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}
     >
       <AppBox
         style={{

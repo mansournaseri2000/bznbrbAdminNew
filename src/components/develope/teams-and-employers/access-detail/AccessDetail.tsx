@@ -17,10 +17,11 @@ const AccessDetail: React.FC<AccessDetailProps> = (props: AccessDetailProps) => 
   const { title, badge, backButton } = props;
   return (
     <AppFlex
+      width={'100%'}
       direction={'column'}
       gap={'4'}
       p={'4'}
-      style={{ width: '100%', maxWidth: 474, border: '1px solid #D4D4D4', borderRadius: 8 }}
+      style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}
     >
       <AppHeading>{title}</AppHeading>
       <AppGrid

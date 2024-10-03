@@ -23,10 +23,11 @@ const AutomationBanner: React.FC<AutomationBannerProps> = (props: AutomationBann
   const { header, imageUrl, title, adOwner, expiryDate } = props;
   return (
     <AppFlex
+      width={'100%'}
       direction={'column'}
       gap={'5'}
       py={'4'}
-      style={{ width: '100%', maxWidth: 608, border: '1px solid #D4D4D4', borderRadius: 8 }}
+      style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}
     >
       <AppBox p={'4'} style={{ borderBottom: '1px solid #D4D4D4' }}>
         <AppHeading>{header}</AppHeading>

@@ -18,9 +18,10 @@ const TripDetailsCard: React.FC<TripDetailsCardProps> = (props: TripDetailsCardP
   return (
     <AppFlex
       direction={'column'}
+      width={'100%'}
       gap={'2'}
       p={'4'}
-      style={{ width: '100%', maxWidth: 640, border: ' 1px solid #6a6a6a', borderRadius: 8 }}
+      style={{ border: ' 1px solid #6a6a6a', borderRadius: 8 }}
     >
       <AppFlex width={'100%'} justify={'between'} align={'center'}>
         <AppText as='p'>{fromCity}</AppText>
