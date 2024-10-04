@@ -1,14 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useRef } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 
 import { Spinner } from '@radix-ui/themes';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { styled } from 'styled-components';
 
 import { getAllPlacesByProvinceID } from '@/api/place';
-import { Button, Flex, Grid, Select, Text } from '@/libs/primitives';
+import { Button, Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import { Province } from '@/types/place/place-constant';
 
 import SearchPlaceCard from './SearchPlaceCard';
@@ -23,7 +23,7 @@ type Props = {
 };
 
 type FormData = {
-  province: undefined | number;
+  province: string;
 };
 
 const SerachByProvince = ({ province }: Props) => {
@@ -33,11 +33,11 @@ const SerachByProvince = ({ province }: Props) => {
    */
   const methods = useForm<FormData>({
     defaultValues: {
-      province: undefined,
+      province: '',
     },
   });
 
-  const { watch, setValue } = methods;
+  const { watch, setValue, control } = methods;
   const ProvinceID = watch('province');
   const observerElem = useRef<HTMLDivElement | null>(null);
 
@@ -53,12 +53,12 @@ const SerachByProvince = ({ province }: Props) => {
 
   const { data, isSuccess, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<any>({
     queryKey: ['search-place-by-province', ProvinceID],
-    queryFn: ({ pageParam = 1 }) => getAllPlacesByProvinceID(pageParam, ProvinceID as number),
+    queryFn: ({ pageParam = 1 }) => getAllPlacesByProvinceID(pageParam, Number(ProvinceID)),
     getNextPageParam: (lastPage: any, allPages: any) => {
       const nextPage = allPages.length + 1;
       return lastPage?.placesDetail?.length !== 0 ? nextPage : undefined;
     },
-    enabled: ProvinceID !== undefined,
+    enabled: false,
   } as any);
 
   const handleObserver = useCallback(
@@ -104,11 +104,33 @@ const SerachByProvince = ({ province }: Props) => {
       <Grid mb={'10px'} p={'16px 16px'} gap={'16px'} style={{ boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}>
         <Text>جستجو بر اساس نام استان</Text>
         <Flex gap={'20px'} align={'center'} position={'relative'}>
-          <Select errorText={''} selected={province.find(item => item.id === watch('province'))?.name} items={province} placeholder={'استان'} store='province' lable='استان' />
-          <Button style={{ marginTop: '18px' }} variant='soft' size={'4'} type='submit' onClick={() => setValue('province', undefined)}>
+          <Controller
+            name='province'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+                placeholder={'استان'}
+                lable='استان'
+              >
+                {province.map(item => {
+                  return (
+                    <SelectItem key={item.id} value={String(item.id)}>
+                      {item.name}
+                    </SelectItem>
+                  );
+                })}
+              </SelectRoot>
+            )}
+          />
+          <Button style={{ marginTop: '18px' }} variant='soft' size={'4'} type='submit' onClick={() => setValue('province', '')}>
             بستن لیست
           </Button>
-          <SearchContainer top={'75px'} right={'0px'} left={'0px'} position={'absolute'} isShow={watch('province') !== undefined}>
+          <SearchContainer top={'75px'} style={{ zIndex: 10 }} right={'0px'} left={'0px'} position={'absolute'} isShow={watch('province').length !== 0}>
             <Grid position={'relative'} p={'16px'} className='wrapper' height={'auto'} style={{ zIndex: 1000 }}>
               {isSuccess &&
                 data?.pages.map((page, index) =>

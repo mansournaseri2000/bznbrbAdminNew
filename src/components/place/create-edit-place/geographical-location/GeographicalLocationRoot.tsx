@@ -4,7 +4,7 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
 
-import { Grid, Select, TextField } from '@/libs/primitives';
+import { Grid, SelectItem, SelectRoot, TextField } from '@/libs/primitives';
 import { Province } from '@/types/place/place-constant';
 
 import Container from '../Container';
@@ -24,12 +24,12 @@ const GeographicalLocationRoot = ({ province }: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
+  const { control, setValue } = useFormContext();
   const provinceId = useWatch({ name: 'provinceId' });
   const cityID = useWatch({ name: 'cityID' });
   const lat = useWatch({ name: 'lat' });
   const lng = useWatch({ name: 'lng' });
-  const { control } = useFormContext();
-  const city = province.filter(item => item.id === provinceId)[0]?.Cities;
+  const city = province.filter(item => item.id === Number(provinceId))[0]?.Cities;
 
   /**
    * useEffect
@@ -54,8 +54,54 @@ const GeographicalLocationRoot = ({ province }: Props) => {
     <Container height='auto' title='موقعیت جغرافیایی'>
       <Grid gap={'16px'} height={'max-content'}>
         <Grid columns={'3'} gap={'20px'}>
-          <Select errorText={''} selected={province.find(item => item.id === provinceId)?.name} items={province} placeholder={'استان'} store='provinceId' lable='استان' />
-          <Select errorText={''} selected={city?.find(item => item.id === cityID)?.name} items={city} placeholder={'شهر'} store='cityID' lable='شهر' />
+          <Controller
+            name='provinceId'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                value={String(provinceId)}
+                onValueChange={val => {
+                  field.onChange(val);
+                  setValue('cityID', '');
+                }}
+                placeholder={'استان'}
+                lable='استان'
+              >
+                {province.map(item => {
+                  return (
+                    <SelectItem key={item.id} value={String(item.id)}>
+                      {item.name}
+                    </SelectItem>
+                  );
+                })}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='cityID'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                value={String(cityID)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+                placeholder={'شهر'}
+                lable='شهر'
+              >
+                {city?.map(item => {
+                  return (
+                    <SelectItem key={item.id} value={String(item.id)}>
+                      {item.name}
+                    </SelectItem>
+                  );
+                })}
+              </SelectRoot>
+            )}
+          />
+
           <Controller name='area' control={control} render={({ field }) => <TextField style={{ marginTop: '15px' }} {...field} placeholder='محله' aria-label='textFiled' />} />
         </Grid>
         <Grid columns={'3'} gap={'20px'}>

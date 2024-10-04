@@ -47,7 +47,7 @@ export const getAllPlacesByName = async (pageNumber: number, searchText: string)
  * _______________________________________________________________________________
  */
 export const getAllPlacesByCityID = async (pageNumber: number, cityID: number) => {
-  const res = await ApiManager.get<ApiData<SearchPlaceResponse>>(`cities/search?page=${pageNumber}&id=${cityID}&limit=30`);
+  const res = await ApiManager.get<ApiData<SearchPlaceResponse>>(`cities/search?page=${pageNumber}&id=${cityID}&limit=10`);
 
   return res.data.data;
 };
@@ -57,7 +57,7 @@ export const getAllPlacesByCityID = async (pageNumber: number, cityID: number) =
  * _______________________________________________________________________________
  */
 export const getAllPlacesByProvinceID = async (pageNumber: number, ProvniceID: number) => {
-  const res = await ApiManager.get<ApiData<SearchPlaceResponse>>(`provinces/search?page=${pageNumber}&id=${ProvniceID}&limit=30`);
+  const res = await ApiManager.get<ApiData<SearchPlaceResponse>>(`provinces/search?page=${pageNumber}&id=${ProvniceID}&limit=10`);
 
   return res.data.data;
 };
@@ -156,7 +156,7 @@ export const getPlaceSSR = async (id: number, status: string) => {
       redirect('/error');
     }
   }
-  return []; // Return default data if status is not 'edit'
+  return [];
 };
 
 /**
@@ -206,10 +206,10 @@ export const createPlace = async (params: fomrData) => {
   } = params;
   const res = await ApiManager.post<ApiData<PlaceResponse>>('places/create', {
     name: name,
+    city_id: cityID == 0 ? undefined : Number(cityID),
     description: basicInfoDescription,
-    category_id: sub_category_id,
-    city_id: cityID,
-    parentCategory_id: category_id,
+    category_id: sub_category_id == 0 ? undefined : Number(sub_category_id),
+    parentCategory_id: category_id == 0 ? undefined : Number(category_id),
     lat: lat,
     lng: lng,
     address: address,
@@ -242,7 +242,7 @@ export const createPlace = async (params: fomrData) => {
     area: area,
     rating: Number(rating),
     trip_value: Number(trip_value),
-    suggested_time: suggested_time,
+    suggested_time: String(suggested_time),
   });
   return res.data;
 };

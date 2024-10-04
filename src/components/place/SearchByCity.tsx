@@ -1,14 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useRef } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 
 import { Spinner } from '@radix-ui/themes';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { styled } from 'styled-components';
 
 import { getAllPlacesByCityID } from '@/api/place';
-import { Button, Flex, Grid, Select, Text } from '@/libs/primitives';
+import { Button, Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import { Province } from '@/types/place/place-constant';
 
 import SearchPlaceCard from './SearchPlaceCard';
@@ -23,8 +23,8 @@ type Props = {
 };
 
 type FormData = {
-  city: undefined | number;
-  province: undefined | number;
+  city: string;
+  province: string;
 };
 
 const SearchByCity = ({ province }: Props) => {
@@ -34,12 +34,12 @@ const SearchByCity = ({ province }: Props) => {
    */
   const methods = useForm<FormData>({
     defaultValues: {
-      city: undefined,
-      province: undefined,
+      city: '',
+      province: '',
     },
   });
 
-  const { watch, setValue } = methods;
+  const { watch, setValue, control } = methods;
   const city = province.filter(item => item.id === Number(watch('province')))[0]?.Cities;
   const cityID = watch('city');
   const observerElem = useRef<HTMLDivElement | null>(null);
@@ -56,7 +56,7 @@ const SearchByCity = ({ province }: Props) => {
 
   const { data, isSuccess, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<any>({
     queryKey: ['search-place-by-city', cityID],
-    queryFn: ({ pageParam = 1 }) => getAllPlacesByCityID(pageParam, cityID as number),
+    queryFn: ({ pageParam = 1 }) => getAllPlacesByCityID(pageParam, Number(cityID)),
     getNextPageParam: (lastPage: any, allPages: any) => {
       const nextPage = allPages.length + 1;
       return lastPage?.placesDetail?.length !== 0 ? nextPage : undefined;
@@ -107,12 +107,57 @@ const SearchByCity = ({ province }: Props) => {
       <Grid mb={'10px'} p={'16px 16px'} gap={'16px'} style={{ boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}>
         <Text>جستجو بر اساس نام شهر</Text>
         <Flex gap={'20px'} align={'center'} position={'relative'}>
-          <Select errorText={''} selected={province.find(item => item.id === watch('province'))?.name} items={province} placeholder={'استان'} store='province' lable='استان' />
-          <Select errorText={''} selected={watch('city') ? city?.find(item => item.id === watch('city'))?.name : undefined} items={city} placeholder={'شهر'} store='city' lable='شهر' />
-          <Button style={{ marginTop: '18px' }} variant='soft' size={'4'} type='submit' onClick={() => setValue('city', undefined)}>
+          <Controller
+            name='province'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                value={field.value}
+                onValueChange={val => {
+                  field.onChange(val);
+                  setValue('city', '');
+                }}
+                placeholder={'استان'}
+                lable='استان'
+              >
+                {province.map(item => {
+                  return (
+                    <SelectItem key={item.id} value={String(item.id)}>
+                      {item.name}
+                    </SelectItem>
+                  );
+                })}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='city'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                value={field.value}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+                placeholder={'شهر'}
+                lable='شهر'
+              >
+                {city?.map(item => {
+                  return (
+                    <SelectItem key={item.id} value={String(item.id)}>
+                      {item.name}
+                    </SelectItem>
+                  );
+                })}
+              </SelectRoot>
+            )}
+          />
+          <Button style={{ marginTop: '18px' }} variant='soft' size={'4'} type='submit' onClick={() => setValue('city', '')}>
             بستن لیست
           </Button>
-          <SearchContainer top={'75px'} right={'0px'} left={'0px'} position={'absolute'} isShow={watch('city') !== undefined}>
+          <SearchContainer top={'75px'} right={'0px'} left={'0px'} position={'absolute'} isShow={watch('city').length !== 0}>
             <Grid position={'relative'} p={'16px'} className='wrapper' height={'auto'} style={{ zIndex: 1000 }}>
               {isSuccess &&
                 data?.pages.map((page, index) =>

@@ -14,5 +14,5 @@ export { default as Modal } from './components/Modal';
 export { default as BottomSheet } from './components/BottomSheet';
 export { default as TextArea } from './components/TextArea';
 export { default as Slider } from './components/Slider';
-export { default as Select } from './components/Select';
+export { SelectItem, SelectRoot } from './components/RadixSelect';
 export { default as CheckboxGroup } from './components/CheckboxGroup';

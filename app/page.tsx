@@ -167,6 +167,8 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
 
   if (constantDataLoading || !constantData) return <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />;
 
+  console.log(newData, 'newData');
+
   /**
    * template
    * _______________________________________________________________________________

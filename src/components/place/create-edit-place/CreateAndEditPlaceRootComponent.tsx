@@ -102,8 +102,8 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
           }
         : {
             name: '',
-            category_id: undefined,
-            sub_category_id: undefined,
+            category_id: '',
+            sub_category_id: '',
             website: '',
             basicInfoDescription: '',
             basicInfosummary: '',
@@ -114,8 +114,8 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
             uploadImage: null,
             pictures: [],
 
-            provinceId: undefined,
-            cityID: undefined,
+            provinceId: '',
+            cityID: '',
             tell: '',
             email: '',
             address: '',
