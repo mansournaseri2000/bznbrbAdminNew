@@ -307,9 +307,9 @@ export const editPlace = async (params: fomrData, id: number) => {
   const res = await ApiManager.put<ApiData<PlaceResponse>>(`places/update/${id}`, {
     name: name,
     description: basicInfoDescription,
-    category_id: Number(sub_category_id),
-    city_id: cityID,
-    parentCategory_id: Number(category_id),
+    category_id: String(sub_category_id).length !== 0 ? Number(sub_category_id) : undefined,
+    city_id: String(cityID).length !== 0 ? Number(cityID) : undefined,
+    parentCategory_id: String(category_id).length !== 0 ? Number(category_id) : undefined,
     lat: lat,
     lng: lng,
     address: address,
