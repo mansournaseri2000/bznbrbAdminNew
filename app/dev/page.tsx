@@ -163,7 +163,13 @@ const page = () => {
         <AppHeading color='red' style={{ width: '100%', borderBottom: '1px solid red', paddingBottom: 8 }}>
           محتوای برنامه ساز
         </AppHeading>
-        <BannerDetail bannerImage='' expirationDate='01 فروردین 1403' owner='شرکت پویان' title='پویان' />
+        <BannerDetail
+          bannerImage=''
+          expirationDate='01 فروردین 1403'
+          owner='شرکت پویان'
+          title='پویان'
+          header='بنر اول'
+        />
         <AppHeading color='red' style={{ width: '100%', borderBottom: '1px solid red', paddingBottom: 8 }}>
           لیست بنر های داینامیک
         </AppHeading>
