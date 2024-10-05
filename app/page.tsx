@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import 'react-responsive-pagination/themes/classic.css';
 
 import dynamic from 'next/dynamic';
@@ -13,10 +13,10 @@ import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { getAllPlacesConstants, removePlace, useGetAllPlaces } from '@/api/place';
-import { SearchAllPlaces, SearchByCity, SerachByProvince } from '@/components/place';
+import { getAllPlacesConstants, getAllPlacesWithParams, removePlace, useGetAllPlaces } from '@/api/place';
+import { SearchAllPlaces, SearchByCity } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
-import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
+import { Button, Flex, Grid, Modal, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { updateUrlWithPageNumber } from '@/libs/utils';
 import { Pictrue, PlacesDetail } from '@/types/place/place-list';
@@ -32,12 +32,6 @@ const Table = dynamic(() => import('@/libs/shared/Table'), {
  * props
  * _______________________________________________________________________________
  */
-
-interface SearchFormInputs {
-  plcaeName: string;
-  province: string;
-  city: string;
-}
 
 const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams: { page: string } }) => {
   /**
@@ -61,7 +55,7 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
       header: 'تصویر',
       cell: info => {
         const pictures = info.getValue<Pictrue[]>();
-        const imageUrl = pictures.length > 0 ? `http://37.32.8.14/${pictures[0].path}` : '/placeholder.jpg';
+        const imageUrl = pictures?.length > 0 ? `http://37.32.8.14/${pictures[0].path}` : '/placeholder.jpg';
         return <Image loading='lazy' src={imageUrl} alt='profile' width={50} height={50} style={{ borderRadius: '4px' }} />;
       },
     },
@@ -125,10 +119,17 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
   const [isOpen, setIsOpen] = useState(false);
   const { push } = useRouter();
   const [page, setPage] = useState(Number(searchParams.page));
-  const { data, isError, isLoading } = useGetAllPlaces({ page: page });
+  const { data, isError } = useGetAllPlaces({ page: page });
 
-  const { control, watch } = useForm<SearchFormInputs>({
-    defaultValues: { plcaeName: '', city: '', province: '' },
+  const methods = useForm({
+    defaultValues: { plcaeName: '', city: '', province: '', provinceID: '', categoryID: '' },
+  });
+
+  const { watch, control } = methods;
+
+  const { data: testData, isLoading: testIsLoadoing } = useQuery({
+    queryKey: ['all-places-with-parmas', page, watch('provinceID'), watch('categoryID')],
+    queryFn: async () => getAllPlacesWithParams(page, watch('categoryID'), watch('provinceID')),
   });
 
   const debouncedPlaceName = useDebounce(watch('plcaeName') || '', 300);
@@ -147,7 +148,7 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
     queryFn: async () => getAllPlacesConstants(),
   });
 
-  const newData = UseGetFilterTable(debouncedSearchCriteria, data ? data?.placesDetail : []);
+  const newData = UseGetFilterTable(debouncedSearchCriteria, testData ? testData?.placesDetail : []);
   const [placeItem, setPlaceItem] = useState<PlacesDetail>(newData[0]);
   const { mutate: removePlaceMutate, isPending: removePlaceIsPending } = useMutation({
     mutationFn: async () => removePlace(placeItem.id),
@@ -167,59 +168,109 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
 
   if (constantDataLoading || !constantData) return <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />;
 
-  console.log(newData, 'newData');
-
   /**
    * template
    * _______________________________________________________________________________
    */
   return (
     <>
-      <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
-        <Flex
-          gap={'10px'}
-          direction={'column'}
-          p={'16px'}
-          width={'100%'}
-          maxWidth={'1000px'}
-          style={{
-            borderRadius: '8px',
-          }}
-        >
-          <Flex gap={'20px'}>
-            <Link href={'/place/create'}>
-              <Button type='button' size={'4'} variant='soft' style={{ width: '150px', minHeight: '45px', paddingInline: '20px', marginBottom: '10px' }}>
-                اضافه کردن
-              </Button>
-            </Link>
-            <Grid style={{ flex: 1 }} gap={'10px'} columns={'3'}>
-              <Controller name='plcaeName' control={control} render={({ field }) => <TextField {...field} placeholder='نام نقطه مورد نظرتان را وارد کنید ...' aria-label='Search field' />} />
-              <Controller name='province' control={control} render={({ field }) => <TextField {...field} placeholder='نام استان مورد نظرتان را وارد کنید ...' aria-label='Search field' />} />
-              <Controller name='city' control={control} render={({ field }) => <TextField {...field} placeholder='نام شهر مورد نظرتان را وارد کنید ...' aria-label='Search field' />} />
-            </Grid>
-          </Flex>
-          <SearchAllPlaces />
-          <SerachByProvince province={constantData?.provinces} />
-          <SearchByCity province={constantData?.provinces} />
-
-          {isError ? (
-            <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
-          ) : isLoading ? (
-            <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
-          ) : (
-            <Table columns={columns as any} data={newData} />
-          )}
-
-          <ResponsivePagination
-            current={page}
-            total={data?.totalPages as number}
-            onPageChange={p => {
-              setPage(p);
-              updateUrlWithPageNumber(p);
+      <FormProvider {...methods}>
+        <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
+          <Flex
+            gap={'10px'}
+            direction={'column'}
+            p={'16px'}
+            width={'100%'}
+            maxWidth={'1000px'}
+            style={{
+              borderRadius: '8px',
             }}
-          />
+          >
+            <Flex gap={'20px'}>
+              <Link href={'/place/create'}>
+                <Button type='button' size={'4'} variant='soft' style={{ width: '150px', minHeight: '45px', paddingInline: '20px', marginBottom: '10px' }}>
+                  اضافه کردن
+                </Button>
+              </Link>
+              <Grid style={{ flex: 1 }} gap={'10px'} columns={'3'}>
+                <Controller name='plcaeName' control={control} render={({ field }) => <TextField {...field} placeholder='نام نقطه مورد نظرتان را وارد کنید ...' aria-label='Search field' />} />
+                <Controller name='province' control={control} render={({ field }) => <TextField {...field} placeholder='نام استان مورد نظرتان را وارد کنید ...' aria-label='Search field' />} />
+                <Controller name='city' control={control} render={({ field }) => <TextField {...field} placeholder='نام شهر مورد نظرتان را وارد کنید ...' aria-label='Search field' />} />
+              </Grid>
+            </Flex>
+            <SearchAllPlaces />
+            {/* <SerachByProvince province={constantData?.provinces} /> */}
+            <Grid gap={'16px'} p={'16px'} style={{ boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}>
+              <Text>جستجو بر اساس نام استان</Text>
+              <Controller
+                name='provinceID'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                    placeholder={'استان'}
+                  >
+                    {constantData?.provinces.map(item => {
+                      return (
+                        <SelectItem key={item.id} value={String(item.id)}>
+                          {item.name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectRoot>
+                )}
+              />
+            </Grid>
+            <Grid gap={'16px'} p={'16px'} style={{ boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}>
+              <Text>جستجو بر اساس نام دسته بندی</Text>
+              <Controller
+                name='categoryID'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                    placeholder={'دسته بندی'}
+                  >
+                    {constantData?.categories.map(item => {
+                      return (
+                        <SelectItem key={item.id} value={String(item.id)}>
+                          {item.name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectRoot>
+                )}
+              />
+            </Grid>
+            <SearchByCity province={constantData?.provinces} />
+
+            {isError ? (
+              <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
+            ) : testIsLoadoing ? (
+              <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
+            ) : (
+              <Table columns={columns as any} data={newData} />
+            )}
+
+            <ResponsivePagination
+              current={page}
+              total={data?.totalPages as number}
+              onPageChange={p => {
+                setPage(p);
+                updateUrlWithPageNumber(p);
+              }}
+            />
+          </Flex>
         </Flex>
-      </Flex>
+      </FormProvider>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <Grid gap={'24px'}>
           <Text>{`آیا از حذف ${placeItem?.name} مطمین هستید ؟`}</Text>

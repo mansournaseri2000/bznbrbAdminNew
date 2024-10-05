@@ -49,7 +49,7 @@ export type NewPlaceWorkTimeData = {
 export const serializePlaceWorkTimes = (schedule: PlaceWorkTimeSchedule[], newData: NewPlaceWorkTimeData[]): PlaceWorkTimes[] => {
   return schedule.map(day => {
     // Find matching data by dayOfWeek
-    const matchingData = newData.find(item => item.dayOfWeek === day.dayOfWeek);
+    const matchingData = newData?.find(item => item.dayOfWeek === day.dayOfWeek);
 
     // Determine the type based on matchingData or original day.type
     const type =

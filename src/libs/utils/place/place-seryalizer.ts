@@ -7,7 +7,7 @@ type Category = {
 };
 
 export const serializeCategories = (categories: Category[]) => {
-  return categories.map(category => ({
+  return categories?.map(category => ({
     categoryId: category.id,
     score: category.score,
   }));
@@ -21,7 +21,7 @@ type TripSeason = {
 };
 
 export const serializeTripSeasons = (tripSeasons: TripSeason[]) => {
-  return tripSeasons.map(tripSeason => ({
+  return tripSeasons?.map(tripSeason => ({
     tripSeasonId: tripSeason.id,
     score: tripSeason.score,
     timing: tripSeason.timing,
@@ -35,7 +35,7 @@ type TripLimitation = {
 };
 
 export const serializeTripLimitations = (tripLimitations: TripLimitation[]) => {
-  return tripLimitations.map(tripLimitation => ({
+  return tripLimitations?.map(tripLimitation => ({
     tripLimitationId: tripLimitation.id,
     score: tripLimitation.score,
   }));

@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { fomrData } from '@/components/place/create-edit-place/defaultValues';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { serializeTripType } from '@/libs/utils';
-import { ApiManager } from '@/libs/utils/axios.config';
+import { ApiManager, ApiManagerV2 } from '@/libs/utils/axios.config';
 import { detailsSerializerForEdit, flattenPlaceWorkTime } from '@/libs/utils/place/place-seryalizer';
 import { PlaceListResponse, PlaceResponse, RemovePlaceResponse, SearchPlaceResponse } from '@/types/place';
 import { PlaceConstantResponse } from '@/types/place/place-constant';
@@ -19,6 +19,14 @@ import { ApiData } from './types';
 export const getAllPlaces = async (pageNumber: number) => {
   const res = await ApiManager.get<ApiData<PlaceListResponse>>(`places?page=${pageNumber}`);
 
+  return res.data.data;
+};
+
+export const getAllPlacesWithParams = async (pageNumber: number, categoryId: string, provinceId: string) => {
+  const category = categoryId.length == 0 ? null : Number(categoryId);
+  const province = provinceId.length == 0 ? null : Number(provinceId);
+
+  const res = await ApiManagerV2.get<ApiData<PlaceListResponse>>(`places/search?page=${pageNumber}&cat=${category}&pro=${province}`);
   return res.data.data;
 };
 
@@ -232,7 +240,7 @@ export const createPlace = async (params: fomrData) => {
     PlaceFeatures: features,
     PlaceDetails: PlaceDetails,
     TripTypes: serializeTripType(TripTypes as any),
-    PlaceWorkTimes: PlaceWorkTimes,
+    PlaceWorkTimes: flattenPlaceWorkTime(PlaceWorkTimes as any),
     PlaceCategories: PlaceCategories,
     PlaceTripLimitations: tripLimitations,
     PlaceTripSeasons: PlaceTripSeasons,
@@ -331,7 +339,7 @@ export const editPlace = async (params: fomrData, id: number) => {
     train: train,
     PlaceFeatures: features,
     PlaceDetails: detailsSerializerForEdit(PlaceDetails as any),
-    TripTypes: serializeTripType(TripTypes as any),
+    TripTypes: TripTypes,
     PlaceWorkTimes: flattenPlaceWorkTime(PlaceWorkTimes as any),
     PlaceCategories: PlaceCategories,
     PlaceTripLimitations: tripLimitations,

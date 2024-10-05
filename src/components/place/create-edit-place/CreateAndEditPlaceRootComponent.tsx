@@ -12,13 +12,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPlace, editPlace } from '@/api/place';
 import { AnalysisRoot, FeaturesAndFacilities, GeographicalLocationRoot, ImageGallery, Navigation, PlaceInfo, SeoSettingsRoot } from '@/components/place';
 import { fomrData, placeCategories, placeTripLimitations, placeTripSeasons, placeTripTypes } from '@/components/place/create-edit-place/defaultValues';
-import { placeWorkTimeSchedule, seasons } from '@/constants/place';
+import { categoriesConstants, placeWorkTimeSchedule, seasons } from '@/constants/place';
 import { Button, Grid, Heading, Text } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { serializeCategories, serializeFeatures, serializePlaceWorkTimeSchedule, serializeTripLimitations, serializeTripSeasons } from '@/libs/utils';
 import { Boxshadow } from '@/theme';
 import { PlaceConstantResponse, PlaceResponse } from '@/types/place';
-import { PlaceCategory } from '@/types/place/create-place';
 
 const Description = dynamic(() => import('@/components/place/create-edit-place/description/Description'), {
   ssr: false,
@@ -39,30 +38,101 @@ type Props = {
   placeData: PlaceResponse;
 };
 
+export function findByChildId(items: any, id: any) {
+  for (const item of items) {
+    if (item.id === id) {
+      return item;
+    }
+
+    if (item.children && item.children.length > 0) {
+      const found: any = findByChildId(item.children, id);
+      if (found) {
+        return found;
+      }
+    }
+  }
+  return null;
+}
+
+function serializeTripData(data: any[], tripsData: any[]) {
+  return tripsData.map(trip => {
+    const matchingData = data.find(d => d.id === trip.id);
+
+    if (matchingData) {
+      return {
+        tripTypeId: trip.id,
+        score: matchingData.score,
+      };
+    } else {
+      return {
+        tripTypeId: trip.id,
+        score: 0,
+      };
+    }
+  });
+}
+
+function serializeCategoryData(data: any[], categoryData: any[]) {
+  return categoryData.map(trip => {
+    const matchingData = data.find(d => d.id === trip.id);
+
+    if (matchingData) {
+      return {
+        categoryId: trip.id,
+        score: matchingData.score,
+      };
+    } else {
+      return {
+        categoryId: trip.id,
+        score: 0,
+      };
+    }
+  });
+}
+
+function serializeLimitaionData(data: any[], limitaionData: any[]) {
+  return limitaionData.map(trip => {
+    const matchingData = data.find(d => d.id === trip.id);
+
+    if (matchingData) {
+      return {
+        tripLimitationId: trip.id,
+        score: matchingData.score,
+      };
+    } else {
+      return {
+        tripLimitationId: trip.id,
+        score: 0,
+      };
+    }
+  });
+}
+
 const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, placeData }: Props) => {
   /**
    * const and variables
    * _______________________________________________________________________________
    */
+
   const queryClient = useQueryClient();
   const { push } = useRouter();
   const methods = useForm<fomrData | any>({
     defaultValues:
       status == 'edit'
         ? {
-            name: placeData.name,
-            category_id: placeData.parentCategory_id,
-            sub_category_id: placeData.category_id,
-            website: placeData.website,
-            basicInfoDescription: placeData.description,
-            basicInfosummary: placeData.summary,
+            name: placeData?.name,
+            category_id: findByChildId(placeConstant?.categories, placeData?.category_id)?.parent_id,
+            sub_category_id: placeData?.category_id,
+            website: placeData?.website,
+            basicInfoDescription: placeData?.description,
+            basicInfosummary: placeData?.summary,
 
             isLoading: false,
             uploadImage: null,
             pictures: [],
 
-            provinceId: placeData.Cities ? placeData?.Cities.Provinces.id : undefined,
-            cityID: placeData.Cities ? placeData?.Cities.id : undefined,
+            provinceId: placeData?.Cities ? placeData?.Cities.Provinces.id : undefined,
+            cityID: placeData?.Cities ? placeData?.Cities.id : undefined,
             tell: placeData?.tell,
             email: placeData?.email,
             address: placeData?.address,
@@ -92,13 +162,13 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
             trip_value: placeData?.trip_value,
             suggested_time: placeData?.suggested_time,
 
-            features: serializeFeatures(placeData.features),
-            TripTypes: placeData.Place_TripType,
-            PlaceCategories: serializeCategories(placeData?.Place_Category) as PlaceCategory[],
-            PlaceTripSeasons: placeData.Place_TripSeason.length > 0 ? serializeTripSeasons(placeData?.Place_TripSeason) : serializeTripSeasons(placeTripSeasons),
-            tripLimitations: serializeTripLimitations(placeData?.Place_TripLimitation),
+            features: serializeFeatures(placeData?.features),
+            TripTypes: serializeTripData(placeData?.Place_TripType, placeConstant.tripDatas),
+            PlaceCategories: serializeCategoryData(placeData?.Place_Category, categoriesConstants),
+            PlaceTripSeasons: placeData?.Place_TripSeason.length > 0 ? serializeTripSeasons(placeData?.Place_TripSeason) : serializeTripSeasons(placeTripSeasons),
+            tripLimitations: serializeLimitaionData(placeData?.Place_TripLimitation, placeConstant.tripLimitations),
             PlaceDetails: placeData?.PlaceDetails,
-            PlaceWorkTimes: placeData.PlaceWorkTime,
+            PlaceWorkTimes: placeData?.PlaceWorkTime,
           }
         : {
             name: '',
@@ -164,7 +234,7 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const { handleSubmit } = methods;
+  const { handleSubmit, watch } = methods;
 
   const { mutate: editPlaceMutate, isPending: editPlaceIspending } = useMutation({
     mutationFn: async (params: fomrData) => editPlace(params, placeID),
@@ -208,6 +278,8 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
     }
     // console.log(data, 'datadata');
   };
+
+  console.log(watch(), 'watchwatch');
 
   /**
    * template

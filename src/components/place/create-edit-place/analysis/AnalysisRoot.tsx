@@ -30,7 +30,6 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
    * _______________________________________________________________________________
    */
   const { setValue, control } = useFormContext();
-
   const TripTypesItems = useWatch({ name: 'TripTypes' });
   const placeCategoryItems = useWatch({ name: 'PlaceCategories' });
   const placeTripSeasonsItems = useWatch({ name: 'PlaceTripSeasons' });
@@ -54,7 +53,7 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
     (tripTypeId: number, value: number) => {
       setValue(
         'TripTypes',
-        TripTypesItems.map((item: { id: number }) => (item.id === tripTypeId ? { ...item, score: value } : item)),
+        TripTypesItems.map((item: { tripTypeId: number }) => (item.tripTypeId === tripTypeId ? { ...item, score: value } : item)),
         { shouldDirty: true, shouldValidate: true }
       );
     },
@@ -188,7 +187,8 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
           <Text>نوع سفر</Text>
           <Grid gap={'0px 30px'} columns={'2'}>
             {tripDatas.map(trip => {
-              const tripType = TripTypesItems.find((item: { id: number }) => item.id === trip.id);
+              const tripType = TripTypesItems.find((item: { tripTypeId: number }) => item.tripTypeId === trip.id);
+
               return (
                 <Grid gap={'8px'} key={trip.id} mb='20px'>
                   <Text as='label'>{trip.name}</Text>
@@ -201,7 +201,6 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
                       max={100}
                       step={1}
                       style={{ width: '100%' }}
-                      disabled={!tripType}
                     />
                   </Flex>
                 </Grid>
@@ -261,7 +260,6 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
                           max={100}
                           step={1}
                           style={{ width: '100%' }}
-                          disabled={!tripSeasond}
                         />
                       </Flex>
                     </Grid>

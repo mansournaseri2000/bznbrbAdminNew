@@ -32,7 +32,7 @@ const Description = ({ details }: Props) => {
   const [editorStates, setEditorStates] = useState(
     details.reduce(
       (acc, field) => {
-        const detail = PlaceDetails.find((detail: { id: number }) => detail.id === field.id);
+        const detail = PlaceDetails?.find((detail: { id: number }) => detail.id === field.id);
 
         if (detail && detail.description) {
           const blocksFromHTML = convertFromHTML(detail.description);

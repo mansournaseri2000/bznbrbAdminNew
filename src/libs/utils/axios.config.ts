@@ -4,6 +4,15 @@ import axios from 'axios';
 
 // Create an instance of axios
 export const ApiManager = axios.create({
+  baseURL: 'https://api.darkube.app/v1/',
+  // baseURL: 'http://37.32.8.14:3005/v1/',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const ApiManagerV2 = axios.create({
+  // baseURL: 'https://api.darkube.app/v2/',
   baseURL: 'http://37.32.8.14:3005/v1/',
   headers: {
     'Content-Type': 'application/json',
