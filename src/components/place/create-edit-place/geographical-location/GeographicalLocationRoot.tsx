@@ -102,17 +102,17 @@ const GeographicalLocationRoot = ({ province }: Props) => {
             )}
           />
 
-          <Controller name='area' control={control} render={({ field }) => <TextField style={{ marginTop: '15px' }} {...field} placeholder='محله' aria-label='textFiled' />} />
+          <Controller name='area' control={control} render={({ field }) => <TextField style={{ marginTop: '-7px' }} title='محله' {...field} placeholder='محله' aria-label='textFiled' />} />
         </Grid>
         <Grid columns={'3'} gap={'20px'}>
-          <Controller name='tell' control={control} render={({ field }) => <TextField {...field} placeholder='تلفن' aria-label='textFiled' />} />
-          <Controller name='website' control={control} render={({ field }) => <TextField {...field} placeholder='وب سایت' aria-label='textFiled' />} />
-          <Controller name='email' control={control} render={({ field }) => <TextField {...field} placeholder='ایمیل' aria-label='textFiled' />} />
+          <Controller name='tell' control={control} render={({ field }) => <TextField title='تلفن' {...field} placeholder='تلفن' aria-label='textFiled' />} />
+          <Controller name='website' control={control} render={({ field }) => <TextField title='وب سایت' {...field} placeholder='وب سایت' aria-label='textFiled' />} />
+          <Controller name='email' control={control} render={({ field }) => <TextField title='ایمیل' {...field} placeholder='ایمیل' aria-label='textFiled' />} />
         </Grid>
-        <Controller name='address' control={control} render={({ field }) => <TextField {...field} placeholder='آدرس متنی' aria-label='textFiled' />} />
+        <Controller name='address' control={control} render={({ field }) => <TextField {...field} title='آدرس متنی' placeholder='آدرس متنی' aria-label='textFiled' />} />
         <Grid gap={'24px'} columns={'2'}>
-          <Controller name='lng' control={control} render={({ field }) => <TextField type='number' {...field} placeholder='طول جغرافیایی' aria-label='textFiled' />} />
-          <Controller name='lat' control={control} render={({ field }) => <TextField {...field} type='number' placeholder='عرض جغرافیایی' aria-label='textFiled' />} />
+          <Controller name='lng' control={control} render={({ field }) => <TextField type='number' {...field} title='طول جغرافیایی' placeholder='طول جغرافیایی' aria-label='textFiled' />} />
+          <Controller name='lat' control={control} render={({ field }) => <TextField {...field} type='number' title='عرض جغرافیایی' placeholder='عرض جغرافیایی' aria-label='textFiled' />} />
         </Grid>
         <PlaceMap location={[Number(lat), Number(lng)]} />
       </Grid>

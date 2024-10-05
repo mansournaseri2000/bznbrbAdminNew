@@ -122,8 +122,12 @@ const SeoSettingsRoot = () => {
             })}
           </Flex>
           <Divider />
-          <Controller name='meta_title' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان صفحه ( متا تایتل )' aria-label='textFiled' />} />
-          <Controller name='meta_description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات متا' aria-label='TextArea' />} />
+          <Controller
+            name='meta_title'
+            control={control}
+            render={({ field }) => <TextField {...field} title='عنوان صفحه ( متا تایتل )' placeholder='عنوان صفحه ( متا تایتل )' aria-label='textFiled' />}
+          />
+          <Controller name='meta_description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات متا' title='توضیحات متا' aria-label='TextArea' />} />
           <Divider />
           <Button
             type='button'
@@ -168,7 +172,7 @@ const SeoSettingsRoot = () => {
         {key === 'tag' && (
           <Grid gap={'24px'}>
             <Text>افزودن تگ</Text>
-            <Controller name='keyword' control={control} render={({ field }) => <TextField autoFocus {...field} placeholder='نام عنوان' aria-label='textFiled' />} />
+            <Controller name='keyword' control={control} render={({ field }) => <TextField autoFocus {...field} title='نام عنوان' placeholder='نام عنوان' aria-label='textFiled' />} />
             <Grid gap={'16px'} columns={'2'}>
               <Button
                 type='button'
@@ -195,7 +199,7 @@ const SeoSettingsRoot = () => {
         {key === 'meta' && (
           <Grid gap={'24px'}>
             <Text>افزودن متا تگ</Text>
-            <Controller name='metakeyword' control={control} render={({ field }) => <TextField autoFocus {...field} placeholder='نام عنوان' aria-label='textFiled' />} />
+            <Controller name='metakeyword' control={control} render={({ field }) => <TextField autoFocus {...field} placeholder='نام عنوان' title='نام عنوان' aria-label='textFiled' />} />
             <Grid gap={'16px'} columns={'2'}>
               <Button
                 type='button'

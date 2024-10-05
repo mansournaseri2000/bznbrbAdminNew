@@ -23,11 +23,32 @@ export const getAllPlaces = async (pageNumber: number) => {
 };
 
 export const getAllPlacesWithParams = async (pageNumber: number, categoryId: string, provinceId: string) => {
-  const category = categoryId.length == 0 ? null : Number(categoryId);
-  const province = provinceId.length == 0 ? null : Number(provinceId);
+  try {
+    // Create query parameters using URLSearchParams
+    const params = new URLSearchParams();
 
-  const res = await ApiManagerV2.get<ApiData<PlaceListResponse>>(`places/search?page=${pageNumber}&cat=${category}&pro=${province}`);
-  return res.data.data;
+    // Add the page number to the params
+    params.append('page', pageNumber.toString());
+
+    // Conditionally add categoryId and provinceId if they exist
+    if (categoryId && categoryId.length > 0) {
+      params.append('cat', categoryId);
+    }
+
+    if (provinceId && provinceId.length > 0) {
+      params.append('pro', provinceId);
+    }
+
+    // Make the API request
+    const res = await ApiManagerV2.get<ApiData<PlaceListResponse>>(`places/search?${params.toString()}`);
+
+    // Return the data if the request was successful
+    return res.data.data;
+  } catch (error) {
+    // Handle the error, log it, or display it to the userd
+    console.error('Error fetching places:', error);
+    throw new Error('Failed to fetch places data.');
+  }
 };
 
 export const useGetAllPlaces = ({ page }: { page: number }) => {

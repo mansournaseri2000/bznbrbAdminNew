@@ -38,7 +38,7 @@ const PlaceInfo = ({ categoris }: Props) => {
   return (
     <Container height='auto' title='اطلاعات اولیه'>
       <Grid height={'max-content'} gap={'16px'}>
-        <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='نام عنوان' aria-label='textFiled' />} />
+        <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='نام عنوان' title='نام عنوان' aria-label='textFiled' />} />
         <Flex gap={'20px'}>
           <Controller
             name='category_id'
@@ -90,9 +90,9 @@ const PlaceInfo = ({ categoris }: Props) => {
             )}
           />
         </Flex>
-        <Controller name='website' control={control} disabled render={({ field }) => <TextField {...field} placeholder='Custom URL' aria-label='textFiled' />} />
-        <Controller name='basicInfoDescription' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات نقطه' aria-label='TextArea' />} />
-        <Controller name='basicInfosummary' control={control} render={({ field }) => <TextArea {...field} placeholder='خلاصه توضیحات' aria-label='TextArea' />} />
+        <Controller name='website' control={control} disabled render={({ field }) => <TextField title='Custom URL' {...field} placeholder='Custom URL' aria-label='textFiled' />} />
+        <Controller name='basicInfoDescription' control={control} render={({ field }) => <TextArea title='توضیحات نقطه' {...field} placeholder='توضیحات نقطه' aria-label='TextArea' />} />
+        <Controller name='basicInfosummary' control={control} render={({ field }) => <TextArea title='خلاصه توضیحات' {...field} placeholder='خلاصه توضیحات' aria-label='TextArea' />} />
       </Grid>
     </Container>
   );

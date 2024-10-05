@@ -7,31 +7,34 @@ import styled from 'styled-components';
 
 import { ErrorText } from '@/libs/shared';
 import { colorPalette } from '@/theme';
+import { typoVariant } from '@/theme/typo-variants';
 
-import { Flex } from '../index';
+import { Grid, Text } from '../index';
 
 /**
  * props
  * _______________________________________________________________________________
  */
 type TextFieldComponentProps = {
+  title?: string;
   errorText?: string;
   placeholder: string;
   icon?: ReactNode; // Dynamic icon prop
 } & React.ComponentPropsWithoutRef<typeof RadixTextField.Root>;
 
-const TextFieldComponent = forwardRef<HTMLInputElement, TextFieldComponentProps>(
-  ({ placeholder, icon, errorText, ...rest }, ref) => {
-    return (
-      <Flex pb={'10px'} width={'100%'} position={'relative'}>
-        <Root size={'3'} ref={ref} {...rest} placeholder={placeholder}>
-          {icon && <RadixTextField.Slot>{icon}</RadixTextField.Slot>}
-        </Root>
-        <ErrorText text={errorText} />
-      </Flex>
-    );
-  }
-);
+const TextFieldComponent = forwardRef<HTMLInputElement, TextFieldComponentProps>(({ placeholder, icon, errorText, title, ...rest }, ref) => {
+  return (
+    <Grid pb={'10px'} width={'100%'} position={'relative'}>
+      <Text style={{ paddingRight: '10px' }} {...typoVariant.body1}>
+        {title}
+      </Text>
+      <Root size={'3'} ref={ref} {...rest} placeholder={placeholder}>
+        {icon && <RadixTextField.Slot>{icon}</RadixTextField.Slot>}
+      </Root>
+      <ErrorText text={errorText} />
+    </Grid>
+  );
+});
 
 TextFieldComponent.displayName = 'TextFieldComponent';
 

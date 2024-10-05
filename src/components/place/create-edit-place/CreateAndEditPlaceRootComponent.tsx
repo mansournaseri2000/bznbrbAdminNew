@@ -234,7 +234,7 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const { handleSubmit, watch } = methods;
+  const { handleSubmit } = methods;
 
   const { mutate: editPlaceMutate, isPending: editPlaceIspending } = useMutation({
     mutationFn: async (params: fomrData) => editPlace(params, placeID),
@@ -278,8 +278,6 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
     }
     // console.log(data, 'datadata');
   };
-
-  console.log(watch(), 'watchwatch');
 
   /**
    * template

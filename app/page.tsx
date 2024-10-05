@@ -13,7 +13,7 @@ import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { getAllPlacesConstants, getAllPlacesWithParams, removePlace, useGetAllPlaces } from '@/api/place';
+import { getAllPlacesConstants, getAllPlacesWithParams, removePlace } from '@/api/place';
 import { SearchAllPlaces, SearchByCity } from '@/components/place';
 import { useDebounce, UseGetFilterTable } from '@/libs/hooks';
 import { Button, Flex, Grid, Modal, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
@@ -118,8 +118,8 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
   ];
   const [isOpen, setIsOpen] = useState(false);
   const { push } = useRouter();
-  const [page, setPage] = useState(Number(searchParams.page));
-  const { data, isError } = useGetAllPlaces({ page: page });
+  const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
+  // const { data, isError } = useGetAllPlaces({ page: page });
 
   const methods = useForm({
     defaultValues: { plcaeName: '', city: '', province: '', provinceID: '', categoryID: '' },
@@ -127,7 +127,11 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
 
   const { watch, control } = methods;
 
-  const { data: testData, isLoading: testIsLoadoing } = useQuery({
+  const {
+    data: testData,
+    isLoading: testIsLoadoing,
+    isError,
+  } = useQuery({
     queryKey: ['all-places-with-parmas', page, watch('provinceID'), watch('categoryID')],
     queryFn: async () => getAllPlacesWithParams(page, watch('categoryID'), watch('provinceID')),
   });
@@ -177,7 +181,7 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
       <FormProvider {...methods}>
         <Flex p={'48px'} justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
           <Flex
-            gap={'10px'}
+            gap={'20px'}
             direction={'column'}
             p={'16px'}
             width={'100%'}
@@ -200,56 +204,59 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
             </Flex>
             <SearchAllPlaces />
             {/* <SerachByProvince province={constantData?.provinces} /> */}
-            <Grid gap={'16px'} p={'16px'} style={{ boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}>
-              <Text>جستجو بر اساس نام استان</Text>
-              <Controller
-                name='provinceID'
-                control={control}
-                render={({ field }) => (
-                  <SelectRoot
-                    {...field}
-                    value={String(field.value)}
-                    onValueChange={val => {
-                      field.onChange(val);
-                    }}
-                    placeholder={'استان'}
-                  >
-                    {constantData?.provinces.map(item => {
-                      return (
-                        <SelectItem key={item.id} value={String(item.id)}>
-                          {item.name}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectRoot>
-                )}
-              />
+            <Grid columns={'2'} gap={'16px'}>
+              <Grid gap={'16px'} p={'16px'} style={{ boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}>
+                <Text>جستجو بر اساس نام استان</Text>
+                <Controller
+                  name='provinceID'
+                  control={control}
+                  render={({ field }) => (
+                    <SelectRoot
+                      {...field}
+                      value={String(field.value)}
+                      onValueChange={val => {
+                        field.onChange(val);
+                      }}
+                      placeholder={'استان'}
+                    >
+                      {constantData?.provinces.map(item => {
+                        return (
+                          <SelectItem key={item.id} value={String(item.id)}>
+                            {item.name}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectRoot>
+                  )}
+                />
+              </Grid>
+              <Grid gap={'16px'} p={'16px'} style={{ boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}>
+                <Text>جستجو بر اساس نام دسته بندی</Text>
+                <Controller
+                  name='categoryID'
+                  control={control}
+                  render={({ field }) => (
+                    <SelectRoot
+                      {...field}
+                      value={String(field.value)}
+                      onValueChange={val => {
+                        field.onChange(val);
+                      }}
+                      placeholder={'دسته بندی'}
+                    >
+                      {constantData?.categories.map(item => {
+                        return (
+                          <SelectItem key={item.id} value={String(item.id)}>
+                            {item.name}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectRoot>
+                  )}
+                />
+              </Grid>
             </Grid>
-            <Grid gap={'16px'} p={'16px'} style={{ boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}>
-              <Text>جستجو بر اساس نام دسته بندی</Text>
-              <Controller
-                name='categoryID'
-                control={control}
-                render={({ field }) => (
-                  <SelectRoot
-                    {...field}
-                    value={String(field.value)}
-                    onValueChange={val => {
-                      field.onChange(val);
-                    }}
-                    placeholder={'دسته بندی'}
-                  >
-                    {constantData?.categories.map(item => {
-                      return (
-                        <SelectItem key={item.id} value={String(item.id)}>
-                          {item.name}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectRoot>
-                )}
-              />
-            </Grid>
+
             <SearchByCity province={constantData?.provinces} />
 
             {isError ? (
@@ -262,7 +269,7 @@ const LandingPage = ({ searchParams }: { params: { slug: string }; searchParams:
 
             <ResponsivePagination
               current={page}
-              total={data?.totalPages as number}
+              total={testData?.totalPages as number}
               onPageChange={p => {
                 setPage(p);
                 updateUrlWithPageNumber(p);

@@ -6,10 +6,11 @@ import { TextArea as RadixTextArea } from '@radix-ui/themes';
 import styled from 'styled-components';
 
 import { ErrorText } from '@/libs/shared';
+import { typoVariant } from '@/theme/typo-variants';
 
 // import { ErrorText } from '@/libs/shared';
 // Assuming you have an ErrorText component
-import { Flex } from '../index';
+import { Grid, Text } from '../index';
 
 // Assuming you have a Flex component for layout
 
@@ -18,20 +19,22 @@ import { Flex } from '../index';
  * _______________________________________________________________________________
  */
 type TextAreaComponentProps = {
+  title?: string;
   errorText?: string;
   placeholder: string;
 } & React.ComponentPropsWithoutRef<typeof RadixTextArea>;
 
-const TextArea = forwardRef<HTMLTextAreaElement, TextAreaComponentProps>(
-  ({ placeholder, errorText, ...rest }, ref) => {
-    return (
-      <Flex pb={'10px'} width={'100%'} position={'relative'}>
-        <StyledTextAreaRoot size={'3'} ref={ref} {...rest} placeholder={placeholder}></StyledTextAreaRoot>
-        {errorText && <ErrorText text={errorText} />}
-      </Flex>
-    );
-  }
-);
+const TextArea = forwardRef<HTMLTextAreaElement, TextAreaComponentProps>(({ placeholder, errorText, title, ...rest }, ref) => {
+  return (
+    <Grid pb={'10px'} width={'100%'} position={'relative'}>
+      <Text style={{ paddingRight: '10px' }} {...typoVariant.body1}>
+        {title}
+      </Text>
+      <StyledTextAreaRoot size={'3'} ref={ref} {...rest} placeholder={placeholder}></StyledTextAreaRoot>
+      {errorText && <ErrorText text={errorText} />}
+    </Grid>
+  );
+});
 
 TextArea.displayName = 'TextArea';
 

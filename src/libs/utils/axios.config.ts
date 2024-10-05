@@ -12,8 +12,8 @@ export const ApiManager = axios.create({
 });
 
 export const ApiManagerV2 = axios.create({
-  // baseURL: 'https://api.darkube.app/v2/',
-  baseURL: 'http://37.32.8.14:3005/v1/',
+  baseURL: 'https://api.darkube.app/v2/',
+  // baseURL: 'http://37.32.8.14:3005/v2/',
   headers: {
     'Content-Type': 'application/json',
   },
