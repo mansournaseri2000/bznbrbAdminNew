@@ -38,7 +38,7 @@ const BannerDetail: React.FC<BannerDetailProps> = (props: BannerDetailProps) => 
         <AppBox>
           <Item label='عنوان آگهی' value={title} />
           <Item label='صاحب امتیاز آگهی' value={owner} />
-          <Item label='تبلیغ تا' value={expirationDate} />
+          <Item label='تبلیغ   تا' value={expirationDate} />
         </AppBox>
         <AppFlex direction={'column'} gap={'3'}>
           <AppBox width={'100%'} style={{ height: 120, position: 'relative', borderRadius: 8 }}>
