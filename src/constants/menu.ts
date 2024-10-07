@@ -6,7 +6,7 @@ export const MenuData = [
     type: 'expand',
     items: [
       { label: 'تیم ها', path: '' },
-      { label: 'پرسنل', path: '' },
+      { label: 'پرسنل', path: '/employee' },
     ],
   },
   {
