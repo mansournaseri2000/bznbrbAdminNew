@@ -1,0 +1,51 @@
+[
+  {
+    "origin": "تهران",
+    "destination": "مشهد",
+    "departureDate": "1403 مرداد 1",
+    "returnDate": "1403 مرداد 5",
+    "ticketType": ["اتوبوس", "هتل"]
+  },
+  {
+    "origin": "تهران",
+    "destination": "مشهد",
+    "departureDate": "1403 مرداد 1",
+    "returnDate": "1403 مرداد 5",
+    "ticketType": ["هواپیما", "ویلا"]
+  },
+  {
+    "origin": "تهران",
+    "destination": "مشهد",
+    "departureDate": "1403 مرداد 1",
+    "returnDate": "1403 مرداد 5",
+    "ticketType": ["قطار", "کلبه"]
+  },
+  {
+    "origin": "تهران",
+    "destination": "مشهد",
+    "departureDate": "1403 مرداد 1",
+    "returnDate": "1403 مرداد 5",
+    "ticketType": ["ویلا"]
+  },
+  {
+    "origin": "تهران",
+    "destination": "مشهد",
+    "departureDate": "1403 مرداد 1",
+    "returnDate": "-",
+    "ticketType": ["اتوبوس"]
+  },
+  {
+    "origin": "تهران",
+    "destination": "مشهد",
+    "departureDate": "1403 مرداد 1",
+    "returnDate": "1403 مرداد 5",
+    "ticketType": ["قطار"]
+  },
+  {
+    "origin": "تهران",
+    "destination": "مشهد",
+    "departureDate": "1403 مرداد 1",
+    "returnDate": "1403 مرداد 5",
+    "ticketType": ["هواپیما"]
+  }
+]
