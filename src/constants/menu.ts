@@ -1,6 +1,6 @@
 export const MenuData = [
-  { label: 'برنامه ها', path: '', type: 'collapse' },
-  { label: 'کاربران', path: '', type: 'collapse' },
+  { label: 'برنامه ها', path: '/plans', type: 'collapse' },
+  { label: 'کاربران', path: '/user', type: 'collapse' },
   {
     label: 'تیم و پرسنل',
     type: 'expand',
@@ -14,7 +14,7 @@ export const MenuData = [
     type: 'expand',
     items: [
       { label: 'نقاط', path: '' },
-      { label: 'رویداد ها', path: '' },
+      { label: 'رویداد ها', path: '/article' },
       { label: 'هتل ها', path: '' },
       { label: 'هواپیما', path: '' },
       { label: 'قطار', path: '' },

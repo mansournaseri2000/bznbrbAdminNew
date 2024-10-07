@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+// import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';

@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 
 import { Flex } from '@/libs/primitives';
 
+import Menu from './Menu';
+
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
@@ -9,7 +11,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       <main>
         <Flex style={{ border: '1px solid blue' }}>
           <Flex width={'30%'} style={{ border: '1px solid red' }}>
-            menu
+            <Menu />
           </Flex>
           <Flex width={'70%'} style={{ border: '1px solid red' }}>
             {children}

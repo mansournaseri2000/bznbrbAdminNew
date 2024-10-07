@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import Link from 'next/link';
@@ -50,4 +52,5 @@ const MenuWrapper = styled(Flex)`
   max-width: 260px;
   border-radius: 16px 0px 0px 16px;
   border: 1px solid #6a6a6a;
+  height: fit-content;
 `;
