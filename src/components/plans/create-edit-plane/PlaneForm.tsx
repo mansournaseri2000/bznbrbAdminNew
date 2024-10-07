@@ -10,7 +10,7 @@ const PlaneForm = () => {
       <Flex width={'100%'} direction={'column'} gap={'2'}>
         <Heading>آدرس مبدا</Heading>
         <Flex width={'100%'} gap={'4'}>
-          <TextField placeholder='استان' />
+          <TextField placeholder=' استان' />
           <TextField placeholder='شهر' />
         </Flex>
       </Flex>
