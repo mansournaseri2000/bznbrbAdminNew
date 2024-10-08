@@ -49,7 +49,6 @@ const ItemWrapper = styled(Flex)`
 
 const MenuWrapper = styled(Flex)`
   width: 100%;
-  max-width: 260px;
   border-radius: 16px 0px 0px 16px;
   border: 1px solid #6a6a6a;
   height: fit-content;

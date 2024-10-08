@@ -2,7 +2,10 @@ import React from 'react';
 
 import AccessDetail from '@/components/develope/teams-and-employers/access-detail/AccessDetail';
 import EmployDetail from '@/components/develope/teams-and-employers/employ-detail/EmployDetail';
-import { Flex, Grid, Heading, TextField } from '@/libs/primitives';
+import ActionListHero from '@/components/employee/action-list/hero/ActionListHero';
+import ActionList from '@/components/employee/action-list/list/ActionList';
+import ActionListPagination from '@/components/employee/action-list/pagination/ActionListPagination';
+import { Flex, Grid, Heading } from '@/libs/primitives';
 
 const badge = ['حذف کاربر', 'مشاهده لیست پرداختی ها', 'مشاهده لیست پرداختی ها', 'ثبت کاربر'];
 
@@ -35,21 +38,9 @@ export default function EmployeeInfo() {
       </Flex>
       <Flex direction={'column'} gap={'4'}>
         <Heading style={{ borderBottom: '1px solid #D4D4D4', paddingBottom: 4 }}>لیست عملیات ها</Heading>
-        <Grid width={'100%'} columns={'4'} gapX={'4'} style={{ gridTemplateColumns: '2fr 0.5fr 0.5fr 1fr' }}>
-          <TextField placeholder='جستجوی عنوان' />
-          <Flex justify={'center'} align={'center'} style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}>
-            از تاریخ
-          </Flex>
-          <Flex justify={'center'} align={'center'} style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}>
-            تا تاریخ
-          </Flex>
-          <Flex justify={'center'} align={'center'} style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}>
-            مرتب سازی بر اساس
-          </Flex>
-        </Grid>
-        <Flex width={'100%'} height={'460px'} align={'center'} justify={'center'} style={{ border: '1px solid' }}>
-          Table
-        </Flex>
+        <ActionListHero />
+        <ActionList />
+        <ActionListPagination />
       </Flex>
     </Flex>
   );
