@@ -3,13 +3,11 @@
 import React from 'react';
 
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 
 import { ColumnDef } from '@tanstack/react-table';
 
-import AppButton from '@/libs/primitives/components/Button';
-import AppBox from '@/libs/primitives/layout/Box';
-import AppFlex from '@/libs/primitives/layout/Flex';
-import AppText from '@/libs/primitives/typography/Text';
+import { Box, Button, Flex, Text } from '@/libs/primitives';
 
 import TableData from './data.json';
 
@@ -23,13 +21,14 @@ export interface UserListDetail {
 }
 
 const UserList = () => {
+  const router = useRouter();
   const columns: ColumnDef<UserListDetail>[] = [
     {
       accessorKey: 'username',
       header: 'نام و نام خانوادگی',
       cell: info => {
         const value = info.getValue() as string | null;
-        return <AppText style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</AppText>;
+        return <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</Text>;
       },
     },
     {
@@ -37,7 +36,7 @@ const UserList = () => {
       header: 'شماره تماس',
       cell: info => {
         const value = info.getValue() as string | null;
-        return <AppText style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</AppText>;
+        return <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</Text>;
       },
     },
     {
@@ -45,7 +44,7 @@ const UserList = () => {
       header: 'ایمیل',
       cell: info => {
         const value = info.getValue() as string | null;
-        return <AppText style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</AppText>;
+        return <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</Text>;
       },
     },
     {
@@ -53,7 +52,7 @@ const UserList = () => {
       header: 'نوع کاربر',
       cell: info => {
         const value = info.getValue() as string | null;
-        return <AppText style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</AppText>;
+        return <Text style={{ display: 'flex', height: '100%', alignItems: 'center' }}>{value ? value : '-'}</Text>;
       },
     },
     {
@@ -62,22 +61,23 @@ const UserList = () => {
         const item = row.original;
         const handleClick = () => {
           console.log('item', item);
+          router.push('/user/user-detail');
         };
         return (
-          <AppFlex width={'100%'} height={'100%'} align={'center'} justify={'center'}>
-            <AppButton variant='ghost' onClick={handleClick}>
+          <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>
+            <Button variant='ghost' onClick={handleClick}>
               ...
-            </AppButton>
-          </AppFlex>
+            </Button>
+          </Flex>
         );
       },
     },
   ];
   return (
-    <AppBox width={'100%'} style={{ overflow: 'scroll' }}>
-      {/* <AppHeading>User List</AppHeading> */}
+    <Box width={'100%'} style={{ overflow: 'scroll' }}>
+      {/* <Heading>User List</Heading> */}
       <Table columns={columns as any} data={TableData as any} />
-    </AppBox>
+    </Box>
   );
 };
 

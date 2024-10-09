@@ -7,8 +7,8 @@ export const MenuData = [
     label: 'دیتابیس',
     type: 'expand',
     items: [
-      { label: 'نقاط', path: '/points' },
-      { label: 'رویداد ها', path: '/article' },
+      { label: 'نقاط', path: '/data-base/points' },
+      { label: 'رویداد ها', path: '/data-base/article' },
     ],
   },
   {

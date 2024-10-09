@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { ColumnDef } from '@tanstack/react-table';
 
 import { Button, Flex, Text } from '@/libs/primitives';
@@ -18,6 +20,7 @@ interface PlansListDetail {
 }
 
 const PlansList = () => {
+  const router = useRouter();
   const columns: ColumnDef<PlansListDetail>[] = [
     {
       accessorKey: 'creatorUser',
@@ -65,6 +68,7 @@ const PlansList = () => {
         const item = row.original;
         const handleClick = () => {
           console.log('item', item);
+          router.push('/plans/plane-detail');
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>

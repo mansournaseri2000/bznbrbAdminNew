@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { ColumnDef } from '@tanstack/react-table';
 
 import { Button, Flex, Text } from '@/libs/primitives';
@@ -17,6 +19,7 @@ interface EmployeeListDetail {
 }
 
 const EmployeeList = () => {
+  const router = useRouter();
   const columns: ColumnDef<EmployeeListDetail>[] = [
     {
       accessorKey: 'fullName',
@@ -56,6 +59,7 @@ const EmployeeList = () => {
         const item = row.original;
         const handleClick = () => {
           console.log('item', item);
+          router.push('/employee/employee-info');
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>
