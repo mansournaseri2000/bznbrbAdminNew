@@ -17,6 +17,8 @@ type CommentProps = {
 };
 
 const Comment = (props: CommentProps) => {
+  console.log("fafsdf");
+  
   const { profileImg, username, date, comment } = props;
   return (
     <CardWrapper direction={'column'} p={'4'} gap={'4'}>

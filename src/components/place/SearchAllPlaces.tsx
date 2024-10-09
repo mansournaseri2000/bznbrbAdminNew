@@ -48,6 +48,8 @@ const SearchAllPlaces = () => {
       const [entry] = entries;
       if (entry.isIntersecting) {
         console.log('Observer is intersecting');
+        console.log("run");
+        
         fetchNextPage();
       }
     },
@@ -58,7 +60,7 @@ const SearchAllPlaces = () => {
     const element = observerElem.current;
 
     if (!element) {
-      console.log('Element is not available for observation');
+      console.log('Element is not ava ilable for obs   ervation');
       return;
     }
 

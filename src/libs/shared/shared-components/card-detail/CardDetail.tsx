@@ -24,6 +24,8 @@ type CardDetailProps = {
 };
 
 const CardDetail = (props: CardDetailProps) => {
+  console.log("run");
+  
   const {
     hero,
     submitButtonText,
@@ -70,7 +72,7 @@ const CardDetail = (props: CardDetailProps) => {
       </Flex>
       <ButtonsWrapper width={'100%'} gap={'4'} p={'4'}>
         <AppButton>
-          <Text>{submitButtonText}</Text>
+          <Text>{submitButtonText} </Text>
         </AppButton>
         <AppButton variant='outline'>
           <Text>{rejectButtonText}</Text>
