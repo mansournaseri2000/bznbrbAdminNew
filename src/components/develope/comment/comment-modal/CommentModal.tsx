@@ -4,31 +4,24 @@ import React from 'react';
 
 import Image from 'next/image';
 
-import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import styled from 'styled-components';
 
-import { TextArea } from '@/libs/primitives';
-import AppButton from '@/libs/primitives/components/Button';
+import { Box, Button, Flex, Heading, Text } from '@/libs/primitives';
 
-type CardDetailProps = {
+type CommentModalProps = {
   hero: string;
   title: string;
   badge: string[];
   location: string;
   profileImg: string;
-  rate: number;
+  //   rate: number;
+  comment: string;
   username: string;
   date: string;
-  question: string;
-  answer: string;
-  submitButtonText: string;
-  rejectButtonText: string;
 };
 
-const CardDetail = (props: CardDetailProps) => {
-  console.log('run');
-
-  const { hero, submitButtonText, rejectButtonText, title, date, badge, profileImg, location, username, question } = props;
+const CommentModal: React.FC<CommentModalProps> = (props: CommentModalProps) => {
+  const { hero, title, badge, date, location, profileImg, username, comment } = props;
   return (
     <CardWrapper direction={'column'} gap={'4'}>
       <HeroWrapper width={'100%'} justify={'between'} p={'4'}>
@@ -55,25 +48,22 @@ const CardDetail = (props: CardDetailProps) => {
             <Text>{date}</Text>
           </Flex>
         </Flex>
-        <Flex direction={'column'} gap={'2'}>
-          <Text>متن سوال</Text>
-          <Text>{question}</Text>
-        </Flex>
-        <TextArea placeholder='پاسخ مدیر' />
+        <Text>{comment}</Text>
+        {/* <TextArea placeholder='پاسخ مدیر' /> */}
       </Flex>
       <ButtonsWrapper width={'100%'} gap={'4'} p={'4'}>
-        <AppButton>
-          <Text>{submitButtonText} </Text>
-        </AppButton>
-        <AppButton variant='outline'>
-          <Text>{rejectButtonText}</Text>
-        </AppButton>
+        <Button size={'3'}>
+          <Text>تایید و انتشار</Text>
+        </Button>
+        <Button variant='outline' size={'3'}>
+          <Text>حذف دیدگاه</Text>
+        </Button>
       </ButtonsWrapper>
     </CardWrapper>
   );
 };
 
-export default CardDetail;
+export default CommentModal;
 
 const CardWrapper = styled(Flex)`
   width: 100%;

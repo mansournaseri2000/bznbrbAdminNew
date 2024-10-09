@@ -21,22 +21,24 @@ export const MenuData = [
       { label: 'اتوبوس', path: '' },
     ],
   },
-  {
-    label: 'محتوای وب',
-    type: 'expand',
-    items: [
-      { label: 'صفحه اصلی', path: '' },
-      { label: 'برنامه ساز', path: '' },
-      { label: 'برترین ها', path: '' },
-    ],
-  },
-  {
-    label: 'اتوماسیون',
-    type: 'expand',
-    items: [
-      { label: 'کاربر', path: '' },
-      { label: 'تیم و پرسنل', path: '' },
-      { label: 'دیتابیس', path: '' },
-    ],
-  },
+  { label: 'مدیریت نظرات', path: '/comments', type: 'collapse' },
+
+  // {
+  //   label: 'محتوای وب',
+  //   type: 'expand',
+  //   items: [
+  //     { label: 'صفحه اصلی', path: '' },
+  //     { label: 'برنامه ساز', path: '' },
+  //     { label: 'برترین ها', path: '' },
+  //   ],
+  // },
+  // {
+  //   label: 'اتوماسیون',
+  //   type: 'expand',
+  //   items: [
+  //     { label: 'کاربر', path: '' },
+  //     { label: 'تیم و پرسنل', path: '' },
+  //     { label: 'دیتابیس', path: '' },
+  //   ],
+  // },
 ];

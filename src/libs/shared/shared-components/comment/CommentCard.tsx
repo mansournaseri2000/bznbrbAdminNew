@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import Image from 'next/image';
@@ -5,7 +7,7 @@ import Image from 'next/image';
 import { Box, Flex } from '@radix-ui/themes';
 import styled from 'styled-components';
 
-import { Text } from '@/libs/primitives';
+import { IconButton, Text } from '@/libs/primitives';
 import AppButton from '@/libs/primitives/components/Button';
 
 type CommentProps = {
@@ -16,9 +18,7 @@ type CommentProps = {
   comment: string;
 };
 
-const Comment = (props: CommentProps) => {
-  console.log("fafsdf");
-  
+const CommentCard = (props: CommentProps) => {
   const { profileImg, username, date, comment } = props;
   return (
     <CardWrapper direction={'column'} p={'4'} gap={'4'}>
@@ -32,14 +32,22 @@ const Comment = (props: CommentProps) => {
             <Text>{date}</Text>
           </Flex>
         </Flex>
-        <Flex>{/* TODO: define ICON's here */}</Flex>
+        <Flex gap={'2'} align={'center'}>
+          {/* TODO: define ICON's here */}
+          <IconButton size={'3'} radius='full'>
+            icon
+          </IconButton>
+          <IconButton size={'3'} radius='full'>
+            icon
+          </IconButton>
+        </Flex>
       </Flex>
       <Text>{comment}</Text>
       <Flex gap={'4'} justify={'end'}>
-        <AppButton>
+        <AppButton size={'3'}>
           <Text>تایید و انتشار</Text>
         </AppButton>
-        <AppButton variant='outline'>
+        <AppButton variant='outline' size={'3'}>
           <Text>اطلاعات بیشتر</Text>
         </AppButton>
       </Flex>
@@ -47,11 +55,10 @@ const Comment = (props: CommentProps) => {
   );
 };
 
-export default Comment;
+export default CommentCard;
 
 const CardWrapper = styled(Flex)`
   width: 100%;
-  max-width: 972px;
   border-radius: 4px;
   border: 1px solid #d4d4d4;
 `;
