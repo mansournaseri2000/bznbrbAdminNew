@@ -6,12 +6,7 @@ import Image from 'next/image';
 
 import styled from 'styled-components';
 
-import { Flex, Heading } from '@/libs/primitives';
-import AppButton from '@/libs/primitives/components/Button';
-import AppBox from '@/libs/primitives/layout/Box';
-import AppFlex from '@/libs/primitives/layout/Flex';
-import AppGrid from '@/libs/primitives/layout/Grid';
-import AppText from '@/libs/primitives/typography/Text';
+import { Box, Button, Flex, Grid, Heading, Text } from '@/libs/primitives';
 
 type BannerDetailProps = {
   header: string;
@@ -28,26 +23,26 @@ const BannerDetail: React.FC<BannerDetailProps> = (props: BannerDetailProps) => 
   return (
     <Flex width={'100%'} direction={'column'} gap={'4'}>
       <Heading>{header}</Heading>
-      <AppGrid width={'100%'} p={'4'} gapX={'5'} columns={'2'} style={{ gridTemplateColumns: '1.5fr 3fr', border: '1px solid #D4D4D4', borderRadius: 8 }}>
-        <AppBox>
+      <Grid width={'100%'} p={'4'} gapX={'5'} columns={'2'} style={{ gridTemplateColumns: '1.5fr 3fr', border: '1px solid #D4D4D4', borderRadius: 8 }}>
+        <Box>
           <Item label='عنوان آگهی' value={title} />
           <Item label='صاحب امتیاز آگهی' value={owner} />
           <Item label='تبلیغ   تا' value={expirationDate} />
-        </AppBox>
-        <AppFlex direction={'column'} gap={'3'}>
-          <AppBox width={'100%'} style={{ height: 120, position: 'relative', borderRadius: 8 }}>
+        </Box>
+        <Flex direction={'column'} gap={'3'}>
+          <Box width={'100%'} style={{ height: 120, position: 'relative', borderRadius: 8 }}>
             <Image src={bannerImage} alt='' fill style={{ borderRadius: 8 }} />
-          </AppBox>
-          <AppFlex width={'100%'} justify='center' gap={'3'}>
-            <AppButton size={'3'} style={{ width: '50%' }}>
+          </Box>
+          <Flex width={'100%'} justify='center' gap={'3'}>
+            <Button size={'3'} style={{ width: '50%' }}>
               ویرایش
-            </AppButton>
-            <AppButton size={'3'} variant='outline' style={{ width: '50%' }}>
+            </Button>
+            <Button size={'3'} variant='outline' style={{ width: '50%' }}>
               حذف بنر
-            </AppButton>
-          </AppFlex>
-        </AppFlex>
-      </AppGrid>
+            </Button>
+          </Flex>
+        </Flex>
+      </Grid>
     </Flex>
   );
 };
@@ -56,12 +51,12 @@ export default BannerDetail;
 
 const Item = ({ label, value }: { label: string; value: string }) => (
   <ItemWrapper>
-    <AppText as='label'>{label}</AppText>
-    <AppText as='p'>{value}</AppText>
+    <Text as='label'>{label}</Text>
+    <Text as='p'>{value}</Text>
   </ItemWrapper>
 );
 
-const ItemWrapper = styled(AppFlex).attrs(() => ({
+const ItemWrapper = styled(Flex).attrs(() => ({
   width: '100%',
   align: 'center',
   py: '4',

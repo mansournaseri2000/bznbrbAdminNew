@@ -6,11 +6,7 @@ import Image from 'next/image';
 
 import styled from 'styled-components';
 
-import AppButton from '@/libs/primitives/components/Button';
-import AppBox from '@/libs/primitives/layout/Box';
-import AppFlex from '@/libs/primitives/layout/Flex';
-import AppGrid from '@/libs/primitives/layout/Grid';
-import AppText from '@/libs/primitives/typography/Text';
+import { Box, Button, Flex, Grid, Text } from '@/libs/primitives';
 
 type MemberDetailProps = {
   firstName: string;
@@ -30,9 +26,9 @@ type MemberDetailProps = {
 const MemberDetail: React.FC<MemberDetailProps> = (props: MemberDetailProps) => {
   const { firstName, lastName, profileImg, birthDate, nationalId, mobile, orgEmail, lastSeen, position, teamName, managerName } = props;
   return (
-    <AppBox width={'100%'}>
-      <AppGrid columns={'3'} gapX={'5'} style={{ gridTemplateColumns: '0.4fr 5fr 0.6fr' }}>
-        <AppBox
+    <Box width={'100%'}>
+      <Grid columns={'3'} gapX={'5'} style={{ gridTemplateColumns: '0.4fr 5fr 0.6fr' }}>
+        <Box
           style={{
             width: 100,
             height: 100,
@@ -41,24 +37,24 @@ const MemberDetail: React.FC<MemberDetailProps> = (props: MemberDetailProps) => 
           }}
         >
           <Image src={profileImg} alt='تصویر کاربر' fill style={{ borderRadius: '50%', border: '1px solid #d4d4d4' }} />
-        </AppBox>
-        <AppGrid columns={'2'} style={{ gridTemplateColumns: '1fr 1fr' }}>
+        </Box>
+        <Grid columns={'2'} style={{ gridTemplateColumns: '1fr 1fr' }}>
           <Item label='نام' value={firstName} />
           <Item label='نام خانوادگی' value={lastName} />
           <Item label='کدملی' value={nationalId} />
           <Item label='تاریخ تولد' value={birthDate} />
-        </AppGrid>
-        <AppButton size={'3'}>حذف از تیم</AppButton>
-      </AppGrid>
-      <AppGrid columns={'3'} style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
+        </Grid>
+        <Button size={'3'}>حذف از تیم</Button>
+      </Grid>
+      <Grid columns={'3'} style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
         <Item label='شماره تماس' value={mobile} />
         <Item label='ایمیل سازمانی' value={orgEmail} />
         <Item label='آخرین بازدید' value={lastSeen} />
         <Item label='تیم' value={teamName} />
         <Item label='سمت اجرایی' value={position} />
         <Item label='مسئول' value={managerName} />
-      </AppGrid>
-    </AppBox>
+      </Grid>
+    </Box>
   );
 };
 
@@ -66,12 +62,12 @@ export default MemberDetail;
 
 const Item = ({ label, value }: { label: string; value: string }) => (
   <ItemWrapper>
-    <AppText as='label'>{label}</AppText>
-    <AppText as='p'>{value}</AppText>
+    <Text as='label'>{label}</Text>
+    <Text as='p'>{value}</Text>
   </ItemWrapper>
 );
 
-const ItemWrapper = styled(AppFlex).attrs(() => ({
+const ItemWrapper = styled(Flex).attrs(() => ({
   align: 'center',
   py: '4',
   gap: '2',

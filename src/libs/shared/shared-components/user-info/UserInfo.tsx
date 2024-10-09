@@ -2,11 +2,9 @@ import React from 'react';
 
 import Image from 'next/image';
 
-import { Box, Flex } from '@radix-ui/themes';
 import styled from 'styled-components';
 
-import { Text } from '@/libs/primitives';
-import AppButton from '@/libs/primitives/components/Button';
+import { Box, Button, Flex, Text } from '@/libs/primitives';
 
 type UserInfoProps = {
   profileImg: string;
@@ -51,7 +49,7 @@ const UserInfo = (props: UserInfoProps) => {
           <Text as='p'>{email}</Text>
         </Flex>
       </Flex>
-      <AppButton>مشاهده پروفایل</AppButton>
+      <Button size={'3'}>مشاهده پروفایل</Button>
     </CardWrapper>
   );
 };

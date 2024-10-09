@@ -6,12 +6,7 @@ import Image from 'next/image';
 
 import styled from 'styled-components';
 
-import AppIconButton from '@/libs/primitives/components/IconButton';
-import AppBox from '@/libs/primitives/layout/Box';
-import AppFlex from '@/libs/primitives/layout/Flex';
-import AppGrid from '@/libs/primitives/layout/Grid';
-import AppHeading from '@/libs/primitives/typography/Heading';
-import AppText from '@/libs/primitives/typography/Text';
+import { Box, Flex, Grid, Heading, IconButton, Text } from '@/libs/primitives';
 
 type TourLeaderInfoProps = {
   state: string;
@@ -28,30 +23,30 @@ type TourLeaderInfoProps = {
 const TourLeaderInfo: React.FC<TourLeaderInfoProps> = (props: TourLeaderInfoProps) => {
   const { experienceYears, state, city, specialties, cardIssueDate, cardExpiryDate, about, languages, image } = props;
   return (
-    <AppFlex width={'100%'} direction={'column'} gap={'5'} py={'4'} style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}>
-      <AppFlex width={'100%'} justify={'between'} align={'center'} px={'4'} py={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-        <AppHeading>اطلاعات تورلیدری</AppHeading>
+    <Flex width={'100%'} direction={'column'} gap={'5'} py={'4'} style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}>
+      <Flex width={'100%'} justify={'between'} align={'center'} px={'4'} py={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+        <Heading>اطلاعات تورلیدری</Heading>
         {/* TODO: add icon */}
-        <AppIconButton size={'3'} radius='full'>
+        <IconButton size={'3'} radius='full'>
           icon
-        </AppIconButton>
-      </AppFlex>
-      <AppFlex direction={'column'} gap={'4'} px={'4'}>
-        <AppGrid width={'100%'} columns={'2'} style={{ gridTemplateColumns: '1fr 1fr' }}>
+        </IconButton>
+      </Flex>
+      <Flex direction={'column'} gap={'4'} px={'4'}>
+        <Grid width={'100%'} columns={'2'} style={{ gridTemplateColumns: '1fr 1fr' }}>
           <Item label='مدت فعالیت' value={`${experienceYears} سال`} />
           <Item label='استان فعالیت' value={state} />
           <Item label='شهر فعالیت' value={city} />
           <Item label='تخصص ها' value={Array.isArray(specialties) ? specialties.join(', ') : specialties} />
           <Item label='تاریخ صدور کارت' value={cardIssueDate} />
           <Item label='تاریخ انقضای کارت' value={cardExpiryDate} />
-        </AppGrid>
-        <AppFlex direction={'column'} gap={'2'}>
-          <AppText>درباره</AppText>
-          <AppText style={{ borderBottom: '1px solid #D4D4D4', paddingBottom: 16 }}>{about}</AppText>
-        </AppFlex>
+        </Grid>
+        <Flex direction={'column'} gap={'2'}>
+          <Text>درباره</Text>
+          <Text style={{ borderBottom: '1px solid #D4D4D4', paddingBottom: 16 }}>{about}</Text>
+        </Flex>
         <Item label='تسلط بر زبان های' value={Array.isArray(languages) ? languages.join(', ') : languages} style={{ paddingTop: 0 }} />
-        <AppBox>
-          <AppBox
+        <Box>
+          <Box
             style={{
               width: 312,
               height: 120,
@@ -61,10 +56,10 @@ const TourLeaderInfo: React.FC<TourLeaderInfoProps> = (props: TourLeaderInfoProp
             }}
           >
             <Image alt='' src={image} fill style={{ borderRadius: 8 }} />
-          </AppBox>
-        </AppBox>
-      </AppFlex>
-    </AppFlex>
+          </Box>
+        </Box>
+      </Flex>
+    </Flex>
   );
 };
 
@@ -72,16 +67,16 @@ export default TourLeaderInfo;
 
 const Item = ({ label, value, style }: { label: string; value: string; style?: React.CSSProperties }) => (
   <ItemWrapper style={style}>
-    <AppText as='label' style={{ whiteSpace: 'nowrap' }}>
+    <Text as='label' style={{ whiteSpace: 'nowrap' }}>
       {label}
-    </AppText>
-    <AppText as='p' style={{ whiteSpace: 'wrap' }}>
+    </Text>
+    <Text as='p' style={{ whiteSpace: 'wrap' }}>
       {value}
-    </AppText>
+    </Text>
   </ItemWrapper>
 );
 
-const ItemWrapper = styled(AppFlex).attrs(() => ({
+const ItemWrapper = styled(Flex).attrs(() => ({
   align: 'center',
   py: '4',
   gap: '2',

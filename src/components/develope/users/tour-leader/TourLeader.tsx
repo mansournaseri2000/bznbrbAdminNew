@@ -6,11 +6,7 @@ import Image from 'next/image';
 
 import styled from 'styled-components';
 
-import AppBox from '@/libs/primitives/layout/Box';
-import AppFlex from '@/libs/primitives/layout/Flex';
-import AppGrid from '@/libs/primitives/layout/Grid';
-import AppHeading from '@/libs/primitives/typography/Heading';
-import AppText from '@/libs/primitives/typography/Text';
+import { Box, Flex, Grid, Heading, Text } from '@/libs/primitives';
 
 type TourLeaderProps = {
   state: string;
@@ -27,31 +23,31 @@ type TourLeaderProps = {
 const TourLeader: React.FC<TourLeaderProps> = (props: TourLeaderProps) => {
   const { experienceYears, state, city, specialties, cardIssueDate, cardExpiryDate, about, languages, image } = props;
   return (
-    <AppFlex width={'100%'} direction={'column'} gap={'4'}>
-      <AppBox style={{ borderBottom: '1px solid #D4D4D4' }}>
-        <AppHeading mb={'1'}> اطلاعات تورلیدری</AppHeading>
-      </AppBox>
-      <AppGrid columns={'3'}>
+    <Flex width={'100%'} direction={'column'} gap={'4'}>
+      <Box style={{ borderBottom: '1px solid #D4D4D4' }}>
+        <Heading mb={'1'}> اطلاعات تورلیدری</Heading>
+      </Box>
+      <Grid columns={'3'}>
         <CardItem label='مدت فعالیت' value={`${experienceYears} سال`} />
         <CardItem label='استان فعالیت' value={state} />
         <CardItem label='شهر فعالیت' value={city} />
         <CardItem label='تخصص ها' value={Array.isArray(specialties) ? specialties.join(', ') : specialties} />
         <CardItem label='تاریخ صدور کارت' value={cardIssueDate} />
         <CardItem label='تاریخ انقضای کارت' value={cardExpiryDate} />
-      </AppGrid>
+      </Grid>
 
-      <AppBox pb={'4'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-        <AppHeading>درباره</AppHeading>
-        <AppText>{about}</AppText>
-      </AppBox>
+      <Box pb={'4'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+        <Heading>درباره</Heading>
+        <Text>{about}</Text>
+      </Box>
 
-      <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-        <AppText as='label'>تسلط بر زبان های</AppText>
-        <AppText as='p'>{Array.isArray(languages) ? languages.join(', ') : languages}</AppText>
-      </AppFlex>
+      <Flex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+        <Text as='label'>تسلط بر زبان های</Text>
+        <Text as='p'>{Array.isArray(languages) ? languages.join(', ') : languages}</Text>
+      </Flex>
 
-      <AppBox>
-        <AppBox
+      <Box>
+        <Box
           style={{
             width: 312,
             height: 120,
@@ -61,9 +57,9 @@ const TourLeader: React.FC<TourLeaderProps> = (props: TourLeaderProps) => {
           }}
         >
           <Image alt='' src={image} style={{ borderRadius: 8 }} />
-        </AppBox>
-      </AppBox>
-    </AppFlex>
+        </Box>
+      </Box>
+    </Flex>
   );
 };
 
@@ -71,12 +67,12 @@ export default TourLeader;
 
 const CardItem = ({ label, value }: { label: string; value: string }) => (
   <ItemWrapper>
-    <AppText as='label'>{label}</AppText>
-    <AppText as='p'>{value}</AppText>
+    <Text as='label'>{label}</Text>
+    <Text as='p'>{value}</Text>
   </ItemWrapper>
 );
 
-const ItemWrapper = styled(AppFlex).attrs(() => ({
+const ItemWrapper = styled(Flex).attrs(() => ({
   align: 'center',
   py: '4',
   gap: '2',
@@ -85,29 +81,29 @@ const ItemWrapper = styled(AppFlex).attrs(() => ({
 `;
 
 {
-  /* <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <AppText as='label'>مدت فعالیت</AppText>
-          <AppText as='p'>{experienceYears}</AppText>
-        </AppFlex>
-        <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <AppText as='label'>استان فعالیت</AppText>
-          <AppText as='p'>{state}</AppText>
-        </AppFlex>
-        <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <AppText as='label'>شهر فعالیت</AppText>
-          <AppText as='p'>{city}</AppText>
-        </AppFlex>
+  /* <Flex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+          <Text as='label'>مدت فعالیت</Text>
+          <Text as='p'>{experienceYears}</Text>
+        </Flex>
+        <Flex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+          <Text as='label'>استان فعالیت</Text>
+          <Text as='p'>{state}</Text>
+        </Flex>
+        <Flex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+          <Text as='label'>شهر فعالیت</Text>
+          <Text as='p'>{city}</Text>
+        </Flex>
 
-        <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <AppText as='label'>تخصص ها</AppText>
-          <AppText as='p'>{specialties}</AppText>
-        </AppFlex>
-        <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <AppText as='label'>تاریخ صدور کارت</AppText>
-          <AppText as='p'>{cardIssueDate}</AppText>
-        </AppFlex>
-        <AppFlex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-          <AppText as='label'>تاریخ انقضای کارت</AppText>
-          <AppText as='p'>{cardExpiryDate}</AppText>
-        </AppFlex> */
+        <Flex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+          <Text as='label'>تخصص ها</Text>
+          <Text as='p'>{specialties}</Text>
+        </Flex>
+        <Flex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+          <Text as='label'>تاریخ صدور کارت</Text>
+          <Text as='p'>{cardIssueDate}</Text>
+        </Flex>
+        <Flex align={'center'} py={'4'} gap={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+          <Text as='label'>تاریخ انقضای کارت</Text>
+          <Text as='p'>{cardExpiryDate}</Text>
+        </Flex> */
 }

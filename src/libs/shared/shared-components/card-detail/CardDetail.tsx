@@ -6,7 +6,7 @@ import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import styled from 'styled-components';
 
 import { TextArea } from '@/libs/primitives';
-import AppButton from '@/libs/primitives/components/Button';
+import Button from '@/libs/primitives/components/Button';
 
 type CardDetailProps = {
   hero: string;
@@ -24,20 +24,9 @@ type CardDetailProps = {
 };
 
 const CardDetail = (props: CardDetailProps) => {
-  console.log("run");
-  
-  const {
-    hero,
-    submitButtonText,
-    rejectButtonText,
-    title,
-    date,
-    badge,
-    profileImg,
-    location,
-    username,
-    question,
-  } = props;
+  console.log('run');
+
+  const { hero, submitButtonText, rejectButtonText, title, date, badge, profileImg, location, username, question } = props;
   return (
     <CardWrapper direction={'column'} gap={'4'}>
       <HeroWrapper width={'100%'} justify={'between'} p={'4'}>
@@ -71,12 +60,12 @@ const CardDetail = (props: CardDetailProps) => {
         <TextArea placeholder='پاسخ مدیر' />
       </Flex>
       <ButtonsWrapper width={'100%'} gap={'4'} p={'4'}>
-        <AppButton>
+        <Button>
           <Text>{submitButtonText} </Text>
-        </AppButton>
-        <AppButton variant='outline'>
+        </Button>
+        <Button variant='outline'>
           <Text>{rejectButtonText}</Text>
-        </AppButton>
+        </Button>
       </ButtonsWrapper>
     </CardWrapper>
   );

@@ -1,10 +1,8 @@
 import React from 'react';
 
-import AppIconButton from '@/libs/primitives/components/IconButton';
-import AppBox from '@/libs/primitives/layout/Box';
-import AppFlex from '@/libs/primitives/layout/Flex';
-import AppHeading from '@/libs/primitives/typography/Heading';
-import AppText from '@/libs/primitives/typography/Text';
+import { Flex, Heading, Text } from '@/libs/primitives';
+import IconButton from '@/libs/primitives/components/IconButton';
+import Box from '@/libs/primitives/layout/Box';
 
 type GeographicInfoProps = {
   companyName: string;
@@ -14,31 +12,31 @@ type GeographicInfoProps = {
 const GeographicInfo: React.FC<GeographicInfoProps> = (props: GeographicInfoProps) => {
   const { companyName, description } = props;
   return (
-    <AppFlex width={'100%'} direction={'column'} gap={'5'} style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}>
-      <AppFlex width={'100%'} justify={'between'} align={'center'} px={'4'} py={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-        <AppHeading>مشخصات نقطه</AppHeading>
+    <Flex width={'100%'} direction={'column'} gap={'5'} style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}>
+      <Flex width={'100%'} justify={'between'} align={'center'} px={'4'} py={'2'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+        <Heading>مشخصات نقطه</Heading>
         {/* TODO: add icon */}
-        <AppIconButton size={'3'} radius='full'>
+        <IconButton size={'3'} radius='full'>
           icon
-        </AppIconButton>
-      </AppFlex>
-      <AppFlex width={'100%'} justify={'between'} align={'center'} px={'4'}>
+        </IconButton>
+      </Flex>
+      <Flex width={'100%'} justify={'between'} align={'center'} px={'4'}>
         <Item label='نام و عنوان شرکت پرواز' value={companyName} />
 
-        <AppText>Logo</AppText>
-      </AppFlex>
-      <AppBox px={'4'} pb={'2'}>
+        <Text>Logo</Text>
+      </Flex>
+      <Box px={'4'} pb={'2'}>
         <Item label='توضیحات قطار' value={description} />
-      </AppBox>
-    </AppFlex>
+      </Box>
+    </Flex>
   );
 };
 
 export default GeographicInfo;
 
 const Item = ({ label, value }: { label: string; value: string }) => (
-  <AppFlex direction={'column'} gap={'2'}>
-    <AppText as='label'>{label}</AppText>
-    <AppText as='p'>{value}</AppText>
-  </AppFlex>
+  <Flex direction={'column'} gap={'2'}>
+    <Text as='label'>{label}</Text>
+    <Text as='p'>{value}</Text>
+  </Flex>
 );

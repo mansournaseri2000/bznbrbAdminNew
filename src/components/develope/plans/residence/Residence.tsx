@@ -4,8 +4,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import AppFlex from '@/libs/primitives/layout/Flex';
-import AppText from '@/libs/primitives/typography/Text';
+import { Flex, Text } from '@/libs/primitives';
 
 type ResidenceProps = {
   name: string;
@@ -18,31 +17,31 @@ type ResidenceProps = {
 const Residence: React.FC<ResidenceProps> = (props: ResidenceProps) => {
   const { name, RoomsNumbers, PassengerNumbers, cost, deliveryDate } = props;
   return (
-    <AppFlex direction={'column'} width={'100%'} px={'4'} py={'2'} gap={'2'} style={{ border: '1px solid #6a6a6a', borderRadius: 8 }}>
-      <AppFlex width={'100%'} justify={'between'} align={'center'}>
-        <AppText as='p'>{name}</AppText>
+    <Flex direction={'column'} width={'100%'} px={'4'} py={'2'} gap={'2'} style={{ border: '1px solid #6a6a6a', borderRadius: 8 }}>
+      <Flex width={'100%'} justify={'between'} align={'center'}>
+        <Text as='p'>{name}</Text>
         {/* TODO: LOGO */}
-      </AppFlex>
-      <AppFlex gap={'4'}>
+      </Flex>
+      <Flex gap={'4'}>
         <InfoBox label='تعداد اتاق' value={RoomsNumbers} />
         <InfoBox label='تعداد نفرات' value={PassengerNumbers} />
-      </AppFlex>
+      </Flex>
       <InfoBox label='هزینه' value={cost} fullWidth />
-      <AppFlex justify={'center'} mt={'1'} style={{ borderTop: '1px solid #D4D4D4' }}>
-        <AppText as='p'>{deliveryDate}</AppText>
-      </AppFlex>
-    </AppFlex>
+      <Flex justify={'center'} mt={'1'} style={{ borderTop: '1px solid #D4D4D4' }}>
+        <Text as='p'>{deliveryDate}</Text>
+      </Flex>
+    </Flex>
   );
 };
 
 const InfoBox = ({ label, value, fullWidth = false }: { label: string; value: string | number; fullWidth?: boolean }) => (
   <InfoBoxContainer fullWidth={fullWidth}>
-    <AppText as='label'>{label}</AppText>
-    <AppText as='p'>{value}</AppText>
+    <Text as='label'>{label}</Text>
+    <Text as='p'>{value}</Text>
   </InfoBoxContainer>
 );
 
-const InfoBoxContainer = styled(AppFlex)<{ fullWidth: boolean }>`
+const InfoBoxContainer = styled(Flex)<{ fullWidth: boolean }>`
   width: ${({ fullWidth }) => (fullWidth ? '100%' : '50%')};
   justify-content: space-between;
   border: 1px solid #d4d4d4;
@@ -51,46 +50,3 @@ const InfoBoxContainer = styled(AppFlex)<{ fullWidth: boolean }>`
 `;
 
 export default Residence;
-
-// const ResidenceContainer = styled(AppFlex).attrs(() => ({
-//   direction: 'column',
-//   px: '2',
-//   gap: '2',
-// }))`
-//   width: 100%;
-//   max-width: 640px;
-//   border: 1px solid #6a6a6a;
-//   border-radius: 0.5 rem;
-// `;
-
-{
-  /* <AppFlex
-          width={'50%'}
-          justify={'between'}
-          style={{ border: '1px solid #d4d4d4', borderRadius: 8, padding: '4px 8px' }}
-        >
-          <AppText as='label'>تعداد اتاق</AppText>
-          <AppText as='p'>{RoomsNumbers}</AppText>
-        </AppFlex> */
-}
-{
-  /* <AppFlex
-          width={'50%'}
-          justify={'between'}
-          style={{ border: '1px solid #d4d4d4', borderRadius: 8, padding: '4px 8px' }}
-        >
-          <AppText as='label'>تعداد نفرات</AppText>
-          <AppText as='p'>{PassengerNumbers}</AppText>
-        </AppFlex> */
-}
-
-{
-  /* <AppFlex
-        width={'100%'}
-        justify={'between'}
-        style={{ border: '1px solid #d4d4d4', borderRadius: 8, padding: '4px 8px' }}
-      >
-        <AppText as='label'>هزینه</AppText>
-        <AppText as='p'>{cost}</AppText>
-      </AppFlex> */
-}

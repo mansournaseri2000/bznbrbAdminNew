@@ -6,10 +6,7 @@ import Image from 'next/image';
 
 import styled from 'styled-components';
 
-import AppIconButton from '@/libs/primitives/components/IconButton';
-import AppBox from '@/libs/primitives/layout/Box';
-import AppFlex from '@/libs/primitives/layout/Flex';
-import AppText from '@/libs/primitives/typography/Text';
+import { Box, Flex, IconButton, Text } from '@/libs/primitives';
 
 type AutomationProfileProps = {
   profileImg: string;
@@ -23,8 +20,8 @@ type AutomationProfileProps = {
 const AutomationProfile: React.FC<AutomationProfileProps> = (props: AutomationProfileProps) => {
   const { profileImg, user, teamName, changeDate, type, status } = props;
   return (
-    <AppFlex direction={'column'} width={'100%'} gap={'4'} py={'4'} align={'center'} style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}>
-      <AppBox
+    <Flex direction={'column'} width={'100%'} gap={'4'} py={'4'} align={'center'} style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}>
+      <Box
         style={{
           width: 100,
           height: 100,
@@ -34,23 +31,23 @@ const AutomationProfile: React.FC<AutomationProfileProps> = (props: AutomationPr
         }}
       >
         <Image alt='تصویر کاربر' src={profileImg} fill style={{ borderRadius: '50%' }} />
-      </AppBox>
-      <AppFlex width={'100%'} direction={'column'} px={'4'}>
+      </Box>
+      <Flex width={'100%'} direction={'column'} px={'4'}>
         <Item label='کاربر' value={user} />
         <Item label='تیم' value={teamName} />
         <Item label='تاریخ تغییر' value={changeDate} />
         <Item label='نوع عملیات' value={type} />
         <Item label='وضعیت' value={status} />
-      </AppFlex>
-      <AppFlex width={'100%'} justify={'center'} gap={'5'}>
-        <AppIconButton radius='full' size={'3'}>
+      </Flex>
+      <Flex width={'100%'} justify={'center'} gap={'5'}>
+        <IconButton radius='full' size={'3'}>
           icon
-        </AppIconButton>
-        <AppIconButton radius='full' size={'3'}>
+        </IconButton>
+        <IconButton radius='full' size={'3'}>
           icon
-        </AppIconButton>
-      </AppFlex>
-    </AppFlex>
+        </IconButton>
+      </Flex>
+    </Flex>
   );
 };
 
@@ -58,16 +55,16 @@ export default AutomationProfile;
 
 const Item = ({ label, value }: { label: string; value: string }) => (
   <ItemWrapper>
-    <AppText as='label' style={{ whiteSpace: 'nowrap' }}>
+    <Text as='label' style={{ whiteSpace: 'nowrap' }}>
       {label}
-    </AppText>
-    <AppText as='p' style={{ whiteSpace: 'wrap' }}>
+    </Text>
+    <Text as='p' style={{ whiteSpace: 'wrap' }}>
       {value}
-    </AppText>
+    </Text>
   </ItemWrapper>
 );
 
-const ItemWrapper = styled(AppFlex).attrs(() => ({
+const ItemWrapper = styled(Flex).attrs(() => ({
   width: '100%',
   justify: 'between',
   align: 'center',

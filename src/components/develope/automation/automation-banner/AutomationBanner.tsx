@@ -6,10 +6,7 @@ import Image from 'next/image';
 
 import styled from 'styled-components';
 
-import AppBox from '@/libs/primitives/layout/Box';
-import AppFlex from '@/libs/primitives/layout/Flex';
-import AppHeading from '@/libs/primitives/typography/Heading';
-import AppText from '@/libs/primitives/typography/Text';
+import { Box, Flex, Heading, Text } from '@/libs/primitives';
 
 type AutomationBannerProps = {
   header: string;
@@ -22,12 +19,12 @@ type AutomationBannerProps = {
 const AutomationBanner: React.FC<AutomationBannerProps> = (props: AutomationBannerProps) => {
   const { header, imageUrl, title, adOwner, expiryDate } = props;
   return (
-    <AppFlex width={'100%'} direction={'column'} gap={'5'} py={'4'} style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}>
-      <AppBox p={'4'} style={{ borderBottom: '1px solid #D4D4D4' }}>
-        <AppHeading>{header}</AppHeading>
-      </AppBox>
-      <AppFlex direction={'column'} gap={'2'} align={'center'} px={'4'}>
-        <AppBox
+    <Flex width={'100%'} direction={'column'} gap={'5'} py={'4'} style={{ border: '1px solid #D4D4D4', borderRadius: 8 }}>
+      <Box p={'4'} style={{ borderBottom: '1px solid #D4D4D4' }}>
+        <Heading>{header}</Heading>
+      </Box>
+      <Flex direction={'column'} gap={'2'} align={'center'} px={'4'}>
+        <Box
           style={{
             width: 576,
             height: 120,
@@ -37,14 +34,14 @@ const AutomationBanner: React.FC<AutomationBannerProps> = (props: AutomationBann
           }}
         >
           <Image alt='تصویر آگهی' src={imageUrl} fill style={{ borderRadius: '50%' }} />
-        </AppBox>
-        <AppBox width={'100%'}>
+        </Box>
+        <Box width={'100%'}>
           <Item label='عنوان آگهی' value={title} />
           <Item label='صاحب امتیاز آگهی' value={adOwner} />
           <Item label='تبلیغ تا' value={expiryDate} />
-        </AppBox>
-      </AppFlex>
-    </AppFlex>
+        </Box>
+      </Flex>
+    </Flex>
   );
 };
 
@@ -52,12 +49,12 @@ export default AutomationBanner;
 
 const Item = ({ label, value }: { label: string; value: string }) => (
   <ItemWrapper>
-    <AppText as='label'>{label}</AppText>
-    <AppText as='p'>{value}</AppText>
+    <Text as='label'>{label}</Text>
+    <Text as='p'>{value}</Text>
   </ItemWrapper>
 );
 
-const ItemWrapper = styled(AppFlex).attrs(() => ({
+const ItemWrapper = styled(Flex).attrs(() => ({
   width: '100%',
   justify: 'between',
   align: 'center',

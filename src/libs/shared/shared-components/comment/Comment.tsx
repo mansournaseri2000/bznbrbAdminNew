@@ -5,8 +5,7 @@ import Image from 'next/image';
 import { Box, Flex } from '@radix-ui/themes';
 import styled from 'styled-components';
 
-import { Text } from '@/libs/primitives';
-import AppButton from '@/libs/primitives/components/Button';
+import { Button, Text } from '@/libs/primitives';
 
 type CommentProps = {
   profileImg: string;
@@ -17,8 +16,8 @@ type CommentProps = {
 };
 
 const Comment = (props: CommentProps) => {
-  console.log("fafsdf");
-  
+  console.log('fafsdf');
+
   const { profileImg, username, date, comment } = props;
   return (
     <CardWrapper direction={'column'} p={'4'} gap={'4'}>
@@ -36,12 +35,12 @@ const Comment = (props: CommentProps) => {
       </Flex>
       <Text>{comment}</Text>
       <Flex gap={'4'} justify={'end'}>
-        <AppButton>
+        <Button>
           <Text>تایید و انتشار</Text>
-        </AppButton>
-        <AppButton variant='outline'>
+        </Button>
+        <Button variant='outline'>
           <Text>اطلاعات بیشتر</Text>
-        </AppButton>
+        </Button>
       </Flex>
     </CardWrapper>
   );

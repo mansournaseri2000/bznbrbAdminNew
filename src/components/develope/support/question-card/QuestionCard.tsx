@@ -1,11 +1,8 @@
 import React from 'react';
 
 import Image from 'next/image';
+import { Box, Button, Flex, Text } from '@/libs/primitives';
 
-import AppButton from '@/libs/primitives/components/Button';
-import AppBox from '@/libs/primitives/layout/Box';
-import AppFlex from '@/libs/primitives/layout/Flex';
-import AppText from '@/libs/primitives/typography/Text';
 
 type QuestionCardProps = {
   profileImg: string;
@@ -19,9 +16,9 @@ type QuestionCardProps = {
 const QuestionCard: React.FC<QuestionCardProps> = (props: QuestionCardProps) => {
   const { profileImg, username, mobile, question } = props;
   return (
-    <AppFlex width={'100%'} direction={'column'} gap={'4'} p={'4'} style={{ border: '1px solid #D4D4D4', borderRadius: 4 }}>
-      <AppFlex align={'center'} gap={'10px'}>
-        <AppBox
+    <Flex width={'100%'} direction={'column'} gap={'4'} p={'4'} style={{ border: '1px solid #D4D4D4', borderRadius: 4 }}>
+      <Flex align={'center'} gap={'10px'}>
+        <Box
           style={{
             width: 32,
             height: 32,
@@ -31,25 +28,25 @@ const QuestionCard: React.FC<QuestionCardProps> = (props: QuestionCardProps) => 
           }}
         >
           <Image alt='تصویر آگهی' src={profileImg} fill style={{ borderRadius: '50%' }} />
-        </AppBox>
+        </Box>
 
         {/* <Avatar fallback='T' size={'2'} src={profileImg} style={{ borderRadius: '50%' }} /> */}
-        <AppFlex direction={'column'} gap={'1'}>
-          <AppText>{username}</AppText>
-          <AppText>{mobile}</AppText>
-        </AppFlex>
-      </AppFlex>
-      <AppFlex direction={'column'} gap={'10px'}>
-        <AppText as='label'>متن سوال</AppText>
-        <AppText as='p'>{question}</AppText>
-      </AppFlex>
-      <AppFlex justify={'end'} gap={'5'}>
-        <AppButton size={'3'} variant='outline'>
+        <Flex direction={'column'} gap={'1'}>
+          <Text>{username}</Text>
+          <Text>{mobile}</Text>
+        </Flex>
+      </Flex>
+      <Flex direction={'column'} gap={'10px'}>
+        <Text as='label'>متن سوال</Text>
+        <Text as='p'>{question}</Text>
+      </Flex>
+      <Flex justify={'end'} gap={'5'}>
+        <Button size={'3'} variant='outline'>
           حذف سوال
-        </AppButton>
-        <AppButton size={'3'}>اطلاعات بیشتر</AppButton>
-      </AppFlex>
-    </AppFlex>
+        </Button>
+        <Button size={'3'}>اطلاعات بیشتر</Button>
+      </Flex>
+    </Flex>
   );
 };
 
