@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import Image from 'next/image';
@@ -5,7 +7,12 @@ import Image from 'next/image';
 import { Box, Flex } from '@radix-ui/themes';
 import styled from 'styled-components';
 
+<<<<<<< HEAD:src/libs/shared/shared-components/comment/Comment.tsx
 import { Button, Text } from '@/libs/primitives';
+=======
+import { IconButton, Text } from '@/libs/primitives';
+import AppButton from '@/libs/primitives/components/Button';
+>>>>>>> feat-comment:src/libs/shared/shared-components/comment/CommentCard.tsx
 
 type CommentProps = {
   profileImg: string;
@@ -15,9 +22,13 @@ type CommentProps = {
   comment: string;
 };
 
+<<<<<<< HEAD:src/libs/shared/shared-components/comment/Comment.tsx
 const Comment = (props: CommentProps) => {
   console.log('fafsdf');
 
+=======
+const CommentCard = (props: CommentProps) => {
+>>>>>>> feat-comment:src/libs/shared/shared-components/comment/CommentCard.tsx
   const { profileImg, username, date, comment } = props;
   return (
     <CardWrapper direction={'column'} p={'4'} gap={'4'}>
@@ -31,14 +42,29 @@ const Comment = (props: CommentProps) => {
             <Text>{date}</Text>
           </Flex>
         </Flex>
-        <Flex>{/* TODO: define ICON's here */}</Flex>
+        <Flex gap={'2'} align={'center'}>
+          {/* TODO: define ICON's here */}
+          <IconButton size={'3'} radius='full'>
+            icon
+          </IconButton>
+          <IconButton size={'3'} radius='full'>
+            icon
+          </IconButton>
+        </Flex>
       </Flex>
       <Text>{comment}</Text>
       <Flex gap={'4'} justify={'end'}>
+<<<<<<< HEAD:src/libs/shared/shared-components/comment/Comment.tsx
         <Button>
           <Text>تایید و انتشار</Text>
         </Button>
         <Button variant='outline'>
+=======
+        <AppButton size={'3'}>
+          <Text>تایید و انتشار</Text>
+        </AppButton>
+        <AppButton variant='outline' size={'3'}>
+>>>>>>> feat-comment:src/libs/shared/shared-components/comment/CommentCard.tsx
           <Text>اطلاعات بیشتر</Text>
         </Button>
       </Flex>
@@ -46,11 +72,10 @@ const Comment = (props: CommentProps) => {
   );
 };
 
-export default Comment;
+export default CommentCard;
 
 const CardWrapper = styled(Flex)`
   width: 100%;
-  max-width: 972px;
   border-radius: 4px;
   border: 1px solid #d4d4d4;
 `;
