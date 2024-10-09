@@ -6,7 +6,7 @@ export const MenuData = [
     type: 'expand',
     items: [
       { label: 'تیم ها', path: '' },
-      { label: 'پرسنل', path: '' },
+      { label: 'پرسنل', path: '/employee' },
     ],
   },
   {
@@ -15,6 +15,7 @@ export const MenuData = [
     items: [
       { label: 'نقاط', path: '/points' },
       { label: 'رویداد ها', path: '/article' },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       { label: 'هتل ها', path: '' },
@@ -26,10 +27,13 @@ export const MenuData = [
   { label: 'مدیریت نظرات', path: '/comments', type: 'collapse' },
 
 =======
+=======
+>>>>>>> feat-employee
       // { label: 'هتل ها', path: '' },
       // { label: 'هواپیما', path: '' },
       // { label: 'قطار', path: '' },
       // { label: 'اتوبوس', path: '' },
+<<<<<<< HEAD
 =======
       // { label: 'هتل ها', path: '' },
       // { label: 'هواپیما', path: '' },
@@ -65,6 +69,10 @@ export const MenuData = [
     ],
   },
 >>>>>>> feat-data-base
+=======
+    ],
+  },
+>>>>>>> feat-employee
   // {
   //   label: 'محتوای وب',
   //   type: 'expand',
