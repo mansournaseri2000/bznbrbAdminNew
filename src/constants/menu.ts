@@ -13,8 +13,9 @@ export const MenuData = [
     label: 'دیتابیس',
     type: 'expand',
     items: [
-      { label: 'نقاط', path: '' },
+      { label: 'نقاط', path: '/points' },
       { label: 'رویداد ها', path: '/article' },
+<<<<<<< HEAD
       { label: 'هتل ها', path: '' },
       { label: 'هواپیما', path: '' },
       { label: 'قطار', path: '' },
@@ -23,6 +24,14 @@ export const MenuData = [
   },
   { label: 'مدیریت نظرات', path: '/comments', type: 'collapse' },
 
+=======
+      // { label: 'هتل ها', path: '' },
+      // { label: 'هواپیما', path: '' },
+      // { label: 'قطار', path: '' },
+      // { label: 'اتوبوس', path: '' },
+    ],
+  },
+>>>>>>> feat-data-base
   // {
   //   label: 'محتوای وب',
   //   type: 'expand',
