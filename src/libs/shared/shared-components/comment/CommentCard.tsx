@@ -7,12 +7,7 @@ import Image from 'next/image';
 import { Box, Flex } from '@radix-ui/themes';
 import styled from 'styled-components';
 
-<<<<<<< HEAD:src/libs/shared/shared-components/comment/Comment.tsx
-import { Button, Text } from '@/libs/primitives';
-=======
-import { IconButton, Text } from '@/libs/primitives';
-import AppButton from '@/libs/primitives/components/Button';
->>>>>>> feat-comment:src/libs/shared/shared-components/comment/CommentCard.tsx
+import { Button, IconButton, Text } from '@/libs/primitives';
 
 type CommentProps = {
   profileImg: string;
@@ -22,13 +17,7 @@ type CommentProps = {
   comment: string;
 };
 
-<<<<<<< HEAD:src/libs/shared/shared-components/comment/Comment.tsx
-const Comment = (props: CommentProps) => {
-  console.log('fafsdf');
-
-=======
 const CommentCard = (props: CommentProps) => {
->>>>>>> feat-comment:src/libs/shared/shared-components/comment/CommentCard.tsx
   const { profileImg, username, date, comment } = props;
   return (
     <CardWrapper direction={'column'} p={'4'} gap={'4'}>
@@ -54,17 +43,10 @@ const CommentCard = (props: CommentProps) => {
       </Flex>
       <Text>{comment}</Text>
       <Flex gap={'4'} justify={'end'}>
-<<<<<<< HEAD:src/libs/shared/shared-components/comment/Comment.tsx
         <Button>
           <Text>تایید و انتشار</Text>
         </Button>
         <Button variant='outline'>
-=======
-        <AppButton size={'3'}>
-          <Text>تایید و انتشار</Text>
-        </AppButton>
-        <AppButton variant='outline' size={'3'}>
->>>>>>> feat-comment:src/libs/shared/shared-components/comment/CommentCard.tsx
           <Text>اطلاعات بیشتر</Text>
         </Button>
       </Flex>

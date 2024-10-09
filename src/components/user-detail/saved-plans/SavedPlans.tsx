@@ -8,7 +8,7 @@ import SavedPlansPagination from './pagination/SavedPlansPagination';
 
 const SavedPlans = () => {
   return (
-    <Flex width={'100'} direction={'column'} gap={'4'}>
+    <Flex width={'100%'} direction={'column'} gap={'4'}>
       <SavedPlansHero />
       <SavedPlansList />
       <SavedPlansPagination />

@@ -24,7 +24,7 @@ export default function UserDetail({ params }: { params: { slug: 'userProfile' |
   };
 
   return (
-    <Flex direction={'column'} gap={'4'}>
+    <Flex width={'100%'} direction={'column'} gap={'4'}>
       <UserDetailHero />
       {renderElement(params.slug)}
     </Flex>
