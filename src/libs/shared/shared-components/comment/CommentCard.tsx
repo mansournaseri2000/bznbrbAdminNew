@@ -8,27 +8,20 @@ import { Box, Flex } from '@radix-ui/themes';
 import styled from 'styled-components';
 
 import { Button, IconButton, Text } from '@/libs/primitives';
+import { CommentsDetail } from '@/types/comment/comment-list';
 
-type CommentProps = {
-  profileImg: string;
-  username: string;
-  date: string;
-  rate: number;
-  comment: string;
-};
-
-const CommentCard = (props: CommentProps) => {
-  const { profileImg, username, date, comment } = props;
+const CommentCard = (props: CommentsDetail) => {
+  const { content, createdAt, users } = props;
   return (
     <CardWrapper direction={'column'} p={'4'} gap={'4'}>
       <Flex width={'100%'} justify={'between'} align={'center'}>
         <Flex align={'center'} gap={'2'}>
           <Box style={{ width: 40, height: 40, position: 'relative', borderRadius: '50%' }}>
-            <Image src={profileImg} alt='' fill style={{ borderRadius: '50%' }} />
+            <Image src={users.pic ? users.pic : ''} alt='' fill style={{ borderRadius: '50%' }} />
           </Box>
           <Flex direction={'column'} gap={'1'}>
-            <Text>{username}</Text>
-            <Text>{date}</Text>
+            <Text>{`${users.name} ${users.last_name}`}</Text>
+            <Text>{createdAt}</Text>
           </Flex>
         </Flex>
         <Flex gap={'2'} align={'center'}>
@@ -41,12 +34,12 @@ const CommentCard = (props: CommentProps) => {
           </IconButton>
         </Flex>
       </Flex>
-      <Text>{comment}</Text>
+      <Text>{content}</Text>
       <Flex gap={'4'} justify={'end'}>
-        <Button>
+        <Button size={'3'}>
           <Text>تایید و انتشار</Text>
         </Button>
-        <Button variant='outline'>
+        <Button size={'3'} variant='outline'>
           <Text>اطلاعات بیشتر</Text>
         </Button>
       </Flex>

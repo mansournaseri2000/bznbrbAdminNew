@@ -1,10 +1,23 @@
-import React from 'react';
+'use client';
 
-import CommentsPagination from '@/components/comment/comment-pagination/CommentPagination';
+import React, { useState } from 'react';
+import 'react-responsive-pagination/themes/classic.css';
+
+import dynamic from 'next/dynamic';
+
+import { useQuery } from '@tanstack/react-query';
+
+import { GetAllComments } from '@/api/comment';
 import { Flex } from '@/libs/primitives';
 import CommentCard from '@/libs/shared/shared-components/comment/CommentCard';
 
-export default function Comment() {
+const ResponsivePagination = dynamic(() => import('react-responsive-pagination').then(module => module.default), { ssr: false });
+
+export default function Comment({ searchParams }: { params: { slug: string }; searchParams: { page: string } }) {
+  const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
+
+  const { data: commentData } = useQuery({ queryKey: ['all-comments', page], queryFn: async () => GetAllComments(page) });
+
   return (
     <Flex width={'100%'} direction={'column'} p={'5'} gap={'4'}>
       <Flex justify={'end'}>
@@ -12,63 +25,15 @@ export default function Comment() {
           مرتب سازی
         </Flex>
       </Flex>
-      <CommentCard
-        comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-        date='24 فروردین'
-        profileImg=''
-        rate={4}
-        username='نام کاربر'
+      {commentData?.allComments.map((item, index) => <CommentCard key={index} content={item.content} createdAt={item.createdAt} users={item.users} />)}
+
+      <ResponsivePagination
+        current={page}
+        total={commentData?.totalPages as number}
+        onPageChange={p => {
+          setPage(p);
+        }}
       />
-      <CommentCard
-        comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-        date='24 فروردین'
-        profileImg=''
-        rate={4}
-        username='نام کاربر'
-      />
-      <CommentCard
-        comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-        date='24 فروردین'
-        profileImg=''
-        rate={4}
-        username='نام کاربر'
-      />
-      <CommentCard
-        comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-        date='24 فروردین'
-        profileImg=''
-        rate={4}
-        username='نام کاربر'
-      />
-      <CommentCard
-        comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-        date='24 فروردین'
-        profileImg=''
-        rate={4}
-        username='نام کاربر'
-      />
-      <CommentCard
-        comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-        date='24 فروردین'
-        profileImg=''
-        rate={4}
-        username='نام کاربر'
-      />
-      <CommentCard
-        comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-        date='24 فروردین'
-        profileImg=''
-        rate={4}
-        username='نام کاربر'
-      />
-      <CommentCard
-        comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-        date='24 فروردین'
-        profileImg=''
-        rate={4}
-        username='نام کاربر'
-      />
-      <CommentsPagination />
     </Flex>
   );
 }
