@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { GetAllComments } from '@/api/comment';
+import { getAllComments } from '@/api/comment';
 import { Flex } from '@/libs/primitives';
 import CommentCard from '@/libs/shared/shared-components/comment/CommentCard';
 
@@ -16,7 +16,9 @@ const ResponsivePagination = dynamic(() => import('react-responsive-pagination')
 export default function Comment({ searchParams }: { params: { slug: string }; searchParams: { page: string } }) {
   const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
 
-  const { data: commentData } = useQuery({ queryKey: ['all-comments', page], queryFn: async () => GetAllComments(page) });
+  const { data: commentData } = useQuery({ queryKey: ['all-comments', page], queryFn: async () => getAllComments(page) });
+
+  console.log('data', commentData);
 
   return (
     <Flex width={'100%'} direction={'column'} p={'5'} gap={'4'}>
@@ -25,7 +27,7 @@ export default function Comment({ searchParams }: { params: { slug: string }; se
           مرتب سازی
         </Flex>
       </Flex>
-      {commentData?.allComments.map((item, index) => <CommentCard key={index} content={item.content} createdAt={item.createdAt} users={item.users} />)}
+      {commentData?.allComments.map((item, index) => <CommentCard key={index} content={item.content} createdAt={item.createdAt} users={item.users} id={item.id} />)}
 
       <ResponsivePagination
         current={page}

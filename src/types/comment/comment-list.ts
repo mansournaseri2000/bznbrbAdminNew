@@ -6,7 +6,7 @@ export interface CommentListResponse {
 }
 
 export interface CommentsDetail {
-  id?: number;
+  id: number;
   content: string;
   score?: number;
   createdAt: string;
