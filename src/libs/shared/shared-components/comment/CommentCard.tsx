@@ -9,26 +9,44 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import { removeComment, updateComment } from '@/api/comment';
+import CommentInfo from '@/components/develope/comment/comment-info/CommentInfo';
 import { Button, Grid, IconButton, Modal, Text } from '@/libs/primitives';
 import { CommentsDetail } from '@/types/comment/comment-list';
 
 import { ToastError, ToastSuccess } from '../../toast/Toast';
 
-const CommentCard = (props: CommentsDetail) => {
-  const { content, createdAt, users, id } = props;
+type modalStateType = {
+  isOpen: boolean;
+  key: 'update' | 'remove' | 'info';
+};
 
-  const [deleteIsOpen, setDeleteIsOpen] = useState(false);
-  const [updateIsOpen, setUpdateIsOpen] = useState(false);
+const CommentCard = (props: CommentsDetail) => {
+  const { content, createdAt, users, id, places } = props;
+
+  const [modalState, setModalState] = useState<modalStateType>({
+    isOpen: false,
+    key: 'remove',
+  });
+
+  console.log('place', places);
+
+  // const [deleteIsOpen, setDeleteIsOpen] = useState<boolean>(false);
+  // const [updateIsOpen, setUpdateIsOpen] = useState<boolean>(false);
+  // const [commentInfo, setCommentInfo] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
-
+  /* 
+    ****
+    update comment service
+    ****_____________________________________________________________________________
+   */
   const { mutate: updateCommentMutate, isPending: updateCommentIsPending } = useMutation({
     mutationFn: async () => updateComment(id),
     onSuccess: async data => {
       if (data.status === true) {
         queryClient.invalidateQueries({ queryKey: ['all-comments'] });
         ToastSuccess('نظر مورد نظر با موفقیت منتشر شد');
-        setUpdateIsOpen(false);
+        setModalState({ ...modalState, isOpen: false });
       } else {
         ToastError('لطفا دوباره تلاش نمایید');
       }
@@ -38,13 +56,18 @@ const CommentCard = (props: CommentsDetail) => {
     },
   });
 
+  /* 
+    ****
+    remove comment service
+    ****_____________________________________________________________________________
+   */
   const { mutate: removeCommentMutate, isPending: removeCommentIsPending } = useMutation({
     mutationFn: async () => removeComment(id),
     onSuccess: async data => {
       if (data.status === true) {
         queryClient.invalidateQueries({ queryKey: ['all-comments'] });
         ToastSuccess('نظر مورد نظر با موفقیت حذف شد');
-        setDeleteIsOpen(false);
+        setModalState({ ...modalState, isOpen: false });
       } else {
         ToastError('لطفا دوباره تلاش نمایید');
       }
@@ -68,7 +91,7 @@ const CommentCard = (props: CommentsDetail) => {
           </Flex>
           <Flex gap={'2'} align={'center'}>
             {/* TODO: define ICON's here */}
-            <IconButton size={'3'} radius='full' onClick={() => setDeleteIsOpen(true)}>
+            <IconButton size={'3'} radius='full' onClick={() => setModalState({ isOpen: true, key: 'remove' })}>
               delete
             </IconButton>
             <IconButton size={'3'} radius='full'>
@@ -78,40 +101,48 @@ const CommentCard = (props: CommentsDetail) => {
         </Flex>
         <Text>{content}</Text>
         <Flex gap={'4'} justify={'end'}>
-          <Button size={'3'} onClick={() => setUpdateIsOpen(true)}>
+          <Button size={'3'} onClick={() => setModalState({ isOpen: true, key: 'update' })}>
             <Text>تایید و انتشار</Text>
           </Button>
-          <Button size={'3'} variant='outline'>
+          <Button size={'3'} variant='outline' onClick={() => setModalState({ isOpen: true, key: 'info' })}>
             <Text>اطلاعات بیشتر</Text>
           </Button>
         </Flex>
       </CardWrapper>
-      <Modal isOpen={updateIsOpen} onClose={() => setUpdateIsOpen(false)}>
-        <Grid gapY={'24px'}>
-          <Text>آیا از انتشار این نظر اظمینان دارید؟ </Text>
-          <Grid gap={'10px'} columns={'2'}>
-            <Button onClick={() => updateCommentMutate()} variant='soft' size={'4'}>
-              <Text>{updateCommentIsPending ? <Spinner /> : 'بله'}</Text>
-            </Button>
-            <Button type='button' onClick={() => setUpdateIsOpen(false)} variant='solid' size={'4'}>
-              خیر
-            </Button>
+
+      <Modal isOpen={modalState.isOpen} onClose={() => setModalState({ ...modalState, isOpen: false })}>
+        {modalState.key === 'update' && (
+          <Grid gapY={'24px'}>
+            <Text>آیا از انتشار این نظر اظمینان دارید؟ </Text>
+            <Grid gap={'10px'} columns={'2'}>
+              <Button onClick={() => updateCommentMutate()} variant='soft' size={'4'}>
+                <Text>{updateCommentIsPending ? <Spinner /> : 'بله'}</Text>
+              </Button>
+              <Button type='button' onClick={() => setModalState({ ...modalState, isOpen: false })} variant='solid' size={'4'}>
+                خیر
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
-      </Modal>
-      <Modal isOpen={deleteIsOpen} onClose={() => setDeleteIsOpen(false)}>
-        <Grid gapY={'24px'}>
-          <Text>آیا از حذف این نظر اظمینان دارید؟ </Text>
-          <Grid gap={'10px'} columns={'2'}>
-            <Button onClick={() => removeCommentMutate()} variant='soft' size={'4'}>
-              <Text>{removeCommentIsPending ? <Spinner /> : 'بله'}</Text>
-            </Button>
-            <Button type='button' onClick={() => setDeleteIsOpen(false)} variant='solid' size={'4'}>
-              خیر
-            </Button>
+        )}
+        {modalState.key === 'remove' && (
+          <Grid gapY={'24px'}>
+            <Text>آیا از حذف این نظر اظمینان دارید؟ </Text>
+            <Grid gap={'10px'} columns={'2'}>
+              <Button onClick={() => removeCommentMutate()} variant='soft' size={'4'}>
+                <Text>{removeCommentIsPending ? <Spinner /> : 'بله'}</Text>
+              </Button>
+              <Button type='button' onClick={() => setModalState({ ...modalState, isOpen: false })} variant='solid' size={'4'}>
+                خیر
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
+        )}
+        {modalState.key === 'info' && (
+          <CommentInfo {...props} onUpdate={() => updateCommentMutate()} onRemove={() => removeCommentMutate()} updatePending={updateCommentIsPending} removePending={removeCommentIsPending} />
+        )}
       </Modal>
+
+
     </>
   );
 };

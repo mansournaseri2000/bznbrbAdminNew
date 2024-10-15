@@ -27,7 +27,7 @@ export default function Comment({ searchParams }: { params: { slug: string }; se
           مرتب سازی
         </Flex>
       </Flex>
-      {commentData?.allComments.map((item, index) => <CommentCard key={index} content={item.content} createdAt={item.createdAt} users={item.users} id={item.id} />)}
+      {commentData?.allComments.map((item, index) => <CommentCard key={index} content={item.content} createdAt={item.createdAt} users={item.users} id={item.id} places={item.places} />)}
 
       <ResponsivePagination
         current={page}

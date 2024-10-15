@@ -17,8 +17,15 @@ export interface CommentsDetail {
   food_and_service_quality?: number;
   location_accessibility?: number;
   staff_satisfaction?: number;
-  TripType?: TripSeason;
+  TripType?: TripType;
+  TripSeason?: TripSeason;
   users: UserDetail;
+  places?: Places;
+}
+
+export interface TripType {
+  id: number;
+  name: string;
 }
 
 export interface TripSeason {
