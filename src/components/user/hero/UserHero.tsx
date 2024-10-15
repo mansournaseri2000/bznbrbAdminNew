@@ -1,15 +1,39 @@
-import React from 'react';
+'use client';
 
-import { Button, Flex, Grid, TextField } from '@/libs/primitives';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+
+import { userTypeConstant } from '@/constants/users';
+import { Button, Grid, SelectItem, SelectRoot, TextField } from '@/libs/primitives';
 
 const UserHero = () => {
+  const methods = useForm({ defaultValues: { userType: '' } });
+  const { control } = methods;
   return (
     <Grid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '0.5fr 3fr 1fr' }}>
       <Button size={'3'}>ثبت کاربر</Button>
       <TextField placeholder='جستجوی  کاربر' style={{ borderRadius: 12 }} />
-      <Flex align={'center'} justify={'center'} style={{ border: '1px solid #D4D4D4', borderRadius: 12 }}>
-        نوع کاربر
-      </Flex>
+
+      <Controller
+        name='userType'
+        control={control}
+        render={({ field }) => (
+          <SelectRoot
+            {...field}
+            placeholder='نوع کاربر'
+            value={String(field.value)}
+            onValueChange={val => {
+              field.onChange(val);
+            }}
+          >
+            {userTypeConstant.map(item => (
+              <SelectItem value={String(item.id)} key={item.id}>
+                {item.name}
+              </SelectItem>
+            ))}
+          </SelectRoot>
+        )}
+      />
     </Grid>
   );
 };

@@ -1,25 +1,51 @@
+'use client';
+
 import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 import { Button } from '@radix-ui/themes';
 
 import Residence from '@/components/develope/plans/residence/Residence';
 import TripDetailsCard from '@/components/develope/plans/trip-details-card/TripDetailsCard';
 import UserInfoCard from '@/components/develope/plans/user-info-card/UserInfoCard';
-import { Box, Flex, Heading, IconButton } from '@/libs/primitives';
+import { optionMenuConstant } from '@/constants/plans';
+import { Box, Flex, Heading, SelectItem, SelectRoot } from '@/libs/primitives';
 
 const PlaneDetail = () => {
+  const methods = useForm({
+    defaultValues: { createdPlan: '' },
+  });
+
+  const { control } = methods;
   return (
     <Flex width={'100%'} direction={'column'} gap={'4'} p={'5'}>
-      <Flex width={'100%'} justify={'between'}>
-        <Button variant='outline' size={'3'} style={{ width: '47.5%' }}>
+      <Flex width={'100%'} justify={'center'} align={'center'} gap={'10px'}>
+        <Button variant='outline' size={'3'} style={{ width: '45.5%' }}>
           برنامه سفر
         </Button>
-        <Button variant='outline' size={'3'} style={{ width: '47.5%' }}>
+        <Button variant='outline' size={'3'} style={{ width: '45.5%' }}>
           نقشه سفر
         </Button>
-        <IconButton size={'3'} variant='outline'>
-          ...
-        </IconButton>
+        <Controller
+          name='createdPlan'
+          control={control}
+          render={({ field }) => (
+            <SelectRoot
+              {...field}
+              value={String(field.value)}
+              onValueChange={val => {
+                field.onChange(val);
+              }}
+              placeholder='...'
+            >
+              {optionMenuConstant.map(item => (
+                <SelectItem key={item.id} value={String(item.id)}>
+                  {item.name}
+                </SelectItem>
+              ))}
+            </SelectRoot>
+          )}
+        />
       </Flex>
       <Flex width={'100%'} height={'56px'} justify={'center'} align={'center'} style={{ border: '1px solid #D4D4D4' }}>
         day picker
