@@ -23,6 +23,7 @@ const FeaturesAndFacilities = ({ featureItems }: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
+  console.log('feature', featureItems);
 
   /**
    * useEffect

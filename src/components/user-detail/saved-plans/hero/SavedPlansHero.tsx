@@ -8,7 +8,8 @@ import { Button, Flex, Grid, IconButton, SelectItem, SelectRoot } from '@/libs/p
 
 const SavedPlansHero = () => {
   const methods = useForm({ defaultValues: { filter: '', sort: '' } });
-  const { control } = methods;
+  const { control, watch } = methods;
+  console.log('watch', watch());
   return (
     <Grid width={'100%'} columns={'2'} style={{ gridTemplateColumns: '4fr 1fr' }}>
       <Flex gap={'4'}>

@@ -18,14 +18,16 @@ const PlansHero = () => {
     },
   });
 
-  const { control } = methods;
+  const { control, watch } = methods;
+  console.log('Watch', watch());
 
   return (
     <Grid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '1fr 4fr 1.5fr' }}>
       <Button size={'3'} onClick={() => router.push('/plans/create-plane')}>
         افزودن برنامه
       </Button>
-      <TextField placeholder='جستجوی نام کاربر' />
+
+      <Controller name='search' control={control} render={({ field }) => <TextField {...field} placeholder='جستجوی نام کاربر' />} />
 
       <Controller
         name='sort'

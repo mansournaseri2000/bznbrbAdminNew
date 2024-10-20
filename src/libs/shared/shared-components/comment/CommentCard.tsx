@@ -29,11 +29,6 @@ const CommentCard = (props: CommentsDetail) => {
   });
 
   console.log('place', places);
-
-  // const [deleteIsOpen, setDeleteIsOpen] = useState<boolean>(false);
-  // const [updateIsOpen, setUpdateIsOpen] = useState<boolean>(false);
-  // const [commentInfo, setCommentInfo] = useState<boolean>(false);
-
   const queryClient = useQueryClient();
   /* 
     ****
