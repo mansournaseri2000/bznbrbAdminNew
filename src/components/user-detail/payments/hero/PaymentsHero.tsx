@@ -7,12 +7,14 @@ import { Flex, Grid, SelectItem, SelectRoot, TextField } from '@/libs/primitives
 
 const PaymentsHero = () => {
   const methods = useForm({
-    defaultValues: { paymentStatus: '', sort: '' },
+    defaultValues: { paymentStatus: '', sort: '', search: '' },
   });
-  const { control } = methods;
+  const { control, watch } = methods;
+  console.log('Watch', watch());
+
   return (
     <Grid width={'100%'} columns={'2'} gapX={'4'}>
-      <TextField placeholder='جستجوی شماره رسید' />
+      <Controller name='search' control={control} render={({ field }) => <TextField {...field} placeholder='جستجوی شماره رسید' />} />
       <Flex width={'100%'} gap={'4'}>
         <Controller
           name='paymentStatus'
