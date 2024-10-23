@@ -31,7 +31,9 @@ const ImageGallery = ({ placeID }: Props) => {
    * _______________________________________________________________________________
    */
   const { setValue } = useFormContext();
+
   const isLoading = useWatch({ name: 'isLoading' });
+  
   const [isOpen, setIsOpen] = useState(false);
   const [imageID, setImageID] = useState<null | number>(null);
   const queryClient = useQueryClient();
