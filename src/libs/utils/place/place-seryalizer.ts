@@ -52,7 +52,7 @@ type PlaceWorkTimes = {
 export const serializePlaceWorkTimeSchedule = (schedule: typeof placeWorkTimeSchedule): PlaceWorkTimes => {
   return schedule.map(day => ({
     dayOfWeek: day.dayOfWeek,
-    type: day.type.find(statusItem => statusItem.key === (day.isTimed ? 'timed' : 'open' || 'closed'))?.key || '',
+    type: day.type.find(statusItem => statusItem.key === (day.isTimed ? 'timed' : day.type.some(t => t.key === 'open') ? 'open' : 'closed'))?.key || '',
     isTimed: day.isTimed,
     timing: day.timing.map(timingItem => ({
       time: timingItem.time,

@@ -9,7 +9,7 @@ const UiPrimitivesPage = () => {
       <Grid style={{ border: '1px solid red', minHeight: '300px' }}>1</Grid>
       <Grid style={{ border: '1px solid red', minHeight: '300px' }}>1</Grid>
       <Grid style={{ border: '1px solid red', minHeight: '300px' }}>1</Grid>
-      <Grid style={{ border: '1px solid red', minHeight: '300px' }}>1</Grid>
+      <Grid style={{ border: '1px solid red', minHeight: '300pxnpm ' }}>1</Grid>
     </Grid>
   );
 };
