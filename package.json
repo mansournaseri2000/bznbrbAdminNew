@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 8090",
     "icons:create": "npx @svgr/cli --ignore-existing --typescript --out-dir ./public/icon ./public/svg --config-file ./public/icon/svgr-config.json --template ./public/icon/svg-template.js"
   },
   "dependencies": {
