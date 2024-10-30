@@ -10,6 +10,7 @@ export type TypoVariant = {
 };
 
 export const typoVariant: Record<string, TypoVariant> = {
+  
   title1: {
     size: {
       initial: '1',

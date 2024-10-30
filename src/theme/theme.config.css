@@ -1,7 +1,7 @@
 .radix-themes {
   --default-font-family: var(--yekan-font) !important;
   font-family: var(--yekan-font) !important;
-
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   --cursor-button: pointer !important;
 
   --font-weight-regular: 400 !important;
@@ -45,9 +45,9 @@
       font-weight: 700;
     }
     &:where(.rt-r-size-3) {
-      font-size: 40px;
+      font-size: 24px;
       --line-height: auto;
-      font-weight: 700;
+      font-weight: 400;
     }
     &:where(.rt-r-size-4) {
       font-size: 20px;
@@ -66,10 +66,17 @@
     }
   }
 
-  .rt-BaseCheckboxRoot:where(.rt-variant-surface):where(
-      [data-state='checked'],
-      [data-state='indeterminate']
-    )::before {
-    background-color: rgba(0, 156, 155, 1);
+  :where(.radix-themes) {
+    --base-button-classic-after-inset: 2px;
+    --base-button-classic-box-shadow-top: none;
+    --base-button-classic-box-shadow-bottom: none;
+    --base-button-classic-disabled-box-shadow: none;
+    --base-button-classic-active-filter: none;
+    --base-button-classic-high-contrast-hover-filter: none;
+    --base-button-classic-high-contrast-active-filter: none;
+  }
+
+  .rt-BaseCheckboxRoot:where(.rt-variant-surface):where([data-state='checked'], [data-state='indeterminate'])::before {
+    background-color: rgba(16, 95, 174, 1);
   }
 }
