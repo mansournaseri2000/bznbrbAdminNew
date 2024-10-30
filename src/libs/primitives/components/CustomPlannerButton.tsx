@@ -21,7 +21,7 @@ type AppButtonProps = React.ComponentProps<typeof Button> & {
 
 const CustomPlannerButton = React.forwardRef<HTMLButtonElement, AppButtonProps>(
   ({ selectedValue, errorText, isFill, error, value, ...props }: AppButtonProps, forwardedRef: ForwardedRef<HTMLButtonElement>) => (
-    <ButtonStyle type='button' isFill={isFill} error={error} ref={forwardedRef as any} {...props}>
+    <ButtonStyle type='button' isFill={isFill} error={error} ref={forwardedRef as any} variant='outline' {...props}>
       <Flex justify={'between'} align={'center'} width={'100%'}>
         <Text {...typoVariant.body2}>{selectedValue ? selectedValue : value}</Text>
         <ArrowLeftCustomButton style={{ scale: 1.5 }} />
@@ -39,7 +39,7 @@ export default CustomPlannerButton;
 
 const ButtonStyle = styled(Button)<{ error: boolean; isFill: boolean }>`
   position: relative;
-
+  border-radius: 12px;
   path {
     fill: ${colorPalette.pink[9]};
   }
@@ -54,7 +54,8 @@ const ButtonStyle = styled(Button)<{ error: boolean; isFill: boolean }>`
     outline: none;
     box-shadow: none;
     margin: 0;
-    border-radius: 8px;
+    /* border-radius: 8px; */
+
     border: ${({ error }) => (!error ? `1px solid ${colorPalette.gray[7]}` : `1px solid ${colorPalette.pink[9]}`)};
     background-color: ${({ error }) => (!error ? colorPalette.gray[1] : colorPalette.gray[2])};
 

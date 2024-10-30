@@ -1627,7 +1627,13 @@ const UiPrimitivesPage = () => {
         ***
         */}
         <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
-          <CustomPlannerButton error={true} isFill={false} value={'استان'} />
+          <CustomPlannerButton error={false} isFill={true} value={'استان'} size={'4'} />
+        </Grid>
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <CustomPlannerButton error={true} isFill={true} value={'استان'} size={'4'} />
+        </Grid>
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <CustomPlannerButton error={false} isFill={true} value={'استان'} size={'4'} disabled />
         </Grid>
       </Grid>
     </Theme>
