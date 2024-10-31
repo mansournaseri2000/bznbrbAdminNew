@@ -3,7 +3,7 @@ import React from 'react';
 import { Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 
-import { Button, Flex, Grid, IconButton, Text, TextField } from '@/libs/primitives';
+import { Button, Flex, Grid, Heading, IconButton, Text, TextField } from '@/libs/primitives';
 import CustomPlannerButton from '@/libs/primitives/components/CustomPlannerButton';
 import { Divider } from '@/libs/shared';
 import { TriangleLeft } from '@/public/icon';
@@ -1640,14 +1640,77 @@ const UiPrimitivesPage = () => {
           TextField
         ***
         */}
+
+        {/* 
+        ***
+          BLUE
+        ***
+        */}
         <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
-          <TextField placeholder='متن' />
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>blue</Heading>
+            <TextField placeholder='متن' colorVariant='BLUE' />
+          </Flex>
         </Grid>
         <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
-          <TextField placeholder='متن' error />
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>blue with error</Heading>
+            <TextField placeholder='متن' colorVariant='BLUE' error />
+          </Flex>
         </Grid>
         <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
-          <TextField placeholder='متن' disabled />
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>disable blue</Heading>
+            <TextField placeholder='متن' colorVariant='BLUE' disabled />
+          </Flex>
+        </Grid>
+
+        {/* 
+        ***
+          PINK
+        ***
+        */}
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>pink</Heading>
+            <TextField placeholder='متن' colorVariant='PINK' />
+          </Flex>
+        </Grid>
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>pink with error</Heading>
+            <TextField placeholder='متن' colorVariant='PINK' error />
+          </Flex>
+        </Grid>
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>disable pink</Heading>
+            <TextField placeholder='متن' colorVariant='PINK' disabled />
+          </Flex>
+        </Grid>
+
+        {/* 
+        ***
+          BLACK
+        ***
+        */}
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>black</Heading>
+            <TextField placeholder='متن' colorVariant='BLACK' />
+          </Flex>
+        </Grid>
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>black with error</Heading>
+            <TextField placeholder='متن' colorVariant='BLACK' error />
+          </Flex>
+        </Grid>
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>disable black</Heading>
+            <TextField placeholder='متن' colorVariant='BLACK' disabled />
+          </Flex>
         </Grid>
       </Grid>
     </Theme>
