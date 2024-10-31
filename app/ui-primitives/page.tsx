@@ -3,7 +3,7 @@ import React from 'react';
 import { Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 
-import { Button, Flex, Grid, IconButton, Text } from '@/libs/primitives';
+import { Button, Flex, Grid, IconButton, Text, TextField } from '@/libs/primitives';
 import CustomPlannerButton from '@/libs/primitives/components/CustomPlannerButton';
 import { Divider } from '@/libs/shared';
 import { TriangleLeft } from '@/public/icon';
@@ -1634,6 +1634,20 @@ const UiPrimitivesPage = () => {
         </Grid>
         <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
           <CustomPlannerButton error={false} isFill={true} value={'استان'} size={'4'} disabled />
+        </Grid>
+        {/* 
+        ***
+          TextField
+        ***
+        */}
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <TextField placeholder='متن' />
+        </Grid>
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <TextField placeholder='متن' error />
+        </Grid>
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <TextField placeholder='متن' disabled />
         </Grid>
       </Grid>
     </Theme>
