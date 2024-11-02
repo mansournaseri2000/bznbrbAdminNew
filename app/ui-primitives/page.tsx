@@ -1626,14 +1626,77 @@ const UiPrimitivesPage = () => {
           CUSTOM PLANNER BUTTON
         ***
         */}
+
+        {/* 
+        ***
+          BLUE
+        ***
+        */}
         <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
-          <CustomPlannerButton error={false} isFill={true} value={'استان'} size={'4'} />
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>planner button - BLUE</Heading>
+            <CustomPlannerButton error={false} isFill={true} value={'استان'} size={'4'} colorVariant='BLUE' />
+          </Flex>
         </Grid>
         <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
-          <CustomPlannerButton error={true} isFill={true} value={'استان'} size={'4'} />
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>planner button - BLUE ERROR</Heading>
+            <CustomPlannerButton error={true} isFill={true} value={'استان'} size={'4'} colorVariant='BLUE' />
+          </Flex>
         </Grid>
         <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
-          <CustomPlannerButton error={false} isFill={true} value={'استان'} size={'4'} disabled />
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>planner button - BLUE Disabled</Heading>
+            <CustomPlannerButton error={false} isFill={true} value={'استان'} size={'4'} colorVariant='BLUE' disabled />
+          </Flex>
+        </Grid>
+
+        {/* 
+        ***
+          PINK
+        ***
+        */}
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>planner button - PINK</Heading>
+            <CustomPlannerButton error={false} isFill={true} value={'استان'} size={'4'} colorVariant='PINK' />
+          </Flex>
+        </Grid>
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>planner button - PINK ERROR</Heading>
+            <CustomPlannerButton error={true} isFill={true} value={'استان'} size={'4'} colorVariant='PINK' />
+          </Flex>
+        </Grid>
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>planner button - PINK Disabled</Heading>
+            <CustomPlannerButton error={false} isFill={true} value={'استان'} size={'4'} colorVariant='PINK' disabled />
+          </Flex>
+        </Grid>
+
+        {/* 
+        ***
+          BLACK
+        ***
+        */}
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>planner button - BLACK</Heading>
+            <CustomPlannerButton error={false} isFill={true} value={'استان'} size={'4'} colorVariant='BLACK' />
+          </Flex>
+        </Grid>
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>planner button - BLACK ERROR</Heading>
+            <CustomPlannerButton error={true} isFill={true} value={'استان'} size={'4'} colorVariant='BLACK' />
+          </Flex>
+        </Grid>
+        <Grid columns={'1'} gap={'20px'} p={'4'} style={{ border: '1px solid red' }}>
+          <Flex direction={'column'} gap={'3'}>
+            <Heading>planner button - BLACK Disabled</Heading>
+            <CustomPlannerButton error={false} isFill={true} value={'استان'} size={'4'} colorVariant='BLACK' disabled />
+          </Flex>
         </Grid>
         {/* 
         ***

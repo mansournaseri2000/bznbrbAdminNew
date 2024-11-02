@@ -136,6 +136,8 @@ const ButtonStyle = styled(IconButton)<{ colorVariant: color }>`
     margin: 0;
     outline: none;
     border-radius: 12px;
+    /* width: auto; */
+
     background-color: ${({ colorVariant }) => (colorVariant === 'BLUE' ? colorPalette.blue[3] : colorVariant === 'BLACK' ? colorPalette.gray[2] : colorVariant === 'PINK' && colorPalette.pink[2])};
     span {
       color: ${({ colorVariant }) => (colorVariant === 'BLUE' ? colorPalette.blue[11] : colorVariant === 'BLACK' ? colorPalette.gray[11] : colorVariant === 'PINK' && colorPalette.pink[11])};

@@ -11,17 +11,20 @@ import { typoVariant } from '@/theme/typo-variants';
 
 import Text from '../typography/Text';
 
+type color = 'PINK' | 'BLACK' | 'BLUE';
+
 type AppButtonProps = React.ComponentProps<typeof Button> & {
   value: string;
   error: boolean;
   isFill: boolean;
   errorText?: string;
   selectedValue?: string;
+  colorVariant?: color;
 };
 
 const CustomPlannerButton = React.forwardRef<HTMLButtonElement, AppButtonProps>(
-  ({ selectedValue, errorText, isFill, error, value, ...props }: AppButtonProps, forwardedRef: ForwardedRef<HTMLButtonElement>) => (
-    <ButtonStyle type='button' isFill={isFill} error={error} ref={forwardedRef as any} variant='outline' {...props}>
+  ({ selectedValue, errorText, isFill, error, value, colorVariant = 'BLUE', ...props }: AppButtonProps, forwardedRef: ForwardedRef<HTMLButtonElement>) => (
+    <ButtonStyle type='button' isFill={isFill} error={error} ref={forwardedRef as any} variant='outline' colorVariant={colorVariant} {...props}>
       <Flex justify={'between'} align={'center'} width={'100%'}>
         <Text {...typoVariant.body2}>{selectedValue ? selectedValue : value}</Text>
         <ArrowLeftCustomButton style={{ scale: 1.5 }} />
@@ -37,7 +40,7 @@ CustomPlannerButton.displayName = 'Button';
 
 export default CustomPlannerButton;
 
-const ButtonStyle = styled(Button)<{ error: boolean; isFill: boolean }>`
+const ButtonStyle = styled(Button)<{ error: boolean; isFill: boolean; colorVariant: color }>`
   position: relative;
   border-radius: 12px;
   path {
@@ -64,15 +67,14 @@ const ButtonStyle = styled(Button)<{ error: boolean; isFill: boolean }>`
     }
 
     &:where(:focus-visible) {
-      background-color: ${colorPalette.blue[2]};
+      background-color: ${({ colorVariant }) => (colorVariant === 'BLUE' ? colorPalette.blue[2] : colorVariant === 'PINK' ? colorPalette.pink[2] : colorVariant === 'BLACK' && colorPalette.gray[2])};
       span {
         color: ${colorPalette.gray[9]};
       }
     }
     @media (hover: hover) {
       &:where(:hover) {
-        background-color: ${colorPalette.blue[2]};
-
+        background-color: ${({ colorVariant }) => (colorVariant === 'BLUE' ? colorPalette.blue[2] : colorVariant === 'PINK' ? colorPalette.pink[2] : colorVariant === 'BLACK' && colorPalette.gray[2])};
         span {
           color: ${colorPalette.gray[9]};
         }
@@ -82,11 +84,11 @@ const ButtonStyle = styled(Button)<{ error: boolean; isFill: boolean }>`
     &:where([data-disabled]) {
       background-color: ${colorPalette.gray[5]};
 
-      &:where(:hover) {
+      /* &:where(:hover) {
         span {
           color: ${colorPalette.gray[9]};
         }
-      }
+      } */
     }
   }
 
