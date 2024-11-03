@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Flex, Grid } from '@/libs/primitives';
+import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
 import BoxWrapper from '@/libs/shared/wrapper/BoxWrapper';
 
 export default function Test() {
@@ -9,6 +10,7 @@ export default function Test() {
       <BoxWrapper hero='تست نرم افزار'>
         <Flex>sw</Flex>
       </BoxWrapper>
+      <AccordionWrapper hero='تست'>s</AccordionWrapper>
     </Grid>
   );
 }
