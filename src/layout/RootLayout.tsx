@@ -10,14 +10,14 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
     <>
       <header>header</header>
       <main>
-        <Sidebar />
-        <Flex p={'5'}>{children}</Flex>
-        {/* <Flex>
+        <Flex>
           <Flex width={'30%'} style={{ border: '1px solid red' }}>
+            <Sidebar />
           </Flex>
           <Flex width={'70%'} style={{ border: '1px solid red' }}>
+            {children}
           </Flex>
-        </Flex> */}
+        </Flex>
       </main>
     </>
   );

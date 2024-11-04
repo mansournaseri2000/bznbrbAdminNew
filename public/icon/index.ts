@@ -1,5 +1,7 @@
 export { default as Archive } from './Archive';
 export { default as ArrowLeftCustomButton } from './ArrowLeftCustomButton';
+export { default as BlueTriangleLeft } from './BlueTriangleLeft';
+export { default as BlueTriangleRight } from './BlueTriangleRight';
 export { default as BznText } from './BznText';
 export { default as CheckCircled } from './CheckCircled';
 export { default as Close } from './Close';

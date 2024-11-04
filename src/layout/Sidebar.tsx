@@ -27,7 +27,6 @@ const Sidebar = () => {
         right: '0',
         top: '0',
         bottom: '0',
-        padding: '16px',
         backgroundColor: colorPalette.gray[2],
         border: `1px solid ${colorPalette.gray[6]}`,
         borderRadius: '16px 0px 0px 16px',
