@@ -2,21 +2,22 @@ import { ReactNode } from 'react';
 
 import { Flex } from '@/libs/primitives';
 
-import Menu from './Menu';
+// import Menu from './Menu';
+import Sidebar from './Sidebar';
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
-      <header style={{ border: '1px solid red', padding: '16px' }}>header</header>
+      <header>header</header>
       <main>
-        <Flex style={{ border: '1px solid blue' }}>
+        <Sidebar />
+        <Flex p={'5'}>{children}</Flex>
+        {/* <Flex>
           <Flex width={'30%'} style={{ border: '1px solid red' }}>
-            <Menu />
           </Flex>
           <Flex width={'70%'} style={{ border: '1px solid red' }}>
-            {children}
           </Flex>
-        </Flex>
+        </Flex> */}
       </main>
     </>
   );
