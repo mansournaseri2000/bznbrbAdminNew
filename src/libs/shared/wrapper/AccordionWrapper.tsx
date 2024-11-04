@@ -27,7 +27,7 @@ const AccordionWrapper = (props: AccordionWrapperProps) => {
     setIsOpen(!isOpen);
   };
   return (
-    <Wrapper>
+    <Wrapper isOpen={isOpen}>
       <Flex className='style' width={'100%'} justify={'between'} align={'center'} p={'8px 16px'} onClick={toggleAccordion}>
         <Text {...typoVariant.title2} style={{ color: colorPalette.gray[1] }}>
           {props.hero}
@@ -51,13 +51,11 @@ const AccordionWrapper = (props: AccordionWrapperProps) => {
 
 export default AccordionWrapper;
 
-const Wrapper = styled(Grid)`
+const Wrapper = styled(Grid)<{ isOpen: boolean }>`
   border-radius: 8px;
   border: 1px solid ${colorPalette.gray[6]};
-  min-height: 100px;
   .style {
-    border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
+    border-radius: ${({ isOpen }) => (isOpen ? '8px 8px 0px 0px' : '8px')};
     height: fit-content;
     background-color: ${colorPalette.blue[10]};
     cursor: pointer;
