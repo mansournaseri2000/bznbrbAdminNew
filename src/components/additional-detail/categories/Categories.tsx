@@ -2,6 +2,7 @@ import React from 'react';
 
 import CategoriesCard from '@/components/develope/additional-detail/categories-card/CategoriesCard';
 import { Button, Flex } from '@/libs/primitives';
+import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
 
 import CategoriesPagination from './categories-pagination/CategoriesPagination';
 
@@ -30,12 +31,18 @@ const Categories = () => {
           مرتب سازی
         </Flex>
       </Flex>
-      <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
-      <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
-      <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
-      <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
-      <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
-      <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
+      <AccordionWrapper hero='طبیعت گردی'>
+        <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
+      </AccordionWrapper>
+      <AccordionWrapper hero='طبیعت گردی'>
+        <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
+      </AccordionWrapper>      <AccordionWrapper hero='طبیعت گردی'>
+        <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
+      </AccordionWrapper>      <AccordionWrapper hero='طبیعت گردی'>
+        <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
+      </AccordionWrapper>      <AccordionWrapper hero='طبیعت گردی'>
+        <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
+      </AccordionWrapper>
       <CategoriesPagination />
     </Flex>
   );

@@ -11,6 +11,7 @@ import { CityOptions, passengersNumberOptions, passengersTypeOptions, planReside
 import { Button, CheckboxGroup, Container, Flex, Grid, Heading, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import DatePickerComponent from '@/libs/shared/CustomDatePicker';
 import TimePickerComponent from '@/libs/shared/CustomTimePicker';
+import BoxWrapper from '@/libs/shared/wrapper/BoxWrapper';
 import { colorPalette } from '@/theme';
 
 const PlaneForm = () => {
@@ -46,104 +47,107 @@ const PlaneForm = () => {
   console.log('touristPlaceTypeOptions', touristPlaceTypeConstant);
   return (
     <FormProvider {...methods}>
-      <Flex width={'100%'} direction={'column'} gap={'4'} p={'5'}>
-        <Flex width={'100%'} direction={'column'} gap={'2'}>
-          <Heading>آدرس مبدا</Heading>
-          <Flex width={'100%'} gap={'4'}>
-            <Controller
-              name='mabdaState'
-              control={control}
-              render={({ field }) => (
-                <SelectRoot
-                  {...field}
-                  placeholder='استان'
-                  size={'3'}
-                  value={String(field.value)}
-                  onValueChange={val => {
-                    field.onChange(val);
-                  }}
-                >
-                  {StateOptions.map(item => (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectRoot>
-              )}
-            />
+      <Flex width={'100%'} direction={'column'} gap={'6'} p={'5'}>
+        <BoxWrapper hero='از کجا به کجا بریم ؟'>
+          <Flex width={'100%'} direction={'column'} gap={'2'}>
+            <Heading>آدرس مبدا</Heading>
+            <Flex width={'100%'} gap={'4'}>
+              <Controller
+                name='mabdaState'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder='استان'
+                    size={'3'}
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {StateOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.id)}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
 
-            <Controller
-              name='mabdaCity'
-              control={control}
-              render={({ field }) => (
-                <SelectRoot
-                  {...field}
-                  placeholder=' شهر'
-                  size={'3'}
-                  value={String(field.value)}
-                  onValueChange={val => {
-                    field.onChange(val);
-                  }}
-                >
-                  {CityOptions.map(item => (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectRoot>
-              )}
-            />
+              <Controller
+                name='mabdaCity'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder=' شهر'
+                    size={'3'}
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {CityOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.id)}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
+            </Flex>
           </Flex>
-        </Flex>
-        <Flex width={'100%'} direction={'column'} gap={'2'}>
-          <Heading>آدرس مقصد</Heading>
-          <Flex width={'100%'} gap={'4'}>
-            <Controller
-              name='maqsadState'
-              control={control}
-              render={({ field }) => (
-                <SelectRoot
-                  {...field}
-                  placeholder=' استان'
-                  size={'3'}
-                  value={String(field.value)}
-                  onValueChange={val => {
-                    field.onChange(val);
-                  }}
-                >
-                  {StateOptions.map(item => (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectRoot>
-              )}
-            />
+          <Flex width={'100%'} direction={'column'} gap={'2'}>
+            <Heading>آدرس مقصد</Heading>
+            <Flex width={'100%'} gap={'4'}>
+              <Controller
+                name='maqsadState'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder=' استان'
+                    size={'3'}
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {StateOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.id)}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
 
-            <Controller
-              name='maqsadCity'
-              control={control}
-              render={({ field }) => (
-                <SelectRoot
-                  {...field}
-                  placeholder=' شهر'
-                  size={'3'}
-                  value={String(field.value)}
-                  onValueChange={val => {
-                    field.onChange(val);
-                  }}
-                >
-                  {CityOptions.map(item => (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectRoot>
-              )}
-            />
+              <Controller
+                name='maqsadCity'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder=' شهر'
+                    size={'3'}
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {CityOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.id)}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
+            </Flex>
           </Flex>
-        </Flex>
-        <Container height='auto' title='تاریخ و ساعت حرکت'>
+        </BoxWrapper>
+
+        <BoxWrapper hero='کی بریم کی بیایم ؟'>
           <Grid gap={'4'} columns={'2'}>
             <Flex direction={'column'} gap={'2'}>
               <Heading mb={'2'}>تاریخ و ساعت حرکت</Heading>
@@ -160,193 +164,197 @@ const PlaneForm = () => {
               </Grid>
             </Flex>
           </Grid>
-        </Container>
+        </BoxWrapper>
 
-        <Flex width={'100%'} direction={'column'} gap={'2'}>
-          <Heading>وسیله و اسکان</Heading>
-          <Flex width={'100%'} gap={'4'}>
-            <Controller
-              name='tourVehicle'
-              control={control}
-              render={({ field }) => (
-                <SelectRoot
-                  {...field}
-                  placeholder='وسیله سفر'
-                  size={'3'}
-                  value={String(field.value)}
-                  onValueChange={val => {
-                    field.onChange(val);
-                  }}
-                >
-                  {tourVehicleOptions.map(item => (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectRoot>
-              )}
-            />
+        <BoxWrapper hero='تنظیمات اضافه'>
+          <Flex width={'100%'} direction={'column'} gap={'2'}>
+            <Heading>وسیله و اسکان</Heading>
+            <Flex width={'100%'} gap={'4'}>
+              <Controller
+                name='tourVehicle'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder='وسیله سفر'
+                    size={'3'}
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {tourVehicleOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.id)}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
 
-            <Controller
-              name='planResidence'
-              control={control}
-              render={({ field }) => (
-                <SelectRoot
-                  {...field}
-                  placeholder='محل اسکان'
-                  size={'3'}
-                  value={String(field.value)}
-                  onValueChange={val => {
-                    field.onChange(val);
-                  }}
-                >
-                  {planResidenceOptions.map(item => (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectRoot>
-              )}
-            />
+              <Controller
+                name='planResidence'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder='محل اسکان'
+                    size={'3'}
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {planResidenceOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.id)}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
+            </Flex>
           </Flex>
-        </Flex>
 
-        <Container height='auto' title='گردشگری'>
-          <Heading mb={'2'}>گردشگری</Heading>
-          <Grid height={'max-content'} gap={'16px'} columns={'2'}>
-            {touristPlaceTypeConstant.map((item, index) => (
-              <Popover.Root key={index}>
-                <Popover.Trigger>
-                  <Button
-                    style={{
-                      paddingInline: '15px',
-                      borderRadius: '8px',
-                      border: `1px solid ${colorPalette.gray[7]}`,
-                      color: colorPalette.gray[9],
-                      backgroundColor: '#fff',
-                    }}
-                    variant='solid'
-                    size={'4'}
-                  >
-                    <Flex align={'center'} width={'100%'} justify={'between'}>
-                      <Text>{item.name}</Text>
-                      <CaretDownIcon style={{ scale: 1.5 }} />
+          <Container height='auto' title='گردشگری'>
+            <Heading mb={'2'}>گردشگری</Heading>
+            <Grid height={'max-content'} gap={'16px'} columns={'2'}>
+              {touristPlaceTypeConstant.map((item, index) => (
+                <Popover.Root key={index}>
+                  <Popover.Trigger>
+                    <Button
+                      style={{
+                        paddingInline: '15px',
+                        borderRadius: '8px',
+                        border: `1px solid ${colorPalette.gray[7]}`,
+                        color: colorPalette.gray[9],
+                        backgroundColor: '#fff',
+                      }}
+                      variant='solid'
+                      size={'4'}
+                    >
+                      <Flex align={'center'} width={'100%'} justify={'between'}>
+                        <Text>{item.name}</Text>
+                        <CaretDownIcon style={{ scale: 1.5 }} />
+                      </Flex>
+                    </Button>
+                  </Popover.Trigger>
+                  <Popover.Content>
+                    <Flex direction={'column'}>
+                      <CheckboxGroup store='touristPlaceType' items={item.features} isRow={false} />
                     </Flex>
-                  </Button>
-                </Popover.Trigger>
-                <Popover.Content>
-                  <Flex direction={'column'}>
-                    <CheckboxGroup store='touristPlaceType' items={item.features} isRow={false} />
-                  </Flex>
-                </Popover.Content>
-              </Popover.Root>
-            ))}
+                  </Popover.Content>
+                </Popover.Root>
+              ))}
 
-            <SegmentedControl.Root size={'3'} style={{ width: '100%' }}>
-              <SegmentedControl.Item value='پربازدید'>پربازدید</SegmentedControl.Item>
-              <SegmentedControl.Item value='معمولی'>معمولی</SegmentedControl.Item>
-              <SegmentedControl.Item value='بکر و ناشناختع'>بکر و ناشناخته</SegmentedControl.Item>
-            </SegmentedControl.Root>
-          </Grid>
-        </Container>
+              <SegmentedControl.Root size={'3'} style={{ width: '100%' }}>
+                <SegmentedControl.Item value='پربازدید'>پربازدید</SegmentedControl.Item>
+                <SegmentedControl.Item value='معمولی'>معمولی</SegmentedControl.Item>
+                <SegmentedControl.Item value='بکر و ناشناختع'>بکر و ناشناخته</SegmentedControl.Item>
+              </SegmentedControl.Root>
+            </Grid>
+          </Container>
 
-        <Container height='auto' title='مسافران'>
-          <Heading mb={'2'}>مسافران</Heading>
-          <Grid height={'max-content'} gap={'16px'} columns={'4'} align={'center'}>
-            <Controller
-              name='adultPassengers'
-              control={control}
-              render={({ field }) => (
-                <SelectRoot
-                  {...field}
-                  placeholder='تعداد مسافرین بزرگسال'
-                  size={'3'}
-                  value={String(field.value)}
-                  onValueChange={val => {
-                    field.onChange(val);
-                  }}
-                >
-                  {passengersNumberOptions.map(item => (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectRoot>
-              )}
-            />
-            <Controller
-              name='childPassengers'
-              control={control}
-              render={({ field }) => (
-                <SelectRoot
-                  {...field}
-                  placeholder='تعداد مسافرین کودک'
-                  size={'3'}
-                  value={String(field.value)}
-                  onValueChange={val => {
-                    field.onChange(val);
-                  }}
-                >
-                  {passengersNumberOptions.map(item => (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectRoot>
-              )}
-            />
-            <Controller
-              name='minorPassengers'
-              control={control}
-              render={({ field }) => (
-                <SelectRoot
-                  {...field}
-                  placeholder='تعداد مسافرین خردسال'
-                  size={'3'}
-                  value={String(field.value)}
-                  onValueChange={val => {
-                    field.onChange(val);
-                  }}
-                >
-                  {passengersNumberOptions.map(item => (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectRoot>
-              )}
-            />
-            {passengersTypeOptions.map((item, index) => (
-              <Popover.Root key={index}>
-                <Popover.Trigger>
-                  <Button
-                    style={{
-                      paddingInline: '15px',
-                      borderRadius: '8px',
-                      border: `1px solid ${colorPalette.gray[7]}`,
-                      color: colorPalette.gray[9],
-                      backgroundColor: '#fff',
+          <Container height='auto' title='مسافران'>
+            <Heading mb={'2'}>مسافران</Heading>
+            <Grid height={'max-content'} gap={'16px'} columns={'4'} align={'center'}>
+              <Controller
+                name='adultPassengers'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder='تعداد مسافرین بزرگسال'
+                    size={'3'}
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
                     }}
-                    variant='solid'
-                    size={'4'}
                   >
-                    <Flex align={'center'} width={'100%'} justify={'between'}>
-                      <Text>{item.name}</Text>
-                      <CaretDownIcon style={{ scale: 1.5 }} />
+                    {passengersNumberOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.id)}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
+              <Controller
+                name='childPassengers'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder='تعداد مسافرین کودک'
+                    size={'3'}
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {passengersNumberOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.id)}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
+              <Controller
+                name='minorPassengers'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder='تعداد مسافرین خردسال'
+                    size={'3'}
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {passengersNumberOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.id)}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
+              {passengersTypeOptions.map((item, index) => (
+                <Popover.Root key={index}>
+                  <Popover.Trigger>
+                    <Button
+                      style={{
+                        paddingInline: '15px',
+                        borderRadius: '8px',
+                        border: `1px solid ${colorPalette.gray[7]}`,
+                        color: colorPalette.gray[9],
+                        backgroundColor: '#fff',
+                      }}
+                      variant='solid'
+                      size={'4'}
+                    >
+                      <Flex align={'center'} width={'100%'} justify={'between'}>
+                        <Text>{item.name}</Text>
+                        <CaretDownIcon style={{ scale: 1.5 }} />
+                      </Flex>
+                    </Button>
+                  </Popover.Trigger>
+                  <Popover.Content>
+                    <Flex direction={'column'}>
+                      <CheckboxGroup store='passengersType' items={item.features} isRow={false} />
                     </Flex>
-                  </Button>
-                </Popover.Trigger>
-                <Popover.Content>
-                  <Flex direction={'column'}>
-                    <CheckboxGroup store='passengersType' items={item.features} isRow={false} />
-                  </Flex>
-                </Popover.Content>
-              </Popover.Root>
-            ))}
-          </Grid>
-        </Container>
-        <Flex gap={'4'}>
-          <Button size={'3'}>ثبت و ساخت</Button>
+                  </Popover.Content>
+                </Popover.Root>
+              ))}
+            </Grid>
+          </Container>
+        </BoxWrapper>
+        <Flex width={'100%'} justify={'between'} p={'4'}>
+          <Button size={'3'} colorVariant='BLUE'>
+            ثبت و ساخت
+          </Button>
           <Button size={'3'} onClick={() => router.push('/plans')}>
             لغو و بازگشت
           </Button>

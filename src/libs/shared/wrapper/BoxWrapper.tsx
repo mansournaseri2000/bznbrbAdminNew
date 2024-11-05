@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode } from 'react';
+import React, { ForwardedRef, ReactNode } from 'react';
 
 import styled from 'styled-components';
 
@@ -13,24 +13,23 @@ type BoxWrapperProps = {
   children: ReactNode;
 };
 
-const BoxWrapper = (props: BoxWrapperProps) => {
-  return (
-    <Wrapper>
-      <Flex className='style' p={'8px 16px'}>
-        <Text {...typoVariant.title2} style={{ color: colorPalette.gray[1] }}>
-          {props.hero}
-        </Text>
-      </Flex>
-      <Grid gap={'16px'} p={'24px 16px 16px 16px'}>
-        {props.children}
-      </Grid>
-    </Wrapper>
-  );
-};
+const BoxWrapper = React.forwardRef<HTMLDivElement, BoxWrapperProps>(({ hero, children, ...props }: BoxWrapperProps, forwardRef: ForwardedRef<HTMLDivElement>) => (
+  <Wrapper ref={forwardRef} {...props}>
+    <Flex className='style' p={'8px 16px'}>
+      <Text {...typoVariant.title2} style={{ color: colorPalette.gray[1] }}>
+        {hero}
+      </Text>
+    </Flex>
+    <Grid gap={'16px'} p={'24px 16px 16px 16px'}>
+      {children}
+    </Grid>
+  </Wrapper>
+));
 
 export default BoxWrapper;
 
 const Wrapper = styled(Grid)`
+  background-color: ${colorPalette.gray[2]};
   border-radius: 8px;
   border: 1px solid ${colorPalette.gray[6]};
   min-height: 100px;

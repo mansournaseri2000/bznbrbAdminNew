@@ -53,7 +53,7 @@ const Sidebar = () => {
               </CollapseWrapper>
             </Link>
             {sidebarOptions.map((item, index) => (
-              <Link href={item.type === 'collapse' ? item.path : ''} key={index}>
+              <Link href={item.path && item.type === 'collapse' ? item.path : ''} key={index}>
                 <Flex gap={'2'} px={'4'} py={'11px'} align={'center'}>
                   {<item.icon />}
                   <CollapseWrapper
