@@ -6,6 +6,7 @@ export { default as BznText } from './BznText';
 export { default as CheckCircled } from './CheckCircled';
 export { default as Close } from './Close';
 export { default as Exit } from './Exit';
+export { default as Filter } from './Filter';
 export { default as Layers } from './Layers';
 export { default as ListBullet } from './ListBullet';
 export { default as Person } from './Person';
