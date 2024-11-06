@@ -116,5 +116,3 @@ const CollapseWrapper = styled(motion.div)`
   display: flex;
   flex-direction: column;
 `;
-
-

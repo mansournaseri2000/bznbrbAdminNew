@@ -6,22 +6,28 @@ import Image from 'next/image';
 
 import { Box, Flex, Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import styled from 'styled-components';
 
 import { removeComment, updateComment } from '@/api/comment';
 import CommentInfo from '@/components/develope/comment/comment-info/CommentInfo';
 import { Button, Grid, IconButton, Modal, Text } from '@/libs/primitives';
+import { Chart, Check } from '@/public/icon';
+import { colorPalette } from '@/theme';
+import { typoVariant } from '@/theme/typo-variants';
 import { CommentsDetail } from '@/types/comment/comment-list';
 
-import { ToastError, ToastSuccess } from '../../toast/Toast';
+import { ToastError, ToastSuccess } from '../../../../libs/shared/toast/Toast';
+
+type CommentCardProps = CommentsDetail & {
+  colorVariant?: 'blue' | 'pink';
+};
 
 type modalStateType = {
   isOpen: boolean;
   key: 'update' | 'remove' | 'info';
 };
 
-const CommentCard = (props: CommentsDetail) => {
-  const { content, createdAt, users, id, places } = props;
+const CommentCard: React.FC<CommentCardProps> = (props: CommentCardProps) => {
+  const { content, createdAt, users, id, places, colorVariant } = props;
 
   const [modalState, setModalState] = useState<modalStateType>({
     isOpen: false,
@@ -73,37 +79,49 @@ const CommentCard = (props: CommentsDetail) => {
   });
   return (
     <>
-      <CardWrapper direction={'column'} p={'4'} gap={'4'}>
+      <Grid
+        width={'100%'}
+        p={'4'}
+        gap={'4'}
+        style={{
+          borderRadius: 8,
+          backgroundColor: colorVariant === 'blue' ? colorPalette.blue[2] : colorPalette.pink[2],
+          border: colorVariant === 'blue' ? `1px solid ${colorPalette.blue[6]}` : `1px solid ${colorPalette.pink[6]}`,
+        }}
+      >
         <Flex width={'100%'} justify={'between'} align={'center'}>
           <Flex align={'center'} gap={'2'}>
             <Box style={{ width: 40, height: 40, position: 'relative', borderRadius: '50%' }}>
               <Image src={users.pic ? users.pic : ''} alt='' fill style={{ borderRadius: '50%' }} />
             </Box>
             <Flex direction={'column'} gap={'1'}>
-              <Text>{`${users.name} ${users.last_name}`}</Text>
-              <Text>{createdAt}</Text>
+              <Text style={{ color: colorPalette.gray[11] }}>{`${users.name} ${users.last_name}`}</Text>
+              <Text style={{ color: colorPalette.gray[9] }}>{createdAt}</Text>
             </Flex>
           </Flex>
           <Flex gap={'2'} align={'center'}>
             {/* TODO: define ICON's here */}
-            <IconButton size={'3'} radius='full' onClick={() => setModalState({ isOpen: true, key: 'remove' })}>
+            {/* <IconButton size={'3'} radius='full' onClick={() => setModalState({ isOpen: true, key: 'remove' })}>
               delete
-            </IconButton>
-            <IconButton size={'3'} radius='full'>
-              icon
+            </IconButton> */}
+            <IconButton size={'3'} style={{ borderRadius: 40 }}>
+              <Chart />
             </IconButton>
           </Flex>
         </Flex>
-        <Text>{content}</Text>
+        <Text {...typoVariant.paragraph1} style={{ color: colorPalette.gray[11] }}>
+          {content}
+        </Text>
         <Flex gap={'4'} justify={'end'}>
-          <Button size={'3'} onClick={() => setModalState({ isOpen: true, key: 'update' })}>
-            <Text>تایید و انتشار</Text>
+          <Button size={'3'} colorVariant='BLUE' variant='soft' onClick={() => setModalState({ isOpen: true, key: 'update' })}>
+            <Check />
+            <Text {...typoVariant.body3}>تایید و انتشار</Text>
           </Button>
-          <Button size={'3'} variant='outline' onClick={() => setModalState({ isOpen: true, key: 'info' })}>
-            <Text>اطلاعات بیشتر</Text>
+          <Button size={'3'} colorVariant='BLACK' onClick={() => setModalState({ isOpen: true, key: 'info' })}>
+            <Text {...typoVariant.body3}>اطلاعات بیشتر</Text>
           </Button>
         </Flex>
-      </CardWrapper>
+      </Grid>
 
       <Modal isOpen={modalState.isOpen} onClose={() => setModalState({ ...modalState, isOpen: false })}>
         {modalState.key === 'update' && (
@@ -136,16 +154,14 @@ const CommentCard = (props: CommentsDetail) => {
           <CommentInfo {...props} onUpdate={() => updateCommentMutate()} onRemove={() => removeCommentMutate()} updatePending={updateCommentIsPending} removePending={removeCommentIsPending} />
         )}
       </Modal>
-
-
     </>
   );
 };
 
 export default CommentCard;
 
-const CardWrapper = styled(Flex)`
-  width: 100%;
-  border-radius: 4px;
-  border: 1px solid #d4d4d4;
-`;
+// const CardWrapper = styled(Flex)`
+//   width: 100%;
+//   border-radius: 4px;
+//   border: 1px solid #d4d4d4;
+// `;
