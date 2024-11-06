@@ -15,6 +15,7 @@ import { typoVariant } from '@/theme/typo-variants';
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+
   return (
     <motion.div
       onHoverStart={() => setIsExpanded(true)}
@@ -67,7 +68,16 @@ const Sidebar = () => {
                       opacity: { duration: 0.2, ease: 'easeInOut' },
                     }}
                   >
-                    <Text {...typoVariant.body3}>{item.text}</Text>
+                    <Text {...typoVariant.body3} style={{ color: colorPalette.gray[11] }}>
+                      {item.text}
+                    </Text>
+                    {item.items?.map((option, index) => (
+                      <Link key={index} href={option.path}>
+                        <Text {...typoVariant.body3} style={{ color: colorPalette.gray[11] }}>
+                          {option.text}
+                        </Text>
+                      </Link>
+                    ))}
                   </CollapseWrapper>
                 </Flex>
               </Link>
@@ -106,3 +116,5 @@ const CollapseWrapper = styled(motion.div)`
   display: flex;
   flex-direction: column;
 `;
+
+

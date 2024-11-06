@@ -16,9 +16,9 @@ const Confirmations = ({ params }: { params: { slug: string[] } }) => {
         return <PathGuid />;
       case 'image-sent':
         return <ImageSent />;
-      case 'improve-data-management':
+      case 'improve-data':
         return <ImproveDataManagement />;
-      case 'top-comments-management':
+      case 'top-comments':
         switch (params.slug[1]) {
           case 'comments':
             return <TopComments />;
