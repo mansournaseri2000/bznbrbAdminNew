@@ -16,3 +16,4 @@ export interface PointDetail {
   Province: string;
   city: string;
 }
+
