@@ -42,6 +42,7 @@ const Comment = () => {
         users={user}
         colorVariant='pink'
       />
+      {/* TODO: add pagination */}
     </Grid>
   );
 };
