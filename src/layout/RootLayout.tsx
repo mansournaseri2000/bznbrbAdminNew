@@ -1,26 +1,28 @@
+'use client';
+
 import { ReactNode } from 'react';
 
-import { Flex } from '@/libs/primitives';
+import styled from 'styled-components';
 
+import { Box, Flex, Grid } from '@/libs/primitives';
+
+import Header from './Header';
 // import Menu from './Menu';
 import Sidebar from './Sidebar';
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
-      <header>header</header>
-      <main>
-        <Flex>
-          <Flex width={'30%'} style={{ border: '1px solid red' }}>
-            <Sidebar />
-          </Flex>
-          <Flex width={'70%'} style={{ border: '1px solid red' }}>
-            {children}
-          </Flex>
-        </Flex>
-      </main>
+      <Header title='نقطه' isNavigation />
+      <Sidebar />
+      <Main>{children}</Main>
     </>
   );
 };
 
 export default RootLayout;
+
+export const Main = styled.main`
+  min-height: calc(100vh - 240px);
+  padding: 24px 100px 24px 24px;
+`;
