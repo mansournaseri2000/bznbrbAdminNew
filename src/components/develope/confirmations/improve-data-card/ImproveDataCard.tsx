@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Button, Flex, Grid, IconButton, Text } from '@/libs/primitives';
-import { Check, EyeOpen, Trash } from '@/public/icon';
+import { EyeOpen, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { ImproveDataDetail } from '@/types/confirmations/improve-data';
