@@ -48,10 +48,19 @@ export const planResidenceOptions = [
 ];
 export const touristPlaceTypeOptions = [
   { id: 1, name: 'طبیعت گردی' },
-  { id: 2, name: 'هنرگردی' },
-  { id: 3, name: 'تاریخ گردی' },
-  { id: 4, name: 'گردشگری مذهبی' },
-  { id: 5, name: 'شهرگردی' },
+  { id: 2, name: 'گردشگری ورزشی' },
+  { id: 3, name: 'هنرگردی' },
+  { id: 4, name: 'تاریخ گردی' },
+  { id: 5, name: 'گردشگری مذهبی' },
+  { id: 6, name: 'شهرگردی' },
+];
+export const subCategoryOption = [
+  { id: 1, name: 'کوهنوردی' },
+  { id: 2, name: 'یخ نوردی' },
+  { id: 3, name: 'غارنوردی' },
+  { id: 4, name: 'جنگل نوردی' },
+  { id: 5, name: 'ماهیگیری' },
+  { id: 6, name: 'ماجراجویانه' },
 ];
 export const touristPlaceTypeConstant = [
   {

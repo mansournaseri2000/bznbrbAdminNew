@@ -1,5 +1,6 @@
 export { default as Archive } from './Archive';
 export { default as ArrowLeftCustomButton } from './ArrowLeftCustomButton';
+export { default as ArrowRight } from './ArrowRight';
 export { default as BlueTriangleLeft } from './BlueTriangleLeft';
 export { default as BlueTriangleRight } from './BlueTriangleRight';
 export { default as Bus } from './Bus';
@@ -16,6 +17,7 @@ export { default as ListBullet } from './ListBullet';
 export { default as Person } from './Person';
 export { default as ProfileLogoExpand } from './ProfileLogoExpand';
 export { default as ProfileLogo } from './ProfileLogo';
+export { default as Search } from './Search';
 export { default as Taxi } from './Taxi';
 export { default as Trash } from './Trash';
 export { default as TriangleLeft } from './TriangleLeft';
