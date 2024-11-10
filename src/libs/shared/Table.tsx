@@ -4,7 +4,9 @@ import { memo } from 'react';
 
 import { Flex, Table, Text } from '@radix-ui/themes';
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import styled from 'styled-components';
 
+import { colorPalette } from '@/theme';
 import { PlacesDetail } from '@/types/place/place-list';
 
 /**
@@ -56,19 +58,17 @@ const TableComponent = ({ columns, data }: Props) => {
         {table.getHeaderGroups().map(headerGroup => (
           <Table.Row key={headerGroup.id}>
             {headerGroup.headers.map(header => (
-              <Table.ColumnHeaderCell style={{ textAlign: 'right' }} key={header.id}>
-                {flexRender(header.column.columnDef.header, header.getContext())}
-              </Table.ColumnHeaderCell>
+              <ColumnHeaderCell key={header.id}>{flexRender(header.column.columnDef.header, header.getContext())}</ColumnHeaderCell>
             ))}
           </Table.Row>
         ))}
       </Table.Header>
       <Table.Body>
         {table.getRowModel().rows.map(row => (
-          <Table.Row style={{ height: '80px' }} key={row.id}>
+          <Table.Row style={{ paddingBlock: 13.5, textAlign: 'center' }} key={row.id}>
             {row.getVisibleCells().map(cell => (
-              <Table.Cell style={{ textAlign: 'right' }} key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              <Table.Cell key={cell.id}>
+                <CenteredContent>{flexRender(cell.column.columnDef.cell, cell.getContext())}</CenteredContent>
               </Table.Cell>
             ))}
           </Table.Row>
@@ -84,3 +84,19 @@ export default memo(TableComponent);
  * styled-component
  * _______________________________________________________________________________
  */
+const ColumnHeaderCell = styled(Table.ColumnHeaderCell)`
+  text-align: center;
+  background-color: ${colorPalette.pink[2]};
+  color: ${colorPalette.pink[11]};
+  padding-block: 17.5px;
+  border-bottom: 1px solid ${colorPalette.pink[6]};
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+`;
+
+const CenteredContent = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;

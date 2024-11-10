@@ -4,7 +4,8 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { StatusFilterOption } from '@/constants/data-management';
-import { Button, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import { Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import ModalAction from '@/libs/shared/ModalAction';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { Category, Province } from '@/types/place/place-constant';
@@ -152,15 +153,16 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
           />
         </Grid>
       </Grid>
-      <Grid width={'100%'} columns={'2'} gap={'2'}>
-        {/* TODO: define onClick For Buttons */}
+      <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} />
+      {/* TODO: define onClick For Buttons */}
+      {/* <Grid width={'100%'} columns={'2'} gap={'2'} p={'4'}>
         <Button size={'3'} variant='soft'>
           <Text {...typoVariant.body1}>اعمال فیلتر ها</Text>
         </Button>
         <Button size={'3'} onClick={() => removeFilter()}>
           <Text {...typoVariant.body1}>حذف فیلتر ها</Text>
         </Button>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 };

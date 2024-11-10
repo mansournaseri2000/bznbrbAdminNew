@@ -27,13 +27,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <ModalBackdrop
-          initial='hidden'
-          animate='visible'
-          exit='hidden'
-          variants={backdropVariants}
-          onClick={onClose}
-        >
+        <ModalBackdrop initial='hidden' animate='visible' exit='hidden' variants={backdropVariants} onClick={onClose}>
           <ModalContent
             initial='hidden'
             animate='visible'
@@ -66,8 +60,7 @@ const ModalBackdrop = styled(motion.div)`
 
 const ModalContent = styled(motion.div)`
   background-color: white;
-  padding: 20px;
   border-radius: 10px;
-  width: 400px;
-  max-width: 90%;
+  min-width: 800px;
+  max-width: 800px;
 `;
