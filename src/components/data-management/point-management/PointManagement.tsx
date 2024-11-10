@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { Flex } from '@/libs/primitives';
 
@@ -10,11 +11,27 @@ import PointManagementList from './list/PointManagementList';
 // { searchParams }: { params: { slug: string }; searchParams: { page: string } }
 
 const PointManagement = () => {
+  const methods = useForm({
+    defaultValues: {
+      searchPoint: '',
+      provinceId: '',
+      cityId: '',
+      categoryId: '',
+      subCategoryId: '',
+      statusId: '',
+    },
+  });
+
+  const { watch } = methods;
+
+  console.log('watch', watch());
   return (
-    <Flex width={'100%'} direction={'column'} gap={'5'} p={'5'}>
-      <PointManagementHero />
-      <PointManagementList />
-    </Flex>
+    <FormProvider {...methods}>
+      <Flex width={'100%'} direction={'column'} gap={'5'} p={'5'}>
+        <PointManagementHero />
+        <PointManagementList />
+      </Flex>
+    </FormProvider>
   );
 };
 

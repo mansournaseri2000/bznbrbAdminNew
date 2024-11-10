@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
 import { useRouter } from 'next/navigation';
 
@@ -21,18 +21,7 @@ const PointManagementHero = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
   const router = useRouter();
-
-  const methods = useForm({
-    defaultValues: {
-      searchPoint: '',
-      provinceID: '',
-      categoryID: '',
-    },
-  });
-
-  const { control, watch } = methods;
-
-  console.log('watch', watch());
+  const { control } = useFormContext();
 
   const { data: constantData } = useQuery({
     queryKey: ['constant'],
