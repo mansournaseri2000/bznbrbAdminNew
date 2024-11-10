@@ -12,6 +12,7 @@ import { Category, Province } from '@/types/place/place-constant';
 type Props = {
   province: Province[];
   categories: Category[];
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type FormData = {
@@ -19,21 +20,26 @@ type FormData = {
   city: string;
   category: string;
   subCategory: string;
-  status: 'کامل' | 'ناقص';
+  status: 'کامل' | 'ناقص' | '';
 };
 
-const PointFilter = ({ province, categories }: Props) => {
+const PointFilter = ({ province, categories, setIsOpen }: Props) => {
   /**
    * const and variables
    * _______________________________________________________________________________
    */
-  const methods = useForm<FormData>({ defaultValues: { province: '', city: '', category: '', subCategory: '', status: 'کامل' } });
-  const { control, setValue, watch } = methods;
+  const methods = useForm<FormData>({ defaultValues: { province: '', city: '', category: '', subCategory: '', status: '' } });
+  const { control, setValue, watch, reset } = methods;
 
   const city = province.filter(item => item.id === Number(watch('province')))[0]?.Cities;
   const subCategory = categories.filter(item => item.id === Number(watch('category')))[0]?.children;
 
   console.log('watch', watch());
+
+  const removeFilter = () => {
+    reset();
+    setIsOpen(false);
+  };
 
   return (
     <FormProvider {...methods}>
@@ -160,10 +166,10 @@ const PointFilter = ({ province, categories }: Props) => {
         <Grid width={'100%'} columns={'2'} gap={'2'}>
           {/* TODO: define onClick For Buttons */}
           <Button size={'3'} variant='soft'>
-            <Text>اعمال فیلتر ها</Text>
+            <Text {...typoVariant.body1}>اعمال فیلتر ها</Text>
           </Button>
-          <Button size={'3'}>
-            <Text>حذف فیلتر ها</Text>
+          <Button size={'3'} onClick={() => removeFilter()}>
+            <Text {...typoVariant.body1}>حذف فیلتر ها</Text>
           </Button>
         </Grid>
       </Grid>

@@ -27,6 +27,7 @@ export const getAllPlacesWithParams = async (pageNumber: number, categoryId: str
     // Create query parameters using URLSearchParams
     const params = new URLSearchParams();
 
+
     // Add the page number to the params
     params.append('page', pageNumber.toString());
 

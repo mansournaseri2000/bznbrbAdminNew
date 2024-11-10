@@ -2,13 +2,13 @@
 
 import { ReactNode } from 'react';
 
+import dynamic from 'next/dynamic';
+
 import styled from 'styled-components';
 
-import { Box, Flex, Grid } from '@/libs/primitives';
-
 import Header from './Header';
-// import Menu from './Menu';
-import Sidebar from './Sidebar';
+
+const Sidebar = dynamic(() => import('@/layout/Sidebar').then(module => module.default), { ssr: false });
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
