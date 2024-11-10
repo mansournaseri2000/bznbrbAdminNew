@@ -15,14 +15,16 @@ import { typoVariant } from '@/theme/typo-variants';
 
 import PointFilter from './PointFilter';
 
-// { searchParams }: { params: { slug: string }; searchParams: { page: string } }
-
 const PointManagementHero = () => {
+  /*
+   *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
+   */
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  // const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
   const router = useRouter();
   const { control } = useFormContext();
-
+  /*
+   *** Services _________________________________________________________________________________________________________________________________________________________________
+   */
   const { data: constantData } = useQuery({
     queryKey: ['constant'],
     queryFn: async () => getAllPlacesConstants(),

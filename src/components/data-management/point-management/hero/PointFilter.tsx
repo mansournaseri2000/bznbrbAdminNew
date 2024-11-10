@@ -17,7 +17,7 @@ type Props = {
 
 const PointFilter = ({ province, categories, setIsOpen }: Props) => {
   /**
-   * const and variables
+   * Variables and Constant
    * _______________________________________________________________________________
    */
   const { control, setValue, watch, reset } = useFormContext();
@@ -48,7 +48,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
-                  setValue('city', '');
+                  setValue('cityId', '');
                 }}
               >
                 {province?.map(item => (
