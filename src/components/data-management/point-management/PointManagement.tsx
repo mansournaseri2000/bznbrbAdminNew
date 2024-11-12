@@ -22,9 +22,9 @@ const PointManagement = () => {
   const methods = useForm({
     defaultValues: {
       name: '',
-      provinceId: '',
-      cityId: '',
-      categoryId: '',
+      pro: '',
+      cit: '',
+      cat: '',
       subCategoryId: '',
       statusId: '',
       pointTypeId: '',
@@ -48,7 +48,7 @@ const PointManagement = () => {
     queryFn: async () => getPointByParams({ ...watch() }),
   });
 
-  // console.log('PointData', pointData);
+  console.log('PointData', pointData);
 
   // const handleSearch = () => {
   //   queryClient.invalidateQueries({ queryKey: ['point-data'] });

@@ -3,11 +3,14 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
+import { useRouter, useSearchParams } from 'next/navigation';
+
 import { useQueryClient } from '@tanstack/react-query';
 
 import { StatusFilterOption } from '@/constants/data-management';
 import { Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
+import { updateUrl } from '@/libs/utils/updateUrl';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { Category, Province } from '@/types/place/place-constant';
@@ -24,10 +27,11 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
    * _______________________________________________________________________________
    */
   const { control, setValue, watch, reset } = useFormContext();
-  const city = province.filter(item => item.id === Number(watch('provinceId')))[0]?.Cities;
-  const subCategory = categories.filter(item => item.id === Number(watch('categoryId')))[0]?.children;
+  const city = province.filter(item => item.id === Number(watch('pro')))[0]?.Cities;
+  const subCategory = categories.filter(item => item.id === Number(watch('cat')))[0]?.children;
 
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
 
   console.log('watch', watch());
   /**
@@ -35,12 +39,15 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
    * _______________________________________________________________________________
    */
   const addFilter = () => {
+    const values = watch();
+    updateUrl(searchParams, values);
     queryClient.invalidateQueries({ queryKey: ['point-data'] });
     setIsOpen(false);
   };
 
   const removeFilter = () => {
     reset();
+    queryClient.invalidateQueries({ queryKey: ['point-data'] });
     setIsOpen(false);
   };
 
@@ -52,7 +59,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
             موقعیت نقطه
           </Text>
           <Controller
-            name='provinceId'
+            name='pro'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -61,7 +68,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
-                  setValue('cityId', '');
+                  setValue('cit', '');
                 }}
               >
                 {province?.map(item => (
@@ -74,7 +81,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
             )}
           />
           <Controller
-            name='cityId'
+            name='cit'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -99,7 +106,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
             دسته بندی
           </Text>
           <Controller
-            name='categoryId'
+            name='cat'
             control={control}
             render={({ field }) => (
               <SelectRoot

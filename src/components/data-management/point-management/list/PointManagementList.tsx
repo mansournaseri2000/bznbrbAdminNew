@@ -139,4 +139,3 @@ const PointManagementList = (props: Props) => {
 };
 
 export default PointManagementList;
-
