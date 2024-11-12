@@ -65,13 +65,13 @@ const TableComponent = ({ columns, data }: Props) => {
       </Table.Header>
       <Table.Body>
         {table.getRowModel().rows.map(row => (
-          <Table.Row style={{ paddingBlock: 13.5, textAlign: 'center' }} key={row.id}>
+          <Row style={{ paddingBlock: 13.5, textAlign: 'center' }} key={row.id}>
             {row.getVisibleCells().map(cell => (
               <Table.Cell key={cell.id}>
                 <CenteredContent>{flexRender(cell.column.columnDef.cell, cell.getContext())}</CenteredContent>
               </Table.Cell>
             ))}
-          </Table.Row>
+          </Row>
         ))}
       </Table.Body>
     </Table.Root>
@@ -93,6 +93,15 @@ const ColumnHeaderCell = styled(Table.ColumnHeaderCell)`
   font-size: 14px;
   font-weight: 500;
   line-height: 21px;
+`;
+
+const Row = styled(Table.Row)`
+  &:nth-child(even) {
+    background-color: ${colorPalette.gray[2]};
+  }
+  &:nth-child(odd) {
+    background-color: ${colorPalette.gray[1]};
+  }
 `;
 
 const CenteredContent = styled.div`

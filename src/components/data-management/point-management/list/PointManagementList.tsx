@@ -2,27 +2,40 @@
 
 import React from 'react';
 
+// import Image from 'next/image';
+// import { useRouter } from 'next/navigation';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { Button, Flex, Text } from '@/libs/primitives';
 import { Table } from '@/libs/shared';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
+import { PlacesDetail } from '@/types/place/place-list';
 
-import TableData from './data.json';
+// import TableData from './data.json';
 
 interface PointListDetail {
-  pointName: string;
+  name: string;
   province: string;
   city: string;
+  pointType: string;
   category: string;
   status: 'ناقص' | 'کامل';
 }
 
-const PointManagementList = () => {
+type Props = {
+  data: PlacesDetail[];
+};
+
+const PointManagementList = (props: Props) => {
+  // const [placeItem, setPlaceItem] = useState<PlacesDetail>(props?.data[0]);
+  // const [isOpen, setIsOpen] = useState(false);
+
+  // const { push } = useRouter();
+
   const columns: ColumnDef<PointListDetail>[] = [
     {
-      accessorKey: 'pointName',
+      accessorKey: 'name',
       header: ' نام نقطه',
       cell: info => {
         const value = info.getValue() as string | null;
@@ -60,6 +73,18 @@ const PointManagementList = () => {
     {
       accessorKey: 'category',
       header: 'دسته بندی',
+      cell: info => {
+        const value = info.getValue() as string | null;
+        return (
+          <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
+            {value ? value : '-'}
+          </Text>
+        );
+      },
+    },
+    {
+      accessorKey: 'pointType',
+      header: 'نوع نقطه',
       cell: info => {
         const value = info.getValue() as string | null;
         return (
@@ -109,7 +134,9 @@ const PointManagementList = () => {
       },
     },
   ];
-  return <Table columns={columns as any} data={TableData as any} />;
+
+  return <Table columns={columns as any} data={props.data as any} />;
 };
 
 export default PointManagementList;
+

@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 // Create an instance of axios
 export const ApiManager = axios.create({
@@ -19,6 +20,37 @@ export const ApiManagerV2 = axios.create({
   },
 });
 
+ApiManager.interceptors.request.use(
+  config => {
+    const cookie = new Cookies();
+    const token = cookie.get('token');
+
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
+
+ApiManagerV2.interceptors.request.use(
+  config => {
+    const cookie = new Cookies();
+    const token = cookie.get('token');
+
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
 // Request Interceptor
 // ApiManager.interceptors.request.use(
 //   config => {

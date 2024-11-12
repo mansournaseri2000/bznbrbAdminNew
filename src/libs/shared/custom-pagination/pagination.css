@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  padding-right: 24px;
 }
 .page-item .page-link {
   display: block;

@@ -3,6 +3,8 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import { StatusFilterOption } from '@/constants/data-management';
 import { Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
@@ -25,7 +27,17 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
   const city = province.filter(item => item.id === Number(watch('provinceId')))[0]?.Cities;
   const subCategory = categories.filter(item => item.id === Number(watch('categoryId')))[0]?.children;
 
+  const queryClient = useQueryClient();
+
   console.log('watch', watch());
+  /**
+   * functions
+   * _______________________________________________________________________________
+   */
+  const addFilter = () => {
+    queryClient.invalidateQueries({ queryKey: ['point-data'] });
+    setIsOpen(false);
+  };
 
   const removeFilter = () => {
     reset();
@@ -151,9 +163,25 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
               </SelectRoot>
             )}
           />
+          <Controller
+            name='pointTypeId'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                placeholder='نوع نقطه'
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                <Text>دیتا باید فیکس بشه</Text>
+              </SelectRoot>
+            )}
+          />
         </Grid>
       </Grid>
-      <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} />
+      <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} />
       {/* TODO: define onClick For Buttons */}
       {/* <Grid width={'100%'} columns={'2'} gap={'2'} p={'4'}>
         <Button size={'3'} variant='soft'>

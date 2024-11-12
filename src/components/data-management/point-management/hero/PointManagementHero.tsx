@@ -5,7 +5,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import { useRouter } from 'next/navigation';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { getAllPlacesConstants } from '@/api/place';
 import { Button, Flex, Grid, IconButton, Modal, Text, TextField } from '@/libs/primitives';
@@ -22,6 +22,8 @@ const PointManagementHero = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const { control } = useFormContext();
+  const queryClient = useQueryClient();
+
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
    */
@@ -30,7 +32,11 @@ const PointManagementHero = () => {
     queryFn: async () => getAllPlacesConstants(),
   });
 
-  console.log('constant', constantData);
+  // console.log('constant', constantData);
+
+  const handleSubmit = () => {
+    queryClient.invalidateQueries({ queryKey: ['point-data'] });
+  };
 
   return (
     <>
@@ -45,8 +51,8 @@ const PointManagementHero = () => {
           </Flex>
         </Button>
 
-        <Controller name='searchPoint' control={control} render={({ field }) => <TextField {...field} placeholder='جستجو نام نقطه' />} />
-        <IconButton size={'3'} variant='soft'>
+        <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='جستجو نام نقطه' />} />
+        <IconButton size={'3'} variant='soft' onClick={handleSubmit}>
           <Search />
         </IconButton>
       </Grid>
