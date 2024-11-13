@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { StatusFilterOption } from '@/constants/data-management';
 import { Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
-import { updateUrl } from '@/libs/utils/updateUrl';
+import { updateURLWithQueryParams } from '@/libs/utils/updateUrl';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { Category, Province } from '@/types/place/place-constant';
@@ -32,6 +32,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
 
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   console.log('watch', watch());
   /**
@@ -40,7 +41,8 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
    */
   const addFilter = () => {
     const values = watch();
-    updateUrl(searchParams, values);
+    // UpdateUrl(searchParams, values);
+    updateURLWithQueryParams(router, searchParams, values);
     queryClient.invalidateQueries({ queryKey: ['point-data'] });
     setIsOpen(false);
   };
