@@ -1,19 +1,4 @@
-// import { useRouter } from 'next/navigation';
-// export const UpdateUrl = (searchParams: URLSearchParams, params: Record<string, any>) => {
-//   const router = useRouter();
-//   const newParams = new URLSearchParams(searchParams.toString());
-//   Object.entries(params).forEach(([key, value]) => {
-//     if (value) {
-//       newParams.set(key, String(value));
-//     } else {
-//       newParams.delete(key);
-//     }
-//   });
-//   router.replace(`?${newParams.toString()}`);
-// };
-import { NextRouter } from 'next/router';
-
-export const updateURLWithQueryParams = (router: NextRouter, searchParams: URLSearchParams, params: Record<string, any>): void => {
+export const updateURLWithQueryParams = (router: any, searchParams: URLSearchParams, params: Record<string, any>): void => {
   const newParams = new URLSearchParams(searchParams.toString());
 
   Object.entries(params).forEach(([key, value]) => {
