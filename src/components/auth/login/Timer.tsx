@@ -49,7 +49,7 @@ const Timer = ({ handleEndTime }: TimerProps) => {
     <Root
       {...typoVariant.body2}
       style={{
-        color: colorPalette.turquoise[11],
+        color: colorPalette.pink[11],
         paddingRight: '10px',
       }}
     >{`${minutes}:${seconds}`}</Root>

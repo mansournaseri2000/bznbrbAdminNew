@@ -1,15 +1,7 @@
-import { Suspense } from 'react';
-
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 
-import { Theme } from '@radix-ui/themes';
-import '@radix-ui/themes/styles.css';
-
-import { ReactQueryProvider, StyledComponentsRegistry } from '@/libs/providers';
-import Toast from '@/libs/shared/toast/Toast';
-import { Yekan } from '@/theme/font.config';
-import '@/theme/globals.css';
-import '@/theme/theme.config.css';
+const AuthRoot = dynamic(() => import('@/layout/AuthRoot').then(module => module.default), { ssr: false });
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -21,20 +13,5 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html className={Yekan.variable} lang='fa' dir='rtl'>
-      <body>
-        <ReactQueryProvider>
-          <StyledComponentsRegistry>
-            <Theme radius='large' scaling='100%'>
-              <Suspense>
-                <main style={{ paddingBlock: '24px' }}>{children}</main>
-              </Suspense>
-            </Theme>
-            <Toast />
-          </StyledComponentsRegistry>
-        </ReactQueryProvider>
-      </body>
-    </html>
-  );
+  return <AuthRoot>{children}</AuthRoot>;
 }
