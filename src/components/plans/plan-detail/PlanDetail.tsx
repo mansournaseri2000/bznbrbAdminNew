@@ -11,14 +11,14 @@ import UserInfoCard from '@/components/develope/plans/user-info-card/UserInfoCar
 import { optionMenuConstant } from '@/constants/plans';
 import { Box, Flex, Heading, SelectItem, SelectRoot } from '@/libs/primitives';
 
-const PlaneDetail = () => {
+const PlanDetail = () => {
   const methods = useForm({
     defaultValues: { createdPlan: '' },
   });
 
   const { control } = methods;
   return (
-    <Flex width={'100%'} direction={'column'} gap={'4'} p={'5'}>
+    <Flex width={'100%'} direction={'column'} gap={'4'} p={'5'} >
       <Flex width={'100%'} justify={'center'} align={'center'} gap={'10px'}>
         <Button variant='outline' size={'3'} style={{ width: '45.5%' }}>
           برنامه سفر
@@ -71,4 +71,4 @@ const PlaneDetail = () => {
   );
 };
 
-export default PlaneDetail;
+export default PlanDetail;

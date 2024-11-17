@@ -6,7 +6,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 
 import { plansSortConstant } from '@/constants/plans';
-import { Button, Grid, SelectItem, SelectRoot, TextField } from '@/libs/primitives';
+import { Button, Flex, Grid, IconButton, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
+import { Filter, Search } from '@/public/icon';
+import { typoVariant } from '@/theme/typo-variants';
 
 const PlansHero = () => {
   const router = useRouter();
@@ -22,12 +24,22 @@ const PlansHero = () => {
   console.log('Watch', watch());
 
   return (
-    <Grid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '1fr 4fr 1.5fr' }}>
-      <Button size={'3'} onClick={() => router.push('/plans/create-plane')}>
-        افزودن برنامه
+    <Grid width={'100%'} columns={'5'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 2fr auto 1fr' }}>
+      <IconButton colorVariant='BLUE' variant='soft' size={'3'}>
+        <Filter />
+      </IconButton>
+
+      <Button colorVariant='BLUE' variant='ghost' size={'3'} onClick={() => router.push('/plans/create-plan')}>
+        <Flex gap={'2'} align={'center'}>
+          <Text {...typoVariant.body1}>+</Text>
+          <Text {...typoVariant.body1}> افزودن نقطه</Text>
+        </Flex>
       </Button>
 
       <Controller name='search' control={control} render={({ field }) => <TextField {...field} placeholder='جستجوی نام کاربر' />} />
+      <IconButton size={'3'} variant='soft'>
+        <Search />
+      </IconButton>
 
       <Controller
         name='sort'

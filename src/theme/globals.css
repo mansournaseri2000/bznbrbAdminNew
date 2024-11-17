@@ -24,3 +24,24 @@ a {
   text-align: inherit; /* Inherits the text alignment */
   text-transform: none; /* Ensures no text transformation */
 }
+::-webkit-scrollbar {
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  display: none;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  opacity: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+  opacity: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

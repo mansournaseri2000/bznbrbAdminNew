@@ -2,23 +2,23 @@
 
 import React, { ForwardedRef, ReactNode } from 'react';
 
+import { GridProps } from '@radix-ui/themes';
 import styled from 'styled-components';
 
-import { Flex, Grid, Text } from '@/libs/primitives';
+import { Flex, Grid, Heading } from '@/libs/primitives';
 import { colorPalette } from '@/theme';
-import { typoVariant } from '@/theme/typo-variants';
 
 type BoxWrapperProps = {
   hero: string;
   children: ReactNode;
-};
+} & GridProps;
 
 const BoxWrapper = React.forwardRef<HTMLDivElement, BoxWrapperProps>(({ hero, children, ...props }: BoxWrapperProps, forwardRef: ForwardedRef<HTMLDivElement>) => (
   <Wrapper ref={forwardRef} {...props}>
     <Flex className='style' p={'8px 16px'}>
-      <Text {...typoVariant.title2} style={{ color: colorPalette.gray[1] }}>
+      <Heading as='h6' size={'6'} style={{ color: colorPalette.gray[1], fontWeight: 700 }}>
         {hero}
-      </Text>
+      </Heading>
     </Flex>
     <Grid gap={'16px'} p={'24px 16px 16px 16px'}>
       {children}
