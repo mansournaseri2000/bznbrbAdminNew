@@ -1,76 +1,88 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect, useRef } from 'react';
 import persian_fa from 'react-date-object/locales/persian_fa';
-import { Controller, useFormContext } from 'react-hook-form';
 import { IoMdTime } from 'react-icons/io';
-import DatePicker, { DateObject } from 'react-multi-date-picker';
+import DatePicker, {
+  CalendarProps,
+  CustomComponentProps,
+  DateObject,
+  DatePickerProps,
+} from 'react-multi-date-picker';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 
 import { styled } from 'styled-components';
 
-import { Boxshadow, colorPalette } from '@/theme';
+import { colorPalette } from '@/theme';
 
 import { Flex } from '../primitives';
 import ErrorText from './ErrorText';
 
 type TimePickerProps = {
+  onChangeValue: (dateObject: DateObject | DateObject[] | null) => void;
   errorText?: string;
-  inputMode: 'text' | 'none';
-  name: string;
-} & React.HTMLAttributes<HTMLInputElement>;
+} & CustomComponentProps &
+  CalendarProps &
+  DatePickerProps &
+  React.HTMLAttributes<HTMLInputElement>;
 
 /**
  * props
  * _______________________________________________________________________________
  */
 
-const TimePickerComponent = forwardRef<HTMLInputElement, TimePickerProps>(({ name, errorText }) => {
-  const { control, setValue, clearErrors } = useFormContext();
+const CustomTimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
+  ({ errorText, onChangeValue, ...rest }) => {
+    const inputRef = useRef<HTMLInputElement>(null);
 
-  return (
-    <Controller
-      name={name}
-      control={control}
-      render={() => (
-        <Root pb={'10px'} position={'relative'} align={'center'}>
-          <DatePicker
-            inputMode='none'
-            inputClass='input-class'
-            locale={persian_fa}
-            placeholder='ساعت'
-            onChange={(dateObject: DateObject | DateObject[] | any) => {
-              setValue(name, dateObject.format());
-              clearErrors(name);
-            }}
-            key={'time'}
-            disableDayPicker
-            format='HH:mm' // Set format to only show hours and minutes
-            plugins={[
-              <TimePicker
-                hideSeconds
-                format='HH:mm' // Set format to only show hours and minutes
-                key={'time'}
-              />,
-            ]}
-          />
-          <IoMdTime style={{ position: 'absolute', left: '20px', scale: 1.2, fill: '#000' }} />
-          <ErrorText text={errorText} />
-        </Root>
-      )}
-    />
-  );
-});
+    useEffect(() => {
+      const handleInput = (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        if (target.value.length > 10) {
+          target.value = target.value.slice(0, 6); // Limit to 10 characters
+        }
+      };
 
-TimePickerComponent.displayName = 'TimePickerComponent';
+      if (inputRef.current) {
+        inputRef.current.addEventListener('input', handleInput);
+      }
 
-export default TimePickerComponent;
+      return () => {
+        if (inputRef.current) {
+          inputRef.current.removeEventListener('input', handleInput);
+        }
+      };
+    }, []);
+
+    return (
+      <Root isError={Boolean(errorText)} position={'relative'} align={'center'}>
+        <DatePicker
+          ref={inputRef}
+          {...rest}
+          inputClass='input-class'
+          locale={persian_fa}
+          onChange={(dateObject: DateObject | DateObject[] | null) => onChangeValue(dateObject)}
+          key={'time'}
+          disableDayPicker
+          format='HH:mm'
+          plugins={[<TimePicker hideSeconds format='HH:mm' key={'time'} />]}
+        />
+        <IoMdTime style={{ position: 'absolute', left: '20px', scale: 1.2, fill: colorPalette.pink[9] }} />
+        <ErrorText text={errorText} />
+      </Root>
+    );
+  }
+);
+
+CustomTimePicker.displayName = 'CustomTimePicker';
+
+export default CustomTimePicker;
 
 /**
  * styled-component
  * _______________________________________________________________________________
  */
-const Root = styled(Flex)`
+const Root = styled(Flex)<{ isError: boolean }>`
   & .rmdp-container {
     display: flex;
     width: -webkit-fill-available !important;
@@ -78,7 +90,7 @@ const Root = styled(Flex)`
   }
 
   .rmdp-wrapper {
-    padding: 5px 0;
+    padding: 0px 0;
   }
 
   .rmdp-arrow {
@@ -86,7 +98,7 @@ const Root = styled(Flex)`
     scale: 0.8;
   }
   .rmdp-arrow-container {
-    background-color: #000;
+    background-color: ${colorPalette.pink[9]};
     margin-block: 5px;
     width: 25px;
     height: 25px;
@@ -104,14 +116,22 @@ const Root = styled(Flex)`
   }
 
   .input-class {
-    --default-font-family: var(--yekan-font) !important;
-    font-family: var(--yekan-font) !important;
-    border-radius: 8px;
+    --default-font-family: var(--sans-font) !important;
+    font-family: var(--sans-font) !important;
     text-align: right;
     width: -webkit-fill-available;
-    padding: 15px 16px;
+    padding: 13px 16px;
     outline: none;
-    border: none;
-    box-shadow: ${Boxshadow.shadow1};
+    background-color: ${colorPalette.gray[2]};
+    border: ${({ isError }) =>
+      !isError ? `1px solid ${colorPalette.gray[7]}` : `1px solid ${colorPalette.pink[9]}`};
+    border-radius: 8px;
+    font-size: 14px;
+    color: ${colorPalette.gray[11]};
+  }
+
+  :disabled {
+    background-color: ${colorPalette.gray[4]};
+    cursor: not-allowed;
   }
 `;

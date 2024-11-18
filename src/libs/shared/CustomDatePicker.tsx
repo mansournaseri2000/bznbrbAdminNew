@@ -1,13 +1,14 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect, useRef } from 'react';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
-import { Controller, useFormContext } from 'react-hook-form';
 import { LuCalendarCheck } from 'react-icons/lu';
-import DatePicker, { DateObject } from 'react-multi-date-picker';
+import DatePicker, { CalendarProps, CustomComponentProps, DateObject, DatePickerProps } from 'react-multi-date-picker';
 
 import { styled } from 'styled-components';
+
+import { colorPalette } from '@/theme';
 
 import { Flex } from '../primitives';
 import ErrorText from './ErrorText';
@@ -17,74 +18,81 @@ import ErrorText from './ErrorText';
  * _______________________________________________________________________________
  */
 type DatePickerComponent = {
+  onChangeValue: (dateObject: DateObject | DateObject[] | null) => void;
   errorText?: string;
-  inputMode: 'none' | 'text';
-  name: string;
-  minDate?: Date;
-  placeholder?: string;
   calendarPosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
-} & React.HTMLAttributes<HTMLInputElement>;
+} & CustomComponentProps &
+  DatePickerProps &
+  CalendarProps &
+  React.HTMLAttributes<HTMLInputElement>;
 
-const DatePickerComponent = forwardRef<HTMLInputElement, DatePickerComponent>(({ name, minDate, placeholder = 'تاریخ', calendarPosition = 'bottom-right', errorText, inputMode, ...rest }, ref) => {
-  const { control, setValue, clearErrors } = useFormContext();
+const CustomDatePicker = forwardRef<HTMLInputElement, DatePickerComponent>(({ onChangeValue, calendarPosition = 'bottom-right', errorText, ...rest }, ref) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const handleInput = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      if (target.value.length > 10) {
+        target.value = target.value.slice(0, 10);
+      }
+    };
+
+    if (inputRef.current) {
+      inputRef.current.addEventListener('input', handleInput);
+    }
+
+    return () => {
+      if (inputRef.current) {
+        inputRef.current.removeEventListener('input', handleInput);
+      }
+    };
+  }, []);
 
   return (
-    <Flex position={'relative'} pb={'10px'} direction={'column'}>
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => (
-          <Root position={'relative'} align={'center'}>
-            <DatePicker
-              inputMode={inputMode}
-              inputClass={`input-class`}
-              {...rest}
-              {...ref}
-              value={field.value}
-              placeholder={placeholder}
-              minDate={minDate || new Date()}
-              calendar={persian}
-              locale={persian_fa}
-              calendarPosition={calendarPosition}
-              onChange={(dateObject: DateObject | DateObject[] | null) => {
-                const formattedDate = Array.isArray(dateObject) ? dateObject.map(d => d.format()).join(', ') : dateObject?.format() || '';
-                setValue(name, formattedDate);
-                clearErrors(name);
-              }}
-            />
-            <LuCalendarCheck style={{ position: 'absolute', left: '20px', stroke: '#000' }} />
-          </Root>
-        )}
-      />
+    <Flex position={'relative'} width={'100%'}>
+      <Root isError={Boolean(errorText)} position={'relative'} align={'center'} width={'100%'}>
+        <DatePicker
+          {...rest}
+          {...ref}
+          inputClass={`input-class`}
+          ref={inputRef}
+          calendar={persian}
+          locale={persian_fa}
+          calendarPosition={calendarPosition}
+          onChange={(dateObject: DateObject | DateObject[] | null) => onChangeValue(dateObject)}
+        />
+        <LuCalendarCheck style={{ position: 'absolute', left: '20px', stroke: colorPalette.pink[9] }} />
+      </Root>
       <ErrorText text={errorText} />
     </Flex>
   );
 });
 
-DatePickerComponent.displayName = 'DatePickerComponent';
-export default DatePickerComponent;
+CustomDatePicker.displayName = 'CustomDatePicker';
+export default CustomDatePicker;
 
 /**
  * styled-component
  * _______________________________________________________________________________
  */
 
-const Root = styled(Flex)`
+const Root = styled(Flex)<{ isError: boolean }>`
   .rmdp-day.rmdp-selected span:not(.highlight) {
-    background-color: #000;
+    background-color: ${colorPalette.pink[9]};
   }
 
   .rmdp-arrow {
-    border-color: #000;
+    border-color: ${colorPalette.pink[9]};
   }
 
   .rmdp-week-day {
-    color: #000;
+    color: ${colorPalette.pink[9]};
   }
 
   input {
     width: -webkit-fill-available !important;
-    padding: 15px 20px !important;
+    background-color: ${colorPalette.gray[2]};
+    font-size: 14px;
+    color: ${colorPalette.gray[11]};
   }
 
   & .rmdp-container {
@@ -93,19 +101,18 @@ const Root = styled(Flex)`
   }
 
   .input-class {
-    --default-font-family: var(--yekan-font) !important;
-    font-family: var(--yekan-font) !important;
-    border-radius: 8px;
+    --default-font-family: var(--sans-font) !important;
+    font-family: var(--sans-font) !important;
     width: 100%;
     text-align: right;
-    padding: 15px 16px;
     outline: none;
-    border: none;
-    box-shadow:
-      0 0 0 1px color-mix(in oklab, var(--gray-a3), var(--gray-3) 25%),
-      0 0 0 0.5px var(--black-a1),
-      0 1px 1px 0 var(--gray-a2),
-      0 2px 1px -1px var(--black-a1),
-      0 1px 3px 0 var(--black-a1);
+    border: ${({ isError }) => (!isError ? `1px solid ${colorPalette.gray[7]}` : `1px solid ${colorPalette.pink[9]}`)};
+    border-radius: 8px;
+    padding: 13px 16px;
+
+    &:disabled {
+      background-color: ${colorPalette.gray[4]};
+      cursor: not-allowed;
+    }
   }
 `;

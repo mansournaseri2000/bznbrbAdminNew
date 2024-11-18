@@ -268,3 +268,192 @@ export const daysKey = [
     key: 'روز سی و هشتم',
   },
 ];
+
+export const means_of_travelItems = [
+  {
+    name: 'هیچکدام',
+    value: 'none',
+    id: 'none',
+    disable: false,
+  },
+  {
+    name: 'کوله ( پیاده )',
+    value: 'bacpacking',
+    id: 'bacpacking',
+    disable: true,
+  },
+  {
+    name: 'خودرو شخصی',
+    value: 'car',
+    id: 'car',
+    disable: true,
+  },
+  {
+    name: 'تاکسی',
+    value: 'taxi',
+    id: 'taxi',
+    disable: false,
+  },
+  {
+    name: 'اتوبوس',
+    value: 'bus',
+    id: 'bus',
+    disable: false,
+  },
+  {
+    name: 'قطار',
+    value: 'train',
+    id: 'train',
+    disable: false,
+  },
+  {
+    name: 'هواپیما',
+    value: 'plain',
+    id: 'plain',
+    disable: false,
+  },
+];
+export const place_of_residence = [
+  {
+    name: 'هیچکدام',
+    value: 'none',
+    id: 'none',
+    disable: false,
+  },
+  { name: 'هتل آپارتمان', value: 'hotel_apartment', id: 'hotel_apartment' },
+  { name: 'ویلا', value: 'villa', id: 'villa' },
+  { name: 'کلبه جنگلی', value: 'cottage', id: 'cottage' },
+];
+export const Type_of_tourist_place = [
+  {
+    key: 'طبیعت گردی',
+    value: 1,
+    id: 1,
+    disable: false,
+  },
+  {
+    key: 'هنرگردی',
+    value: 3,
+    id: 3,
+    disable: true,
+  },
+  {
+    id: 4,
+    value: 4,
+    key: 'گردشگری تفریحی',
+    disable: false,
+  },
+  {
+    key: 'تاریخ گردی',
+    value: 5,
+    id: 5,
+    disable: false,
+  },
+  {
+    key: 'گردشگری مذهبی',
+    value: 6,
+    id: 6,
+    disable: true,
+  },
+  {
+    key: 'شهرگردی',
+    value: 7,
+    id: 7,
+    disable: false,
+  },
+];
+
+export const Type_Of_Passengers = [
+  {
+    key: 'بانوان',
+    value: 'women',
+    id: 1,
+    disable: false,
+  },
+  {
+    key: 'کودک و نوجوان',
+    value: 'child',
+    id: 2,
+    disable: false,
+  },
+  {
+    key: 'سالمندان',
+    value: 'elderly',
+    id: 3,
+    disable: false,
+  },
+  {
+    key: 'معلولین',
+    value: 'disabled',
+    id: 4,
+    disable: false,
+  },
+  {
+    key: 'دارای بیماری خاص',
+    value: 'specific_lines',
+    id: 5,
+    disable: true,
+  },
+];
+export const Number_Of_Passengers = [
+  {
+    value: '0',
+    name: 'هیچکدام',
+    id: '0',
+  },
+  {
+    value: '1',
+    name: '1 نفر',
+    id: 2,
+  },
+  {
+    value: '2',
+    name: '2 نفر',
+    id: 3,
+  },
+  {
+    value: '3',
+    name: '3 نفر',
+    id: 4,
+  },
+  {
+    value: '4',
+    name: '4 نفر',
+    id: 5,
+  },
+  {
+    value: '5',
+    name: '5 نفر',
+    id: 6,
+  },
+  {
+    value: '6',
+    name: '6 نفر',
+    id: 7,
+  },
+  {
+    value: '7',
+    name: '7 نفر',
+    id: 8,
+  },
+  {
+    value: '8',
+    name: '8 نفر',
+    id: 9,
+  },
+  {
+    value: '9',
+    name: '9 نفر',
+    id: 10,
+  },
+  {
+    value: '10',
+    name: '10 نفر',
+    id: 11,
+  },
+  {
+    value: '11',
+    name: '11 نفر',
+    id: 12,
+  },
+];
