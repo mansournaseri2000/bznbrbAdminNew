@@ -7,49 +7,50 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { StatusFilterOption } from '@/constants/data-management';
-import { Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import { Flex, Grid, Heading, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
 import { updateURLWithQueryParams } from '@/libs/utils/updateUrl';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { Category, Province } from '@/types/place/place-constant';
+import { Province } from '@/types/place/place-constant';
 
 type Props = {
   province: Province[];
-  categories: Category[];
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const PointFilter = ({ province, categories, setIsOpen }: Props) => {
+const PlansFilter = ({ province, setIsOpen }: Props) => {
   /**
    * Variables and Constant
    * _______________________________________________________________________________
    */
   const { control, setValue, watch, reset } = useFormContext();
-  const city = province.filter(item => item.id === Number(watch('pro')))[0]?.Cities;
-  const subCategory = categories.filter(item => item.id === Number(watch('cat')))[0]?.children;
+
+  const sourceCity = province.filter(item => item.id === Number(watch('sourceProvince')))[0]?.Cities;
+  const departureCity = province.filter(item => item.id === Number(watch('departureProvince')))[0]?.Cities;
 
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  console.log('watch', watch());
   /**
    * functions
    * _______________________________________________________________________________
    */
   const addFilter = () => {
     const values = watch();
-    // UpdateUrl(searchParams, values);
+
     updateURLWithQueryParams(router, searchParams, values);
-    queryClient.invalidateQueries({ queryKey: ['point-data'] });
+    queryClient.invalidateQueries({ queryKey: ['plans-data'] });
     setIsOpen(false);
   };
 
+  // TODO: fix update url for remove filters
   const removeFilter = () => {
     reset();
-    queryClient.invalidateQueries({ queryKey: ['point-data'] });
+    updateURLWithQueryParams(router, searchParams, {});
+
+    queryClient.invalidateQueries({ queryKey: ['plans-data'] });
     setIsOpen(false);
   };
 
@@ -58,10 +59,10 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
       <Grid width={'100%'} p={'4'} gapY={'4'}>
         <Grid gapY={'2'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
-            موقعیت نقطه
+            مبدا
           </Text>
           <Controller
-            name='pro'
+            name='sourceProvince'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -70,7 +71,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
-                  setValue('cit', '');
+                  setValue('sourceCity', '');
                 }}
               >
                 {province?.map(item => (
@@ -83,7 +84,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
             )}
           />
           <Controller
-            name='cit'
+            name='sourceCity'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -94,7 +95,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
                   field.onChange(val);
                 }}
               >
-                {city?.map(item => (
+                {sourceCity?.map(item => (
                   <SelectItem key={item.id} value={String(item.id)}>
                     {item.name}
                   </SelectItem>
@@ -105,22 +106,24 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
         </Grid>
         <Grid gapY={'2'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
-            دسته بندی
+            مقصد
           </Text>
           <Controller
-            name='cat'
+            name='departureProvince'
             control={control}
             render={({ field }) => (
               <SelectRoot
                 {...field}
-                placeholder='دسته بندی اصلی'
+                placeholder='استان'
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('departureCity', '');
                 }}
               >
-                {categories.map(item => (
+                {province?.map(item => (
                   <SelectItem key={item.id} value={String(item.id)}>
+                    {/* TODO: fix item style */}
                     {item.name}
                   </SelectItem>
                 ))}
@@ -128,18 +131,18 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
             )}
           />
           <Controller
-            name='subCategoryId'
+            name='departureCity'
             control={control}
             render={({ field }) => (
               <SelectRoot
                 {...field}
-                placeholder='زیردسته بندی'
+                placeholder='شهر'
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
                 }}
               >
-                {subCategory?.map(item => (
+                {departureCity?.map(item => (
                   <SelectItem key={item.id} value={String(item.id)}>
                     {item.name}
                   </SelectItem>
@@ -147,47 +150,11 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
               </SelectRoot>
             )}
           />
-        </Grid>
-        <Grid gapY={'2'}>
-          <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
-            وضعیت
-          </Text>
-          <Controller
-            name='statusId'
-            control={control}
-            render={({ field }) => (
-              <SelectRoot
-                {...field}
-                placeholder='وضعیت اطلاعات'
-                value={String(field.value)}
-                onValueChange={val => {
-                  field.onChange(val);
-                }}
-              >
-                {StatusFilterOption.map((item, index) => (
-                  <SelectItem key={index} value={String(item.id)}>
-                    {item.value}
-                  </SelectItem>
-                ))}
-              </SelectRoot>
-            )}
-          />
-          <Controller
-            name='pointTypeId'
-            control={control}
-            render={({ field }) => (
-              <SelectRoot
-                {...field}
-                placeholder='نوع نقطه'
-                value={String(field.value)}
-                onValueChange={val => {
-                  field.onChange(val);
-                }}
-              >
-                <Text>دیتا باید فیکس بشه</Text>
-              </SelectRoot>
-            )}
-          />
+          <Flex height={'350px'} align={'center'} justify={'center'} mt={'4'} style={{ border: '2px solid red' }}>
+            <Heading as='h4' size={'4'}>
+              date picker
+            </Heading>
+          </Flex>
         </Grid>
       </Grid>
       <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} />
@@ -195,4 +162,4 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
   );
 };
 
-export default PointFilter;
+export default PlansFilter;
