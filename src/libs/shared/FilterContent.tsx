@@ -19,7 +19,7 @@ type Props = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const PlansFilter = ({ province, setIsOpen }: Props) => {
+const FilterContent = ({ province, setIsOpen }: Props) => {
   /**
    * Variables and Constant
    * _______________________________________________________________________________
@@ -162,4 +162,4 @@ const PlansFilter = ({ province, setIsOpen }: Props) => {
   );
 };
 
-export default PlansFilter;
+export default FilterContent;

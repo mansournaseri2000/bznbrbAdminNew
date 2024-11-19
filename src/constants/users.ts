@@ -1,6 +1,6 @@
 export const userTypeConstant = [
-  { id: 1, name: 'کاربر عادی' },
-  { id: 2, name: 'تورلیدر' },
+  { id: 1, key: 'کاربر عادی', value: 1, disable: false },
+  { id: 2, key: 'تورلیدر', value: 2, disable: false },
 ];
 
 export const tourVehicleConstants = [
@@ -101,4 +101,14 @@ export const paymentSortConstants = [
     id: 4,
     name: 'کمترین مبلغ',
   },
+];
+export const userDetailSortConstant = [
+  { id: 1, name: 'تاریخ رفت - جدیدترین ' },
+  { id: 2, name: 'تاریخ رفت - قدیمی ترین' },
+  { id: 3, name: 'تاریخ بازگشت - جدیدترین' },
+  { id: 4, name: 'تاریخ بازگشت - قدیمی ترین' },
+];
+export const sexConstant = [
+  { id: 1, name: 'مرد' },
+  { id: 2, name: 'زن' },
 ];

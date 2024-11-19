@@ -1,52 +1,59 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+
+import { CaretDownIcon } from '@radix-ui/react-icons';
+import { Popover } from '@radix-ui/themes';
 
 import { userTypeConstant } from '@/constants/users';
-import { Button, Grid, Modal, SelectItem, SelectRoot, TextField } from '@/libs/primitives';
-
-import UserInfoModal from '../info-modal/UserInfoModal';
+import { Button, Flex, Grid, IconButton, Text, TextField } from '@/libs/primitives';
+import CheckboxGroup from '@/libs/shared/CheckboxGroup';
+import { Search } from '@/public/icon';
+import { colorPalette } from '@/theme';
+import { typoVariant } from '@/theme/typo-variants';
 
 const UserHero = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const methods = useForm({ defaultValues: { userType: '', search: '' } });
-  const { control, watch } = methods;
+  const { control, watch } = useFormContext();
   console.log('Watch', watch());
   return (
-    <>
-      <Grid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '0.5fr 3fr 1fr' }}>
-        <Button size={'3'} onClick={() => setIsOpen(true)}>
-          ثبت کاربر
-        </Button>
-        <Controller name='search' control={control} render={({ field }) => <TextField {...field} placeholder='جستجوی  کاربر' style={{ borderRadius: 12 }} />} />
+    <Grid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '3fr auto 1fr' }}>
+      <Controller name='search' control={control} render={({ field }) => <TextField {...field} placeholder='جستجوی  کاربر' style={{ borderRadius: 12 }} />} />
 
-        <Controller
-          name='userType'
-          control={control}
-          render={({ field }) => (
-            <SelectRoot
-              {...field}
-              placeholder='نوع کاربر'
-              value={String(field.value)}
-              onValueChange={val => {
-                field.onChange(val);
-              }}
-            >
-              {userTypeConstant.map(item => (
-                <SelectItem value={String(item.id)} key={item.id}>
-                  {item.name}
-                </SelectItem>
-              ))}
-            </SelectRoot>
-          )}
-        />
-      </Grid>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <UserInfoModal />
-      </Modal>
-    </>
+      <IconButton size={'3'} variant='soft'>
+        <Search />
+      </IconButton>
+
+      <Popover.Root>
+        <Popover.Trigger>
+          <Button
+            style={{
+              minHeight: '48px',
+              paddingInline: '15px 10px',
+              borderRadius: '12px',
+              border: `1px solid ${colorPalette.gray[7]}`,
+              color: colorPalette.gray[9],
+              backgroundColor: colorPalette.gray[2],
+            }}
+            variant='solid'
+            size={'4'}
+          >
+            <Flex width={'100%'} align={'center'} justify={'between'}>
+              <Text {...typoVariant.body2} style={{ color: colorPalette.gray[9] }}>
+                {' '}
+                وضعیت کاربر
+              </Text>
+              <CaretDownIcon style={{ scale: 1.6 }} color={colorPalette.pink[9]} />
+            </Flex>
+          </Button>
+        </Popover.Trigger>
+        <Popover.Content>
+          <Flex gap={'2'}>
+            <CheckboxGroup isRow={false} items={userTypeConstant} store='Type_Of_User' />
+          </Flex>
+        </Popover.Content>
+      </Popover.Root>
+    </Grid>
   );
 };
 

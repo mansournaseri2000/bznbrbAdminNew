@@ -1,7 +1,10 @@
+'use client';
+
 import React, { useCallback, useEffect, useState } from 'react';
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
 
@@ -14,9 +17,9 @@ import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { TripResponse } from '@/types/plans/trip';
 
+import UserDetailCard from '../../../libs/shared/UserDetailCard';
 import TripCommonView from './common-view/TripCommonView';
 import DayList from './day-list/DayList';
-import UserPlanHero from './hero/UserPlanHero';
 
 const TripMapView = dynamic(() => import('@/components/plans/user-plan/map-view/MapView').then(module => module.default), { ssr: false });
 
@@ -33,7 +36,7 @@ const UserPlan = ({ data, isLoading }: Props) => {
     ***
   */
   const [dayID, setDayID] = useState<number>(data?.days?.length > 0 ? data?.days[0]?.day_id : 0);
-
+  const router = useRouter();
   /*
     ***
     hooks and methods _______________________________________________________________________________
@@ -62,7 +65,17 @@ const UserPlan = ({ data, isLoading }: Props) => {
 
   return (
     <Grid width={'100%'} gapY={'5'}>
-      <UserPlanHero name='اکبر' last_name='روشن دل' image='/image/profile.jpeg' birthday='1379/01/24' sex='زن' mobile='091212345678' email='example@gmail.com' />
+      <UserDetailCard
+        type='PLAN'
+        name='اکبر'
+        last_name='روشن دل'
+        image='/image/profile.jpeg'
+        birthday='1379/01/24'
+        sex='زن'
+        mobile='091212345678'
+        email='example@gmail.com'
+        onShowProfile={() => router.push('/user/user-profile')}
+      />
       {/* 
         ***
         user planner_________________________________________________________________________________________________________________________________________

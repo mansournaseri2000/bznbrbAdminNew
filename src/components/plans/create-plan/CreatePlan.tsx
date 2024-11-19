@@ -24,7 +24,7 @@ import { Province } from '@/types/place/place-constant';
 import { defaultFormValues, TripFormData } from '@/types/plans/create-plan';
 import { plannerValidationSchema } from '@/validations/plans';
 
-import Checkbox from '../shared/CheckboxGroup';
+import Checkbox from '../../../libs/shared/CheckboxGroup';
 
 type Props = {
   provinces: Province[];

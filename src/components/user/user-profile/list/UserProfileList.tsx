@@ -2,32 +2,32 @@
 
 import React from 'react';
 
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
 import { ColumnDef } from '@tanstack/react-table';
 
-import { Box, Button, Flex, Text } from '@/libs/primitives';
+import { Button, Flex, Text } from '@/libs/primitives';
+import { Table } from '@/libs/shared';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
 import TableData from './data.json';
 
-const Table = dynamic(() => import('@/libs/shared/Table'), { ssr: false });
-
-export interface UserListDetail {
-  username: string;
-  mobile: string;
-  email: string;
-  userStatus: 'فعال' | 'غیر فعال';
+interface UserProfileListDetail {
+  source: string;
+  destination: string;
+  createAt: string;
+  departureDate: string;
+  returnDate: string;
 }
 
-const UserList = () => {
+const UserProfileList = () => {
   const router = useRouter();
-  const columns: ColumnDef<UserListDetail>[] = [
+
+  const columns: ColumnDef<UserProfileListDetail>[] = [
     {
-      accessorKey: 'username',
-      header: 'نام و نام خانوادگی',
+      accessorKey: 'source',
+      header: 'مبدا',
       cell: info => {
         const value = info.getValue() as string | null;
         return (
@@ -38,8 +38,8 @@ const UserList = () => {
       },
     },
     {
-      accessorKey: 'mobile',
-      header: 'شماره تماس',
+      accessorKey: 'destination',
+      header: 'مقصد',
       cell: info => {
         const value = info.getValue() as string | null;
         return (
@@ -50,8 +50,8 @@ const UserList = () => {
       },
     },
     {
-      accessorKey: 'email',
-      header: 'ایمیل',
+      accessorKey: 'createAt',
+      header: 'تاریخ ساخت برنامه',
       cell: info => {
         const value = info.getValue() as string | null;
         return (
@@ -62,23 +62,24 @@ const UserList = () => {
       },
     },
     {
-      accessorKey: 'userStatus',
-      header: 'نوع کاربر',
+      accessorKey: 'departureDate',
+      header: 'تاریخ رفت',
       cell: info => {
         const value = info.getValue() as string | null;
         return (
-          <Text
-            {...typoVariant.body2}
-            style={{
-              display: 'flex',
-              width: 'fit-content',
-              alignItems: 'center',
-              padding: '4px 8px',
-              backgroundColor: value === 'غیر فعال' ? colorPalette.pink[3] : colorPalette.blue[3],
-              color: value === 'غیر فعال' ? colorPalette.pink[11] : colorPalette.blue[11],
-              borderRadius: 4,
-            }}
-          >
+          <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
+            {value ? value : '-'}
+          </Text>
+        );
+      },
+    },
+    {
+      accessorKey: 'returnDate',
+      header: 'تاریخ بازگشت',
+      cell: info => {
+        const value = info.getValue() as string | null;
+        return (
+          <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
             {value ? value : '-'}
           </Text>
         );
@@ -90,7 +91,8 @@ const UserList = () => {
         const item = row.original;
         const handleClick = () => {
           console.log('item', item);
-          router.push('/user/user-profile');
+          //   TODO: fix link as a dynamic by using id
+          router.push('/plans/user-plan');
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>
@@ -102,12 +104,8 @@ const UserList = () => {
       },
     },
   ];
-  return (
-    <Box width={'100%'} style={{ overflow: 'scroll' }}>
-      {/* <Heading>User List</Heading> */}
-      <Table columns={columns as any} data={TableData as any} />
-    </Box>
-  );
+
+  return <Table columns={columns as any} data={TableData as any} />;
 };
 
-export default UserList;
+export default UserProfileList;

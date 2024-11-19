@@ -36,7 +36,7 @@ const ModalAction = ({ closeButtonText, submitButtonText, isLoading, onCloseButt
       position={'sticky'}
       bottom={'0px'}
     >
-      <Grid gap={'16px'} columns={'2'} width={'100%'}>
+      <Grid gap={'16px'} columns={'2'} width={'max-content'}>
         <Button onClick={onSubmit} type='submit' variant='soft' size={'3'}>
           {isLoading ? <Spinner /> : <Text {...typoVariant.body1}>{submitButtonText}</Text>}
         </Button>

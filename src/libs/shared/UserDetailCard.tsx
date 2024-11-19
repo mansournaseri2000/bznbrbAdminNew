@@ -8,8 +8,16 @@ import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { UserPlansProfileDetail } from '@/types/plans/user-plans';
 
-const UserPlanHero = (props: UserPlansProfileDetail) => {
-  const { image, name, last_name, birthday, sex, mobile, email } = props;
+type Props = UserPlansProfileDetail & {
+  type: 'USER' | 'PLAN';
+  userStatus?: 'active' | 'deActive';
+  onDeActive?: () => void;
+  onEditInfo?: () => void;
+  onShowProfile?: () => void;
+};
+
+const UserDetailCard = (props: Props) => {
+  const { image, name, last_name, birthday, sex, mobile, email, type, userStatus, onShowProfile, onDeActive, onEditInfo } = props;
   return (
     <BoxWrapper hero='سازنده برنامه'>
       <Grid width={'100%'} columns={'3'} px={'4'} gapX={'5'} style={{ gridTemplateColumns: 'auto 3fr auto' }}>
@@ -25,17 +33,33 @@ const UserPlanHero = (props: UserPlansProfileDetail) => {
           <Item label='ایمیل' value={email} />
         </Grid>
         <Flex align={'end'}>
-          {/* TODO: define onClick for button */}
-          <Button size={'3'} colorVariant='PINK'>
-            <Text {...typoVariant.body1}>مشاهده پروفایل</Text>
-          </Button>
+          {type === 'PLAN' ? (
+            <Button size={'3'} colorVariant='PINK' onClick={onShowProfile}>
+              <Text {...typoVariant.body1}>مشاهده پروفایل</Text>
+            </Button>
+          ) : (
+            <Flex direction={'column'} gap={'2'}>
+              {userStatus === 'active' ? (
+                <Button size={'3'} colorVariant='PINK' onClick={onDeActive}>
+                  <Text {...typoVariant.body1}>غیرفعال کردن کاربر</Text>
+                </Button>
+              ) : (
+                <Button size={'3'} onClick={onEditInfo}>
+                  <Text {...typoVariant.body1}>فعال سازی کاربر</Text>
+                </Button>
+              )}
+              <Button size={'3'} onClick={onEditInfo}>
+                <Text {...typoVariant.body1}>ویرایش اطلاعات</Text>
+              </Button>
+            </Flex>
+          )}
         </Flex>
       </Grid>
     </BoxWrapper>
   );
 };
 
-export default UserPlanHero;
+export default UserDetailCard;
 
 const Item = ({ label, value }: { label: string; value: string }) => (
   <Flex align={'center'} gap={'2'}>
