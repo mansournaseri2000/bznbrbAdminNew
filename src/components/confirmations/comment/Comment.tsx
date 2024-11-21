@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CommentCard from '@/components/develope/confirmations/comment-card/CommentCard';
+import CommentCard from '@/components/develop/confirmations/comment-card/CommentCard';
 import { Grid } from '@/libs/primitives';
 
 const user = {

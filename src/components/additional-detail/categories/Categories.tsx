@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CategoriesCard from '@/components/develope/additional-detail/categories-card/CategoriesCard';
+import CategoriesCard from '@/components/develop/additional-detail/categories-card/CategoriesCard';
 import { Button, Flex } from '@/libs/primitives';
 import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
 
@@ -36,11 +36,14 @@ const Categories = () => {
       </AccordionWrapper>
       <AccordionWrapper hero='طبیعت گردی'>
         <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
-      </AccordionWrapper>      <AccordionWrapper hero='طبیعت گردی'>
+      </AccordionWrapper>{' '}
+      <AccordionWrapper hero='طبیعت گردی'>
         <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
-      </AccordionWrapper>      <AccordionWrapper hero='طبیعت گردی'>
+      </AccordionWrapper>{' '}
+      <AccordionWrapper hero='طبیعت گردی'>
         <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
-      </AccordionWrapper>      <AccordionWrapper hero='طبیعت گردی'>
+      </AccordionWrapper>{' '}
+      <AccordionWrapper hero='طبیعت گردی'>
         <CategoriesCard header='دسته بندی اول' category={categoriesOptions} />
       </AccordionWrapper>
       <CategoriesPagination />

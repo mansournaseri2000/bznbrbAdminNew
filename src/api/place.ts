@@ -6,8 +6,10 @@ import { fomrData } from '@/components/place/create-edit-place/defaultValues';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { serializeTripType } from '@/libs/utils';
 import { ApiManager, ApiManagerV2 } from '@/libs/utils/axios.config';
+import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
 import { detailsSerializerForEdit, flattenPlaceWorkTime } from '@/libs/utils/place/place-seryalizer';
 import { PlaceListResponse, PlaceResponse, RemovePlaceResponse, SearchPlaceResponse } from '@/types/place';
+import { addRoutingGuidBody } from '@/types/place/place';
 import { PlaceConstantResponse } from '@/types/place/place-constant';
 
 import { ApiData } from './types';
@@ -26,7 +28,6 @@ export const getAllPlacesWithParams = async (pageNumber: number, categoryId: str
   try {
     // Create query parameters using URLSearchParams
     const params = new URLSearchParams();
-
 
     // Add the page number to the params
     params.append('page', pageNumber.toString());
@@ -374,6 +375,12 @@ export const editPlace = async (params: fomrData, id: number) => {
     trip_value: Number(trip_value),
     suggested_time: suggested_time,
   });
+
+  return res.data;
+};
+
+export const addRoutingGuid = async (params: addRoutingGuidBody) => {
+  const res = await clientApiManagerV2.post<ApiData<{ data: string }>>('places/user-edit', params);
 
   return res.data;
 };

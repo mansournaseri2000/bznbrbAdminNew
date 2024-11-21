@@ -5,9 +5,9 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { Button } from '@radix-ui/themes';
 
-import Residence from '@/components/develope/plans/residence/Residence';
-import TripDetailsCard from '@/components/develope/plans/trip-details-card/TripDetailsCard';
-import UserInfoCard from '@/components/develope/plans/user-info-card/UserInfoCard';
+import Residence from '@/components/develop/plans/residence/Residence';
+import TripDetailsCard from '@/components/develop/plans/trip-details-card/TripDetailsCard';
+import UserInfoCard from '@/components/develop/plans/user-info-card/UserInfoCard';
 import { optionMenuConstant } from '@/constants/plans';
 import { Box, Flex, Heading, SelectItem, SelectRoot } from '@/libs/primitives';
 
@@ -18,7 +18,7 @@ const PlanDetail = () => {
 
   const { control } = methods;
   return (
-    <Flex width={'100%'} direction={'column'} gap={'4'} p={'5'} >
+    <Flex width={'100%'} direction={'column'} gap={'4'} p={'5'}>
       <Flex width={'100%'} justify={'center'} align={'center'} gap={'10px'}>
         <Button variant='outline' size={'3'} style={{ width: '45.5%' }}>
           برنامه سفر

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PointCommentItem from '@/components/develope/confirmations/Point-comment-item/PointCommentItem';
+import PointCommentItem from '@/components/develop/confirmations/Point-comment-item/PointCommentItem';
 import { Accordion, Button, Flex, Grid, Text } from '@/libs/primitives';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';

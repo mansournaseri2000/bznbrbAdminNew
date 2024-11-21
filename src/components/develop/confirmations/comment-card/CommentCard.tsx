@@ -8,7 +8,7 @@ import { Box, Flex, Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { removeComment, updateComment } from '@/api/comment';
-import CommentInfo from '@/components/develope/comment/comment-info/CommentInfo';
+import CommentInfo from '@/components/develop/comment/comment-info/CommentInfo';
 import { Button, Grid, IconButton, Modal, Text } from '@/libs/primitives';
 import { Chart, Check } from '@/public/icon';
 import { colorPalette } from '@/theme';

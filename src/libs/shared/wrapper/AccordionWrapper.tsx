@@ -29,15 +29,11 @@ const AccordionWrapper = (props: AccordionWrapperProps) => {
   return (
     <Wrapper isOpen={isOpen}>
       <Flex className='style' width={'100%'} justify={'between'} align={'center'} p={'8px 16px'} onClick={toggleAccordion}>
-        <Text {...typoVariant.title2} style={{ color: colorPalette.gray[1] }}>
+        <Text {...typoVariant.title2} style={{ color: colorPalette.gray[11] }}>
           {props.hero}
         </Text>
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3 }}
-          style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 12, backgroundColor: colorPalette.blue[9], padding: '8px' }}
-        >
-          <TriangleUp />
+        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Triangle />
         </motion.div>
       </Flex>
       <motion.div variants={containerVariants} initial='closed' animate={isOpen ? 'open' : 'closed'} transition={{ duration: 0.3 }} style={{ overflow: 'hidden' }} layout>
@@ -57,7 +53,12 @@ const Wrapper = styled(Grid)<{ isOpen: boolean }>`
   .style {
     border-radius: ${({ isOpen }) => (isOpen ? '8px 8px 0px 0px' : '8px')};
     height: fit-content;
-    background-color: ${colorPalette.blue[10]};
+    background-color: ${colorPalette.blue[4]};
     cursor: pointer;
+  }
+`;
+const Triangle = styled(TriangleUp)`
+  path {
+    fill: ${colorPalette.blue[10]};
   }
 `;

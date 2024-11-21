@@ -3,7 +3,7 @@ import React from 'react';
 import ArticleManagement from '@/components/data-management/article-management/ArticleManagement';
 import CreateAndEditArticle from '@/components/data-management/article-management/create-and-edit-article/CreateAndEditArticle';
 import CreateAndEditPoint from '@/components/data-management/point-management/create-and-edit-point/CreateAndEditPoint';
-import PointDetail from '@/components/data-management/point-management/point-detail/PointDetail';
+import PointDetailRoot from '@/components/data-management/point-management/point-detail/PointDetailRoot';
 import PointManagement from '@/components/data-management/point-management/PointManagement';
 
 const DataManagement = ({ params }: { params: { slug: string[] } }) => {
@@ -14,7 +14,7 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
           case 'create-point':
             return <CreateAndEditPoint />;
           case 'point-detail':
-            return params.slug[2] === 'edit-point' ? <CreateAndEditPoint /> : <PointDetail />;
+            return params.slug[2] === 'edit-point' ? <CreateAndEditPoint /> : <PointDetailRoot />;
           default:
             return <PointManagement />;
         }

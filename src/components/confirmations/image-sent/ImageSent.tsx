@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ImageSentCard from '@/components/develope/confirmations/img-sent-card/ImageSentCard';
+import ImageSentCard from '@/components/develop/confirmations/img-sent-card/ImageSentCard';
 import { Grid } from '@/libs/primitives';
 
 const point = {

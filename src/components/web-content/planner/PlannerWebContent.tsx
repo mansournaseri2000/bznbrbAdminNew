@@ -1,7 +1,7 @@
 import React from 'react';
 
-import BannerDetail from '@/components/develope/web-content/banner-detail/BannerDetail';
-import BannerItem from '@/components/develope/web-content/banner-item/BannerItem';
+import BannerDetail from '@/components/develop/web-content/banner-detail/BannerDetail';
+import BannerItem from '@/components/develop/web-content/banner-item/BannerItem';
 import { Button, Flex, Heading } from '@/libs/primitives';
 
 const PlannerWebContent = () => {

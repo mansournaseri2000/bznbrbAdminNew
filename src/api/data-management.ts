@@ -1,4 +1,6 @@
 import { ApiManagerV2 } from '@/libs/utils/axios.config';
+import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
+import { CommentListResponse } from '@/types/data-management/point';
 import { PlaceListResponse } from '@/types/place';
 
 import { ApiData } from './types';
@@ -30,4 +32,10 @@ const handleQueryParams = (obj: Record<string, any>) => {
   //   }, {})
   // );
   // return queryParams.toString();
+};
+
+export const getPlaceComments = async (id: number, pageParam: number) => {
+  const res = await clientApiManagerV2.get<ApiData<CommentListResponse>>(`comment/${id}?page=${pageParam}&limit=${10}`);
+
+  return res.data.data;
 };

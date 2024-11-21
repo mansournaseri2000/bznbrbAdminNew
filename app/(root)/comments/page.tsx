@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic';
 import { useQuery } from '@tanstack/react-query';
 
 import { getAllComments } from '@/api/comment';
-import CommentCard from '@/components/develope/confirmations/comment-card/CommentCard';
+import CommentCard from '@/components/develop/confirmations/comment-card/CommentCard';
 import { Flex } from '@/libs/primitives';
 
 const ResponsivePagination = dynamic(() => import('react-responsive-pagination').then(module => module.default), { ssr: false });

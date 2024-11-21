@@ -1,7 +1,7 @@
 import React from 'react';
 
-import AccessDetail from '@/components/develope/teams-and-employers/access-detail/AccessDetail';
-import EmployDetail from '@/components/develope/teams-and-employers/employ-detail/EmployDetail';
+import AccessDetail from '@/components/develop/teams-and-employers/access-detail/AccessDetail';
+import EmployDetail from '@/components/develop/teams-and-employers/employ-detail/EmployDetail';
 import ActionListHero from '@/components/employee/action-list/hero/ActionListHero';
 import ActionList from '@/components/employee/action-list/list/ActionList';
 import ActionListPagination from '@/components/employee/action-list/pagination/ActionListPagination';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ProvinceTopCommentCard from '@/components/develope/confirmations/province-top-comment-card/ProvinceTopCommentCard';
+import ProvinceTopCommentCard from '@/components/develop/confirmations/province-top-comment-card/ProvinceTopCommentCard';
 import { Grid } from '@/libs/primitives';
 
 const TopCommentsManagement = () => {

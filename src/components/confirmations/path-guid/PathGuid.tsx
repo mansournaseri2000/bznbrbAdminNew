@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PathGuidCard from '@/components/develope/confirmations/path-guid-card/PathGuidCard';
+import PathGuidCard from '@/components/develop/confirmations/path-guid-card/PathGuidCard';
 import { Grid } from '@/libs/primitives';
 
 const point = {

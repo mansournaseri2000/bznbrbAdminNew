@@ -4,7 +4,7 @@ import React from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import TopCommentItem from '@/components/develope/confirmations/top-comment-item/TopCommentItem';
+import TopCommentItem from '@/components/develop/confirmations/top-comment-item/TopCommentItem';
 import { Button, Flex, Grid, Text } from '@/libs/primitives';
 import { typoVariant } from '@/theme/typo-variants';
 

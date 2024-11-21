@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ImproveDataCard from '@/components/develope/confirmations/improve-data-card/ImproveDataCard';
+import DataCard from '@/components/develop/shared/data-card/DataCard';
 import { Grid } from '@/libs/primitives';
 
 const point = {
@@ -12,7 +12,8 @@ const point = {
 const ImproveDataManagement = () => {
   return (
     <Grid width={'100%'} gapY={'5'} p={'5'}>
-      <ImproveDataCard
+      <DataCard
+        type="improve_data_management"
         colorVariant='blue'
         point={point}
         mobile='091212345678'
@@ -23,7 +24,8 @@ const ImproveDataManagement = () => {
         id={1}
         content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
       />
-      <ImproveDataCard
+      <DataCard
+        type="improve_data_management"
         colorVariant='pink'
         point={point}
         mobile='091212345678'
@@ -34,7 +36,8 @@ const ImproveDataManagement = () => {
         id={1}
         content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
       />
-      <ImproveDataCard
+      <DataCard
+        type="improve_data_management"
         colorVariant='blue'
         point={point}
         mobile='091212345678'
@@ -45,7 +48,8 @@ const ImproveDataManagement = () => {
         id={1}
         content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
       />
-      <ImproveDataCard
+      <DataCard
+        type="improve_data_management"
         colorVariant='pink'
         point={point}
         mobile='091212345678'
