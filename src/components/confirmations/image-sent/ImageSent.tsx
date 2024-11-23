@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ImageSentCard from '@/components/develop/confirmations/img-sent-card/ImageSentCard';
-import { Grid } from '@/libs/primitives';
+import { Flex, Grid, Text } from '@/libs/primitives';
 
 const point = {
   id: 1,
@@ -34,7 +34,11 @@ const ImageSent = () => {
         content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد'
         id={1}
       />
-      {/* TODO: define pagination  */}
+      {/* TODO: add pagination */}
+      <Flex width={'100%'} p={'5'} align={'center'} justify={'between'} style={{ border: '1px solid red' }}>
+        <Text>pagination</Text>
+        <Text>pagination count</Text>
+      </Flex>
     </Grid>
   );
 };

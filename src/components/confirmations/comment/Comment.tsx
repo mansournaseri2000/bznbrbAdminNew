@@ -1,12 +1,12 @@
 import React from 'react';
 
 import CommentCard from '@/components/develop/confirmations/comment-card/CommentCard';
-import { Grid } from '@/libs/primitives';
+import { Flex, Grid, Text } from '@/libs/primitives';
 
 const user = {
   id: 1,
   name: 'سید اکبر',
-  last_name: 'موسی نژاد',
+  last_name: 'روشن دل',
   mobile: '09937665252',
   pic: '/image/profile.jpeg',
 };
@@ -43,6 +43,10 @@ const Comment = () => {
         colorVariant='pink'
       />
       {/* TODO: add pagination */}
+      <Flex width={'100%'} p={'5'} align={'center'} justify={'between'} style={{ border: '1px solid red' }}>
+        <Text>pagination</Text>
+        <Text>pagination count</Text>
+      </Flex>
     </Grid>
   );
 };

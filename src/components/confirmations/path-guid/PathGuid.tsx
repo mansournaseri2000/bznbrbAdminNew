@@ -1,7 +1,7 @@
 import React from 'react';
 
 import PathGuidCard from '@/components/develop/confirmations/path-guid-card/PathGuidCard';
-import { Grid } from '@/libs/primitives';
+import { Flex, Grid, Text } from '@/libs/primitives';
 
 const point = {
   id: 1,
@@ -31,6 +31,11 @@ const PathGuid = () => {
         id={1}
         content='تاکسی ها از سه راه تهران پارس، میدان انقلاب، میدان فردوسی، میدان آزادی و سرتاسر خیابان انقلاب اسلامی شما را به میدان امام حسین (ع) می رسانند.'
       />
+      {/* TODO: add pagination */}
+      <Flex width={'100%'} p={'5'} align={'center'} justify={'between'} style={{ border: '1px solid red' }}>
+        <Text>pagination</Text>
+        <Text>pagination count</Text>
+      </Flex>
     </Grid>
   );
 };

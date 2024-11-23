@@ -1,6 +1,5 @@
 import React from 'react';
 
-import CommentManagement from '@/components/confirmations/comment-management/CommentManagement';
 import Comment from '@/components/confirmations/comment/Comment';
 import ImageSent from '@/components/confirmations/image-sent/ImageSent';
 import ImproveDataManagement from '@/components/confirmations/improve-data-management/ImproveDataManagement';
@@ -22,12 +21,7 @@ const Confirmations = ({ params }: { params: { slug: string[] } }) => {
       case 'top-comments':
         switch (params.slug[1]) {
           case 'comments':
-            switch (params.slug[2]) {
-              case 'comment-management':
-                return <CommentManagement />;
-              default:
-                return <TopComments />;
-            }
+            return <TopComments />;
           default:
             return <TopCommentsManagement />;
         }

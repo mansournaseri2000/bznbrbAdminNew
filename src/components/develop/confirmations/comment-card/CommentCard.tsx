@@ -10,7 +10,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { removeComment, updateComment } from '@/api/comment';
 import CommentInfo from '@/components/develop/comment/comment-info/CommentInfo';
 import { Button, Grid, IconButton, Modal, Text } from '@/libs/primitives';
-import { Chart, Check } from '@/public/icon';
+import { Check, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { CommentsDetail } from '@/types/comment/comment-list';
@@ -90,6 +90,20 @@ const CommentCard: React.FC<CommentCardProps> = (props: CommentCardProps) => {
         }}
       >
         <Flex width={'100%'} justify={'between'} align={'center'}>
+          <Flex direction={'column'} gap={'2'}>
+            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
+              {places?.name}
+            </Text>
+            <Text {...typoVariant.description2} style={{ color: colorPalette.gray[11], opacity: '50%' }}>
+              {`${places?.Cities.Provinces.name} / ${places?.Cities.name}`}
+            </Text>
+          </Flex>
+          {/* TODO: fix color by define count */}
+          <Button size={'3'} colorVariant={colorVariant === 'blue' ? 'BLUE' : 'PINK'}>
+            <Text {...typoVariant.body3}>مشاهده نقطه</Text>
+          </Button>
+        </Flex>
+        <Flex width={'100%'} justify={'between'} align={'center'}>
           <Flex align={'center'} gap={'2'}>
             <Box style={{ width: 40, height: 40, position: 'relative', borderRadius: '50%' }}>
               <Image src={users.pic ? users.pic : ''} alt='' fill style={{ borderRadius: '50%' }} />
@@ -98,15 +112,6 @@ const CommentCard: React.FC<CommentCardProps> = (props: CommentCardProps) => {
               <Text style={{ color: colorPalette.gray[11] }}>{`${users.name} ${users.last_name}`}</Text>
               <Text style={{ color: colorPalette.gray[9] }}>{createdAt}</Text>
             </Flex>
-          </Flex>
-          <Flex gap={'2'} align={'center'}>
-            {/* TODO: define ICON's here */}
-            {/* <IconButton size={'3'} radius='full' onClick={() => setModalState({ isOpen: true, key: 'remove' })}>
-              delete
-            </IconButton> */}
-            <IconButton size={'3'} style={{ borderRadius: 40 }}>
-              <Chart />
-            </IconButton>
           </Flex>
         </Flex>
         <Text {...typoVariant.paragraph1} style={{ color: colorPalette.gray[11] }}>
@@ -117,9 +122,9 @@ const CommentCard: React.FC<CommentCardProps> = (props: CommentCardProps) => {
             <Check />
             <Text {...typoVariant.body3}>تایید و انتشار</Text>
           </Button>
-          <Button size={'3'} colorVariant='BLACK' onClick={() => setModalState({ isOpen: true, key: 'info' })}>
-            <Text {...typoVariant.body3}>اطلاعات بیشتر</Text>
-          </Button>
+          <IconButton size={'3'} radius='full' colorVariant='PINK' onClick={() => setModalState({ isOpen: true, key: 'remove' })}>
+            <Trash />
+          </IconButton>
         </Flex>
       </Grid>
 

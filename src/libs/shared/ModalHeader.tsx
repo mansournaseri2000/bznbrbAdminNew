@@ -8,7 +8,7 @@ import { styled } from 'styled-components';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
-import { Box, Flex, IconButton, Text } from '../primitives';
+import { Flex, IconButton, Text } from '../primitives';
 
 type Props = {
   title: string;
