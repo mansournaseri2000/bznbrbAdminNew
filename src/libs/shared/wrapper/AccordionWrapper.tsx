@@ -5,13 +5,17 @@ import React, { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import styled from 'styled-components';
 
-import { Flex, Grid, Text } from '@/libs/primitives';
-import { TriangleUp } from '@/public/icon';
+import { Button, Flex, Grid, IconButton, Text } from '@/libs/primitives';
+import { Pencil, TriangleUp } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
 type AccordionWrapperProps = {
   hero: string;
+  withEdit?: boolean;
+  withButton?: boolean;
+  onEdit?: () => void;
+  onButtonSubmit?: () => void;
   children: React.ReactNode;
 };
 
@@ -21,6 +25,7 @@ const containerVariants: Variants = {
 };
 
 const AccordionWrapper = (props: AccordionWrapperProps) => {
+  const { hero, children, withEdit = false, withButton = false, onEdit, onButtonSubmit } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleAccordion = () => {
@@ -29,16 +34,35 @@ const AccordionWrapper = (props: AccordionWrapperProps) => {
   return (
     <Wrapper isOpen={isOpen}>
       <Flex className='style' width={'100%'} justify={'between'} align={'center'} p={'8px 16px'} onClick={toggleAccordion}>
-        <Text {...typoVariant.title2} style={{ color: colorPalette.gray[11] }}>
-          {props.hero}
-        </Text>
-        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Triangle />
-        </motion.div>
+        <Flex gap={'2'} align={'center'}>
+          <Text {...typoVariant.title2} style={{ color: colorPalette.gray[11] }}>
+            {hero}
+          </Text>
+          {withButton && (
+            <IconButton variant='surface' onClick={onEdit}>
+              <Pencil />
+            </IconButton>
+          )}
+        </Flex>
+        <Flex align={'center'} gap={'4'}>
+          {withButton && (
+            <Button size={'3'} variant='soft' onClick={onButtonSubmit}>
+              <Text {...typoVariant.body1}>افزودن ویژگی</Text>
+            </Button>
+          )}
+          {withEdit && (
+            <IconButton variant='surface' size={'3'} onClick={onEdit}>
+              <Pencil />
+            </IconButton>
+          )}
+          <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }} style={{ width: 32, height: 32, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Triangle />
+          </motion.div>
+        </Flex>
       </Flex>
       <motion.div variants={containerVariants} initial='closed' animate={isOpen ? 'open' : 'closed'} transition={{ duration: 0.3 }} style={{ overflow: 'hidden' }} layout>
         <Grid gap={'16px'} p={'24px 16px 16px 16px'}>
-          {props.children}
+          {children}
         </Grid>
       </motion.div>
     </Wrapper>

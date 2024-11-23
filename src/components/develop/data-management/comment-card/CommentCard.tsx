@@ -31,7 +31,7 @@ const CommentCard = (props: Props) => {
    */
   const { imageSrc, name, createAt, comment, like, dislike } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const MAX_CHARACTERS = 100;
+  const MAX_CHARACTERS = 300;
   /**
    * hooks and methods
    * _______________________________________________________________________________
