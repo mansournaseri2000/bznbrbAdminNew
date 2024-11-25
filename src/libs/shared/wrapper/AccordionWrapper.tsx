@@ -14,8 +14,8 @@ type AccordionWrapperProps = {
   hero: string;
   withEdit?: boolean;
   withButton?: boolean;
-  onEdit?: () => void;
-  onButtonSubmit?: () => void;
+  onEdit?: (e: any) => void;
+  onButtonSubmit?: (e: any) => void;
   children: React.ReactNode;
 };
 

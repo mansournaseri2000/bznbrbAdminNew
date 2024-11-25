@@ -18,7 +18,7 @@ export const sidebarOptions = [
     type: 'expand',
     items: [
       { text: 'مدیریت دسته بندی ها ', path: '/additional-detail/categories' },
-      { text: 'مدیریت تگ ها ', path: '/additional-detail/tags' },
+
       { text: 'مدیریت ویژگی ها', path: '/additional-detail/features' },
     ],
   },

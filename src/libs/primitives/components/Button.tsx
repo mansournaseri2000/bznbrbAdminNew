@@ -125,7 +125,7 @@ const ButtonStyle = styled(Button)<{ colorVariant: color }>`
     outline: none;
     border-radius: 12px;
 
-    background-color: ${({ colorVariant }) => (colorVariant === 'BLUE' ? colorPalette.blue[3] : colorVariant === 'BLACK' ? colorPalette.gray[2] : colorVariant === 'PINK' && colorPalette.pink[2])};
+    background-color: ${({ colorVariant }) => (colorVariant === 'BLUE' ? colorPalette.blue[2] : colorVariant === 'BLACK' ? colorPalette.gray[2] : colorVariant === 'PINK' && colorPalette.pink[2])};
 
     span {
       color: ${({ colorVariant }) => (colorVariant === 'BLUE' ? colorPalette.blue[11] : colorVariant === 'BLACK' ? colorPalette.gray[11] : colorVariant === 'PINK' && colorPalette.pink[11])};
