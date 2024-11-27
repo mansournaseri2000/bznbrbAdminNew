@@ -157,6 +157,7 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
             metakeyword: '',
 
             cost: placeData?.cost,
+
             renown: placeData?.renown,
             rating: placeData?.rating,
             trip_value: placeData?.trip_value,

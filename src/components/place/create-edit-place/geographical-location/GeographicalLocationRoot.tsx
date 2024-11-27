@@ -4,10 +4,11 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
 
-import { Grid, SelectItem, SelectRoot, TextField } from '@/libs/primitives';
+import { Flex, Grid, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
+import { Divider } from '@/libs/shared';
+import { colorPalette } from '@/theme';
+import { typoVariant } from '@/theme/typo-variants';
 import { Province } from '@/types/place/place-constant';
-
-import Container from '../Container';
 
 const PlaceMap = dynamic(() => import('./PlaceMap'), { ssr: false });
 
@@ -51,72 +52,77 @@ const GeographicalLocationRoot = ({ province }: Props) => {
    * _______________________________________________________________________________
    */
   return (
-    <Container height='auto' title='موقعیت جغرافیایی'>
-      <Grid gap={'16px'} height={'max-content'}>
-        <Grid columns={'3'} gap={'20px'}>
-          <Controller
-            name='provinceId'
-            control={control}
-            render={({ field }) => (
-              <SelectRoot
-                {...field}
-                value={String(provinceId)}
-                onValueChange={val => {
-                  field.onChange(val);
-                  setValue('cityID', '');
-                }}
-                placeholder={'استان'}
-                lable='استان'
-              >
-                {province.map(item => {
-                  return (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
-                  );
-                })}
-              </SelectRoot>
-            )}
-          />
-          <Controller
-            name='cityID'
-            control={control}
-            render={({ field }) => (
-              <SelectRoot
-                {...field}
-                value={String(cityID)}
-                onValueChange={val => {
-                  field.onChange(val);
-                }}
-                placeholder={'شهر'}
-                lable='شهر'
-              >
-                {city?.map(item => {
-                  return (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
-                  );
-                })}
-              </SelectRoot>
-            )}
-          />
+    <Grid gap={'16px'} height={'max-content'}>
+      <Grid columns={'3'} gap={'20px'}>
+        <Controller
+          name='provinceId'
+          control={control}
+          render={({ field }) => (
+            <SelectRoot
+              {...field}
+              value={String(provinceId)}
+              onValueChange={val => {
+                field.onChange(val);
+                setValue('cityID', '');
+              }}
+              placeholder={'استان'}
+            >
+              {province.map(item => {
+                return (
+                  <SelectItem key={item.id} value={String(item.id)}>
+                    {item.name}
+                  </SelectItem>
+                );
+              })}
+            </SelectRoot>
+          )}
+        />
+        <Controller
+          name='cityID'
+          control={control}
+          render={({ field }) => (
+            <SelectRoot
+              {...field}
+              value={String(cityID)}
+              onValueChange={val => {
+                field.onChange(val);
+              }}
+              placeholder={'شهرستان'}
+            >
+              {city?.map(item => {
+                return (
+                  <SelectItem key={item.id} value={String(item.id)}>
+                    {item.name}
+                  </SelectItem>
+                );
+              })}
+            </SelectRoot>
+          )}
+        />
 
-          <Controller name='area' control={control} render={({ field }) => <TextField style={{ marginTop: '-7px' }} title='محله' {...field} placeholder='محله' aria-label='textFiled' />} />
-        </Grid>
-        <Grid columns={'3'} gap={'20px'}>
-          <Controller name='tell' control={control} render={({ field }) => <TextField title='تلفن' {...field} placeholder='تلفن' aria-label='textFiled' />} />
-          <Controller name='website' control={control} render={({ field }) => <TextField title='وب سایت' {...field} placeholder='وب سایت' aria-label='textFiled' />} />
-          <Controller name='email' control={control} render={({ field }) => <TextField title='ایمیل' {...field} placeholder='ایمیل' aria-label='textFiled' />} />
-        </Grid>
-        <Controller name='address' control={control} render={({ field }) => <TextField {...field} title='آدرس متنی' placeholder='آدرس متنی' aria-label='textFiled' />} />
-        <Grid gap={'24px'} columns={'2'}>
-          <Controller name='lng' control={control} render={({ field }) => <TextField type='number' {...field} title='طول جغرافیایی' placeholder='طول جغرافیایی' aria-label='textFiled' />} />
-          <Controller name='lat' control={control} render={({ field }) => <TextField {...field} type='number' title='عرض جغرافیایی' placeholder='عرض جغرافیایی' aria-label='textFiled' />} />
-        </Grid>
-        <PlaceMap location={[Number(lat), Number(lng)]} />
+        <Controller name='area' control={control} render={({ field }) => <TextField style={{ marginTop: '-7px' }} {...field} placeholder='شهر' aria-label='textFiled' />} />
       </Grid>
-    </Container>
+      <Grid columns={'3'} gap={'20px'}>
+        <Controller name='tell' control={control} render={({ field }) => <TextField {...field} placeholder='تلفن' aria-label='textFiled' />} />
+        <Controller name='website' control={control} render={({ field }) => <TextField {...field} placeholder='وب سایت' aria-label='textFiled' />} />
+        <Controller name='email' control={control} render={({ field }) => <TextField {...field} placeholder='ایمیل' aria-label='textFiled' />} />
+      </Grid>
+      <Controller name='address' control={control} render={({ field }) => <TextField {...field} placeholder='آدرس متنی' aria-label='textFiled' />} />
+      <Grid gap={'24px'} columns={'2'}>
+        <Controller name='lng' control={control} render={({ field }) => <TextField type='number' {...field} placeholder='طول جغرافیایی' aria-label='textFiled' />} />
+        <Controller name='lat' control={control} render={({ field }) => <TextField {...field} type='number' placeholder='عرض جغرافیایی' aria-label='textFiled' />} />
+      </Grid>
+      <PlaceMap location={[Number(lat), Number(lng)]} />
+      <Divider style={{ color: colorPalette.gray[6], marginTop: 12 }} />
+      <Flex direction={'column'} gap={'28px'}>
+        <Text {...typoVariant.title2} style={{ color: colorPalette.gray[12], fontWeight: 700 }}>
+          چجوری بریم
+        </Text>
+        <Flex width={'100%'} height={'208px'} align={'center'} justify={'center'} style={{ border: '2px solid red' }}>
+          buttons & text area
+        </Flex>
+      </Flex>
+    </Grid>
   );
 };
 

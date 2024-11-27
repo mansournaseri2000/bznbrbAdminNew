@@ -10,6 +10,7 @@ import { styled } from 'styled-components';
 
 import { placeWorkTimeSchedule } from '@/constants/place';
 import { Flex, Grid, Text } from '@/libs/primitives';
+import CustomTimePicker from '@/libs/shared/CustomTimePicker';
 import { timeStringToDate } from '@/libs/utils';
 import { Boxshadow, colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
@@ -69,33 +70,33 @@ export const serializePlaceWorkTimes = (schedule: PlaceWorkTimeSchedule[], newDa
             { time: '00:00', key: 'secondCloseTime', faKey: 'ساعت پایان دوم' },
           ]
         : matchingData
-          ? [
-              {
-                time: matchingData.firstOpenTime || '00:00', // Default to '00:00' if null
-                key: 'firstOpenTime',
-                faKey: 'ساعت شروع اول',
-              },
-              {
-                time: matchingData.secondOpenTime || '00:00', // Default to '00:00' if null
-                key: 'secondOpenTime',
-                faKey: 'ساعت شروع دوم',
-              },
-              {
-                time: matchingData.firstCloseTime || '00:00', // Default to '00:00' if null
-                key: 'firstCloseTime',
-                faKey: 'ساعت پایان اول',
-              },
-              {
-                time: matchingData.secondCloseTime || '00:00', // Default to '00:00' if null
-                key: 'secondCloseTime',
-                faKey: 'ساعت پایان دوم',
-              },
-            ]
-          : day.timing.map(timeSlot => ({
-              time: timeSlot.time || '00:00', // Default to '00:00' if null in original timing data
-              key: timeSlot.key,
-              faKey: timeSlot.faKey,
-            }));
+        ? [
+            {
+              time: matchingData.firstOpenTime || '00:00', // Default to '00:00' if null
+              key: 'firstOpenTime',
+              faKey: 'ساعت شروع اول',
+            },
+            {
+              time: matchingData.secondOpenTime || '00:00', // Default to '00:00' if null
+              key: 'secondOpenTime',
+              faKey: 'ساعت شروع دوم',
+            },
+            {
+              time: matchingData.firstCloseTime || '00:00', // Default to '00:00' if null
+              key: 'firstCloseTime',
+              faKey: 'ساعت پایان اول',
+            },
+            {
+              time: matchingData.secondCloseTime || '00:00', // Default to '00:00' if null
+              key: 'secondCloseTime',
+              faKey: 'ساعت پایان دوم',
+            },
+          ]
+        : day.timing.map(timeSlot => ({
+            time: timeSlot.time || '00:00', // Default to '00:00' if null in original timing data
+            key: timeSlot.key,
+            faKey: timeSlot.faKey,
+          }));
 
     return {
       dayOfWeek: day.dayOfWeek,
@@ -168,66 +169,62 @@ const TravelTime = () => {
    * _______________________________________________________________________________
    */
   return (
-    <Container height='auto' title='کی برم ؟'>
-      <Root gap={'16px'}>
-        {placeWorkTimeSchedule.map(item => {
-          const dayItem = schedule.filter((v: { dayOfWeek: string }) => v.dayOfWeek === item.dayOfWeek)[0];
+    <Root gap={'16px'}>
+      {placeWorkTimeSchedule.map(item => {
+        const dayItem = schedule.filter((v: { dayOfWeek: string }) => v.dayOfWeek === item.dayOfWeek)[0];
 
-          return (
-            <Grid
-              p={'24px'}
-              gap={'16px'}
-              key={item.dayOfWeek}
-              style={{
-                borderRadius: '8px',
-                backgroundColor: '#fff',
-                boxShadow: Boxshadow.shadow1,
-              }}
-            >
-              <Flex justify={'between'} align={'center'}>
-                <Text>{item.faDay}</Text>
-              </Flex>
-              <Grid gap={'34px'} columns={'2'}>
-                <RadioGroup.Root defaultValue={dayItem ? dayItem.type : 'TIMED'} name={`schedule-${item.dayOfWeek}`} onValueChange={value => handleStatusChange(item.dayOfWeek, value)}>
-                  <Flex gap={'16px'}>
-                    {item.type.map(statusItem => (
-                      <RadioGroup.Item key={statusItem.key} value={statusItem.key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        {statusItem.value}
-                      </RadioGroup.Item>
-                    ))}
-                  </Flex>
-                </RadioGroup.Root>
-                <Grid columns={'2'} gap={'16px'}>
-                  {dayItem.timing.map((v: any) => {
-                    return (
-                      <Grid gap={'8px'} key={v.key}>
-                        <Text {...typoVariant.description1}>{v.faKey}</Text>
-                        <DatePicker
-                          key={v.key}
-                          inputMode='none'
-                          inputClass='input-class'
-                          placeholder='ساعت'
-                          disabled={(dayItem && dayItem.type === 'CLOSED') || dayItem.type === 'OPEN'}
-                          value={timeStringToDate(v.time)}
-                          onChange={dateObject => {
-                            if (dateObject) {
-                              handleTiming(item.dayOfWeek, dateObject.format('HH:mm'), v.key);
-                            }
-                          }}
-                          disableDayPicker
-                          format='HH:mm'
-                          plugins={[<TimePicker hideSeconds format='HH:mm' key={v.key} />]}
-                        />
-                      </Grid>
-                    );
-                  })}
-                </Grid>
+        return (
+          <Grid
+            p={'24px'}
+            gap={'16px'}
+            key={item.dayOfWeek}
+            style={{
+              borderBottom: `1px solid ${colorPalette.gray[6]}`,
+            }}
+          >
+            <Flex justify={'between'} align={'center'}>
+              <Text>{item.faDay}</Text>
+            </Flex>
+            <Grid gap={'34px'} columns={'2'}>
+              <RadioGroup.Root defaultValue={dayItem ? dayItem.type : 'TIMED'} name={`schedule-${item.dayOfWeek}`} onValueChange={value => handleStatusChange(item.dayOfWeek, value)}>
+                <Flex gap={'6'}>
+                  {item.type.map(statusItem => (
+                    <RadioGroup.Item key={statusItem.key} value={statusItem.key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      {statusItem.value}
+                    </RadioGroup.Item>
+                  ))}
+                </Flex>
+              </RadioGroup.Root>
+              <Grid columns={'2'} gap={'16px'}>
+                {dayItem.timing.map((v: any) => {
+                  return (
+                    <Grid gap={'8px'} key={v.key}>
+                      <Text {...typoVariant.description1}>{v.faKey}</Text>
+                      <DatePicker
+                        key={v.key}
+                        inputMode='none'
+                        inputClass='input-class'
+                        placeholder='ساعت'
+                        disabled={(dayItem && dayItem.type === 'CLOSED') || dayItem.type === 'OPEN'}
+                        value={timeStringToDate(v.time)}
+                        onChange={dateObject => {
+                          if (dateObject) {
+                            handleTiming(item.dayOfWeek, dateObject.format('HH:mm'), v.key);
+                          }
+                        }}
+                        disableDayPicker
+                        format='HH:mm'
+                        plugins={[<TimePicker hideSeconds format='HH:mm' key={v.key} />]}
+                      />
+                    </Grid>
+                  );
+                })}
               </Grid>
             </Grid>
-          );
-        })}
-      </Root>
-    </Container>
+          </Grid>
+        );
+      })}
+    </Root>
   );
 };
 

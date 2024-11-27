@@ -40,6 +40,8 @@ const CreateAndEditPlacePage = ({ params }: { params: { slug: string } }) => {
   const { data: constantData } = constantResult;
   const { data: placeData, isLoading: placeIsLoading } = editPlaceResult;
 
+  console.log('PlaceData', placeData);
+
   if (!constantData || placeIsLoading) return <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />;
 
   /**

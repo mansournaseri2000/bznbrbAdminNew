@@ -248,7 +248,7 @@ export const categoriesConstants = [
   },
   {
     id: 6,
-    name:"گردشگری مذهبی",
+    name: 'گردشگری مذهبی',
   },
   {
     id: 7,

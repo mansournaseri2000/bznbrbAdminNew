@@ -8,9 +8,8 @@ import { RadioGroup, Slider } from '@radix-ui/themes';
 import { categoriesConstants, cost, renownLevel } from '@/constants/place';
 import { Flex, Grid, Text, TextField } from '@/libs/primitives';
 import { Divider } from '@/libs/shared';
+import { colorPalette } from '@/theme';
 import { Category, Season, TripData, TripLimitation } from '@/types/place/place-constant';
-
-import Container from '../Container';
 
 /**
  * props
@@ -109,11 +108,203 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
    * _______________________________________________________________________________
    */
   return (
-    <Container height='auto' title='تحلیل بزنیم بیرون'>
-      <Grid pb={'24px'} gap={'24px'} height={'max-content'}>
-        {/* AmountOfCashCost _______________________________________________________________________________*/}
-        <Grid gap={'24px'} height={'max-content'}>
-          <Text>میزان هزینه نقدی</Text>
+    <Grid pb={'24px'} gap={'24px'} height={'max-content'}>
+      {/* AmountOfCashCost _______________________________________________________________________________*/}
+      <Grid gap={'24px'} height={'max-content'}>
+        <Text>میزان هزینه نقدی</Text>
+        <RadioGroup.Root
+          defaultValue={costValue}
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: '24px',
+          }}
+          name='cost'
+          onValueChange={value => {
+            setValue('cost', value);
+          }}
+        >
+          {cost.map(item => {
+            return (
+              <RadioGroup.Item key={item.id} value={item.id} style={{ cursor: 'pointer' }}>
+                <Text>{item.name}</Text>
+              </RadioGroup.Item>
+            );
+          })}
+        </RadioGroup.Root>
+        <Divider style={{ color: colorPalette.gray[6] }} />
+      </Grid>
+
+      {/* DegreeOfFame _______________________________________________________________________________*/}
+      <Grid gap={'24px'} height={'max-content'}>
+        <Text>میزان شهرت</Text>
+        <RadioGroup.Root
+          defaultValue={renownValue}
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: '24px',
+          }}
+          name='renown'
+          onValueChange={value => {
+            setValue('renown', value);
+          }}
+        >
+          {renownLevel.map(item => {
+            return (
+              <RadioGroup.Item key={item.id} value={String(item.id)} style={{ cursor: 'pointer' }}>
+                <Text>{item.name}</Text>
+              </RadioGroup.Item>
+            );
+          })}
+        </RadioGroup.Root>
+        <Divider style={{ color: colorPalette.gray[6] }} />
+      </Grid>
+
+      <Grid columns={'2'} gap={'24px'}>
+        <Flex direction={'column'} gap={'16px'}>
+          <Text>میزان اهمیت نقطه</Text>
+          <Flex width={'50%'} gap={'10px'} align={'center'}>
+            <Slider defaultValue={[0]} value={[trip_value]} onValueChange={value => setValue('trip_value', value)} max={100} step={1} style={{ width: '50%' }} />
+            <Text>{trip_value ?? 0}%</Text>
+          </Flex>
+        </Flex>
+        <Flex direction={'column'} gap={'16px'}>
+          <Text>رتبه بندی</Text>
+          <Flex width={'50%'} gap={'10px'} align={'center'}>
+            <Slider defaultValue={[0]} value={[rating]} onValueChange={value => setValue('rating', value)} max={100} step={1} style={{ width: '100%' }} />
+            <Text>{rating ?? 0}%</Text>
+          </Flex>
+        </Flex>
+      </Grid>
+
+      {/* TypeOfTrip _______________________________________________________________________________*/}
+      <Grid gap={'16px'}>
+        <Text>نوع سفر</Text>
+        <Grid gap={'0px 30px'} columns={'2'}>
+          {tripDatas.map(trip => {
+            const tripType = TripTypesItems.find((item: { tripTypeId: number }) => item.tripTypeId === trip.id);
+
+            return (
+              <Grid gap={'8px'} key={trip.id} mb='20px'>
+                <Text as='label'>{trip.name}</Text>
+                <Flex width={'50%'} gap={'10px'} align={'center'}>
+                  <Slider
+                    defaultValue={[tripType?.score ?? 0]}
+                    value={[tripType?.score ?? 0]}
+                    onValueChange={value => handleSliderChange(trip.id, Number(value))}
+                    max={100}
+                    step={1}
+                    style={{ width: '100%' }}
+                  />
+                  <Text>{tripType?.score ?? 0}%</Text>
+                </Flex>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Grid>
+      {/* PlaceCategories _______________________________________________________________________________*/}
+      <Divider style={{ color: colorPalette.gray[6] }} />
+      <Grid gap={'16px'}>
+        <Text>دسته‌بندی‌ها</Text>
+        <Grid gap={'0px 30px'} columns={'2'}>
+          {categoriesConstants.map(trip => {
+            const category = placeCategoryItems?.find((item: { categoryId: number }) => item.categoryId === trip.id);
+            return (
+              <Grid gap={'8px'} key={trip.id} mb='20px'>
+                <Text as='label'>{trip.name}</Text>
+                <Flex width={'50%'} gap={'10px'} align={'center'}>
+                  <Slider
+                    defaultValue={[category?.score ?? 0]}
+                    value={[category?.score ?? 0]}
+                    onValueChange={value => handleCategorySliderChange(trip.id, Number(value))}
+                    max={100}
+                    step={1}
+                    style={{ width: '100%' }}
+                  />
+                  <Text>{category?.score ?? 0}%</Text>
+                </Flex>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Grid>
+
+      {/* <Grid gap={'16px'} maxWidth={'50%'}>
+        <Text>مدت زمان بازدید از این جا‌ذبه</Text>
+        <Controller name='suggested_time' control={control} render={({ field }) => <TextField {...field} placeholder='مدت زمان بازدید از این جا‌ذبه' aria-label='' />} />
+      </Grid> */}
+
+      {/* tripSeason_______________________________________________________________________________*/}
+      <Grid gap={'16px'}>
+        <Text>بهترین فصل , زمان شروع و مدت اقامت در هر فصل</Text>
+        <Grid columns={'1'}>
+          <Grid gap={'0px 30px'} columns={'1'}>
+            {seasons.map(trip => {
+              const tripSeason = placeTripSeasonsItems?.find((item: { tripSeasonId: number }) => item.tripSeasonId === trip.id);
+
+              return (
+                <Grid columns={'2'} gap={'24px'} key={trip.id} mb='20px'>
+                  <Grid>
+                    <Text as='label'>{trip.name}</Text>
+                    <Flex width={'50%'} gap={'10px'} align={'center'}>
+                      <Slider
+                        defaultValue={[tripSeason?.score ?? 0]}
+                        value={[tripSeason?.score ?? 0]}
+                        onValueChange={value => handlePlaceTripSeasonsSliderChange(trip.id, Number(value))}
+                        max={100}
+                        step={1}
+                        style={{ width: '100%' }}
+                      />
+                      <Text>{tripSeason?.score ?? 0}%</Text>
+                    </Flex>
+                  </Grid>
+                  <Grid style={{ border: '2px solid red' }}>
+                    {
+                      <TextField
+                        type='number'
+                        value={tripSeason?.timing}
+                        placeholder={'مدت اقامت پیشنهادی'}
+                        onChange={e => handlePlaceTripSeasonsTimingChange(tripSeason.tripSeasonId, Number(e.target.value))}
+                      />
+                    }
+                  </Grid>
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Grid>
+      </Grid>
+      <Divider style={{ color: colorPalette.gray[6] }} />
+      {/* tripLimitationsItem _______________________________________________________________________________*/}
+
+      <Grid gap={'16px'}>
+        <Text>محدودیت ها</Text>
+        <Grid gap={'0px 30px'} columns={'2'}>
+          {tripLimitations.map(trip => {
+            const tripLimitationsItem = tripLimitationsItems?.find((item: { tripLimitationId: number }) => item.tripLimitationId === trip.id);
+            return (
+              <Grid gap={'8px'} key={trip.id} mb='20px'>
+                <Text as='label'>{trip.name}</Text>
+                <Flex width={'50%'} gap={'10px'} align={'center'}>
+                  <Slider
+                    defaultValue={[tripLimitationsItem?.score ?? 0]}
+                    value={[tripLimitationsItem?.score ?? 0]}
+                    onValueChange={value => handleTripLimitationsSliderChange(trip.id, Number(value))}
+                    max={100}
+                    step={1}
+                    style={{ width: '100%' }}
+                  />
+                  <Text>{tripLimitationsItem?.score ?? 0}%</Text>
+                </Flex>
+              </Grid>
+            );
+          })}
+        </Grid>
+        <Grid p={'4'} style={{ border: '2px solid red' }}>
           <RadioGroup.Root
             defaultValue={costValue}
             style={{
@@ -135,178 +326,9 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
               );
             })}
           </RadioGroup.Root>
-          <Divider />
-        </Grid>
-
-        {/* DegreeOfFame _______________________________________________________________________________*/}
-        <Grid gap={'24px'} height={'max-content'}>
-          <Text>میزان شهرت</Text>
-          <RadioGroup.Root
-            defaultValue={renownValue}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: '24px',
-            }}
-            name='renown'
-            onValueChange={value => {
-              setValue('renown', value);
-            }}
-          >
-            {renownLevel.map(item => {
-              return (
-                <RadioGroup.Item key={item.id} value={String(item.id)} style={{ cursor: 'pointer' }}>
-                  <Text>{item.name}</Text>
-                </RadioGroup.Item>
-              );
-            })}
-          </RadioGroup.Root>
-          <Divider />
-        </Grid>
-
-        <Grid columns={'2'} gap={'24px'}>
-          <Flex direction={'column'} gap={'16px'}>
-            <Text>میزان اهمیت نقطه</Text>
-            <Flex gap={'10px'} align={'center'}>
-              <Text>{trip_value ?? 0}%</Text>
-              <Slider defaultValue={[0]} value={[trip_value]} onValueChange={value => setValue('trip_value', value)} max={100} step={1} style={{ width: '100%' }} />
-            </Flex>
-          </Flex>
-          <Flex direction={'column'} gap={'16px'}>
-            <Text>رتبه بندی</Text>
-            <Flex gap={'10px'} align={'center'}>
-              <Text>{rating ?? 0}%</Text>
-              <Slider defaultValue={[0]} value={[rating]} onValueChange={value => setValue('rating', value)} max={100} step={1} style={{ width: '100%' }} />
-            </Flex>
-          </Flex>
-        </Grid>
-
-        {/* TypeOfTrip _______________________________________________________________________________*/}
-        <Grid gap={'16px'}>
-          <Text>نوع سفر</Text>
-          <Grid gap={'0px 30px'} columns={'2'}>
-            {tripDatas.map(trip => {
-              const tripType = TripTypesItems.find((item: { tripTypeId: number }) => item.tripTypeId === trip.id);
-
-              return (
-                <Grid gap={'8px'} key={trip.id} mb='20px'>
-                  <Text as='label'>{trip.name}</Text>
-                  <Flex gap={'10px'} align={'center'}>
-                    <Text>{tripType?.score ?? 0}%</Text>
-                    <Slider
-                      defaultValue={[tripType?.score ?? 0]}
-                      value={[tripType?.score ?? 0]}
-                      onValueChange={value => handleSliderChange(trip.id, Number(value))}
-                      max={100}
-                      step={1}
-                      style={{ width: '100%' }}
-                    />
-                  </Flex>
-                </Grid>
-              );
-            })}
-          </Grid>
-        </Grid>
-        {/* PlaceCategories _______________________________________________________________________________*/}
-        <Grid gap={'16px'}>
-          <Text>دسته‌بندی‌ها</Text>
-          <Grid gap={'0px 30px'} columns={'2'}>
-            {categoriesConstants.map(trip => {
-              const category = placeCategoryItems?.find((item: { categoryId: number }) => item.categoryId === trip.id);
-              return (
-                <Grid gap={'8px'} key={trip.id} mb='20px'>
-                  <Text as='label'>{trip.name}</Text>
-                  <Flex gap={'10px'} align={'center'}>
-                    <Text>{category?.score ?? 0}%</Text>
-                    <Slider
-                      defaultValue={[category?.score ?? 0]}
-                      value={[category?.score ?? 0]}
-                      onValueChange={value => handleCategorySliderChange(trip.id, Number(value))}
-                      max={100}
-                      step={1}
-                      style={{ width: '100%' }}
-                    />
-                  </Flex>
-                </Grid>
-              );
-            })}
-          </Grid>
-        </Grid>
-
-        <Grid gap={'16px'} maxWidth={'50%'}>
-          <Text>مدت زمان بازدید از این جا‌ذبه</Text>
-          <Controller name='suggested_time' control={control} render={({ field }) => <TextField {...field} placeholder='مدت زمان بازدید از این جا‌ذبه' aria-label='' />} />
-        </Grid>
-
-        {/* tripSeasond _______________________________________________________________________________*/}
-        <Grid gap={'16px'}>
-          <Text>بهترین فصل , زمان شروع و مدت اقامت در هر فصل</Text>
-          <Grid columns={'1'}>
-            <Grid gap={'0px 30px'} columns={'1'}>
-              {seasons.map(trip => {
-                const tripSeasond = placeTripSeasonsItems?.find((item: { tripSeasonId: number }) => item.tripSeasonId === trip.id);
-
-                return (
-                  <Grid columns={'2'} gap={'24px'} key={trip.id} mb='20px'>
-                    <Grid>
-                      <Text as='label'>{trip.name}</Text>
-                      <Flex gap={'10px'} align={'center'}>
-                        <Text>{tripSeasond?.score ?? 0}%</Text>
-                        <Slider
-                          defaultValue={[tripSeasond?.score ?? 0]}
-                          value={[tripSeasond?.score ?? 0]}
-                          onValueChange={value => handlePlaceTripSeasonsSliderChange(trip.id, Number(value))}
-                          max={100}
-                          step={1}
-                          style={{ width: '100%' }}
-                        />
-                      </Flex>
-                    </Grid>
-                    <Grid>
-                      {
-                        <TextField
-                          type='number'
-                          value={tripSeasond?.timing}
-                          placeholder={'مدت اقامت پیشنهادی'}
-                          onChange={e => handlePlaceTripSeasonsTimingChange(tripSeasond.tripSeasonId, Number(e.target.value))}
-                        />
-                      }
-                    </Grid>
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </Grid>
-        </Grid>
-
-        {/* tripLimitationsItem _______________________________________________________________________________*/}
-        <Grid gap={'16px'}>
-          <Text>محدودیت ها</Text>
-          <Grid gap={'0px 30px'} columns={'2'}>
-            {tripLimitations.map(trip => {
-              const tripLimitationsItem = tripLimitationsItems?.find((item: { tripLimitationId: number }) => item.tripLimitationId === trip.id);
-              return (
-                <Grid gap={'8px'} key={trip.id} mb='20px'>
-                  <Text as='label'>{trip.name}</Text>
-                  <Flex gap={'10px'} align={'center'}>
-                    <Text>{tripLimitationsItem?.score ?? 0}%</Text>
-                    <Slider
-                      defaultValue={[tripLimitationsItem?.score ?? 0]}
-                      value={[tripLimitationsItem?.score ?? 0]}
-                      onValueChange={value => handleTripLimitationsSliderChange(trip.id, Number(value))}
-                      max={100}
-                      step={1}
-                      style={{ width: '100%' }}
-                    />
-                  </Flex>
-                </Grid>
-              );
-            })}
-          </Grid>
         </Grid>
       </Grid>
-    </Container>
+    </Grid>
   );
 };
 
