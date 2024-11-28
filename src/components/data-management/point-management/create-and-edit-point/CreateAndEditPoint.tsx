@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { createPlace, editPlace } from '@/api/place';
-import { AnalysisRoot, FeaturesAndFacilities, GeographicalLocationRoot, PlaceInfo } from '@/components/place';
+import { AnalysisRoot, FeaturesAndFacilities, GeographicalLocationRoot, PlaceInfo, SeoSettingsRoot } from '@/components/place';
 import { fomrData, placeCategories, placeTripLimitations, placeTripSeasons, placeTripTypes } from '@/components/place/create-edit-place/defaultValues';
 import Images from '@/components/place/create-edit-place/Images';
 import { pointTypeOptions } from '@/constants/data-management';
@@ -329,7 +329,9 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
               Categories={placeConstant?.categories ? placeConstant.categories : []}
             />
           </AccordionWrapper>
-          <AccordionWrapper hero='تنظیمات SEO'> </AccordionWrapper>
+          <AccordionWrapper hero='تنظیمات SEO'>
+            <SeoSettingsRoot />
+          </AccordionWrapper>
           <AccordionWrapper hero='کی برم ؟'>
             <TravelTime />
           </AccordionWrapper>

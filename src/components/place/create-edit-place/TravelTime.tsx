@@ -10,12 +10,9 @@ import { styled } from 'styled-components';
 
 import { placeWorkTimeSchedule } from '@/constants/place';
 import { Flex, Grid, Text } from '@/libs/primitives';
-import CustomTimePicker from '@/libs/shared/CustomTimePicker';
 import { timeStringToDate } from '@/libs/utils';
 import { Boxshadow, colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-
-import Container from './Container';
 
 /**
  * props

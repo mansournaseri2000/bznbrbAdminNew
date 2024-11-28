@@ -3,10 +3,13 @@
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { Button, Flex, Grid, Modal, Text, TextArea, TextField } from '@/libs/primitives';
-import { Divider } from '@/libs/shared';
+import styled from 'styled-components';
 
-import Container from '../Container';
+import { Button, Flex, Grid, IconButton, Modal, Text, TextArea, TextField } from '@/libs/primitives';
+import { Divider } from '@/libs/shared';
+import { Close } from '@/public/icon';
+import { colorPalette } from '@/theme';
+import { typoVariant } from '@/theme/typo-variants';
 
 export const processStringToTags = (inputString: string | undefined): { label: string; id: number }[] => {
   if (typeof inputString !== 'string') {
@@ -84,88 +87,155 @@ const SeoSettingsRoot = () => {
    */
   return (
     <>
-      <Container height='auto' title='تنظیمات SEO'>
-        <Grid pb={'16px'} gap={'24px'}>
-          <Button
-            type='button'
-            onClick={() => {
-              setKey('tag');
-              setIsOpen(true);
-            }}
-            style={{ width: 'max-content' }}
-            variant='soft'
-            size={'4'}
-          >
-            <Text>افزودن تگ</Text>
-          </Button>
-          <Flex gap={'24px'} wrap={'wrap'}>
-            {tagList.map(item => {
-              return (
-                <Button
-                  type='button'
-                  onClick={() =>
-                    removeTag({
-                      id: item.id,
-                      localStore: tagList,
-                      setLocalStore: setTagList,
-                      hookformStore: 'keywords',
-                    })
-                  }
-                  key={item.id}
-                  variant='solid'
-                  size={'4'}
-                >
-                  <Text>{item.label}</Text>
-                  <Text>X</Text>
-                </Button>
-              );
-            })}
-          </Flex>
-          <Divider />
-          <Controller
-            name='meta_title'
-            control={control}
-            render={({ field }) => <TextField {...field} title='عنوان صفحه ( متا تایتل )' placeholder='عنوان صفحه ( متا تایتل )' aria-label='textFiled' />}
-          />
-          <Controller name='meta_description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات متا' title='توضیحات متا' aria-label='TextArea' />} />
-          <Divider />
-          <Button
-            type='button'
-            onClick={() => {
-              setKey('meta');
-              setIsOpen(true);
-            }}
-            style={{ width: 'max-content' }}
-            variant='soft'
-            size={'4'}
-          >
-            <Text>افزودن کلمات کلیدی ( متا ) </Text>
-          </Button>
+      <Grid pb={'16px'} gap={'24px'} style={{ border: '2px solid red' }}>
+        <Button
+          type='button'
+          onClick={() => {
+            setKey('tag');
+            setIsOpen(true);
+          }}
+          style={{ width: 'max-content' }}
+          variant='soft'
+          size={'4'}
+        >
+          <Text>افزودن تگ</Text>
+        </Button>
+        <Controller name='metakeyword' control={control} render={({ field }) => <TextField autoFocus {...field} placeholder='افزودن تگ' aria-label='textFiled' style={{ width: '50%' }} />} />
 
-          <Flex gap={'24px'} wrap={'wrap'}>
-            {metaTagList.map(item => {
-              return (
-                <Button
-                  onClick={() =>
-                    removeTag({
-                      id: item.id,
-                      localStore: metaTagList,
-                      setLocalStore: setMetaTagList,
-                      hookformStore: 'metakeywords',
-                    })
-                  }
-                  key={item.id}
-                  variant='solid'
-                  size={'4'}
-                >
-                  <Text>{item.label}</Text>
-                  <Text>X</Text>
-                </Button>
-              );
-            })}
-          </Flex>
-        </Grid>
-      </Container>
+        <Flex gap={'5'} p={'4'} wrap={'wrap'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
+          {tagList.length === 0 ? (
+            <Flex direction={'column'} gap={'5'} p={'30px 16px'}>
+              <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11], fontWeight: 500 }}>
+                هنوز تگی اضافه نشده است.
+              </Text>
+              <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
+                از فیلد بالا تگ مورد نظر خود را پیدا کنید و به لیست اضافه کنید.
+              </Text>
+            </Flex>
+          ) : (
+            tagList.length > 0 && (
+              <>
+                {tagList.map(item => {
+                  return (
+                    <Flex key={item.id} align={'center'} gap={'10px'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
+                      <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+                        {item.label}
+                      </Text>
+                      <IconButton
+                        type='button'
+                        variant='surface'
+                        onClick={() =>
+                          removeTag({
+                            id: item.id,
+                            localStore: tagList,
+                            setLocalStore: setTagList,
+                            hookformStore: 'keywords',
+                          })
+                        }
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </Flex>
+                    // <Button
+                    //   type='button'
+                    //   onClick={() =>
+                    //     removeTag({
+                    //       id: item.id,
+                    //       localStore: tagList,
+                    //       setLocalStore: setTagList,
+                    //       hookformStore: 'keywords',
+                    //     })
+                    //   }
+                    //   key={item.id}
+                    //   variant='solid'
+                    //   size={'4'}
+                    // >
+                    //   <Text>{item.label}</Text>
+                    //   <Text>x</Text>
+                    // </Button>
+                  );
+                })}
+              </>
+            )
+          )}
+        </Flex>
+
+        <Divider />
+        <Controller name='meta_title' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان صفحه ( متا تایتل )' aria-label='textFiled' />} />
+        <Controller name='meta_description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات متا' aria-label='TextArea' />} />
+        <Divider />
+        <Button
+          type='button'
+          onClick={() => {
+            setKey('meta');
+            setIsOpen(true);
+          }}
+          style={{ width: 'max-content' }}
+          variant='soft'
+          size={'4'}
+        >
+          <Text>افزودن کلمات کلیدی ( متا ) </Text>
+        </Button>
+
+        <Controller name='metakeyword' control={control} render={({ field }) => <TextField autoFocus {...field} placeholder='کلمات کلیدی ( متا )' aria-label='textFiled' style={{ width: '50%' }} />} />
+
+        <Flex gap={'5'} p={'4'} wrap={'wrap'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
+          {metaTagList.length === 0 ? (
+            <Flex direction={'column'} gap={'5'} p={'30px 16px'}>
+              <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11], fontWeight: 500 }}>
+                هنوز تگی اضافه نشده است.
+              </Text>
+              <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
+                از فیلد بالا تگ مورد نظر خود را پیدا کنید و به لیست اضافه کنید.
+              </Text>
+            </Flex>
+          ) : (
+            metaTagList.length > 0 && (
+              <>
+                {metaTagList.map(item => {
+                  return (
+                    <Flex key={item.id} align={'center'} gap={'10px'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
+                      <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+                        {item.label}
+                      </Text>
+                      <IconButton
+                        type='button'
+                        variant='surface'
+                        onClick={() =>
+                          removeTag({
+                            id: item.id,
+                            localStore: metaTagList,
+                            setLocalStore: setMetaTagList,
+                            hookformStore: 'metakeywords',
+                          })
+                        }
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </Flex>
+                    // <Button
+                    //   onClick={() =>
+                    //     removeTag({
+                    //       id: item.id,
+                    //       localStore: metaTagList,
+                    //       setLocalStore: setMetaTagList,
+                    //       hookformStore: 'metakeywords',
+                    //     })
+                    //   }
+                    //   key={item.id}
+                    //   variant='solid'
+                    //   size={'4'}
+                    // >
+                    //   <Text>{item.label}</Text>
+                    //   <Text>X</Text>
+                    // </Button>
+                  );
+                })}
+              </>
+            )
+          )}
+        </Flex>
+      </Grid>
 
       {/* modal _______________________________________________________________________________*/}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -234,3 +304,8 @@ export default SeoSettingsRoot;
  * styled-component
  * _______________________________________________________________________________
  */
+const CloseIcon = styled(Close)`
+  path {
+    fill: ${colorPalette.pink[11]};
+  }
+`;
