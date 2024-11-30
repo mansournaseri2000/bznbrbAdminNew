@@ -1,11 +1,11 @@
 import { Archive, CheckCircled, Layers, ListBullet, Person } from '@/public/icon';
 
 export const sidebarOptions = [
-  { text: 'مدیریت برنامه ها', icon: ListBullet, path: '/plans', type: 'collapse' },
-  { text: 'کاربران', icon: Person, path: '/user', type: 'collapse' },
+  { text: 'مدیریت برنامه ها', Icon: ListBullet, path: '/plans', type: 'collapse' },
+  { text: 'کاربران', Icon: Person, path: '/user', type: 'collapse' },
   {
     text: 'مدیریت اطلاعات',
-    icon: Archive,
+    Icon: Archive,
     type: 'expand',
     items: [
       { text: 'مدیریت نقاط', path: '/data-management/point-management' },
@@ -14,7 +14,7 @@ export const sidebarOptions = [
   },
   {
     text: 'مدیریت اطلاعات تکمیلی',
-    icon: Layers,
+    Icon: Layers,
     type: 'expand',
     items: [
       { text: 'مدیریت دسته بندی ها ', path: '/additional-detail/categories' },
@@ -24,7 +24,7 @@ export const sidebarOptions = [
   },
   {
     text: 'تاییدیه ها',
-    icon: CheckCircled,
+    Icon: CheckCircled,
     type: 'expand',
     items: [
       { text: 'مدیریت نظرات', path: '/confirmations/comment' },
@@ -32,6 +32,7 @@ export const sidebarOptions = [
       { text: 'مدیریت اصلاح اطلاعات ', path: '/confirmations/improve-data' },
       { text: 'مدیریت راهنماهای مسیر', path: '/confirmations/path-guid' },
       { text: 'مدیریت تصاویر ارسالی', path: '/confirmations/image-sent' },
+      { text: 'مدیریت استان ها', path: '/confirmations/province' },
     ],
   },
 ];

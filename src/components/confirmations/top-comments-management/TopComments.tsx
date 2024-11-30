@@ -22,7 +22,7 @@ const user = {
 
 const TopComments = () => {
   return (
-    <Grid width={'100%'} gapY={'5'} p={'5'}>
+    <Grid width={'100%'} gapY={'5'}>
       <TopCommentItem
         id={1}
         point={point}

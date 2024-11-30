@@ -7,10 +7,14 @@ import { useRouter } from 'next/navigation';
 import { Button, Flex, Text } from '@/libs/primitives';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { ProvinceTopCommentsDetail } from '@/types/confirmations/top-comments';
+import { ProvinceDetailCardDetail } from '@/types/confirmations/top-comments';
 
-const ProvinceTopCommentCard: React.FC<ProvinceTopCommentsDetail> = (props: ProvinceTopCommentsDetail) => {
-  const { province, activeComments, lastEditDate } = props;
+type Props = ProvinceDetailCardDetail & {
+  type: 'comments' | 'province';
+};
+
+const ProvinceDetailCard = (props: Props) => {
+  const { province, subtitle, lastEditDate, type } = props;
 
   const router = useRouter();
   return (
@@ -19,17 +23,17 @@ const ProvinceTopCommentCard: React.FC<ProvinceTopCommentsDetail> = (props: Prov
         <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
           {province}
         </Text>
-        <Item label='کامنت های فعال' value={activeComments} />
+        <Item label={type === 'comments' ? 'کامنت های فعال' : 'تعداد شهرستان'} value={subtitle} />
         <Item label='آخرین ویرایش' value={lastEditDate} />
       </Flex>
-      <Button size={'3'} onClick={() => router.push('/confirmations/top-comments/comments')}>
+      <Button size={'3'} onClick={() => router.push(type === 'comments' ? '/confirmations/top-comments/comments' : '/confirmations/province/cities')}>
         <Text>مشاهده نظرات</Text>
       </Button>
     </Flex>
   );
 };
 
-export default ProvinceTopCommentCard;
+export default ProvinceDetailCard;
 
 const Item = ({ label, value }: { label: string; value: string | number }) => (
   <Flex align={'center'} gap={'2'}>
