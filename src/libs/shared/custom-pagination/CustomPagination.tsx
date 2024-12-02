@@ -21,7 +21,7 @@ type CustomPaginationProps = {
 const CustomPagination = ({ current, total, onPageChange, ...rest }: CustomPaginationProps) => {
   return (
     <Flex align={'center'} maxWidth={'348px'}>
-      <ResponsivePagination current={current} total={total} onPageChange={onPageChange} {...rest} className='pagination' previousLabel={<BlueTriangleRight />} nextLabel={<BlueTriangleLeft />} />
+      <ResponsivePagination  current={current} total={total} onPageChange={onPageChange} {...rest} className='pagination' previousLabel={<BlueTriangleRight />} nextLabel={<BlueTriangleLeft />} />
     </Flex>
   );
 };

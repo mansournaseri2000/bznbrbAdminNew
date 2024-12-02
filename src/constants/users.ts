@@ -1,6 +1,7 @@
 export const userTypeConstant = [
-  { id: 1, key: 'کاربر عادی', value: 1, disable: false },
-  { id: 2, key: 'تورلیدر', value: 2, disable: false },
+  { id: 1, key: 'فعال', value: true, disable: false },
+  { id: 2, key: 'غیر فعال', value: false, disable: false },
+  { id: 3, key: 'هیچکدام', value: null, disable: false },
 ];
 
 export const tourVehicleConstants = [

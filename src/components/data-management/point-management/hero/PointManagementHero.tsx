@@ -32,8 +32,6 @@ const PointManagementHero = () => {
     queryFn: async () => getAllPlacesConstants(),
   });
 
-  // console.log('constant', constantData);
-
   const handleSubmit = () => {
     queryClient.invalidateQueries({ queryKey: ['point-data'] });
   };

@@ -41,7 +41,7 @@ const TableComponent = ({ columns, data }: Props) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (data.length === 0)
+  if (data?.length === 0)
     return (
       <Flex justify={'center'} p={'40px'}>
         <Text>دیتایی موجود نیست</Text>

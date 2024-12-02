@@ -12,7 +12,7 @@ type Props = {
   store: string;
   items: {
     key: string;
-    value: number | string;
+    value: number | string | boolean;
     id: number;
     disable?: boolean;
   }[];
@@ -51,7 +51,7 @@ const CheckboxGroup = ({ items, store, isRow = true }: Props) => {
                 key={item.id}
               >
                 <Flex gap='2' style={{ cursor: 'pointer' }}>
-                  <Checkbox disabled={item.disable} value={item.value} checked={value?.includes(item.value)} onCheckedChange={() => handleCheckboxChange(item.value as any)} />
+                  <Checkbox disabled={item.disable} value={item.value as any} checked={value?.includes(item.value)} onCheckedChange={() => handleCheckboxChange(item.value as any)} />
                   <Text {...typoVariant.body2} style={{ color: item.disable ? colorPalette.gray[8] : colorPalette.gray[11] }}>
                     {item.key}
                   </Text>
