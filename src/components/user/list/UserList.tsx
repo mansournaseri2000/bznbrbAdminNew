@@ -100,7 +100,7 @@ const UserList = ({ data }: { data: LatestUsersDetail }) => {
         const item = row.original;
         const handleClick = () => {
           console.log('item', item);
-          router.push('/user/user-profile');
+          router.push(`/user/${item.id}`);
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>

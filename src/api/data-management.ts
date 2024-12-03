@@ -1,5 +1,6 @@
 import { ApiManagerV2 } from '@/libs/utils/axios.config';
 import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
+import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
 import { CommentListResponse } from '@/types/data-management/point';
 import { PlaceListResponse } from '@/types/place';
 
@@ -23,15 +24,6 @@ const handleQueryParams = (obj: Record<string, any>) => {
     .map(([key, value]) => `${key}=${value}`);
 
   return queryParams.length ? `${queryParams.join('&')}` : '';
-  // const queryParams = new URLSearchParams(
-  //   Object.entries(obj).reduce((acc, [key, value]) => {
-  //     if (value !== '' && value !== null && value !== undefined) {
-  //       acc[key] = value;
-  //     }
-  //     return acc;
-  //   }, {})
-  // );
-  // return queryParams.toString();
 };
 
 export const getPlaceComments = async (id: number, pageParam: number) => {
@@ -39,3 +31,15 @@ export const getPlaceComments = async (id: number, pageParam: number) => {
 
   return res.data.data;
 };
+
+export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
+  const res = await DevApiManager.post<ApiData<PlaceListResponse>>('places/allPlacesWithFilter', params);
+  return res.data.data;
+};
+
+export interface AllPlacesBody {
+  page: number;
+  limit: number;
+  cityId: number | string;
+  arrayCatIds: number[];
+}

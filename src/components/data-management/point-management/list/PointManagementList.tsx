@@ -10,7 +10,7 @@ import { Button, Flex, Text } from '@/libs/primitives';
 import { Table } from '@/libs/shared';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { PlacesDetail } from '@/types/place/place-list';
+import { AllFilteredPlacesDetail } from '@/types/place/place-list';
 
 // import TableData from './data.json';
 
@@ -20,11 +20,11 @@ interface PointListDetail {
   city: string;
   pointType: string;
   category: string;
-  status: 'ناقص' | 'کامل';
+  isPlaceInfoComplete: boolean;
 }
 
 type Props = {
-  data: PlacesDetail[];
+  data: AllFilteredPlacesDetail[];
 };
 
 const PointManagementList = (props: Props) => {
@@ -34,6 +34,15 @@ const PointManagementList = (props: Props) => {
   // const { push } = useRouter();
 
   const columns: ColumnDef<PointListDetail>[] = [
+    {
+      accessorKey: 'index',
+      header: 'ردیف',
+      cell: info => (
+        <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
+          {info.row.index + 1}
+        </Text>
+      ),
+    },
     {
       accessorKey: 'name',
       header: ' نام نقطه',
@@ -95,10 +104,10 @@ const PointManagementList = (props: Props) => {
       },
     },
     {
-      accessorKey: 'status',
+      accessorKey: 'isPlaceInfoComplete',
       header: 'وضعیت اطلاعات',
       cell: info => {
-        const value = info.getValue() as string | null;
+        const value = info.getValue() as boolean | null;
         return (
           <Text
             {...typoVariant.body2}
@@ -107,12 +116,12 @@ const PointManagementList = (props: Props) => {
               width: 'fit-content',
               alignItems: 'center',
               padding: '4px 8px',
-              backgroundColor: value === 'ناقص' ? colorPalette.pink[3] : colorPalette.blue[3],
-              color: value === 'ناقص' ? colorPalette.pink[11] : colorPalette.blue[11],
+              backgroundColor: value === false ? colorPalette.pink[3] : colorPalette.blue[3],
+              color: value === false ? colorPalette.pink[11] : colorPalette.blue[11],
               borderRadius: 4,
             }}
           >
-            {value ? value : '-'}
+            {value === false ? 'ناقص' : value === true ? 'کامل' : '-'}
           </Text>
         );
       },

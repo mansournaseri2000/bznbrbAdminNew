@@ -1,11 +1,12 @@
 export interface PlaceListResponse {
-  placesDetail: PlacesDetail[];
+  allFilteredPlaces: AllFilteredPlacesDetail[];
   currentPage: number;
+  currentLimit: number;
   totalPages: number;
-  totalCount: number;
+  placesCountBasedOnFilter: number;
 }
 
-export interface PlacesDetail {
+export interface AllFilteredPlacesDetail {
   id: number;
   name: string;
   city?: string;

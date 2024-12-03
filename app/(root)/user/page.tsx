@@ -44,7 +44,7 @@ export default function User({ searchParams }: { params: { slug: string }; searc
 
   useEffect(() => {
     userMutate(watch());
-  }, []);
+  }, [watch('status'), watch('page')]);
 
   console.log(userData, 'sample test');
 
