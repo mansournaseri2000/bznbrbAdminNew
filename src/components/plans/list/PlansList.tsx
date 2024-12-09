@@ -14,9 +14,10 @@ import { typoVariant } from '@/theme/typo-variants';
 import TableData from './data.json';
 
 interface PlansListDetail {
-  creatorUser: string;
-  origin: string;
-  destination: string;
+  tripId: string;
+  fullName: string;
+  sourceCityName: string;
+  destinationCity: string;
   departureDate: string;
   returnDate: string;
 }
@@ -25,7 +26,16 @@ const PlansList = () => {
   const router = useRouter();
   const columns: ColumnDef<PlansListDetail>[] = [
     {
-      accessorKey: 'creatorUser',
+      accessorKey: 'index',
+      header: 'ردیف',
+      cell: info => (
+        <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
+          {info.row.index + 1}
+        </Text>
+      ),
+    },
+    {
+      accessorKey: 'fullName',
       header: 'نام کاربر سازنده',
       cell: info => {
         const value = info.getValue() as string | null;
@@ -37,7 +47,7 @@ const PlansList = () => {
       },
     },
     {
-      accessorKey: 'origin',
+      accessorKey: 'sourceCityName',
       header: 'مبدا',
       cell: info => {
         const value = info.getValue() as string | null;
@@ -49,7 +59,7 @@ const PlansList = () => {
       },
     },
     {
-      accessorKey: 'destination',
+      accessorKey: 'destinationCity',
       header: 'مقصد',
       cell: info => {
         const value = info.getValue() as string | null;
@@ -90,7 +100,7 @@ const PlansList = () => {
         const item = row.original;
         const handleClick = () => {
           console.log('item', item);
-          router.push('/plans/user-plan');
+          router.push(`/plans/user-plan/${item.tripId}`);
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>

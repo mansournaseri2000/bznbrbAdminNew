@@ -6,6 +6,7 @@ import { TextArea as RadixTextArea } from '@radix-ui/themes';
 import styled from 'styled-components';
 
 import { ErrorText } from '@/libs/shared';
+import { Boxshadow, colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
 // import { ErrorText } from '@/libs/shared';
@@ -42,14 +43,25 @@ export default TextArea;
 
 const StyledTextAreaRoot = styled(RadixTextArea)`
   width: -webkit-fill-available;
-  border: 1px solid #00000033;
+  border: 1px solid ${colorPalette.gray[3]};
   border-radius: 8px;
-  min-height: 144px;
-  background-color: #fcfdfc;
+  /* min-height: 144px; */
+  background-color: ${colorPalette.gray[1]};
 
   &.rt-TextAreaRoot:where(.rt-variant-surface) {
     --text-field-focus-color: none;
     font-size: 14px;
+  }
+
+  @media (hover: hover) {
+    &:where(:hover) {
+      background-color: ${colorPalette.blue[2]};
+    }
+  }
+
+  &:focus-within {
+    background-color: ${colorPalette.blue[2]};
+    box-shadow: ${Boxshadow.shadow1};
   }
 
   & .rt-TextAreaInput {

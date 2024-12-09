@@ -6,29 +6,30 @@ import { Box, Button, Flex, Grid, Text } from '@/libs/primitives';
 import BoxWrapper from '@/libs/shared/wrapper/BoxWrapper';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { UserPlansProfileDetail } from '@/types/plans/user-plans';
+import { UserInfoDetail } from '@/types/user/user';
 
-type Props = UserPlansProfileDetail & {
+import { convertTimestampToPersianDate } from '../utils/convertTimestampToPersianDate';
+
+type Props = UserInfoDetail & {
   type: 'USER' | 'PLAN';
-  userStatus?: 'active' | 'deActive';
   onDeActive?: () => void;
   onEditInfo?: () => void;
   onShowProfile?: () => void;
 };
 
 const UserDetailCard = (props: Props) => {
-  const { image, name, last_name, birthday, sex, mobile, email, type, userStatus, onShowProfile, onDeActive, onEditInfo } = props;
+  const { pic, name, last_name, birthday, gender, mobile, email, type, status, onShowProfile, onDeActive, onEditInfo } = props;
   return (
     <BoxWrapper hero='سازنده برنامه'>
       <Grid width={'100%'} columns={'3'} px={'4'} gapX={'5'} style={{ gridTemplateColumns: 'auto 3fr auto' }}>
         <Box width={'130px'} height={'130px'} position={'relative'}>
-          <Image src={image} alt='تصویر کاربر' fill style={{ borderRadius: '100px', border: `1px solid ${colorPalette.blue[9]}` }} />
+          <Image src={pic ? pic : ''} alt='تصویر کاربر' fill style={{ borderRadius: '100px', border: `1px solid ${colorPalette.blue[9]}` }} />
         </Box>
         <Grid width={'3'} columns={'3'} gapY={'5'}>
           <Item label='نام' value={name} />
           <Item label='نام خانوادگی' value={last_name} />
-          <Item label='تاریخ تولد' value={birthday} />
-          <Item label='جنسیت' value={sex} />
+          <Item label='تاریخ تولد' value={convertTimestampToPersianDate(birthday)} />
+          <Item label='جنسیت' value={gender === 'MALE' ? 'مرد' : 'زن'} />
           <Item label='شماره تماس' value={mobile} />
           <Item label='ایمیل' value={email} />
         </Grid>
@@ -39,7 +40,7 @@ const UserDetailCard = (props: Props) => {
             </Button>
           ) : (
             <Flex direction={'column'} gap={'2'}>
-              {userStatus === 'active' ? (
+              {status === true ? (
                 <Button size={'3'} colorVariant='PINK' onClick={onDeActive}>
                   <Text {...typoVariant.body1}>غیرفعال کردن کاربر</Text>
                 </Button>
@@ -61,7 +62,7 @@ const UserDetailCard = (props: Props) => {
 
 export default UserDetailCard;
 
-const Item = ({ label, value }: { label: string; value: string }) => (
+const Item = ({ label, value }: { label: string; value: string | number }) => (
   <Flex align={'center'} gap={'2'}>
     <Text {...typoVariant.body2} style={{ color: colorPalette.gray[10] }}>
       {label}

@@ -33,6 +33,7 @@ export const getPlaceComments = async (id: number, pageParam: number) => {
 };
 
 export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
+  
   const res = await DevApiManager.post<ApiData<PlaceListResponse>>('places/allPlacesWithFilter', params);
   return res.data.data;
 };

@@ -92,7 +92,6 @@ const UserPlan = ({ data, isLoading }: Props) => {
           {data?.days?.length > 0 ? (
             <LazyLoadWrapper>
               <TripCommonView dayID={dayID} listItem={commonViewListItem} />
-              {/* listItem={commonViewListItem} addCommentData={tripData} */}
             </LazyLoadWrapper>
           ) : (
             <>

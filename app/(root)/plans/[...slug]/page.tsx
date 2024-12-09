@@ -9,7 +9,9 @@ import { getTrips } from '@/api/plans';
 import CreatePlan from '@/components/plans/create-plan/CreatePlan';
 import UserPlan from '@/components/plans/user-plan/UserPlan';
 
-const PlansDetail = ({ params }: { params: { slug: 'create-plan' | 'user-plan' } }) => {
+const PlansDetail = ({ params }: { params: { slug: string[] } }) => {
+  const type = params.slug[0];
+  const userId = params.slug[1];
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
    */
@@ -25,18 +27,24 @@ const PlansDetail = ({ params }: { params: { slug: 'create-plan' | 'user-plan' }
 
   console.log('data', data);
 
-  const renderElement = (key: 'create-plan' | 'user-plan') => {
-    switch (key) {
+  const renderElement = () => {
+    switch (type) {
       case 'create-plan':
         return <CreatePlan provinces={constantData?.provinces ? constantData.provinces : []} />;
       case 'user-plan':
-        return <UserPlan data={data?.data as any} tripID='f2436471-3467-4284-bd87-68fdb191f06e' isLoading={isLoading} />;
+        switch (userId) {
+          case userId:
+            return <UserPlan data={data?.data as any} tripID='f2436471-3467-4284-bd87-68fdb191f06e' isLoading={isLoading} />;
+          default:
+            return null;
+        }
+      // return <UserPlan data={data?.data as any} tripID='f2436471-3467-4284-bd87-68fdb191f06e' isLoading={isLoading} />;
       default:
         return null;
     }
   };
 
-  return renderElement(params.slug);
+  return renderElement();
 };
 
 export default PlansDetail;

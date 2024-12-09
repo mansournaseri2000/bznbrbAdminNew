@@ -1,18 +1,62 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
-import { sexConstant } from '@/constants/users';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { editUser, EditUserDetailResponse } from '@/api/user';
+import { genderConstant } from '@/constants/users';
 import { Flex, Grid, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
 import CustomDatePicker from '@/libs/shared/CustomDatePicker';
 import ModalAction from '@/libs/shared/ModalAction';
+import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { colorPalette } from '@/theme';
 
 type Props = {
+  data: EditUserDetailResponse;
+  userId: number;
   onClose: () => void;
 };
 
-const EditUser = ({ onClose }: Props) => {
-  const { control, setValue } = useFormContext();
+const EditUser = ({ onClose, userId, data }: Props) => {
+  /*
+   *** Services_________________________________________________________________________________________________________________________________________________________________
+   */
+  const { mutate: updateUser, isPending: userPending } = useMutation({
+    mutationFn: async (body: EditUserDetailResponse) => editUser(userId, body),
+    onSuccess: async data => {
+      if (data.status === true) {
+        queryClient.invalidateQueries({ queryKey: ['user_info'] });
+        ToastSuccess('اطلاعات مورد نظر با موفقیت بروزرسانی شد');
+        onClose();
+      } else {
+        ToastError('لطفا دوباره امتحان نمایید');
+      }
+    },
+    onError: err => {
+      console.log(err);
+    },
+  });
+
+  console.log('USER_DATA', data.userInfo);
+
+  /*
+   *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
+   */
+  // const { control, setValue, watch } = useFormContext();
+  const { control, setValue, watch } = useForm({
+    defaultValues: {
+      name: data?.userInfo.name,
+      last_name: data?.userInfo.last_name,
+      email: data?.userInfo.email,
+      birthday: data?.userInfo.birthday,
+      pic: data?.userInfo.pic,
+      gender: data?.userInfo.gender,
+      mobile: data?.userInfo.mobile,
+      status: data?.userInfo.status,
+    },
+  });
+  const queryClient = useQueryClient();
+
   return (
     <Grid width={'100%'} gap={'5'} style={{ backgroundColor: colorPalette.gray[2] }}>
       <Flex width={'100%'} justify={'center'} mt={'5'}>
@@ -24,7 +68,7 @@ const EditUser = ({ onClose }: Props) => {
         <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='نام' />} />
         <Controller name='last_name' control={control} render={({ field }) => <TextField {...field} placeholder='نام خانوادگی' />} />
         <Controller
-          name='sex'
+          name='gender'
           control={control}
           render={({ field }) => (
             <SelectRoot
@@ -36,8 +80,8 @@ const EditUser = ({ onClose }: Props) => {
                 field.onChange(val);
               }}
             >
-              {sexConstant.map(item => (
-                <SelectItem key={item.id} value={String(item.id)}>
+              {genderConstant.map(item => (
+                <SelectItem key={item.id} value={item.value}>
                   {item.name}
                 </SelectItem>
               ))}
@@ -53,7 +97,7 @@ const EditUser = ({ onClose }: Props) => {
               placeholder='تاریخ تولد'
               value={item.field.value as any}
               onChangeValue={(val: any) => {
-                setValue('birthday', new Date(val));
+                setValue('birthday', Number(new Date(val)));
               }}
             />
           )}
@@ -61,7 +105,14 @@ const EditUser = ({ onClose }: Props) => {
         <Controller name='mobile' control={control} render={({ field }) => <TextField {...field} placeholder='شماره تماس' />} />
         <Controller name='email' control={control} render={({ field }) => <TextField {...field} placeholder='ایمیل' />} />
       </Grid>
-      <ModalAction submitButtonText='ثبت تغییرات' closeButtonText='لغو و بازگشت' onCloseButton={onClose} />
+      <ModalAction
+        submitButtonText='ثبت تغییرات'
+        closeButtonText='لغو و بازگشت'
+        isLoading={userPending}
+        // TODO: fix watch and remove as any
+        onCloseButton={onClose}
+        onSubmit={() => updateUser(watch() as any)}
+      />
     </Grid>
   );
 };

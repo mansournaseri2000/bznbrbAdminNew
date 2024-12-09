@@ -109,7 +109,7 @@ export const userDetailSortConstant = [
   { id: 3, name: 'تاریخ بازگشت - جدیدترین' },
   { id: 4, name: 'تاریخ بازگشت - قدیمی ترین' },
 ];
-export const sexConstant = [
-  { id: 1, name: 'مرد' },
-  { id: 2, name: 'زن' },
+export const genderConstant = [
+  { id: 1, name: 'مرد', value: 'MALE' },
+  { id: 2, name: 'زن', value: 'FEMALE' },
 ];

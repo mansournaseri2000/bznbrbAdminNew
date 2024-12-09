@@ -14,8 +14,8 @@ import { typoVariant } from '@/theme/typo-variants';
 import TableData from './data.json';
 
 interface UserProfileListDetail {
-  source: string;
-  destination: string;
+  sourceCityName: string;
+  destinationCity: string;
   createAt: string;
   departureDate: string;
   returnDate: string;
@@ -26,7 +26,16 @@ const UserProfileList = () => {
 
   const columns: ColumnDef<UserProfileListDetail>[] = [
     {
-      accessorKey: 'source',
+      accessorKey: 'index',
+      header: 'ردیف',
+      cell: info => (
+        <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
+          {info.row.index + 1}
+        </Text>
+      ),
+    },
+    {
+      accessorKey: 'sourceCityName',
       header: 'مبدا',
       cell: info => {
         const value = info.getValue() as string | null;
@@ -38,7 +47,7 @@ const UserProfileList = () => {
       },
     },
     {
-      accessorKey: 'destination',
+      accessorKey: 'destinationCity',
       header: 'مقصد',
       cell: info => {
         const value = info.getValue() as string | null;

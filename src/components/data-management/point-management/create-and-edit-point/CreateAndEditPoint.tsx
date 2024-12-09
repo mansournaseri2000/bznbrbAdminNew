@@ -11,7 +11,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPlace, editPlace } from '@/api/place';
 import { AnalysisRoot, FeaturesAndFacilities, GeographicalLocationRoot, PlaceInfo, SeoSettingsRoot } from '@/components/place';
 import { fomrData, placeCategories, placeTripLimitations, placeTripSeasons, placeTripTypes } from '@/components/place/create-edit-place/defaultValues';
-import Images from '@/components/place/create-edit-place/Images';
+import ImageGallery from '@/components/place/create-edit-place/ImageGallery';
+import PrimaryImage from '@/components/place/create-edit-place/PrimaryImage';
 import { pointTypeOptions } from '@/constants/data-management';
 import { categoriesConstants, placeWorkTimeSchedule, seasons } from '@/constants/place';
 import { Button, Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
@@ -309,8 +310,11 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
           <AccordionWrapper hero='اطلاعات نقطه'>
             <PlaceInfo categoris={placeConstant ? placeConstant.categories : []} />
           </AccordionWrapper>
-          <AccordionWrapper hero='تصاویر'>
-            <Images />
+          <AccordionWrapper hero='تصویر شاخص'>
+            <PrimaryImage />
+          </AccordionWrapper>
+          <AccordionWrapper hero='گالری تصاویر'>
+            <ImageGallery />
           </AccordionWrapper>
           <AccordionWrapper hero='موقعیت جغرافیایی'>
             <GeographicalLocationRoot province={placeConstant ? placeConstant.provinces : []} />

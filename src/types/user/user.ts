@@ -21,11 +21,16 @@ export interface RecentTripsResponse {
   totalPages: number;
 }
 
+export interface UserInfoResponse {
+  userInfo: UserInfoDetail;
+}
+
 export interface UserInfoDetail {
   status: boolean;
+  pic: string | null;
   name: string;
   last_name: string;
-  birthday: string;
+  birthday: number;
   mobile: string;
   gender: 'MALE' | 'FEMALE';
   email: string;
@@ -39,3 +44,14 @@ export interface RecentUserTripsDetail {
   returnDate: number;
   tripCreationDate: number;
 }
+
+// export interface EditUserDetail {
+//   name: string;
+//   last_name: string;
+//   email: string;
+//   birthday: string;
+//   pic: string | null;
+//   gender: 'MALE' | 'FEMALE';
+//   mobile: string;
+//   status: boolean;
+// }
