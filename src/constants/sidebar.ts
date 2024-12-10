@@ -35,4 +35,18 @@ export const sidebarOptions = [
       { text: 'مدیریت استان ها', path: '/confirmations/province' },
     ],
   },
+  {
+    text: 'آگهی ها',
+    Icon: CheckCircled,
+    type: 'collapse',
+    path: '/ads',
+    // items: [
+    //   { text: 'مدیریت نظرات', path: '/confirmations/comment' },
+    //   { text: 'مدیریت نظرات برتر', path: '/confirmations/top-comments' },
+    //   { text: 'مدیریت اصلاح اطلاعات ', path: '/confirmations/improve-data' },
+    //   { text: 'مدیریت راهنماهای مسیر', path: '/confirmations/path-guid' },
+    //   { text: 'مدیریت تصاویر ارسالی', path: '/confirmations/image-sent' },
+    //   { text: 'مدیریت استان ها', path: '/confirmations/province' },
+    // ],
+  },
 ];

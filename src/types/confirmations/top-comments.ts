@@ -7,10 +7,14 @@ export interface ProvinceTopCommentsResponse {
   totalCount: number;
 }
 export interface ProvinceDetailCardDetail {
-  id: number;
-  province: string;
-  subtitle: number;
-  lastEditDate: string;
+  id?: number;
+  title: string;
+  firstLabel: string;
+  secondLabel: string;
+  firstValue: number | string;
+  secondValue: number | string;
+  path: string;
+  buttonText: string;
 }
 export interface TopCommentsItemListResponse {
   allTopCommentsItem: TopCommentItemDetail[];
