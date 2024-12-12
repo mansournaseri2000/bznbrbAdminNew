@@ -5,7 +5,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import styled from 'styled-components';
 
-import { Button, Flex, Grid, IconButton, Modal, Text, TextArea, TextField } from '@/libs/primitives';
+import { Button, Flex, Grid, IconButton, Text, TextArea, TextField } from '@/libs/primitives';
 import { Divider } from '@/libs/shared';
 import { Close } from '@/public/icon';
 import { colorPalette } from '@/theme';
@@ -41,8 +41,6 @@ const SeoSettingsRoot = () => {
    * _______________________________________________________________________________
    */
   const { control, watch, setValue } = useFormContext();
-  const [isOpen, setIsOpen] = useState(false);
-  const [key, setKey] = useState<'meta' | 'tag'>('tag');
   const [tagList, setTagList] = useState<{ id: number; label: string }[]>(processStringToTags(watch('keywords')));
   const [metaTagList, setMetaTagList] = useState<{ id: number; label: string }[]>(processStringToTags(watch('metakeywords')));
 
@@ -71,7 +69,6 @@ const SeoSettingsRoot = () => {
     updateLocalStore(updatedTagList);
     setValue(hookformStore, tagsAsString);
     setValue(inputStore, '');
-    setIsOpen(false);
   };
 
   const removeTag = ({ id, localStore, setLocalStore, hookformStore }: { id: number; localStore: any; setLocalStore: any; hookformStore: string }) => {
@@ -86,215 +83,134 @@ const SeoSettingsRoot = () => {
    * _______________________________________________________________________________
    */
   return (
-    <>
-      <Grid pb={'16px'} gap={'24px'} style={{ border: '2px solid red' }}>
+    <Grid pb={'16px'} gap={'24px'}>
+      <Flex width={'50%'} align={'center'} gap={'2'}>
+        <Controller name='keyword' control={control} render={({ field }) => <TextField autoFocus {...field} placeholder='افزودن تگ' aria-label='textFiled' />} />
         <Button
+          size={'3'}
+          variant='soft'
           type='button'
           onClick={() => {
-            setKey('tag');
-            setIsOpen(true);
+            addTag({
+              inputStore: 'keyword',
+              hookformStore: 'keywords',
+              localStore: tagList,
+              updateLocalStore: setTagList,
+            });
           }}
-          style={{ width: 'max-content' }}
-          variant='soft'
-          size={'4'}
+          style={{ padding: '13.5px 48.5px' }}
         >
-          <Text>افزودن تگ</Text>
+          <Text {...typoVariant.body1}>ثبت</Text>
         </Button>
-        <Controller name='metakeyword' control={control} render={({ field }) => <TextField autoFocus {...field} placeholder='افزودن تگ' aria-label='textFiled' style={{ width: '50%' }} />} />
+      </Flex>
 
-        <Flex gap={'5'} p={'4'} wrap={'wrap'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
-          {tagList.length === 0 ? (
-            <Flex direction={'column'} gap={'5'} p={'30px 16px'}>
-              <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11], fontWeight: 500 }}>
-                هنوز تگی اضافه نشده است.
-              </Text>
-              <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
-                از فیلد بالا تگ مورد نظر خود را پیدا کنید و به لیست اضافه کنید.
-              </Text>
-            </Flex>
-          ) : (
-            tagList.length > 0 && (
-              <>
-                {tagList.map(item => {
-                  return (
-                    <Flex key={item.id} align={'center'} gap={'10px'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
-                      <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
-                        {item.label}
-                      </Text>
-                      <IconButton
-                        type='button'
-                        variant='surface'
-                        onClick={() =>
-                          removeTag({
-                            id: item.id,
-                            localStore: tagList,
-                            setLocalStore: setTagList,
-                            hookformStore: 'keywords',
-                          })
-                        }
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    </Flex>
-                    // <Button
-                    //   type='button'
-                    //   onClick={() =>
-                    //     removeTag({
-                    //       id: item.id,
-                    //       localStore: tagList,
-                    //       setLocalStore: setTagList,
-                    //       hookformStore: 'keywords',
-                    //     })
-                    //   }
-                    //   key={item.id}
-                    //   variant='solid'
-                    //   size={'4'}
-                    // >
-                    //   <Text>{item.label}</Text>
-                    //   <Text>x</Text>
-                    // </Button>
-                  );
-                })}
-              </>
-            )
-          )}
-        </Flex>
+      <Flex gap={'5'} p={'4'} wrap={'wrap'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
+        {tagList.length === 0 ? (
+          <Flex direction={'column'} gap={'5'} p={'30px 16px'}>
+            <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11], fontWeight: 500 }}>
+              هنوز تگی اضافه نشده است.
+            </Text>
+            <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
+              از فیلد بالا تگ مورد نظر خود را پیدا کنید و به لیست اضافه کنید.
+            </Text>
+          </Flex>
+        ) : (
+          tagList.length > 0 && (
+            <>
+              {tagList.map(item => {
+                return (
+                  <Flex key={item.id} align={'center'} gap={'10px'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
+                    <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+                      {item.label}
+                    </Text>
+                    <IconButton
+                      type='button'
+                      variant='surface'
+                      onClick={() =>
+                        removeTag({
+                          id: item.id,
+                          localStore: tagList,
+                          setLocalStore: setTagList,
+                          hookformStore: 'keywords',
+                        })
+                      }
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </Flex>
+                );
+              })}
+            </>
+          )
+        )}
+      </Flex>
 
-        <Divider />
-        <Controller name='meta_title' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان صفحه ( متا تایتل )' aria-label='textFiled' />} />
-        <Controller name='meta_description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات متا' aria-label='TextArea' />} />
-        <Divider />
+      <Divider />
+      <Controller name='meta_title' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان صفحه ( متا تایتل )' aria-label='textFiled' />} />
+      <Controller name='meta_description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات متا' aria-label='TextArea' />} />
+      <Divider />
+
+      <Flex width={'50%'} align={'center'} gap={'2'}>
+        <Controller name='metakeyword' control={control} render={({ field }) => <TextField autoFocus {...field} placeholder='کلمات کلیدی ( متا )' aria-label='textFiled' />} />
         <Button
+          size={'3'}
+          variant='soft'
           type='button'
           onClick={() => {
-            setKey('meta');
-            setIsOpen(true);
+            addTag({
+              inputStore: 'metakeyword',
+              hookformStore: 'metakeywords',
+              localStore: metaTagList,
+              updateLocalStore: setMetaTagList,
+            });
           }}
-          style={{ width: 'max-content' }}
-          variant='soft'
-          size={'4'}
+          style={{ padding: '13.5px 48.5px' }}
         >
-          <Text>افزودن کلمات کلیدی ( متا ) </Text>
+          <Text {...typoVariant.body1}>ثبت</Text>
         </Button>
+      </Flex>
 
-        <Controller name='metakeyword' control={control} render={({ field }) => <TextField autoFocus {...field} placeholder='کلمات کلیدی ( متا )' aria-label='textFiled' style={{ width: '50%' }} />} />
-
-        <Flex gap={'5'} p={'4'} wrap={'wrap'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
-          {metaTagList.length === 0 ? (
-            <Flex direction={'column'} gap={'5'} p={'30px 16px'}>
-              <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11], fontWeight: 500 }}>
-                هنوز تگی اضافه نشده است.
-              </Text>
-              <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
-                از فیلد بالا تگ مورد نظر خود را پیدا کنید و به لیست اضافه کنید.
-              </Text>
-            </Flex>
-          ) : (
-            metaTagList.length > 0 && (
-              <>
-                {metaTagList.map(item => {
-                  return (
-                    <Flex key={item.id} align={'center'} gap={'10px'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
-                      <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
-                        {item.label}
-                      </Text>
-                      <IconButton
-                        type='button'
-                        variant='surface'
-                        onClick={() =>
-                          removeTag({
-                            id: item.id,
-                            localStore: metaTagList,
-                            setLocalStore: setMetaTagList,
-                            hookformStore: 'metakeywords',
-                          })
-                        }
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    </Flex>
-                    // <Button
-                    //   onClick={() =>
-                    //     removeTag({
-                    //       id: item.id,
-                    //       localStore: metaTagList,
-                    //       setLocalStore: setMetaTagList,
-                    //       hookformStore: 'metakeywords',
-                    //     })
-                    //   }
-                    //   key={item.id}
-                    //   variant='solid'
-                    //   size={'4'}
-                    // >
-                    //   <Text>{item.label}</Text>
-                    //   <Text>X</Text>
-                    // </Button>
-                  );
-                })}
-              </>
-            )
-          )}
-        </Flex>
-      </Grid>
-
-      {/* modal _______________________________________________________________________________*/}
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        {key === 'tag' && (
-          <Grid gap={'24px'}>
-            <Text>افزودن تگ</Text>
-            <Controller name='keyword' control={control} render={({ field }) => <TextField autoFocus {...field} title='نام عنوان' placeholder='نام عنوان' aria-label='textFiled' />} />
-            <Grid gap={'16px'} columns={'2'}>
-              <Button
-                type='button'
-                onClick={() => {
-                  addTag({
-                    inputStore: 'keyword',
-                    hookformStore: 'keywords',
-                    localStore: tagList,
-                    updateLocalStore: setTagList,
-                  });
-                  setIsOpen(false);
-                }}
-                variant='soft'
-                size={'4'}
-              >
-                <Text>ثبت</Text>
-              </Button>
-              <Button type='button' onClick={() => setIsOpen(false)} variant='solid' size={'4'}>
-                <Text>انصراف</Text>
-              </Button>
-            </Grid>
-          </Grid>
+      <Flex gap={'5'} p={'4'} wrap={'wrap'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
+        {metaTagList.length === 0 ? (
+          <Flex direction={'column'} gap={'5'} p={'30px 16px'}>
+            <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11], fontWeight: 500 }}>
+              هنوز تگی اضافه نشده است.
+            </Text>
+            <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
+              از فیلد بالا تگ مورد نظر خود را پیدا کنید و به لیست اضافه کنید.
+            </Text>
+          </Flex>
+        ) : (
+          metaTagList.length > 0 && (
+            <>
+              {metaTagList.map(item => {
+                return (
+                  <Flex key={item.id} align={'center'} gap={'10px'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
+                    <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+                      {item.label}
+                    </Text>
+                    <IconButton
+                      type='button'
+                      variant='surface'
+                      onClick={() =>
+                        removeTag({
+                          id: item.id,
+                          localStore: metaTagList,
+                          setLocalStore: setMetaTagList,
+                          hookformStore: 'metakeywords',
+                        })
+                      }
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </Flex>
+                );
+              })}
+            </>
+          )
         )}
-        {key === 'meta' && (
-          <Grid gap={'24px'}>
-            <Text>افزودن متا تگ</Text>
-            <Controller name='metakeyword' control={control} render={({ field }) => <TextField autoFocus {...field} placeholder='نام عنوان' title='نام عنوان' aria-label='textFiled' />} />
-            <Grid gap={'16px'} columns={'2'}>
-              <Button
-                type='button'
-                onClick={() => {
-                  addTag({
-                    inputStore: 'metakeyword',
-                    hookformStore: 'metakeywords',
-                    localStore: metaTagList,
-                    updateLocalStore: setMetaTagList,
-                  });
-                  setIsOpen(false);
-                }}
-                variant='soft'
-                size={'4'}
-              >
-                <Text>ثبت</Text>
-              </Button>
-              <Button type='button' onClick={() => setIsOpen(false)} variant='solid' size={'4'}>
-                <Text>انصراف</Text>
-              </Button>
-            </Grid>
-          </Grid>
-        )}
-      </Modal>
-    </>
+      </Flex>
+    </Grid>
   );
 };
 

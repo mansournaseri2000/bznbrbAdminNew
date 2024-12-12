@@ -10,3 +10,21 @@ export const pointTypeOptions = [
   { id: 5, name: 'سرویس ها' },
   { id: 6, name: 'فروشگاه' },
 ];
+
+export const articleStatusOptions = [
+  { id: 1, name: 'منتشر شده' },
+  { id: 2, name: 'منتشر نشده' },
+];
+
+export const selectPointOptions = [
+  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
+  { select: false, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
+  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
+  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
+  { select: false, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
+  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
+  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
+  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
+  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
+  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
+];

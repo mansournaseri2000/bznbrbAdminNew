@@ -33,7 +33,7 @@ export const SelectRoot = forwardRef<React.ElementRef<typeof Select.Root>, Selec
      */
     return (
       <Root {...props} gap={'4px'} width={'100%'} direction={'column'} position={'relative'}>
-        <Text style={{ paddingRight: '5px', color: colorPalette.gray[11] }} {...typoVariant.paragraph3}>
+        <Text style={{ paddingRight: '8px', color: colorPalette.gray[12] }} {...typoVariant.body1}>
           {lable}
         </Text>
         <Select.Root ref={forwardedRef} size={'3'} {...props}>

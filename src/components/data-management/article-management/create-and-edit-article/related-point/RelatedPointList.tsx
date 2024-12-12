@@ -1,31 +1,25 @@
-'use client';
-
 import React from 'react';
-
-import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
 
 import { ColumnDef } from '@tanstack/react-table';
 
-import { Box, Button, Flex, Text } from '@/libs/primitives';
+import { Button, Flex, IconButton, Text } from '@/libs/primitives';
+import { Table } from '@/libs/shared';
+import { Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { LatestUsersDetail } from '@/types/user/user';
 
-// import TableData from './data.json';
+import TableData from './list-data.json';
 
-const Table = dynamic(() => import('@/libs/shared/Table'), { ssr: false });
+type ColumnDetail = {
+  pointName: string;
+  province: string;
+  category: string;
+  pointType: string;
+  status: boolean;
+};
 
-export interface UserListDetail {
-  username: string;
-  mobile: string;
-  email: string;
-  userStatus: 'فعال' | 'غیر فعال';
-}
-
-const UserList = ({ data }: { data: LatestUsersDetail }) => {
-  const router = useRouter();
-  const columns: ColumnDef<LatestUsersDetail>[] = [
+const RelatedPointList = () => {
+  const columns: ColumnDef<ColumnDetail>[] = [
     {
       accessorKey: 'index',
       header: 'ردیف',
@@ -36,8 +30,8 @@ const UserList = ({ data }: { data: LatestUsersDetail }) => {
       ),
     },
     {
-      accessorKey: 'fullName',
-      header: 'نام و نام خانوادگی',
+      accessorKey: 'pointName',
+      header: ' نام نقطه',
       cell: info => {
         const value = info.getValue() as string | null;
         return (
@@ -48,8 +42,8 @@ const UserList = ({ data }: { data: LatestUsersDetail }) => {
       },
     },
     {
-      accessorKey: 'mobileNumber',
-      header: 'شماره تماس',
+      accessorKey: 'province',
+      header: 'استان',
       cell: info => {
         const value = info.getValue() as string | null;
         return (
@@ -60,8 +54,20 @@ const UserList = ({ data }: { data: LatestUsersDetail }) => {
       },
     },
     {
-      accessorKey: 'email',
-      header: 'ایمیل',
+      accessorKey: 'category',
+      header: 'دسته بندی',
+      cell: info => {
+        const value = info.getValue() as string | null;
+        return (
+          <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
+            {value ? value : '-'}
+          </Text>
+        );
+      },
+    },
+    {
+      accessorKey: 'pointType',
+      header: 'نوع نقطه',
       cell: info => {
         const value = info.getValue() as string | null;
         return (
@@ -73,7 +79,7 @@ const UserList = ({ data }: { data: LatestUsersDetail }) => {
     },
     {
       accessorKey: 'status',
-      header: 'نوع کاربر',
+      header: 'وضعیت انتشار',
       cell: info => {
         const value = info.getValue() as boolean | null;
         return (
@@ -89,8 +95,24 @@ const UserList = ({ data }: { data: LatestUsersDetail }) => {
               borderRadius: 4,
             }}
           >
-            {value === true ? 'فعال' : 'غیر فعال'}
+            {value === false ? 'منتشر نشده' : value === true ? 'منتشر شده' : '-'}
           </Text>
+        );
+      },
+    },
+    {
+      id: 'delete',
+      cell: ({ row }) => {
+        const item = row.original;
+        const handleClick = () => {
+          console.log('item', item);
+        };
+        return (
+          <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>
+            <IconButton variant='surface' onClick={handleClick}>
+              <Trash />
+            </IconButton>
+          </Flex>
         );
       },
     },
@@ -100,7 +122,6 @@ const UserList = ({ data }: { data: LatestUsersDetail }) => {
         const item = row.original;
         const handleClick = () => {
           console.log('item', item);
-          router.push(`/user/${item.id}`);
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>
@@ -112,12 +133,7 @@ const UserList = ({ data }: { data: LatestUsersDetail }) => {
       },
     },
   ];
-  return (
-    <Box width={'100%'} style={{ overflow: 'scroll' }}>
-      {/* <Heading>User List</Heading> */}
-      <Table columns={columns as any} data={data as any} />
-    </Box>
-  );
+  return <Table columns={columns as any} data={TableData as any} />;
 };
 
-export default UserList;
+export default RelatedPointList;

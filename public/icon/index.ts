@@ -35,3 +35,4 @@ export { default as Taxi } from './Taxi';
 export { default as Trash } from './Trash';
 export { default as TriangleLeft } from './TriangleLeft';
 export { default as TriangleUp } from './TriangleUp';
+export { default as Update } from './Update';

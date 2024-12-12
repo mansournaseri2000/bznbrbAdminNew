@@ -14,11 +14,20 @@ import TableData from './data.json';
 interface ArticleDetail {
   title: string;
   category: string;
-  date: string;
+  status: boolean;
 }
 
 const ArticleManagementList = () => {
   const columns: ColumnDef<ArticleDetail>[] = [
+    {
+      accessorKey: 'index',
+      header: 'ردیف',
+      cell: info => (
+        <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
+          {info.row.index + 1}
+        </Text>
+      ),
+    },
     {
       accessorKey: 'title',
       header: 'عنوان مقاله',
@@ -44,13 +53,24 @@ const ArticleManagementList = () => {
       },
     },
     {
-      accessorKey: 'date',
-      header: 'تاریخ نشر',
+      accessorKey: 'status',
+      header: 'وضعیت انتشار',
       cell: info => {
-        const value = info.getValue() as string | null;
+        const value = info.getValue() as boolean | null;
         return (
-          <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
-            {value ? value : '-'}
+          <Text
+            {...typoVariant.body2}
+            style={{
+              display: 'flex',
+              width: 'fit-content',
+              alignItems: 'center',
+              padding: '4px 8px',
+              backgroundColor: value === false ? colorPalette.pink[3] : colorPalette.blue[3],
+              color: value === false ? colorPalette.pink[11] : colorPalette.blue[11],
+              borderRadius: 4,
+            }}
+          >
+            {value === true ? 'منتشر شده' : 'منتشر نشده'}
           </Text>
         );
       },

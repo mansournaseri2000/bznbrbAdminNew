@@ -16,18 +16,16 @@ type CheckboxComponentProps = {
   defaultChecked?: boolean;
 } & React.ComponentPropsWithoutRef<typeof RadixCheckbox>;
 
-const CheckboxComponent = forwardRef<HTMLButtonElement, CheckboxComponentProps>(
-  ({ label, defaultChecked, ...rest }, ref) => {
-    return (
-      <Text as='label' size={'1'} style={{ color: colorPalette.gray[11] }}>
-        <Flex gap='2' align='center'>
-          <RadixCheckbox defaultChecked={defaultChecked} ref={ref} {...rest} />
-          {label}
-        </Flex>
-      </Text>
-    );
-  }
-);
+const CheckboxComponent = forwardRef<HTMLButtonElement, CheckboxComponentProps>(({ label, defaultChecked, ...rest }, ref) => {
+  return (
+    <Text as='label' size={'2'} style={{ color: colorPalette.gray[11] }}>
+      <Flex gap='2' align='center'>
+        <RadixCheckbox defaultChecked={defaultChecked} ref={ref} {...rest} />
+        {label}
+      </Flex>
+    </Text>
+  );
+});
 
 CheckboxComponent.displayName = 'CheckboxComponent';
 
