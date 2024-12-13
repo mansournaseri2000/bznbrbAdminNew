@@ -11,8 +11,6 @@ import { Table } from '@/libs/shared';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
-import TableData from './data.json';
-
 interface UserProfileListDetail {
   sourceCityName: string;
   destinationCity: string;
@@ -21,7 +19,11 @@ interface UserProfileListDetail {
   returnDate: string;
 }
 
-const UserProfileList = () => {
+type UserProfileListProps = {
+  data: UserProfileListDetail[];
+};
+
+const UserProfileList = ({ data }: UserProfileListProps) => {
   const router = useRouter();
 
   const columns: ColumnDef<UserProfileListDetail>[] = [
@@ -114,7 +116,7 @@ const UserProfileList = () => {
     },
   ];
 
-  return <Table columns={columns as any} data={TableData as any} />;
+  return <Table columns={columns as any} data={data as any} />;
 };
 
 export default UserProfileList;

@@ -7,7 +7,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
+import { useQuery } from '@tanstack/react-query';
 
+import { getUserInfo } from '@/api/user';
 import { useGetTripViewList } from '@/libs/hooks/useGetTripViewList';
 import { Button, Flex, Grid, Heading, Text } from '@/libs/primitives';
 import LazyLoadWrapper from '@/libs/shared/LazyLoadWrapper';
@@ -26,12 +28,18 @@ const TripMapView = dynamic(() => import('@/components/plans/user-plan/map-view/
 type Props = {
   data: TripResponse;
   tripID: string;
+  userId: number;
   isLoading: boolean;
 };
 
-const UserPlan = ({ data, isLoading }: Props) => {
+const UserPlan = ({ data, isLoading, userId }: Props) => {
   /*
-    ***
+   *** Services_________________________________________________________________________________________________________________________________________________________________
+   */
+  const { data: userData, isLoading: userLoading, isFetching: userFetching } = useQuery({ queryKey: ['user_info'], queryFn: async () => getUserInfo(userId) });
+
+  /*
+    *** 
     variables and constant_______________________________________________________________________________
     ***
   */
@@ -65,17 +73,11 @@ const UserPlan = ({ data, isLoading }: Props) => {
 
   return (
     <Grid width={'100%'} gapY={'5'}>
-      <UserDetailCard
-        type='PLAN'
-        name='اکبر'
-        last_name='روشن دل'
-        image='/image/profile.jpeg'
-        birthday='1379/01/24'
-        sex='زن'
-        mobile='091212345678'
-        email='example@gmail.com'
-        onShowProfile={() => router.push('/user/user-profile')}
-      />
+      {userLoading || userFetching ? (
+        <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} />
+      ) : (
+        <UserDetailCard {...(userData?.userInfo as any)} type='PLAN' onShowProfile={() => router.push(`/user/${userId}`)} />
+      )}
       {/* 
         ***
         user planner_________________________________________________________________________________________________________________________________________

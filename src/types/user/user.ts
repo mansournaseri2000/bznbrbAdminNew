@@ -15,10 +15,11 @@ export interface LatestUsersDetail {
 }
 
 export interface RecentTripsResponse {
-  userInfo: UserInfoDetail;
-  recentUserTrips: '';
-  totalUserTripsCount: number;
+  latestTrips: LatestTripsDetail[];
+  currentPage: number;
   totalPages: number;
+  totalCurrentPageCount: number;
+  totalTripsCount: number;
 }
 
 export interface UserInfoResponse {
@@ -44,14 +45,15 @@ export interface RecentUserTripsDetail {
   returnDate: number;
   tripCreationDate: number;
 }
-
-// export interface EditUserDetail {
-//   name: string;
-//   last_name: string;
-//   email: string;
-//   birthday: string;
-//   pic: string | null;
-//   gender: 'MALE' | 'FEMALE';
-//   mobile: string;
-//   status: boolean;
-// }
+export interface LatestTripsDetail {
+  tripId: string;
+  fullName: string;
+  sourceCityName: string;
+  sourceCityId: number;
+  sourceCityProvinceId: number;
+  destinationCity: string;
+  destinationCityId: number;
+  destinationCityProvinceId: number;
+  departureDate: number;
+  returnDate: number;
+}

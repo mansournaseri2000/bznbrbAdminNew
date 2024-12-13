@@ -21,7 +21,6 @@ export default function User({ searchParams }: { params: { slug: string }; searc
   const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
   const methods = useForm({ defaultValues: { searchQuery: '', status: true, limit: 10, page: 1 } });
   const { watch, handleSubmit, setValue } = methods;
-  // const queryClient = useQueryClient();
 
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________

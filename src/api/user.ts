@@ -17,7 +17,7 @@ export const getAllUsersWithParams = async (params: UserBody) => {
 export const getRecentTrips = async (params: RecentTripsBody) => {
   const res = await DevApiManager.post<ApiData<RecentTripsResponse>>('trips/recentTrips', params, {
     headers: {
-      userId: 39,
+      userId: params.userId,
     },
   });
   return res.data.data;
