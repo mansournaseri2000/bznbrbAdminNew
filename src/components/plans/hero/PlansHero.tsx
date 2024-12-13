@@ -16,7 +16,11 @@ import { typoVariant } from '@/theme/typo-variants';
 
 import FilterContent from '../../../libs/shared/FilterContent';
 
-const PlansHero = () => {
+type Props = {
+  onSubmit: () => void;
+};
+
+const PlansHero = (props: Props) => {
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
@@ -32,7 +36,6 @@ const PlansHero = () => {
     queryKey: ['constant'],
     queryFn: async () => getAllPlacesConstants(),
   });
-  console.log('Watch', watch());
 
   return (
     <>
@@ -49,7 +52,7 @@ const PlansHero = () => {
         </Button>
 
         <Controller name='search' control={control} render={({ field }) => <TextField {...field} placeholder='جستجوی نام کاربر' />} />
-        <IconButton size={'3'} variant='soft'>
+        <IconButton size={'3'} variant='soft' onClick={props.onSubmit}>
           <Search />
         </IconButton>
 

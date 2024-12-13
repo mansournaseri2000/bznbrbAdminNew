@@ -26,3 +26,5 @@ export const getTrips = async (id: string): Promise<ApiData<TripResponse> | null
     }
   }
 };
+
+

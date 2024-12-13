@@ -15,6 +15,7 @@ import TableData from './data.json';
 
 interface PlansListDetail {
   tripId: string;
+  userId: number;
   fullName: string;
   sourceCityName: string;
   destinationCity: string;
@@ -22,7 +23,11 @@ interface PlansListDetail {
   returnDate: string;
 }
 
-const PlansList = () => {
+type PlansListProps = {
+  data: PlansListDetail;
+};
+
+const PlansList = (props: PlansListProps) => {
   const router = useRouter();
   const columns: ColumnDef<PlansListDetail>[] = [
     {
@@ -100,7 +105,7 @@ const PlansList = () => {
         const item = row.original;
         const handleClick = () => {
           console.log('item', item);
-          router.push(`/plans/user-plan/${item.tripId}`);
+          router.push(`/plans/user-plan/${item.userId}/${item.tripId}`);
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>
@@ -112,7 +117,7 @@ const PlansList = () => {
       },
     },
   ];
-  return <Table columns={columns as any} data={TableData as any} />;
+  return <Table columns={columns as any} data={props.data as any} />;
 };
 
 export default PlansList;

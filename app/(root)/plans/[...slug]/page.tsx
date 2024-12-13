@@ -11,13 +11,15 @@ import UserPlan from '@/components/plans/user-plan/UserPlan';
 
 const PlansDetail = ({ params }: { params: { slug: string[] } }) => {
   const type = params.slug[0];
-  const userId = params.slug[1];
+  const userId = Number(params.slug[1]);
+  const tripId = params.slug[2];
+
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
    */
   const { data, isLoading } = useQuery({
     queryKey: ['trip'],
-    queryFn: async () => await getTrips('f2436471-3467-4284-bd87-68fdb191f06e'),
+    queryFn: async () => await getTrips(tripId),
   });
 
   const { data: constantData } = useQuery({
@@ -32,13 +34,12 @@ const PlansDetail = ({ params }: { params: { slug: string[] } }) => {
       case 'create-plan':
         return <CreatePlan provinces={constantData?.provinces ? constantData.provinces : []} />;
       case 'user-plan':
-        switch (userId) {
-          case userId:
-            return <UserPlan data={data?.data as any} tripID='f2436471-3467-4284-bd87-68fdb191f06e' isLoading={isLoading} />;
+        switch (tripId) {
+          case tripId:
+            return <UserPlan data={data?.data as any} tripID={tripId} userId={userId} isLoading={isLoading} />;
           default:
             return null;
         }
-      // return <UserPlan data={data?.data as any} tripID='f2436471-3467-4284-bd87-68fdb191f06e' isLoading={isLoading} />;
       default:
         return null;
     }
