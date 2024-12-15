@@ -21,13 +21,12 @@ export default function Plans({ searchParams }: { params: { slug: string }; sear
   const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
   const methods = useForm({
     defaultValues: {
-      search: '',
-      sort: '',
+      searchQuery: '',
+      sortDate: '',
       page: 1,
       userId: '',
       limit: 10,
       targetDate: '',
-      sortDate: '',
       originCityId: 0,
       originProvinceId: 0,
       destinationCityId: 0,

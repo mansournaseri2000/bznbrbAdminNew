@@ -1,19 +1,17 @@
-export interface PathGuidListResponse {
-  allPathGuides: PathGuidDetail[];
+export interface TravelMethodsSuggestionsResponse {
+  filteredSuggestions: FilteredSuggestionsDetail[];
+  currentLimit: number;
   currentPage: number;
-  totalPages: number;
-  totalCount: number;
+  allPages: number;
+  CurrentPageCount: number;
 }
-export interface PathGuidDetail {
+export interface FilteredSuggestionsDetail {
   id: number;
-  point: PointDetail;
-  content: string;
-  //   isRead: boolean;
+  status: number;
+  travelMode: 'HIKE' | 'AIRPLANE' | 'BUS' | 'CAR' | 'SHIP' | 'TRAIN' | 'TAXI';
+  description: string;
+  placeId: number;
+  placeName: string;
+  placeCity: string;
+  placeProvince: string;
 }
-export interface PointDetail {
-  id: number;
-  name: string;
-  Province: string;
-  city: string;
-}
-

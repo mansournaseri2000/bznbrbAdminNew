@@ -1,15 +1,19 @@
-import { PointDetail } from './path-guid';
 
 export interface ImageSentListResponse {
-  allPathGuides: ImageSentDetail[];
+  filteredPics: FilteredPicsDetail[];
+  currentLimit: number;
   currentPage: number;
-  totalPages: number;
-  totalCount: number;
+  allPicsCount: number;
+  allPicsPages: number;
 }
-export interface ImageSentDetail {
+export interface FilteredPicsDetail {
   id: number;
-  point: PointDetail;
-  image: string;
-  content: string;
-  //   isRead: boolean;
+  status: boolean;
+  isTop: boolean;
+  picture: string;
+  placeId: number;
+  placeName: string;
+  placeCity: string;
+  placeProvince: string;
+  content?:string
 }

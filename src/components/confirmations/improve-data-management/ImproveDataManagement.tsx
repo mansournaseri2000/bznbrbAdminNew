@@ -1,70 +1,43 @@
+'use client';
+
 import React from 'react';
 
-import DataCard from '@/components/develop/shared/data-card/DataCard';
-import { Flex, Grid, Text } from '@/libs/primitives';
+import { useQuery } from '@tanstack/react-query';
 
-const point = {
-  id: 1,
-  name: 'نام و عنوان point',
-  Province: 'تهران',
-  city: 'تهران',
-};
+import { getAllImproveContent } from '@/api/confirmations';
+import DataCard from '@/components/develop/shared/data-card/DataCard';
+import { Flex, Grid } from '@/libs/primitives';
+import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
+import ItemsPerPage from '@/libs/shared/ItemsPerPage';
+import { updateUrlWithPageNumber } from '@/libs/utils';
+
 const ImproveDataManagement = () => {
+  /*
+   *** Services_________________________________________________________________________________________________________________________________________________________________
+   */
+
+  const { data: improveData } = useQuery({ queryKey: ['improve-data'], queryFn: async () => getAllImproveContent() });
+
+  console.log('Improve data', improveData);
+
   return (
     <Grid width={'100%'} gapY={'5'} p={'5'}>
-      <DataCard
-        type='improve_data_management'
-        colorVariant='blue'
-        point={point}
-        mobile='091212345678'
-        website='www.example.com'
-        email='example@gmail.com'
-        province='نام استان'
-        city='نام شهر'
-        id={1}
-        content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
-      />
-      <DataCard
-        type='improve_data_management'
-        colorVariant='pink'
-        point={point}
-        mobile='091212345678'
-        website='www.example.com'
-        email='example@gmail.com'
-        province='نام استان'
-        city='نام شهر'
-        id={1}
-        content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
-      />
-      <DataCard
-        type='improve_data_management'
-        colorVariant='blue'
-        point={point}
-        mobile='091212345678'
-        website='www.example.com'
-        email='example@gmail.com'
-        province='نام استان'
-        city='نام شهر'
-        id={1}
-        content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
-      />
-      <DataCard
-        type='improve_data_management'
-        colorVariant='pink'
-        point={point}
-        mobile='091212345678'
-        website='www.example.com'
-        email='example@gmail.com'
-        province='نام استان'
-        city='نام شهر'
-        id={1}
-        content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
-      />
-      {/* TODO: add pagination */}
-      <Flex width={'100%'} p={'5'} align={'center'} justify={'between'} style={{ border: '1px solid red' }}>
-        <Text>pagination</Text>
-        <Text>pagination count</Text>
-      </Flex>
+      {improveData?.PlaceImproveContent.map((item, index) => (
+        <DataCard type='improve_data_management' key={item.id} index={index} {...item} />
+      ))}
+
+      {improveData?.PlaceImproveContent && (
+        <Flex width={'100%'} align={'center'} justify={'between'} style={{ border: '1px solid red' }}>
+          <CustomPagination
+            current={1}
+            total={improveData?.CurrentShowingPlaceImproveContent}
+            onPageChange={p => {
+              updateUrlWithPageNumber(p);
+            }}
+          />
+          <ItemsPerPage data={improveData?.PlaceImproveContent} currentPage={improveData?.CurrentShowingPlaceImproveContentPage} totalCount={improveData?.PlaceImproveContentCount} />
+        </Flex>
+      )}
     </Grid>
   );
 };

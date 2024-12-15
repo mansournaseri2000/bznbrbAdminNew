@@ -9,27 +9,19 @@ import { Box, Button, Flex, Grid, IconButton, Text } from '@/libs/primitives';
 import { Dislike, Like, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-
-type Props = {
-  imageSrc: string;
-  name: string;
-  createAt: string;
-  comment: string;
-  like: number;
-  dislike: number;
-};
+import { PlaceCommentsDetail } from '@/types/data-management/point';
 
 const containerVariants: Variants = {
   open: { opacity: 1, height: 'auto' },
   closed: { opacity: 0, height: 0 },
 };
 
-const CommentCard = (props: Props) => {
+const CommentCard = (props: PlaceCommentsDetail) => {
   /**
    * const and variables
    * _______________________________________________________________________________
    */
-  const { imageSrc, name, createAt, comment, like, dislike } = props;
+  const { pic, fullName, date, content, likes, dislikes } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const MAX_CHARACTERS = 300;
   /**
@@ -46,14 +38,14 @@ const CommentCard = (props: Props) => {
       <Flex width={'100%'} align={'center'} justify={'between'}>
         <Flex align={'center'} gap={'10px'}>
           <Box width={'32px'} height={'32px'} position={'relative'}>
-            <Image src={imageSrc} alt='' fill style={{ borderRadius: 100 }} />
+            <Image src={pic ? pic : ''} alt='' fill style={{ borderRadius: 100 }} />
           </Box>
           <Flex direction={'column'} gap={'1'}>
             <Text {...typoVariant.body3} style={{ color: colorPalette.gray[11] }}>
-              {name}
+              {fullName}
             </Text>
             <Text {...typoVariant.description2} style={{ color: colorPalette.gray[11], opacity: '50%' }}>
-              {createAt}
+              {date}
             </Text>
           </Flex>
         </Flex>
@@ -62,18 +54,16 @@ const CommentCard = (props: Props) => {
         </IconButton>
       </Flex>
 
-
-
       <motion.div variants={containerVariants} initial={false} transition={{ duration: 0.3 }} style={{ overflow: 'hidden' }} layout>
         <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
-          {isOpen ? comment : `${comment.slice(0, MAX_CHARACTERS)}${comment.length > MAX_CHARACTERS ? '...' : ''}`}
+          {isOpen ? content : `${content.slice(0, MAX_CHARACTERS)}${content.length > MAX_CHARACTERS ? '...' : ''}`}
         </Text>
       </motion.div>
       <Flex width={'100%'} align={'center'} justify={'between'}>
         <Flex align={'center'} gap={'2'}>
           <Flex align={'center'} gap={'2'} p={'2'}>
             <Text {...typoVariant.body3} style={{ color: colorPalette.blue[11] }}>
-              {like}
+              {likes}
             </Text>
             <IconButton variant='surface'>
               <Like />
@@ -81,7 +71,7 @@ const CommentCard = (props: Props) => {
           </Flex>
           <Flex align={'center'} gap={'2'} p={'2'}>
             <Text {...typoVariant.body3} style={{ color: colorPalette.blue[11] }}>
-              {dislike}
+              {dislikes}
             </Text>
             <IconButton variant='surface'>
               <Dislike />

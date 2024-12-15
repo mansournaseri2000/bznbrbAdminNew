@@ -1,7 +1,7 @@
 import { ApiManagerV2 } from '@/libs/utils/axios.config';
-import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
+// import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
 import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
-import { CommentListResponse } from '@/types/data-management/point';
+import { CommentListResponse, PlaceImproveContentResponse } from '@/types/data-management/point';
 import { PlaceListResponse } from '@/types/place';
 
 import { ApiData } from './types';
@@ -26,15 +26,19 @@ const handleQueryParams = (obj: Record<string, any>) => {
   return queryParams.length ? `${queryParams.join('&')}` : '';
 };
 
-export const getPlaceComments = async (id: number, pageParam: number) => {
-  const res = await clientApiManagerV2.get<ApiData<CommentListResponse>>(`comment/${id}?page=${pageParam}&limit=${10}`);
+export const getPlaceComments = async (placeId: number) => {
+  const res = await DevApiManager.get<ApiData<CommentListResponse>>(`comment/placeComments/${placeId}`);
 
   return res.data.data;
 };
 
 export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
-  
   const res = await DevApiManager.post<ApiData<PlaceListResponse>>('places/allPlacesWithFilter', params);
+  return res.data.data;
+};
+
+export const getPlaceImproveContent = async (placeId: number) => {
+  const res = await DevApiManager.get<ApiData<PlaceImproveContentResponse>>(`places/placeImproveContent/${placeId}`);
   return res.data.data;
 };
 
@@ -43,4 +47,9 @@ export interface AllPlacesBody {
   limit: number;
   cityId: number | string;
   arrayCatIds: number[];
+  isInfoCompleted: string;
+  // TODO: isInfoCompleted must change to boolean
+  isPublished: boolean;
+  status: boolean;
+  searchQuery: string;
 }

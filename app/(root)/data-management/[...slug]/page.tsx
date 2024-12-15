@@ -15,7 +15,9 @@ import { PlaceResponse } from '@/types/place';
 
 const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   const status = params.slug[0];
-  const placeID = 17567;
+  const placeID = params.slug[2];
+
+  console.log('placeID', placeID);
   // params.slug[1];
 
   const results = useQueries({
@@ -37,7 +39,7 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   const { data: constantData } = constantResult;
   const { data: placeData, isLoading: placeIsLoading } = editPlaceResult;
 
-  console.log('PlaceData', placeData);
+  // console.log('PlaceData', placeData);
 
   if (!constantData || placeIsLoading) return <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />;
 

@@ -26,12 +26,14 @@ const FilterContent = ({ province, setIsOpen }: Props) => {
    */
   const { control, setValue, watch, reset } = useFormContext();
 
-  const sourceCity = province.filter(item => item.id === Number(watch('sourceProvince')))[0]?.Cities;
-  const departureCity = province.filter(item => item.id === Number(watch('departureProvince')))[0]?.Cities;
+  const sourceCity = province.filter(item => item.id === Number(watch('originProvinceId')))[0]?.Cities;
+  const departureCity = province.filter(item => item.id === Number(watch('destinationProvinceId')))[0]?.Cities;
 
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  console.log('watch', watch());
 
   /**
    * functions
@@ -62,7 +64,7 @@ const FilterContent = ({ province, setIsOpen }: Props) => {
             مبدا
           </Text>
           <Controller
-            name='sourceProvince'
+            name='originProvinceId'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -71,7 +73,7 @@ const FilterContent = ({ province, setIsOpen }: Props) => {
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
-                  setValue('sourceCity', '');
+                  setValue('originCityId', '');
                 }}
               >
                 {province?.map(item => (
@@ -84,7 +86,7 @@ const FilterContent = ({ province, setIsOpen }: Props) => {
             )}
           />
           <Controller
-            name='sourceCity'
+            name='originCityId'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -109,7 +111,7 @@ const FilterContent = ({ province, setIsOpen }: Props) => {
             مقصد
           </Text>
           <Controller
-            name='departureProvince'
+            name='destinationProvinceId'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -118,7 +120,7 @@ const FilterContent = ({ province, setIsOpen }: Props) => {
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
-                  setValue('departureCity', '');
+                  setValue('destinationCityId', '');
                 }}
               >
                 {province?.map(item => (
@@ -131,7 +133,7 @@ const FilterContent = ({ province, setIsOpen }: Props) => {
             )}
           />
           <Controller
-            name='departureCity'
+            name='destinationCityId'
             control={control}
             render={({ field }) => (
               <SelectRoot

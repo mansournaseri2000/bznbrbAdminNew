@@ -3,7 +3,8 @@
 import React from 'react';
 
 // import Image from 'next/image';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+
 import { ColumnDef } from '@tanstack/react-table';
 
 import { Button, Flex, Text } from '@/libs/primitives';
@@ -12,13 +13,12 @@ import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { AllFilteredPlacesDetail } from '@/types/place/place-list';
 
-// import TableData from './data.json';
-
 interface PointListDetail {
+  id: number;
   name: string;
   province: string;
   city: string;
-  pointType: string;
+  parentCategory: string;
   category: string;
   isPlaceInfoComplete: boolean;
 }
@@ -32,6 +32,7 @@ const PointManagementList = (props: Props) => {
   // const [isOpen, setIsOpen] = useState(false);
 
   // const { push } = useRouter();
+  const router = useRouter();
 
   const columns: ColumnDef<PointListDetail>[] = [
     {
@@ -69,7 +70,7 @@ const PointManagementList = (props: Props) => {
     },
     {
       accessorKey: 'city',
-      header: 'شهر',
+      header: 'شهرستان',
       cell: info => {
         const value = info.getValue() as string | null;
         return (
@@ -80,7 +81,7 @@ const PointManagementList = (props: Props) => {
       },
     },
     {
-      accessorKey: 'category',
+      accessorKey: 'parentCategory',
       header: 'دسته بندی',
       cell: info => {
         const value = info.getValue() as string | null;
@@ -92,7 +93,7 @@ const PointManagementList = (props: Props) => {
       },
     },
     {
-      accessorKey: 'pointType',
+      accessorKey: 'category',
       header: 'نوع نقطه',
       cell: info => {
         const value = info.getValue() as string | null;
@@ -105,7 +106,7 @@ const PointManagementList = (props: Props) => {
     },
     {
       accessorKey: 'isPlaceInfoComplete',
-      header: 'وضعیت اطلاعات',
+      header: 'وضعیت انتشار',
       cell: info => {
         const value = info.getValue() as boolean | null;
         return (
@@ -121,7 +122,7 @@ const PointManagementList = (props: Props) => {
               borderRadius: 4,
             }}
           >
-            {value === false ? 'ناقص' : value === true ? 'کامل' : '-'}
+            {value === false ? 'منتشر نشده' : value === true ? 'منتشر شده' : '-'}
           </Text>
         );
       },
@@ -132,6 +133,7 @@ const PointManagementList = (props: Props) => {
         const item = row.original;
         const handleClick = () => {
           console.log('item', item);
+          router.push(`/data-management/point-management/point-detail/${item.id}`);
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>

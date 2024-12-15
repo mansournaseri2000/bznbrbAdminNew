@@ -51,13 +51,13 @@ const PlansHero = (props: Props) => {
           </Flex>
         </Button>
 
-        <Controller name='search' control={control} render={({ field }) => <TextField {...field} placeholder='جستجوی نام کاربر' />} />
+        <Controller name='searchQuery' control={control} render={({ field }) => <TextField {...field} placeholder='جستجوی نام کاربر' />} />
         <IconButton size={'3'} variant='soft' onClick={props.onSubmit}>
           <Search />
         </IconButton>
 
         <Controller
-          name='sort'
+          name='sortDate'
           control={control}
           render={({ field }) => (
             <SelectRoot

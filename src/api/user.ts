@@ -48,6 +48,7 @@ export interface RecentTripsBody {
   limit: number;
   targetDate: string;
   sortDate: string;
+  searchQuery:string,
   originCityId: number;
   originProvinceId: number;
   destinationCityId: number;

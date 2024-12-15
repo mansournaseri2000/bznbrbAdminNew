@@ -22,17 +22,20 @@ const PointManagement = () => {
 
   const methods = useForm({
     defaultValues: {
-      name: '',
-      pro: '',
-      cit: '',
-      cat: '',
-      subCategoryId: '',
-      statusId: '',
-      pointTypeId: '',
       page: 1,
       limit: 10,
-      cityId: '',
+      cityId: 0,
       arrayCatIds: [],
+      isInfoCompleted: '',
+      isPublished: true,
+      status: true,
+      searchQuery: '',
+      // name: '',
+      // pro: '',
+      // cat: '',
+      // subCategoryId: '',
+      // statusId: '',
+      // pointTypeId: '',
     },
   });
 

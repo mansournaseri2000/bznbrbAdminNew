@@ -2,15 +2,17 @@
 
 import React, { useState } from 'react';
 
-import { Grid } from '@/libs/primitives';
+import { Flex, Grid } from '@/libs/primitives';
 import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
+import { FeaturesResponse } from '@/types/additional-detail/additional-detail';
 
 import FeatureCard from '../feature-card/FeatureCard';
 import FeatureModal from '../feature-modal/FeatureModal';
 
 type KeyOptions = 'edit' | 'add' | '';
 
-const FeatureItems = () => {
+const FeatureItems = (props: FeaturesResponse) => {
+  const { name, features } = props;
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openAdd, setOpenAdd] = useState<boolean>(false);
   const [key, setKey] = useState<KeyOptions>('');
@@ -18,7 +20,7 @@ const FeatureItems = () => {
     <>
       <Grid width={'100%'} gapY={'5'}>
         <AccordionWrapper
-          hero='خطرات و محدودیت‌ها'
+          hero={name}
           withButton
           onEdit={e => {
             e.stopPropagation();
@@ -31,7 +33,11 @@ const FeatureItems = () => {
             setKey('add');
           }}
         >
-          <FeatureCard title='ویژگی اول' />
+          <Flex width={'100%'} gap={'5'} align={'center'} wrap={'wrap'}>
+            {features.map(item => (
+              <FeatureCard key={item.id} title={item.name} />
+            ))}
+          </Flex>
         </AccordionWrapper>
       </Grid>
       {key === 'add' ? (

@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
+import { useQuery } from '@tanstack/react-query';
+
+import { getCategories } from '@/api/additional-detail';
 import { sortCategoryOptions } from '@/constants/additional-detail';
 import { Button, Flex, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import { typoVariant } from '@/theme/typo-variants';
@@ -11,9 +14,19 @@ import CategoryItems from './category-items/CategoryItems';
 import CategoryModal from './category-modal/CategoryModal';
 
 const Categories = () => {
+  /*
+   *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
+   */
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const methods = useForm({ defaultValues: { sort: '' } });
   const { control } = methods;
+
+  /*
+   *** Services_________________________________________________________________________________________________________________________________________________________________
+   */
+  const { data: categoriesData } = useQuery({ queryKey: ['categories'], queryFn: async () => await getCategories() });
+
+  console.log('Categories Data', categoriesData);
   return (
     <FormProvider {...methods}>
       <Flex width={'100%'} direction={'column'} gap={'5'} p={'4'}>
@@ -47,7 +60,9 @@ const Categories = () => {
             />
           </Flex>
         </Flex>
-        <CategoryItems />
+        {categoriesData?.map(item => (
+          <CategoryItems key={item.id} {...item} />
+        ))}
       </Flex>
       <CategoryModal isOpen={isOpen} setIsOpen={setIsOpen} type='edit_category' />
     </FormProvider>

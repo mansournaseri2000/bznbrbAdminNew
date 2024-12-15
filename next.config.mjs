@@ -3,7 +3,7 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ['37.32.8.14', 'https://uploader.darkube.app', '780.ir', 'website-cms.780.ir'], // Add your domain here
+    domains: ['780.ir', 'website-cms.780.ir', '37.32.8.14', 'uploader.darkube.app', '780.ir', 'website-cms.780.ir'], // Add your domain here
     remotePatterns: [
       {
         protocol: 'https',

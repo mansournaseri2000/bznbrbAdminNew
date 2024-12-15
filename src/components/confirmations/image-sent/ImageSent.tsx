@@ -1,44 +1,40 @@
+'use client';
+
 import React from 'react';
 
-import ImageSentCard from '@/components/develop/confirmations/img-sent-card/ImageSentCard';
-import { Flex, Grid, Text } from '@/libs/primitives';
+import { useQuery } from '@tanstack/react-query';
 
-const point = {
-  id: 1,
-  name: 'نام و عنوان point',
-  Province: 'تهران',
-  city: 'تهران',
-};
+import { getAllPicUserUploads } from '@/api/confirmations';
+import ImageSentCard from '@/components/develop/confirmations/img-sent-card/ImageSentCard';
+import { Flex, Grid } from '@/libs/primitives';
+import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
+import ItemsPerPage from '@/libs/shared/ItemsPerPage';
+import { updateUrlWithPageNumber } from '@/libs/utils';
 
 const ImageSent = () => {
+  /*
+   *** Services_________________________________________________________________________________________________________________________________________________________________
+   */
+
+  const { data: userImageUploads } = useQuery({ queryKey: ['user-image-uploads'], queryFn: async () => await getAllPicUserUploads() });
+  console.log('UserImageUploads', userImageUploads);
   return (
     <Grid width={'100%'} gapY={'5'} p={'5'}>
-      <ImageSentCard
-        colorVariant='blue'
-        point={point}
-        image={'/image/image-sent.png'}
-        content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد'
-        id={1}
-      />
-      <ImageSentCard
-        colorVariant='pink'
-        point={point}
-        image={'/image/image-sent.png'}
-        content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد'
-        id={1}
-      />
-      <ImageSentCard
-        colorVariant='blue'
-        point={point}
-        image={'/image/image-sent.png'}
-        content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد'
-        id={1}
-      />
-      {/* TODO: add pagination */}
-      <Flex width={'100%'} p={'5'} align={'center'} justify={'between'} style={{ border: '1px solid red' }}>
-        <Text>pagination</Text>
-        <Text>pagination count</Text>
-      </Flex>
+      {userImageUploads?.filteredPics.map((item, index) => (
+        <ImageSentCard key={item.id} {...item} index={index} />
+      ))}
+      {userImageUploads?.filteredPics && (
+        <Flex width={'100%'} align={'center'} justify={'between'}>
+          <CustomPagination
+            current={1}
+            total={userImageUploads?.allPicsCount}
+            onPageChange={p => {
+              updateUrlWithPageNumber(p);
+            }}
+          />
+          <ItemsPerPage data={userImageUploads?.filteredPics} currentPage={userImageUploads?.currentPage} totalCount={userImageUploads?.allPicsCount} />
+        </Flex>
+      )}
     </Grid>
   );
 };

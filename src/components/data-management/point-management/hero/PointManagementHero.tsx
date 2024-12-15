@@ -49,7 +49,7 @@ const PointManagementHero = () => {
           </Flex>
         </Button>
 
-        <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='جستجو نام نقطه' />} />
+        <Controller name='searchQuery' control={control} render={({ field }) => <TextField {...field} placeholder='جستجو نام نقطه' />} />
         <IconButton size={'3'} variant='soft' onClick={handleSubmit}>
           <Search />
         </IconButton>

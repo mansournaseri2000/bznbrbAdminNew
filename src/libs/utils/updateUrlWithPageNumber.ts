@@ -3,7 +3,8 @@ const updateUrlWithPageNumber = (pageNumber: number) => {
     const params = new URLSearchParams(window.location.search);
     params.set('page', pageNumber.toString());
 
-    window.history.pushState({}, '', `/?${params.toString()}`);
+    const pathname = window.location.pathname;
+    window.history.pushState({}, '', `${pathname}?${params.toString()}`);
   }
 };
 

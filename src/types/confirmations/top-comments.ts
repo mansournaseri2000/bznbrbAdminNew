@@ -1,11 +1,12 @@
 import { PointDetail } from './path-guid';
 
-export interface ProvinceTopCommentsResponse {
-  allProvinceTopComments: ProvinceDetailCardDetail[];
-  currentPage: number;
-  totalPages: number;
-  totalCount: number;
+export interface TopCommentsForProvinceResponse {
+  id: number;
+  name: string;
+  countOfAds: number;
+  latestUpdatedAt: number;
 }
+
 export interface ProvinceDetailCardDetail {
   id?: number;
   title: string;
@@ -41,4 +42,15 @@ export interface PointCommentsDetail {
 export interface PointCommentItemDetail {
   user: User;
   comment: string;
+}
+
+export interface CommentItemDetail {
+  provinceName: string;
+  comments: CommentsDetail[];
+}
+export interface CommentsDetail {
+  commentId: number;
+  commentContent: string;
+  commentName: string;
+  commentUpdateTime: number;
 }

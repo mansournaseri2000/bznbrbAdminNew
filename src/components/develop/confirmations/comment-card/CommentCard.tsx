@@ -19,6 +19,7 @@ import { ToastError, ToastSuccess } from '../../../../libs/shared/toast/Toast';
 
 type CommentCardProps = CommentsDetail & {
   colorVariant?: 'blue' | 'pink';
+  index: number;
 };
 
 type modalStateType = {
@@ -27,7 +28,7 @@ type modalStateType = {
 };
 
 const CommentCard: React.FC<CommentCardProps> = (props: CommentCardProps) => {
-  const { content, createdAt, users, id, places, colorVariant } = props;
+  const { content, createdAt, users, id, places, index } = props;
 
   const [modalState, setModalState] = useState<modalStateType>({
     isOpen: false,
@@ -85,8 +86,8 @@ const CommentCard: React.FC<CommentCardProps> = (props: CommentCardProps) => {
         gap={'4'}
         style={{
           borderRadius: 8,
-          backgroundColor: colorVariant === 'blue' ? colorPalette.blue[2] : colorPalette.pink[2],
-          border: colorVariant === 'blue' ? `1px solid ${colorPalette.blue[6]}` : `1px solid ${colorPalette.pink[6]}`,
+          backgroundColor: index % 2 === 0 ? colorPalette.blue[2] : colorPalette.pink[2],
+          border: index % 2 === 0 ? `1px solid ${colorPalette.blue[6]}` : `1px solid ${colorPalette.pink[6]}`,
         }}
       >
         <Flex width={'100%'} justify={'between'} align={'center'}>
@@ -98,8 +99,7 @@ const CommentCard: React.FC<CommentCardProps> = (props: CommentCardProps) => {
               {`${places?.Cities.Provinces.name} / ${places?.Cities.name}`}
             </Text>
           </Flex>
-          {/* TODO: fix color by define count */}
-          <Button size={'3'} colorVariant={colorVariant === 'blue' ? 'BLUE' : 'PINK'}>
+          <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'}>
             <Text {...typoVariant.body3}>مشاهده نقطه</Text>
           </Button>
         </Flex>

@@ -1,27 +1,39 @@
-interface User {
-  id: number;
-  last_name: string;
-  pic: string | null;
-  name: string;
-  mobile: string | number;
+// interface User {
+//   id: number;
+//   last_name: string;
+//   pic: string | null;
+//   name: string;
+//   mobile: string | number;
+// }
+// interface Comment {
+//   id: number;
+//   content: string;
+//   likes: number;
+//   dislikes: number;
+//   users: User;
+//   createdAt: string;
+//   CommentInteraction: { type: 'DISLIKE' | 'LIKE' }[];
+// }
+export interface CommentListResponse {
+  PlaceComments: PlaceCommentsDetail[];
+  PlaceRating: number;
+  PlaceCommentsCount: number;
+  CurrentShowingComments: number;
+  CurrentShowingCommentsLimit: number;
+  CurrentShowingCommentsPage: number;
+  allCommentsForPlacePages: number;
 }
-interface Comment {
+export interface PlaceCommentsDetail {
   id: number;
+  score: number;
+  date: number;
+  pic: string | null;
+  fullName: string;
   content: string;
   likes: number;
   dislikes: number;
-  users: User;
-  createdAt: string;
-  CommentInteraction: { type: 'DISLIKE' | 'LIKE' }[];
 }
-export interface CommentListResponse {
-  averageScore: number;
-  commentCount: number;
-  allComments: Comment[];
-  currentPage: number;
-  totalPages: number;
-  totalCount: number;
-}
+
 export interface PlaceResponse {
   id: number;
   city_id: number;
@@ -145,4 +157,23 @@ export interface Item {
   id: number;
   name: string;
   en_name: any;
+}
+export interface PlaceImproveContentResponse {
+  PlaceImproveContent: PlaceImproveContentDataDetail[];
+  PlaceImproveContentCount: number;
+  CurrentShowingPlaceImproveContent: number;
+  CurrentShowingPlaceImproveContentLimit: number;
+  CurrentShowingPlaceImproveContentPage: number;
+  AllPlaceImprovementContentPages: number;
+}
+export interface PlaceImproveContentDataDetail {
+  id: number;
+  name: string;
+  phone: string;
+  website: string;
+  email: string;
+  provinceName: string;
+  cityName: string;
+  address: string;
+  content?: string;
 }

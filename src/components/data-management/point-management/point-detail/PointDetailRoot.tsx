@@ -3,16 +3,19 @@
 import React from 'react';
 
 import dynamic from 'next/dynamic';
+import { useParams } from 'next/navigation';
 
 import { Skeleton, Spinner } from '@radix-ui/themes';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 
-import { getPlaceComments } from '@/api/data-management';
+import { getPlaceComments, getPlaceImproveContent } from '@/api/data-management';
 import { getPlace } from '@/api/place';
 import CommentCard from '@/components/develop/data-management/comment-card/CommentCard';
 import ImageCard from '@/components/develop/data-management/image-card/ImageCard';
 import DataCard from '@/components/develop/shared/data-card/DataCard';
 import { Box, Flex, Grid, IconButton, Text } from '@/libs/primitives';
+import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
+import ItemsPerPage from '@/libs/shared/ItemsPerPage';
 import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
 import SimpleWrapper from '@/libs/shared/wrapper/SimpleWrapper';
 import { generateRecommendNavigationItems } from '@/libs/utils/generateRecommendNavigationItems';
@@ -30,30 +33,43 @@ const Map = dynamic(() => import('./routing-gide/Map'), {
   loading: () => <Skeleton loading minHeight={'460px'} style={{ borderRadius: '8px' }} />,
 });
 
-const point = {
-  id: 1,
-  name: 'نام و عنوان point',
-  Province: 'تهران',
-  city: 'تهران',
-};
-
 const PointDetailRoot = () => {
   /**
    * services
    * _______________________________________________________________________________
    */
-  const { data: pointData, isLoading: pointLoading } = useQuery({
-    queryKey: ['point-data'],
-    queryFn: async () => await getPlace(70),
-  });
 
-  const { data: commentData } = useQuery({
-    queryKey: ['point-comment'],
-    queryFn: async () => await getPlaceComments(70, 1),
-  });
+  const params = useParams();
+  console.log('params', params.slug[2]);
 
-  console.log('Data', pointData);
-  console.log('commentData', commentData);
+  const result = useQueries({
+    queries: [
+      {
+        queryKey: ['point-data'],
+        queryFn: async () => await getPlace(Number(params.slug[2])),
+      },
+      {
+        queryKey: ['point-comment'],
+        queryFn: async () => await getPlaceComments(Number(params.slug[2])),
+      },
+      {
+        queryKey: ['improve-content'],
+        queryFn: async () => await getPlaceImproveContent(Number(params.slug[2])),
+        // Number(params.slug[2])
+      },
+    ],
+  });
+  /*
+   *** Variables and Constant _________________________________________________________________________________________________________________________________________________________________
+   */
+  const [pointResult, commentResult, improveContentResult] = result;
+  const { data: pointData, isLoading: pointLoading } = pointResult;
+  const { data: commentData } = commentResult;
+  const { data: improveContentData } = improveContentResult;
+  // const [page,setPage] = useState<number>(commentData?.CurrentShowingCommentsPage)
+
+  // console.log('Data', pointData);
+  console.log('improveContentData', improveContentData);
 
   if (pointLoading) return <Spinner />;
 
@@ -64,41 +80,37 @@ const PointDetailRoot = () => {
        * _______________________________________________________________________________
        */}
       {/* TODO: fix data type and remove any */}
-      <GalleryWithInfo data={pointData ? pointData : ([] as any)} commentList={commentData?.allComments ? commentData.allComments : ([] as any)} />
+      <GalleryWithInfo data={pointData ? pointData : ([] as any)} commentList={commentData?.PlaceComments ? commentData.PlaceComments : ([] as any)} />
       <PlaceDetails data={pointData?.PlaceDetails ? pointData.PlaceDetails : []} />
       {/**
        * edit data
        * _______________________________________________________________________________
        */}
       <AccordionWrapper hero='اصلاح اطلاعات ارسال شده'>
-        <DataCard
-          type='point_detail'
-          colorVariant='blue'
-          point={point}
-          mobile='091212345678'
-          website='www.example.com'
-          email='example@gmail.com'
-          province='نام استان'
-          city='نام شهر'
-          id={1}
-          content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
-        />
-        <DataCard
-          type='point_detail'
-          colorVariant='pink'
-          point={point}
-          mobile='091212345678'
-          website='www.example.com'
-          email='example@gmail.com'
-          province='نام استان'
-          city='نام شهر'
-          id={1}
-          content='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می   باشد'
-        />
-        <Flex width={'100%'} justify={'between'} p={'5'} style={{ border: '2px solid red' }}>
-          <Text>pagination</Text>
-          <Text>data count info</Text>
-        </Flex>
+        {improveContentData?.PlaceImproveContent.length !== 0 ? (
+          <>
+            {improveContentData?.PlaceImproveContent.map((item, index) => (
+              <DataCard key={item.id} {...item} type='point_detail' index={index} />
+            ))}
+
+            <Flex width={'100%'} align={'center'} justify={'between'}>
+              <CustomPagination
+                current={improveContentData?.CurrentShowingPlaceImproveContentPage ? improveContentData?.CurrentShowingPlaceImproveContentPage : 0}
+                total={improveContentData?.AllPlaceImprovementContentPages ? improveContentData?.AllPlaceImprovementContentPages : 0}
+                onPageChange={p => {
+                  console.log('page', p);
+                }}
+              />
+              <ItemsPerPage
+                data={improveContentData?.PlaceImproveContent}
+                currentPage={improveContentData?.CurrentShowingPlaceImproveContentPage ? improveContentData?.CurrentShowingPlaceImproveContentPage : 0}
+                totalCount={improveContentData?.PlaceImproveContentCount ? improveContentData?.PlaceImproveContentCount : 0}
+              />
+            </Flex>
+          </>
+        ) : (
+          <Text>دیتایی وجود ندارد</Text>
+        )}
       </AccordionWrapper>
       {/**
        * Routing Guide
@@ -120,28 +132,28 @@ const PointDetailRoot = () => {
        * comment
        * _______________________________________________________________________________
        */}
-      <SimpleWrapper hero='نظرات' iconContent={<CommentInfo score='3.2' comment={1520} />}>
-        <CommentCard
-          imageSrc='/image/profile.jpeg'
-          name='نام کاربر'
-          createAt='۲۴ فروردین'
-          comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشدلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشدلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشدلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشدلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
-          like={1}
-          dislike={2}
-        />
-        <CommentCard
-          imageSrc='/image/profile.jpeg'
-          name='نام کاربر'
-          createAt='۲۴ فروردین'
-          comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-          like={1}
-          dislike={2}
-        />
-        <Flex width={'100%'} justify={'between'} p={'5'} style={{ border: '2px solid red' }}>
-          <Text>pagination</Text>
-          <Text>data count info</Text>
-        </Flex>
-      </SimpleWrapper>
+      {commentData?.PlaceComments.length !== 0 && (
+        <SimpleWrapper hero='نظرات' iconContent={<CommentInfo score={String(commentData?.PlaceRating)} comment={commentData?.PlaceComments ? commentData.PlaceComments.length : 0} />}>
+          {commentData?.PlaceComments.map(item => (
+            <CommentCard key={item.id} {...item} />
+          ))}
+
+          <Flex width={'100%'} align={'center'} justify={'between'} style={{ border: '2px solid red' }}>
+            <CustomPagination
+              current={commentData?.CurrentShowingCommentsPage ? commentData.CurrentShowingCommentsPage : 0}
+              total={commentData?.PlaceCommentsCount ? commentData.PlaceCommentsCount : 0}
+              onPageChange={p => {
+                console.log('page', p);
+              }}
+            />
+            <ItemsPerPage
+              data={commentData?.PlaceComments}
+              currentPage={commentData?.CurrentShowingCommentsPage ? commentData.CurrentShowingCommentsPage : 0}
+              totalCount={commentData?.PlaceCommentsCount ? commentData.PlaceCommentsCount : 0}
+            />
+          </Flex>
+        </SimpleWrapper>
+      )}
       {/**
        * images
        * _______________________________________________________________________________

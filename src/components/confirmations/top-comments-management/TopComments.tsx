@@ -2,52 +2,37 @@
 
 import React from 'react';
 
+import { useParams } from 'next/navigation';
+
+import { useQuery } from '@tanstack/react-query';
+
+import { getCommentsByProvinceId } from '@/api/confirmations';
 import AddComment from '@/components/develop/confirmations/add-comment/AddComment';
 import TopCommentItem from '@/components/develop/confirmations/top-comment-item/TopCommentItem';
 import { Grid } from '@/libs/primitives';
 
-const point = {
-  id: 1,
-  name: 'نام و عنوان point',
-  Province: 'تهران',
-  city: 'تهران',
-};
-
-const user = {
-  pic: '/image/profile.jpeg',
-  username: 'مصطفی',
-  last_name: 'اجاقلو',
-  date: '24 فروردین',
-};
-
 const TopComments = () => {
+  /*
+   *** Services_________________________________________________________________________________________________________________________________________________________________
+   */
+  const { data: commentItemData } = useQuery({ queryKey: ['top-comments-item'], queryFn: async () => await getCommentsByProvinceId(Number(params.slug[2])) });
+  /*
+   *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
+   */
+  const params = useParams();
+  const numberOfComments = commentItemData?.comments.length || 0;
+  const numberOfAddComments = 5 - numberOfComments;
+  console.log('params', params.slug[2]);
+
+  console.log('CommentData', commentItemData?.comments.length);
   return (
     <Grid width={'100%'} gapY={'5'}>
-      <TopCommentItem
-        id={1}
-        point={point}
-        user={user}
-        comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
-      />
-      <TopCommentItem
-        id={1}
-        point={point}
-        user={user}
-        comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
-      />
-      <TopCommentItem
-        id={1}
-        point={point}
-        user={user}
-        comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
-      />
-      <TopCommentItem
-        id={1}
-        point={point}
-        user={user}
-        comment='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد'
-      />
-      <AddComment />
+      {commentItemData?.comments.map((item, index) => (
+        <>{item.commentName && item.commentContent ? <TopCommentItem key={index} {...item} /> : <AddComment key={index} />}</>
+      ))}{' '}
+      {Array.from({ length: numberOfAddComments }).map((_, index) => (
+        <AddComment key={`add-comment-${index}`} />
+      ))}
     </Grid>
   );
 };
