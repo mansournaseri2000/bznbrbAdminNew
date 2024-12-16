@@ -27,7 +27,7 @@ const PlansHero = (props: Props) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const { control, watch } = useFormContext();
+  const { control } = useFormContext();
 
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________

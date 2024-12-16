@@ -11,7 +11,6 @@ import { Table } from '@/libs/shared';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
-import TableData from './data.json';
 
 interface PlansListDetail {
   tripId: string;

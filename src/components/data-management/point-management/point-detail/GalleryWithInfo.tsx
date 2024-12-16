@@ -14,7 +14,7 @@ import { Badge } from '@/libs/shared/SharedStyled';
 import { Star, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { CommentListResponse, PlaceResponse } from '@/types/data-management/point';
+import { PlaceCommentsDetail, PlaceResponse } from '@/types/data-management/point';
 
 const ClientRenderText = dynamic(() => import('@/libs/shared/ClientRenderText'), {
   ssr: false,
@@ -23,7 +23,7 @@ const ClientRenderText = dynamic(() => import('@/libs/shared/ClientRenderText'),
 
 type Props = {
   data: PlaceResponse;
-  commentList: CommentListResponse;
+  commentList: PlaceCommentsDetail;
 };
 
 const GalleryWithInfo = ({ data, commentList }: Props) => {
@@ -84,13 +84,14 @@ const GalleryWithInfo = ({ data, commentList }: Props) => {
           <Flex gap={'4px'}>
             <Flex gap={'3px'}>
               <Text {...typoVariant.body3} style={{ color: colorPalette.gray[11] }}>
-                {`${Boolean(commentList.averageScore) ? commentList.averageScore : '_'}/5`}
+                {`${Boolean(commentList.score) ? commentList.score : '_'}/5`}
               </Text>
               <StarStyle />
             </Flex>
-            <Text {...typoVariant.body3} style={{ color: colorPalette.gray[11] }}>
-              {`(${Boolean(commentList.commentCount) ? commentList.commentCount : '_'}نظر )`}
-            </Text>
+            {/* TODO: fix this item */}
+            {/* <Text {...typoVariant.body3} style={{ color: colorPalette.gray[11] }}>
+              {`(${Boolean(commentList.) ? commentList.commentCount : '_'}نظر )`}
+            </Text> */}
           </Flex>
         </Flex>
         <Flex justify={'between'} align={'center'}>

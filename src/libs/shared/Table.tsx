@@ -7,7 +7,7 @@ import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack
 import styled from 'styled-components';
 
 import { colorPalette } from '@/theme';
-import { PlacesDetail } from '@/types/place/place-list';
+import { AllFilteredPlacesDetail } from '@/types/place/place-list';
 
 /**
  * props
@@ -15,8 +15,8 @@ import { PlacesDetail } from '@/types/place/place-list';
  */
 
 type Props = {
-  columns: ColumnDef<PlacesDetail>[];
-  data: PlacesDetail[];
+  columns: ColumnDef<AllFilteredPlacesDetail>[];
+  data: AllFilteredPlacesDetail[];
 };
 
 const TableComponent = ({ columns, data }: Props) => {

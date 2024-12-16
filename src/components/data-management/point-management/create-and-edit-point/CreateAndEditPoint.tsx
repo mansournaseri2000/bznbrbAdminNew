@@ -237,7 +237,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
    */
   const { handleSubmit, control } = methods;
 
-  const { mutate: editPlaceMutate, isPending: editPlaceIspending } = useMutation({
+  const { mutate: editPlaceMutate } = useMutation({
     mutationFn: async (params: fomrData) => editPlace(params, placeID),
     onSuccess: async data => {
       if (data.status === true) {
@@ -255,7 +255,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     gcTime: 0,
   });
 
-  const { mutate: createPlaceMutate, isPending: createPlaceIspending } = useMutation({
+  const { mutate: createPlaceMutate } = useMutation({
     mutationFn: async (params: fomrData) => createPlace(params),
     onSuccess: async data => {
       if (data.status === true) {

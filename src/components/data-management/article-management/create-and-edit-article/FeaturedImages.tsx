@@ -1,7 +1,6 @@
 import React from 'react';
 
 import SelectPrimaryImage from '@/components/develop/data-management/select-primary-image/SelectPrimaryImage';
-import ImageCreator from '@/components/develop/shared/image-creator/ImageCreator';
 import { Button, Flex, Heading, Text } from '@/libs/primitives';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';

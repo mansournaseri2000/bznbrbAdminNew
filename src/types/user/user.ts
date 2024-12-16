@@ -2,8 +2,7 @@ export interface UserListResponse {
   latestUsers: LatestUsersDetail[];
   currentPage: number;
   totalPages: number;
-  totalCurrentPageCount: number;
-  totalUsersCount: number;
+  totalCount: number;
 }
 
 export interface LatestUsersDetail {
@@ -18,8 +17,7 @@ export interface RecentTripsResponse {
   latestTrips: LatestTripsDetail[];
   currentPage: number;
   totalPages: number;
-  totalCurrentPageCount: number;
-  totalTripsCount: number;
+  totalCount: number;
 }
 
 export interface UserInfoResponse {

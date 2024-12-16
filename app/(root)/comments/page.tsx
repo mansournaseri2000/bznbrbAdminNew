@@ -28,7 +28,7 @@ export default function Comment({ searchParams }: { params: { slug: string }; se
         </Flex>
       </Flex>
       {commentData?.allComments.map((item, index) => (
-        <CommentCard key={index} content={item.content} createdAt={item.createdAt} users={item.users} id={item.id} places={item.places} />
+        <CommentCard index={index} key={index} content={item.content} createdAt={item.createdAt} users={item.users} id={item.id} places={item.places} />
       ))}
 
       <ResponsivePagination

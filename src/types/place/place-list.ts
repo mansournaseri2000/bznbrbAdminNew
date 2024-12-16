@@ -1,9 +1,8 @@
 export interface PlaceListResponse {
   allFilteredPlaces: AllFilteredPlacesDetail[];
   currentPage: number;
-  currentLimit: number;
   totalPages: number;
-  placesCountBasedOnFilter: number;
+  totalCount: number;
 }
 
 export interface AllFilteredPlacesDetail {
@@ -11,7 +10,11 @@ export interface AllFilteredPlacesDetail {
   name: string;
   city?: string;
   province?: string;
-  pictrues: Pictrue[];
+  category?: string;
+  parentCategory?: string;
+  isPlaceInfoComplete: boolean;
+  isPublished?: boolean;
+  // pictrues: Pictrue[];
 }
 
 export interface Pictrue {

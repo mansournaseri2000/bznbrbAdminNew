@@ -160,11 +160,9 @@ export interface Item {
 }
 export interface PlaceImproveContentResponse {
   PlaceImproveContent: PlaceImproveContentDataDetail[];
-  PlaceImproveContentCount: number;
-  CurrentShowingPlaceImproveContent: number;
-  CurrentShowingPlaceImproveContentLimit: number;
-  CurrentShowingPlaceImproveContentPage: number;
-  AllPlaceImprovementContentPages: number;
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
 }
 export interface PlaceImproveContentDataDetail {
   id: number;

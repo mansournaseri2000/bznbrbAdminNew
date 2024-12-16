@@ -18,7 +18,6 @@ import { CommentsDetail } from '@/types/comment/comment-list';
 import { ToastError, ToastSuccess } from '../../../../libs/shared/toast/Toast';
 
 type CommentCardProps = CommentsDetail & {
-  colorVariant?: 'blue' | 'pink';
   index: number;
 };
 

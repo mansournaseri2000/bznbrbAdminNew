@@ -15,3 +15,10 @@ export interface FilteredSuggestionsDetail {
   placeCity: string;
   placeProvince: string;
 }
+
+export interface PointDetail {
+  id: number;
+  name: string;
+  Province: string;
+  city: string;
+}

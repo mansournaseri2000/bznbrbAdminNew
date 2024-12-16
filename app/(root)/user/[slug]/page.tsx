@@ -99,14 +99,14 @@ export default function UserProfile({ params }: { params: { slug: number } }) {
             <Flex width={'100%'} align={'center'} justify={'between'}>
               <CustomPagination
                 current={watch('page')}
-                total={tripsData?.totalPages as number}
+                total={tripsData?.totalPages}
                 onPageChange={p => {
                   setValue('page', p);
                   updateUrlWithPageNumber(p);
                   onSubmit();
                 }}
               />
-              <ItemsPerPage data={tripsData?.latestTrips} currentPage={tripsData?.currentPage as number} totalCount={tripsData?.totalTripsCount} />
+              <ItemsPerPage data={tripsData?.latestTrips} currentPage={tripsData?.currentPage} totalCount={tripsData?.totalCount} />
             </Flex>
           )}
         </Grid>

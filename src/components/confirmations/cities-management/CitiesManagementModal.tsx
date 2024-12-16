@@ -20,6 +20,8 @@ const CitiesManagementModal = (props: Props) => {
   const { isOpen, setIsOpen, type } = props;
   const [cityList, setCityList] = useState<{ id: number; label: string }[] | []>();
 
+  console.log('setCityList', setCityList(cityList));
+
   const methods = useForm({ defaultValues: { province: '' } });
   const { control } = methods;
   return (

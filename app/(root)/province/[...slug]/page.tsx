@@ -4,12 +4,17 @@ import React, { useEffect, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
 import { useMutation } from '@tanstack/react-query';
+import styled from 'styled-components';
 
 import { getAllProvincesById } from '@/api/province';
-import CitiesManagementModal from '@/components/confirmations/cities-management/CitiesManagementModal';
+// import CitiesManagementModal from '@/components/confirmations/cities-management/CitiesManagementModal';
 import { sortCategoryOptions } from '@/constants/additional-detail';
-import { Button, Flex, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
+import ModalAction from '@/libs/shared/ModalAction';
+import ModalHeader from '@/libs/shared/ModalHeader';
 import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
+import { Close, Pencil } from '@/public/icon';
+import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
 type TypeOptions = 'edit' | 'create';
@@ -90,35 +95,55 @@ export default function Cities({ params }: { params: { slug: string } }) {
             دیتای این قسمت نیست
           </AccordionWrapper>
         ))}
-        {/* <AccordionWrapper
-          hero='تبریز'
-          withEdit
-          onEdit={e => {
-            e.stopPropagation();
-            setIsOpen(true);
-            setType('edit');
-          }}
-        >
-          <Flex align={'center'} wrap={'wrap'} gap={'5'}>
-            <Box width={'fit-content'} p={'10px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
-              <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
-                آبشار
-              </Text>
-            </Box>{' '}
-            <Box width={'fit-content'} p={'10px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
-              <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
-                طبیعت گردی
-              </Text>
-            </Box>
-          </Flex>
-        </AccordionWrapper> */}
       </Flex>
       {/* 
       ***
         Modal___________________________________________
       ***
       */}
-      <CitiesManagementModal isOpen={isOpen} setIsOpen={setIsOpen} type={type} />
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <ModalHeader icon={<Close />} title={type === 'create' ? 'افزودن شهرستان' : 'ویرایش شهرستان'} handleClose={() => setIsOpen(false)} />
+        <Grid gapY={'4'} p={'12px 16px'}>
+          <Controller name='provinceId' control={control} render={({ field }) => <TextField {...field} placeholder='نام شهرستان' />} />
+          <Flex p={'13.5px 16px'} width={'50%'} style={{ border: '2px solid red' }}>
+            افزودن شهر
+          </Flex>
+          {citiesData?.Cities?.length === 0 ? (
+            <Flex direction={'column'} p={'30.5px 16px'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
+              <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11] }}>
+                هنوز شهری اضافه نشده است.
+              </Text>
+              <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
+                از فیلد بالا استفاده کنید و شهر را به لیست اضافه کنید.
+              </Text>
+            </Flex>
+          ) : (
+            citiesData?.Cities?.length !== 0 && (
+              <Flex align={'center'} gap={'5'} p={'4'} wrap={'wrap'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
+                <Flex width={'fit-content'} p={'9.5px 16px'} align={'center'} gap={'4'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
+                  <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+                    تبریز
+                  </Text>
+                  <IconButton variant='surface' size={'1'}>
+                    <Pencil />
+                  </IconButton>
+                  <IconButton variant='surface' size={'1'}>
+                    <CloseIcon />
+                  </IconButton>
+                </Flex>
+              </Flex>
+            )
+          )}
+        </Grid>
+        <ModalAction submitButtonText='ثبت' closeButtonText='لغو' onCloseButton={() => setIsOpen(false)} />
+      </Modal>
+      {/* <CitiesManagementModal isOpen={isOpen} setIsOpen={setIsOpen} type={type} /> */}
     </FormProvider>
   );
 }
+
+const CloseIcon = styled(Close)`
+  path {
+    fill: ${colorPalette.pink[11]};
+  }
+`;

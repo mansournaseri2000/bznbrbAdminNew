@@ -24,12 +24,12 @@ const PointManagement = () => {
     defaultValues: {
       page: 1,
       limit: 10,
-      cityId: 0,
+      provinceId: null,
+      parentCategoryId: null,
       arrayCatIds: [],
-      isInfoCompleted: '',
-      isPublished: true,
-      status: true,
-      searchQuery: '',
+      isInfoCompleted: null,
+      isPublished: false,
+      searchQuery: null,
       // name: '',
       // pro: '',
       // cat: '',
@@ -69,7 +69,7 @@ const PointManagement = () => {
   });
 
   useEffect(() => {
-    pointMutate(watch());
+    pointMutate(watch() as any);
   }, []);
 
   console.log('PointData', pointData);
@@ -79,7 +79,7 @@ const PointManagement = () => {
   // };
 
   const onSubmit = () => {
-    pointMutate(watch());
+    pointMutate(watch() as any);
     console.log('run');
   };
 
@@ -114,7 +114,7 @@ const PointManagement = () => {
                   onSubmit();
                 }}
               />
-              <ItemsPerPage data={pointData?.allFilteredPlaces} currentPage={pointData?.currentPage} totalCount={pointData?.totalPages} />
+              <ItemsPerPage data={pointData?.allFilteredPlaces} currentPage={pointData?.currentPage} totalCount={pointData?.totalCount} />
             </Flex>
           )}
         </Flex>

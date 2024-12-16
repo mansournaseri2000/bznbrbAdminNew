@@ -6,7 +6,7 @@ import { Flex, IconButton, Text } from '@/libs/primitives';
 import { Pencil, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { CommentsDetail, TopCommentItemDetail } from '@/types/confirmations/top-comments';
+import { CommentsDetail } from '@/types/confirmations/top-comments';
 
 import ModalContent from '../add-comment/AddEditModalContent';
 

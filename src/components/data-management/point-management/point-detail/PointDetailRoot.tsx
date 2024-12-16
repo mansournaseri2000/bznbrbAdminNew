@@ -92,19 +92,19 @@ const PointDetailRoot = () => {
             {improveContentData?.PlaceImproveContent.map((item, index) => (
               <DataCard key={item.id} {...item} type='point_detail' index={index} />
             ))}
-
+            {/* TODO: fix pagination */}
             <Flex width={'100%'} align={'center'} justify={'between'}>
               <CustomPagination
-                current={improveContentData?.CurrentShowingPlaceImproveContentPage ? improveContentData?.CurrentShowingPlaceImproveContentPage : 0}
-                total={improveContentData?.AllPlaceImprovementContentPages ? improveContentData?.AllPlaceImprovementContentPages : 0}
+                current={improveContentData?.currentPage ? improveContentData?.currentPage : 0}
+                total={improveContentData?.totalCount ? improveContentData?.totalCount : 0}
                 onPageChange={p => {
                   console.log('page', p);
                 }}
               />
               <ItemsPerPage
                 data={improveContentData?.PlaceImproveContent}
-                currentPage={improveContentData?.CurrentShowingPlaceImproveContentPage ? improveContentData?.CurrentShowingPlaceImproveContentPage : 0}
-                totalCount={improveContentData?.PlaceImproveContentCount ? improveContentData?.PlaceImproveContentCount : 0}
+                currentPage={improveContentData?.currentPage ? improveContentData?.currentPage : 0}
+                totalCount={improveContentData?.totalCount ? improveContentData?.totalCount : 0}
               />
             </Flex>
           </>
@@ -132,28 +132,38 @@ const PointDetailRoot = () => {
        * comment
        * _______________________________________________________________________________
        */}
-      {commentData?.PlaceComments.length !== 0 && (
-        <SimpleWrapper hero='نظرات' iconContent={<CommentInfo score={String(commentData?.PlaceRating)} comment={commentData?.PlaceComments ? commentData.PlaceComments.length : 0} />}>
-          {commentData?.PlaceComments.map(item => (
-            <CommentCard key={item.id} {...item} />
-          ))}
 
-          <Flex width={'100%'} align={'center'} justify={'between'} style={{ border: '2px solid red' }}>
-            <CustomPagination
-              current={commentData?.CurrentShowingCommentsPage ? commentData.CurrentShowingCommentsPage : 0}
-              total={commentData?.PlaceCommentsCount ? commentData.PlaceCommentsCount : 0}
-              onPageChange={p => {
-                console.log('page', p);
-              }}
-            />
-            <ItemsPerPage
-              data={commentData?.PlaceComments}
-              currentPage={commentData?.CurrentShowingCommentsPage ? commentData.CurrentShowingCommentsPage : 0}
-              totalCount={commentData?.PlaceCommentsCount ? commentData.PlaceCommentsCount : 0}
-            />
-          </Flex>
-        </SimpleWrapper>
-      )}
+      <SimpleWrapper
+        hero='نظرات'
+        data={commentData?.PlaceComments}
+        iconContent={<CommentInfo score={String(commentData?.PlaceRating)} comment={commentData?.PlaceComments ? commentData.PlaceComments.length : 0} />}
+      >
+        {commentData?.PlaceComments.length !== 0 ? (
+          <>
+            {commentData?.PlaceComments.map(item => (
+              <CommentCard key={item.id} {...item} />
+            ))}
+
+            <Flex width={'100%'} align={'center'} justify={'between'}>
+              <CustomPagination
+                current={commentData?.CurrentShowingCommentsPage ? commentData.CurrentShowingCommentsPage : 0}
+                total={commentData?.PlaceCommentsCount ? commentData.PlaceCommentsCount : 0}
+                onPageChange={p => {
+                  console.log('page', p);
+                }}
+              />
+              <ItemsPerPage
+                data={commentData?.PlaceComments}
+                currentPage={commentData?.CurrentShowingCommentsPage ? commentData.CurrentShowingCommentsPage : 0}
+                totalCount={commentData?.PlaceCommentsCount ? commentData.PlaceCommentsCount : 0}
+              />
+            </Flex>
+          </>
+        ) : (
+          <Text>در حال حاضر نظری ثبت نشده است</Text>
+        )}
+      </SimpleWrapper>
+
       {/**
        * images
        * _______________________________________________________________________________

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ApiManagerV2 } from '@/libs/utils/axios.config';
 // import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
 import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
@@ -33,6 +34,7 @@ export const getPlaceComments = async (placeId: number) => {
 };
 
 export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
+  
   const res = await DevApiManager.post<ApiData<PlaceListResponse>>('places/allPlacesWithFilter', params);
   return res.data.data;
 };
@@ -45,11 +47,10 @@ export const getPlaceImproveContent = async (placeId: number) => {
 export interface AllPlacesBody {
   page: number;
   limit: number;
-  cityId: number | string;
+  provinceId: number;
+  parentCategoryId: number;
   arrayCatIds: number[];
-  isInfoCompleted: string;
-  // TODO: isInfoCompleted must change to boolean
+  isInfoCompleted: boolean;
   isPublished: boolean;
-  status: boolean;
   searchQuery: string;
 }

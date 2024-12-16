@@ -76,7 +76,7 @@ export default function User({ searchParams }: { params: { slug: string }; searc
                   onSubmit();
                 }}
               />
-              <ItemsPerPage data={userData?.latestUsers} currentPage={userData?.currentPage as number} totalCount={userData?.totalUsersCount as number} />
+              <ItemsPerPage data={userData?.latestUsers} currentPage={userData?.currentPage} totalCount={userData?.totalCount} />
             </Flex>
           )}
         </Flex>

@@ -10,7 +10,6 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllPlacesConstants } from '@/api/place';
 import ImageCreator from '@/components/develop/shared/image-creator/ImageCreator';
 import { SeoSettingsRoot } from '@/components/place';
-import ImageGallery from '@/components/place/create-edit-place/ImageGallery';
 import { Button, Flex, Grid, Text } from '@/libs/primitives';
 import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
 import { colorPalette } from '@/theme';

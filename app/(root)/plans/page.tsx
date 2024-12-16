@@ -93,7 +93,7 @@ export default function Plans({ searchParams }: { params: { slug: string }; sear
                 onSubmit();
               }}
             />
-            <ItemsPerPage data={tripsData?.latestTrips} currentPage={tripsData?.currentPage as number} totalCount={tripsData?.totalTripsCount} />
+            <ItemsPerPage data={tripsData?.latestTrips} currentPage={tripsData?.currentPage as number} totalCount={tripsData?.totalCount} />
           </Flex>
         )}
       </Grid>

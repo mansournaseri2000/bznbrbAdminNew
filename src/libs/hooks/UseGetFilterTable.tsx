@@ -1,6 +1,6 @@
-import { PlacesDetail } from '@/types/place/place-list';
 import { useMemo } from 'react';
 
+import { AllFilteredPlacesDetail } from '@/types/place/place-list';
 
 // Define a type for search criteria
 interface SearchCriteria {
@@ -9,15 +9,14 @@ interface SearchCriteria {
   city?: string; // Optional type
 }
 
-const useFilteredData = (searchCriteria: SearchCriteria, data: PlacesDetail[]): PlacesDetail[] => {
+const useFilteredData = (searchCriteria: SearchCriteria, data: AllFilteredPlacesDetail[]): AllFilteredPlacesDetail[] => {
   const { placeName = '', province = '', city = '' } = searchCriteria; // Provide default values to avoid undefined
 
   const filteredData = useMemo(() => {
-    return data.filter(item => {
+    return data?.filter(item => {
       // Check each filter criterion and apply filtering
       const matchesPlaceName = placeName.trim() === '' || item.name.includes(placeName.trim());
-      const matchesProvince =
-        province.trim() === '' || (item.province && item.province.includes(province.trim()));
+      const matchesProvince = province.trim() === '' || (item.province && item.province.includes(province.trim()));
       const matchesCity = city.trim() === '' || (item.city && item.city.includes(city.trim()));
 
       return matchesPlaceName && matchesProvince && matchesCity;

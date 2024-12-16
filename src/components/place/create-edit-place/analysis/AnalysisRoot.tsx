@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { RadioGroup, Slider } from '@radix-ui/themes';
 
@@ -28,7 +28,7 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const { setValue, control } = useFormContext();
+  const { setValue } = useFormContext();
   const TripTypesItems = useWatch({ name: 'TripTypes' });
   const placeCategoryItems = useWatch({ name: 'PlaceCategories' });
   const placeTripSeasonsItems = useWatch({ name: 'PlaceTripSeasons' });

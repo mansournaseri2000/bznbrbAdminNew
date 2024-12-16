@@ -1,9 +1,9 @@
 import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import Image from 'next/image';
 
-import { Box, Button, Checkbox, Flex, Grid, IconButton, Text } from '@/libs/primitives';
+import { Box, Button, Flex, Grid, IconButton, Text } from '@/libs/primitives';
 import { Check, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
@@ -20,7 +20,7 @@ const ImageSentCard: React.FC<CardProps> = (props: CardProps) => {
   const { index, placeName, placeProvince, placeCity, picture, content } = props;
 
   const methods = useForm({ defaultValues: { isTop: false } });
-  const { control, watch } = methods;
+  const { watch } = methods;
 
   console.log('watch', watch());
   return (
@@ -58,7 +58,7 @@ const ImageSentCard: React.FC<CardProps> = (props: CardProps) => {
         </Text>
       </Flex>
       <Flex width={'100%'} align={'center'} justify={'between'}>
-        <Controller name='isTop' control={control} render={({ field }) => <Checkbox {...field} label='تصویر برتر' onCheckedChange={checked => field.onChange(checked)} />} />
+        {/* <Controller name='isTop' control={control} render={({ field }) => <Checkbox {...field} label='تصویر برتر' onCheckedChange={checked => field.onChange(checked)} />} /> */}
 
         <Flex align={'center'} gap={'2'}>
           <Button size={'3'} colorVariant='BLUE' variant='soft'>
