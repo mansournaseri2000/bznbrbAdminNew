@@ -5,9 +5,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { useQueryClient } from '@tanstack/react-query';
-
-import { StatusFilterOption } from '@/constants/data-management';
+import { isPublishedOptions, StatusFilterOption } from '@/constants/data-management';
 import { Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
 import { updateURLWithQueryParams } from '@/libs/utils/updateUrl';
@@ -27,29 +25,27 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
    * _______________________________________________________________________________
    */
   const { control, setValue, watch, reset } = useFormContext();
-  const city = province.filter(item => item.id === Number(watch('pro')))[0]?.Cities;
-  const subCategory = categories.filter(item => item.id === Number(watch('cat')))[0]?.children;
+  const city = province.filter(item => item.id === Number(watch('provinceId')))[0]?.Cities;
+  const subCategory = categories.filter(item => item.id === Number(watch('parentCategoryId')))[0]?.children;
 
-  const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const router = useRouter();
 
   console.log('watch', watch());
+  console.log('subCategory', subCategory);
   /**
    * functions
    * _______________________________________________________________________________
    */
   const addFilter = () => {
     const values = watch();
-    // UpdateUrl(searchParams, values);
     updateURLWithQueryParams(router, searchParams, values);
-    queryClient.invalidateQueries({ queryKey: ['point-data'] });
     setIsOpen(false);
   };
 
   const removeFilter = () => {
     reset();
-    queryClient.invalidateQueries({ queryKey: ['point-data'] });
+    updateURLWithQueryParams(router, searchParams, {});
     setIsOpen(false);
   };
 
@@ -61,7 +57,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
             موقعیت نقطه
           </Text>
           <Controller
-            name='pro'
+            name='provinceId'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -70,7 +66,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
-                  setValue('cit', '');
+                  setValue('cityId', '');
                 }}
               >
                 {province?.map(item => (
@@ -83,7 +79,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
             )}
           />
           <Controller
-            name='cit'
+            name='cityId'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -108,7 +104,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
             دسته بندی
           </Text>
           <Controller
-            name='cat'
+            name='parentCategoryId'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -128,7 +124,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
             )}
           />
           <Controller
-            name='subCategoryId'
+            name='arrayCatIds'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -153,7 +149,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
             وضعیت
           </Text>
           <Controller
-            name='statusId'
+            name='isInfoCompleted'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -164,30 +160,91 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
                   field.onChange(val);
                 }}
               >
-                {StatusFilterOption.map((item, index) => (
-                  <SelectItem key={index} value={String(item.id)}>
-                    {item.value}
+                {StatusFilterOption.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
                   </SelectItem>
                 ))}
               </SelectRoot>
             )}
           />
           <Controller
-            name='pointTypeId'
+            name='isPublished'
             control={control}
             render={({ field }) => (
               <SelectRoot
                 {...field}
-                placeholder='نوع نقطه'
+                placeholder='وضعیت انتشار'
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
                 }}
               >
-                <Text>دیتا باید فیکس بشه</Text>
+                {isPublishedOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
               </SelectRoot>
             )}
           />
+          {/* <Popover.Root>
+            <Popover.Trigger>
+              <Button
+                style={{
+                  minHeight: '48px',
+                  paddingInline: '15px 10px',
+                  borderRadius: '12px',
+                  border: `1px solid ${colorPalette.gray[7]}`,
+                  color: colorPalette.gray[9],
+                  backgroundColor: colorPalette.gray[2],
+                }}
+                variant='solid'
+                size={'4'}
+              >
+                <Flex width={'100%'} align={'center'} justify={'between'}>
+                  <Text {...typoVariant.body2} style={{ color: colorPalette.gray[9] }}>
+                    وضعیت اطلاعات
+                  </Text>
+                  <CaretDownIcon style={{ scale: 1.6 }} color={colorPalette.pink[9]} />
+                </Flex>
+              </Button>
+            </Popover.Trigger>
+            <Popover.Content>
+              <Flex gap={'2'}>
+                <CheckboxGroup isRow={false} items={StatusFilterOption} store='isInfoCompleted' />
+              </Flex>
+            </Popover.Content>
+          </Popover.Root> */}
+
+          {/* <Popover.Root>
+            <Popover.Trigger>
+              <Button
+                style={{
+                  minHeight: '48px',
+                  paddingInline: '15px 10px',
+                  borderRadius: '12px',
+                  border: `1px solid ${colorPalette.gray[7]}`,
+                  color: colorPalette.gray[9],
+                  backgroundColor: colorPalette.gray[2],
+                }}
+                variant='solid'
+                size={'4'}
+              >
+                <Flex width={'100%'} align={'center'} justify={'between'}>
+                  <Text {...typoVariant.body2} style={{ color: colorPalette.gray[9] }}>
+                    وضعیت انتشار
+                  </Text>
+                  <CaretDownIcon style={{ scale: 1.6 }} color={colorPalette.pink[9]} />
+                </Flex>
+              </Button>
+            </Popover.Trigger>
+            <Popover.Content>
+              <Flex gap={'2'}>
+                <CheckboxGroup isRow={false} items={isPublishedOptions} store='isPublished' />
+              </Flex>
+            </Popover.Content>
+          </Popover.Root> */}
         </Grid>
       </Grid>
       <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} />

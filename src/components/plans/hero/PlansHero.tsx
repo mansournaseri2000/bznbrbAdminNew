@@ -3,14 +3,16 @@
 import React, { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
 
 import { getAllPlacesConstants } from '@/api/place';
-import { plansSortConstant } from '@/constants/plans';
+import { userDetailSortConstant } from '@/constants/users';
 import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
+import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
+import { updateURLWithQueryParams } from '@/libs/utils/updateUrl';
 import { ArrowRight, Filter, Search } from '@/public/icon';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -24,11 +26,11 @@ const PlansHero = (props: Props) => {
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const { control } = useFormContext();
-
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const { control, watch, reset, setValue } = useFormContext();
+  console.log('Watch', watch());
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
    */
@@ -37,10 +39,45 @@ const PlansHero = (props: Props) => {
     queryFn: async () => getAllPlacesConstants(),
   });
 
+  /**
+   * functions
+   * _______________________________________________________________________________
+   */
+  const addFilter = () => {
+    const values = watch();
+    updateURLWithQueryParams(router, searchParams, values);
+    setIsOpen(false);
+  };
+
+  // TODO: fix update url for remove filters
+  const removeFilter = () => {
+    reset();
+    updateURLWithQueryParams(router, searchParams, {});
+    setIsOpen(false);
+  };
+
+  const handleSortItems = (id: number) => {
+    switch (id) {
+      case 1:
+        return setValue('sortDate', 'des'), setValue('targetDate', 'dep');
+        break;
+      case 2:
+        return setValue('targetDate', 'dep'), setValue('sortDate', 'asc');
+        break;
+
+      case 3:
+        return setValue('targetDate', 'ret'), setValue('sortDate', 'des');
+        break;
+
+      case 4:
+        return setValue('targetDate', 'ret'), setValue('sortDate', 'asc');
+    }
+  };
+
   return (
     <>
       <Grid width={'100%'} columns={'5'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 2fr auto 1fr' }}>
-        <IconButton colorVariant='BLUE' variant='soft' size={'3'} onClick={() => setIsOpen(true)}>
+        <IconButton type='button' colorVariant='BLUE' variant='soft' size={'3'} onClick={() => setIsOpen(true)}>
           <Filter />
         </IconButton>
 
@@ -57,7 +94,7 @@ const PlansHero = (props: Props) => {
         </IconButton>
 
         <Controller
-          name='sortDate'
+          name='sort'
           control={control}
           render={({ field }) => (
             <SelectRoot
@@ -66,11 +103,14 @@ const PlansHero = (props: Props) => {
               size={'3'}
               value={String(field.value)}
               onValueChange={val => {
+                const currentItem = userDetailSortConstant.find(item => item.id === Number(val));
+                handleSortItems(currentItem?.id as any);
                 field.onChange(val);
+                props.onSubmit();
               }}
             >
-              {plansSortConstant.map(item => (
-                <SelectItem key={item.id} value={String(item.id)} style={{ paddingBottom: '8px 12px', borderBottom: '1px solid #D4D4D4' }}>
+              {userDetailSortConstant.map(item => (
+                <SelectItem key={item.id} value={String(item.id)} style={{ padding: '13.5px 12px' }}>
                   {item.name}
                 </SelectItem>
               ))}
@@ -80,7 +120,8 @@ const PlansHero = (props: Props) => {
       </Grid>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
-        <FilterContent setIsOpen={setIsOpen} province={constantData?.provinces ? constantData.provinces : []} />
+        <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
+        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} />
       </Modal>
     </>
   );

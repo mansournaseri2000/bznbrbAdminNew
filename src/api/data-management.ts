@@ -7,6 +7,20 @@ import { PlaceListResponse } from '@/types/place';
 
 import { ApiData } from './types';
 
+interface InputObject {
+  [key: string]: any;
+}
+const filterObject = (obj: InputObject): InputObject => {
+  const result: InputObject = {};
+  Object.keys(obj).forEach(key => {
+    const value = obj[key];
+    if (value !== null && value !== '' && value !==0 && !(Array.isArray(value) && value.length === 0)) {
+      result[key] = value;
+    }
+  });
+  return result;
+};
+
 export const getPointByParams = async (obj: Record<string, any>) => {
   console.log(handleQueryParams(obj), 'DATA');
   try {
@@ -34,8 +48,17 @@ export const getPlaceComments = async (placeId: number) => {
 };
 
 export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
-  
-  const res = await DevApiManager.post<ApiData<PlaceListResponse>>('places/allPlacesWithFilter', params);
+  const obj = {
+    ...params,
+    provinceId: Number(params.provinceId),
+    cityId: Number(params.cityId),
+    parentCategoryId: Number(params.parentCategoryId),
+    isInfoCompleted: Boolean(params.isInfoCompleted),
+    isPublished: Boolean(params.isPublished),
+  };
+  const body = filterObject(obj);
+  console.log('🚀 ~ getAllPlacesFiltered ~ body:', body);
+  const res = await DevApiManager.post<ApiData<PlaceListResponse>>('places/allPlacesWithFilter', body);
   return res.data.data;
 };
 
@@ -48,6 +71,7 @@ export interface AllPlacesBody {
   page: number;
   limit: number;
   provinceId: number;
+  cityId: number;
   parentCategoryId: number;
   arrayCatIds: number[];
   isInfoCompleted: boolean;

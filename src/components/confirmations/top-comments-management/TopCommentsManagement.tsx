@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 
 import { getAllTopCommentsForProvince } from '@/api/confirmations';
@@ -13,9 +14,11 @@ const TopCommentsManagement = () => {
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
-  const { data: topCommentsData } = useQuery({ queryKey: ['top-comments'], queryFn: async () => await getAllTopCommentsForProvince() });
+  const { data: topCommentsData, isLoading, isFetching } = useQuery({ queryKey: ['top-comments'], queryFn: async () => await getAllTopCommentsForProvince() });
 
   console.log('topComments', topCommentsData);
+
+  if (isLoading || isFetching || !topCommentsData) return <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '100px' }} />;
 
   return (
     <Grid width={'100%'} columns={'2'} gap={'5'}>

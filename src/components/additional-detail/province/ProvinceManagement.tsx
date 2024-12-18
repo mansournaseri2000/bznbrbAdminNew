@@ -2,18 +2,23 @@
 
 import React, { useEffect } from 'react';
 
+import { Spinner } from '@radix-ui/themes';
 import { useMutation } from '@tanstack/react-query';
 
-import { getAllProvinces } from '@/api/province';
+import { getAllProvinces } from '@/api/additional-detail';
 import ProvinceDetailCard from '@/components/develop/confirmations/province-detail-card/ProvinceDetailCard';
 import { Grid } from '@/libs/primitives';
 import { convertTimestampToPersianDate } from '@/libs/utils/convertTimestampToPersianDate';
 
-export default function ProvinceManagement() {
+const ProvinceManagement = () => {
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
-  const { data: provinceData, mutate: provinceMutate } = useMutation({
+  const {
+    data: provinceData,
+    mutate: provinceMutate,
+    isPending: provincePending,
+  } = useMutation({
     mutationFn: async () => getAllProvinces(),
     onSuccess: async data => {
       console.log('data', data);
@@ -27,6 +32,9 @@ export default function ProvinceManagement() {
     provinceMutate();
   }, []);
   console.log('DATA', provinceData);
+
+  if (provincePending || !provinceData) return <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '100px' }} />;
+
   return (
     <Grid width={'100%'} columns={'2'} gap={'5'}>
       {provinceData?.map(item => (
@@ -39,9 +47,11 @@ export default function ProvinceManagement() {
           title={item.name}
           firstValue={item.citiesCount}
           secondValue={convertTimestampToPersianDate(item.lastUpdated)}
-          path={`/province/cities/${item.id}`}
+          path={`/additional-detail/province/cities/${item.id}`}
         />
       ))}
     </Grid>
   );
-}
+};
+
+export default ProvinceManagement;

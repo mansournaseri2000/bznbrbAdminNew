@@ -32,11 +32,12 @@ const Sidebar = () => {
         bottom: '0',
         backgroundColor: colorPalette.gray[2],
         border: `1px solid ${colorPalette.gray[6]}`,
+        overflowY: 'auto',
         borderRadius: '16px 0px 0px 16px',
         zIndex: 100,
       }}
     >
-      <Grid mx={'auto'} height={'100%'} style={{ overflow: 'hidden', whiteSpace: 'nowrap', alignContent: 'space-between' }}>
+      <Grid mx={'auto'} height={'100%'} style={{ overflowX: 'hidden', whiteSpace: 'nowrap', alignContent: 'space-between', overflowY: 'auto' }}>
         <Grid width={'100%'}>
           <Flex height={'100%'} direction='column' p={'4'} gap={'4'}>
             <Link href={''}>

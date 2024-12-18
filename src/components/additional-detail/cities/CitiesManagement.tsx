@@ -3,11 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
+import { useParams } from 'next/navigation';
+
+import { Spinner } from '@radix-ui/themes';
 import { useMutation } from '@tanstack/react-query';
 import styled from 'styled-components';
 
-import { getAllProvincesById } from '@/api/province';
-// import CitiesManagementModal from '@/components/confirmations/cities-management/CitiesManagementModal';
+import { getAllProvincesById } from '@/api/additional-detail';
 import { sortCategoryOptions } from '@/constants/additional-detail';
 import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
@@ -19,13 +21,19 @@ import { typoVariant } from '@/theme/typo-variants';
 
 type TypeOptions = 'edit' | 'create';
 
-export default function Cities({ params }: { params: { slug: string } }) {
+const CitiesManagement = () => {
+  const params = useParams();
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [type, setType] = useState<TypeOptions>('create');
-  const methods = useForm({ defaultValues: { provinceId: Number(params.slug[1]), sortProvincesBy: 'asc' } });
+  const methods = useForm({ defaultValues: { provinceId: Number(params.slug[2]), sortProvincesBy: '' } });
   const { control, watch } = methods;
 
-  const { data: citiesData, mutate: citiesMutate } = useMutation({
+  const {
+    data: citiesData,
+    mutate: citiesMutate,
+    isPending: citiesPending,
+  } = useMutation({
     mutationFn: async () => await getAllProvincesById(watch() as any),
     onSuccess: async data => {
       console.log('data', data);
@@ -39,7 +47,9 @@ export default function Cities({ params }: { params: { slug: string } }) {
     citiesMutate();
   }, []);
 
-  console.log('CitiesData', citiesData?.Cities);
+  console.log('CitiesData', citiesData);
+
+  if (citiesPending || !citiesData) return <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '100px' }} />;
 
   return (
     <FormProvider {...methods}>
@@ -137,10 +147,11 @@ export default function Cities({ params }: { params: { slug: string } }) {
         </Grid>
         <ModalAction submitButtonText='ثبت' closeButtonText='لغو' onCloseButton={() => setIsOpen(false)} />
       </Modal>
-      {/* <CitiesManagementModal isOpen={isOpen} setIsOpen={setIsOpen} type={type} /> */}
     </FormProvider>
   );
-}
+};
+
+export default CitiesManagement;
 
 const CloseIcon = styled(Close)`
   path {

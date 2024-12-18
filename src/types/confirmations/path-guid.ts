@@ -1,9 +1,8 @@
 export interface TravelMethodsSuggestionsResponse {
   filteredSuggestions: FilteredSuggestionsDetail[];
-  currentLimit: number;
   currentPage: number;
-  allPages: number;
-  CurrentPageCount: number;
+  totalPages: number;
+  totalCount: number;
 }
 export interface FilteredSuggestionsDetail {
   id: number;

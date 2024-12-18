@@ -1,10 +1,8 @@
-
 export interface ImageSentListResponse {
   filteredPics: FilteredPicsDetail[];
-  currentLimit: number;
   currentPage: number;
-  allPicsCount: number;
-  allPicsPages: number;
+  totalPages: number;
+  totalCount: number;
 }
 export interface FilteredPicsDetail {
   id: number;
@@ -15,5 +13,5 @@ export interface FilteredPicsDetail {
   placeName: string;
   placeCity: string;
   placeProvince: string;
-  content?:string
+  content?: string;
 }

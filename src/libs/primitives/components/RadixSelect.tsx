@@ -18,10 +18,11 @@ type SelectCompnentProps = React.ComponentProps<typeof Select.Root> & {
   errorText?: string;
   lable?: string;
   placeholder: string;
+  style?: React.CSSProperties;
 };
 
 export const SelectRoot = forwardRef<React.ElementRef<typeof Select.Root>, SelectCompnentProps>(
-  ({ placeholder, errorText, lable, ...props }: SelectCompnentProps | any, forwardedRef: ForwardedRef<React.ElementRef<typeof Select.Root>>) => {
+  ({ placeholder, errorText, lable, style, ...props }: SelectCompnentProps | any, forwardedRef: ForwardedRef<React.ElementRef<typeof Select.Root>>) => {
     /**
      * const and variables
      * _______________________________________________________________________________
@@ -39,7 +40,7 @@ export const SelectRoot = forwardRef<React.ElementRef<typeof Select.Root>, Selec
         <Select.Root ref={forwardedRef} size={'3'} {...props}>
           <Select.Trigger placeholder={placeholder} />
           <Select.Content position='popper' style={{ maxHeight: '200px' }}>
-            <Select.Group style={{ width: '100%' }}>{props.children}</Select.Group>
+            <Select.Group style={style}>{props.children}</Select.Group>
           </Select.Content>
         </Select.Root>
         <Text weight={'medium'} color='red' style={{ position: 'absolute', bottom: '-19px', fontSize: '10px', right: '10px' }}>

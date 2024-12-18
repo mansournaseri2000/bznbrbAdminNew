@@ -24,22 +24,18 @@ const PointManagement = () => {
     defaultValues: {
       page: 1,
       limit: 10,
-      provinceId: null,
-      parentCategoryId: null,
+      provinceId: '',
+      cityId: '',
+      parentCategoryId: '',
       arrayCatIds: [],
-      isInfoCompleted: null,
+      isInfoCompleted: true,
       isPublished: false,
-      searchQuery: null,
-      // name: '',
-      // pro: '',
-      // cat: '',
-      // subCategoryId: '',
-      // statusId: '',
-      // pointTypeId: '',
+      searchQuery: '',
     },
   });
 
   const { watch, setValue, handleSubmit } = methods;
+  console.log('WATCH POINTTTTTTTTTTTTTTTTTT', watch());
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */

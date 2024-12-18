@@ -6,23 +6,18 @@ import { CommentItemDetail, TopCommentsForProvinceResponse } from '@/types/confi
 
 import { ApiData } from './types';
 
-export const getAllPicUserUploads = async () => {
-  const res = await DevApiManager.get<ApiData<ImageSentListResponse>>('places/getAllPlacePicUserUploadsForAllPlaces');
+export const getAllPicUserUploads = async (page: number) => {
+  const res = await DevApiManager.get<ApiData<ImageSentListResponse>>(`places/getAllPlacePicUserUploadsForAllPlaces?page=${page}&limit=10`);
   return res.data.data;
 };
 
-export const getAllImproveContent = async () => {
-  const res = await DevApiManager.get<ApiData<ImproveDataListResponse>>('places/getAllPlaceImproveContent');
+export const getAllImproveContent = async (page:number) => {
+  const res = await DevApiManager.get<ApiData<ImproveDataListResponse>>(`places/getAllPlaceImproveContent?page=${page}&limit=10`);
   return res.data.data;
 };
 
-export const getAllTravelMethodsSuggestions = async () => {
-  const res = await DevApiManager.get<ApiData<TravelMethodsSuggestionsResponse>>('/places/getAllTravelMethodSuggestions', {
-    headers: {
-      limit: 10,
-      page: 1,
-    },
-  });
+export const getAllTravelMethodsSuggestions = async (page: number) => {
+  const res = await DevApiManager.get<ApiData<TravelMethodsSuggestionsResponse>>(`/places/getAllTravelMethodSuggestions?page=${page}&limit=10`);
   return res.data.data;
 };
 

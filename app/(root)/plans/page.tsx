@@ -21,20 +21,21 @@ export default function Plans({ searchParams }: { params: { slug: string }; sear
   const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
   const methods = useForm({
     defaultValues: {
+      page: 1,
+      limit: 10,
       searchQuery: '',
       sortDate: '',
-      page: 1,
-      userId: '',
-      limit: 10,
       targetDate: '',
-      originCityId: 0,
-      originProvinceId: 0,
-      destinationCityId: 0,
-      destinationProvinceId: 0,
-      departureDateStart: 0,
-      departureDateEnd: 0,
-      returnDateStart: 0,
-      returnDateEnd: 0,
+      userId: '',
+      originCityId: '',
+      originProvinceId: '',
+      destinationCityId: '',
+      destinationProvinceId: '',
+      departureDateStart: '',
+      departureDateEnd: '',
+      returnDateStart: '',
+      returnDateEnd: '',
+      sort: '',
     },
   });
   const { watch, handleSubmit, setValue } = methods;
@@ -47,6 +48,7 @@ export default function Plans({ searchParams }: { params: { slug: string }; sear
     isError: tripsError,
     isPending: tripsPending,
   } = useMutation({
+    mutationKey: ['trips-data'],
     mutationFn: async (body: RecentTripsBody) => getRecentTrips(body),
     onSuccess: async data => {
       console.log('data', data);
@@ -66,37 +68,37 @@ export default function Plans({ searchParams }: { params: { slug: string }; sear
 
   const onSubmit = () => {
     tripsMutate(watch() as any);
-    console.log('run');
   };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}></form>
-      <Grid width={'100%'} gap={'4'} p={'5'}>
-        <PlansHero onSubmit={() => tripsMutate(watch() as any)} />
-        {tripsError ? (
-          <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
-        ) : tripsPending ? (
-          <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
-        ) : (
-          <PlansList data={tripsData?.latestTrips as any} />
-        )}
-        {tripsData?.latestTrips && (
-          <Flex width={'100%'} align={'center'} justify={'between'}>
-            <CustomPagination
-              current={page}
-              total={tripsData.totalPages as number}
-              onPageChange={p => {
-                setPage(p);
-                setValue('page', p);
-                updateUrlWithPageNumber(p);
-                onSubmit();
-              }}
-            />
-            <ItemsPerPage data={tripsData?.latestTrips} currentPage={tripsData?.currentPage as number} totalCount={tripsData?.totalCount} />
-          </Flex>
-        )}
-      </Grid>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid width={'100%'} gap={'4'} p={'5'}>
+          <PlansHero onSubmit={() => tripsMutate(watch() as any)} />
+          {tripsError ? (
+            <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
+          ) : tripsPending ? (
+            <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
+          ) : (
+            <PlansList data={tripsData?.latestTrips as any} />
+          )}
+          {tripsData?.latestTrips && (
+            <Flex width={'100%'} align={'center'} justify={'between'}>
+              <CustomPagination
+                current={page}
+                total={tripsData.totalPages as number}
+                onPageChange={p => {
+                  setPage(p);
+                  setValue('page', p);
+                  updateUrlWithPageNumber(p);
+                  onSubmit();
+                }}
+              />
+              <ItemsPerPage data={tripsData?.latestTrips} currentPage={tripsData?.currentPage as number} totalCount={tripsData?.totalCount} />
+            </Flex>
+          )}
+        </Grid>
+      </form>
     </FormProvider>
   );
 }

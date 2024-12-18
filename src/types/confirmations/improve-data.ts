@@ -1,10 +1,8 @@
 export interface ImproveDataListResponse {
   PlaceImproveContent: PlaceImproveContentDetail[];
-  PlaceImproveContentCount: number;
-  CurrentShowingPlaceImproveContent: number;
-  CurrentShowingPlaceImproveContentLimit: number;
-  CurrentShowingPlaceImproveContentPage: number;
-  AllPlaceImprovementContentPages: number;
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
 }
 export interface PlaceImproveContentDetail {
   id: number;

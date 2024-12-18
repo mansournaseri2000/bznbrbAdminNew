@@ -8,9 +8,9 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { Button, Flex, Text } from '@/libs/primitives';
 import { Table } from '@/libs/shared';
+import { convertTimestampToPersianDate } from '@/libs/utils/convertTimestampToPersianDate';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-
 
 interface PlansListDetail {
   tripId: string;
@@ -81,7 +81,7 @@ const PlansList = (props: PlansListProps) => {
         const value = info.getValue() as string | null;
         return (
           <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
-            {value ? value : '-'}
+            {value ? convertTimestampToPersianDate(value) : '-'}
           </Text>
         );
       },
@@ -93,7 +93,7 @@ const PlansList = (props: PlansListProps) => {
         const value = info.getValue() as string | null;
         return (
           <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
-            {value ? value : '-'}
+            {value ? convertTimestampToPersianDate(value) : '-'}
           </Text>
         );
       },

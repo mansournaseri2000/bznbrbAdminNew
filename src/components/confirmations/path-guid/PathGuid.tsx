@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Spinner } from '@radix-ui/themes';
+import { useQuery } from '@tanstack/react-query';
 
 import { getAllTravelMethodsSuggestions } from '@/api/confirmations';
 import PathGuidCard from '@/components/develop/confirmations/path-guid-card/PathGuidCard';
@@ -20,12 +21,15 @@ const PathGuid = () => {
    */
   const searchParams = useSearchParams();
   const [page, setPage] = useState(searchParams.get('page') ? Number(searchParams.get('page')) : 1);
-  const queryClient = useQueryClient();
   /**
    * services
    * _______________________________________________________________________________
    */
-  const { data: travelSuggestionData } = useQuery({ queryKey: ['travel-suggestion'], queryFn: async () => await getAllTravelMethodsSuggestions() });
+  const { data: travelSuggestionData, isLoading, isFetching } = useQuery({ queryKey: ['travel-suggestion', page], queryFn: async () => await getAllTravelMethodsSuggestions(page) });
+  /*
+   *** Loading_________________________________________________________________________________________________________________________________________________________________
+   */
+  if (isLoading || isFetching || !travelSuggestionData) return <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '100px' }} />;
 
   console.log('DATA', travelSuggestionData);
   return (
@@ -35,20 +39,17 @@ const PathGuid = () => {
       ))}
 
       {/* TODO: add pagination */}
-      {travelSuggestionData?.filteredSuggestions && (
-        <Flex width={'100%'} align={'center'} justify={'between'} style={{ border: '1px solid red' }}>
-          <CustomPagination
-            current={page}
-            total={travelSuggestionData?.CurrentPageCount}
-            onPageChange={p => {
-              setPage(p);
-              updateUrlWithPageNumber(p);
-              queryClient.invalidateQueries({ queryKey: ['travel-suggestion'] });
-            }}
-          />
-          <ItemsPerPage data={travelSuggestionData?.filteredSuggestions} currentPage={travelSuggestionData?.currentPage} totalCount={travelSuggestionData?.CurrentPageCount} />
-        </Flex>
-      )}
+      <Flex width={'100%'} align={'center'} justify={'between'}>
+        <CustomPagination
+          current={page}
+          total={travelSuggestionData?.totalPages}
+          onPageChange={p => {
+            setPage(p);
+            updateUrlWithPageNumber(p);
+          }}
+        />
+        <ItemsPerPage data={travelSuggestionData?.filteredSuggestions} currentPage={travelSuggestionData?.currentPage} totalCount={travelSuggestionData?.totalCount} />
+      </Flex>
     </Grid>
   );
 };

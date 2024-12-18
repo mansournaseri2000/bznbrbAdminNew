@@ -20,6 +20,7 @@ export const sidebarOptions = [
       { text: 'مدیریت دسته بندی ها ', path: '/additional-detail/categories' },
 
       { text: 'مدیریت ویژگی ها', path: '/additional-detail/features' },
+      { text: 'مدیریت استان ها', path: '/additional-detail/province' },
     ],
   },
   {
@@ -39,27 +40,11 @@ export const sidebarOptions = [
     Icon: CheckCircled,
     type: 'collapse',
     path: '/ads',
-    // items: [
-    //   { text: 'مدیریت نظرات', path: '/confirmations/comment' },
-    //   { text: 'مدیریت نظرات برتر', path: '/confirmations/top-comments' },
-    //   { text: 'مدیریت اصلاح اطلاعات ', path: '/confirmations/improve-data' },
-    //   { text: 'مدیریت راهنماهای مسیر', path: '/confirmations/path-guid' },
-    //   { text: 'مدیریت تصاویر ارسالی', path: '/confirmations/image-sent' },
-    //   { text: 'مدیریت استان ها', path: '/confirmations/province' },
-    // ],
   },
   {
-    text: 'مدیریت استان ها',
+    text: 'پشتیبانی',
     Icon: CheckCircled,
     type: 'collapse',
-    path: '/province',
-    // items: [
-    //   { text: 'مدیریت نظرات', path: '/confirmations/comment' },
-    //   { text: 'مدیریت نظرات برتر', path: '/confirmations/top-comments' },
-    //   { text: 'مدیریت اصلاح اطلاعات ', path: '/confirmations/improve-data' },
-    //   { text: 'مدیریت راهنماهای مسیر', path: '/confirmations/path-guid' },
-    //   { text: 'مدیریت تصاویر ارسالی', path: '/confirmations/image-sent' },
-    //   { text: 'مدیریت استان ها', path: '/confirmations/province' },
-    // ],
+    path: '/support',
   },
 ];

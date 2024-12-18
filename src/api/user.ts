@@ -3,6 +3,20 @@ import { RecentTripsResponse, UserInfoResponse, UserListResponse } from '@/types
 
 import { ApiData } from './types';
 
+interface InputObject {
+  [key: string]: any;
+}
+const filterObject = (obj: InputObject): InputObject => {
+  const result: InputObject = {};
+  Object.keys(obj).forEach(key => {
+    const value = obj[key];
+    if (value !== null && value !== '' && !(Array.isArray(value) && value.length === 0)) {
+      result[key] = value;
+    }
+  });
+  return result;
+};
+
 export const getAllUsers = async (pageNumber: number) => {
   const res = await DevApiManager.get<ApiData<UserListResponse>>(`user?page=${pageNumber}&limit=10`);
 
@@ -15,7 +29,16 @@ export const getAllUsersWithParams = async (params: UserBody) => {
 };
 
 export const getRecentTrips = async (params: RecentTripsBody) => {
-  const res = await DevApiManager.post<ApiData<RecentTripsResponse>>('trips/recentTrips', params, {
+  const obj = {
+    ...params,
+    originCityId: Number(params.originCityId),
+    originProvinceId: Number([params.originProvinceId]),
+    destinationCityId: Number(params.destinationCityId),
+    destinationProvinceId: Number(params.destinationProvinceId),
+    departureDateStart: new Date(params.departureDateStart).getTime(),
+  };
+  const body = filterObject(obj);
+  const res = await DevApiManager.post<ApiData<RecentTripsResponse>>('trips/recentTrips', body, {
     headers: {
       userId: params.userId,
     },
@@ -48,13 +71,13 @@ export interface RecentTripsBody {
   limit: number;
   targetDate: string;
   sortDate: string;
-  searchQuery:string,
-  originCityId: number;
-  originProvinceId: number;
-  destinationCityId: number;
-  destinationProvinceId: number;
-  departureDateStart: number;
-  departureDateEnd: number;
-  returnDateStart: number;
-  returnDateEnd: number;
+  searchQuery: string;
+  originCityId: number | string;
+  originProvinceId: number | string;
+  destinationCityId: number | string;
+  destinationProvinceId: number | string;
+  departureDateStart: number | string;
+  departureDateEnd: number | string;
+  returnDateStart: number | string;
+  returnDateEnd: number | string;
 }

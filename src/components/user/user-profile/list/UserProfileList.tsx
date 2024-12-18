@@ -8,6 +8,7 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { Button, Flex, Text } from '@/libs/primitives';
 import { Table } from '@/libs/shared';
+import { convertTimestampToPersianDate } from '@/libs/utils/convertTimestampToPersianDate';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -79,7 +80,7 @@ const UserProfileList = ({ data }: UserProfileListProps) => {
         const value = info.getValue() as string | null;
         return (
           <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
-            {value ? value : '-'}
+            {value ? convertTimestampToPersianDate(value) : '-'}
           </Text>
         );
       },
@@ -91,7 +92,7 @@ const UserProfileList = ({ data }: UserProfileListProps) => {
         const value = info.getValue() as string | null;
         return (
           <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
-            {value ? value : '-'}
+            {value ? convertTimestampToPersianDate(value) : '-'}
           </Text>
         );
       },

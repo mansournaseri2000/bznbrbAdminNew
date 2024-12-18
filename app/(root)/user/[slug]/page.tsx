@@ -29,20 +29,20 @@ export default function UserProfile({ params }: { params: { slug: number } }) {
 
   const methods = useForm({
     defaultValues: {
-      sort: '',
       page: 1,
-      userId: Number(userId),
       limit: 10,
-      targetDate: '',
       sortDate: '',
-      originCityId: 0,
-      originProvinceId: 0,
-      destinationCityId: 0,
-      destinationProvinceId: 0,
-      departureDateStart: 0,
-      departureDateEnd: 0,
-      returnDateStart: 0,
-      returnDateEnd: 0,
+      sort: '',
+      userId: Number(userId),
+      targetDate: '',
+      originCityId: '',
+      originProvinceId: '',
+      destinationCityId: '',
+      destinationProvinceId: '',
+      departureDateStart: '',
+      departureDateEnd: '',
+      returnDateStart: '',
+      returnDateEnd: '',
     },
   });
 
@@ -92,7 +92,7 @@ export default function UserProfile({ params }: { params: { slug: number } }) {
             برنامه های کاربر
           </Text>
 
-          <UserProfileHero />
+          <UserProfileHero onSubmit={() => tripsMutate(watch() as any)} />
           {tripPending ? <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} /> : <UserProfileList data={tripsData?.latestTrips ? tripsData.latestTrips : ([] as any)} />}
 
           {tripsData?.latestTrips && (
