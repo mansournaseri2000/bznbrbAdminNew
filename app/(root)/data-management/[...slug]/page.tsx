@@ -17,8 +17,8 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   const status = params.slug[0];
   const placeID = params.slug[2];
 
-  console.log('placeID', placeID);
   // params.slug[1];
+  console.log('PARAMS', params.slug[2]);
 
   const results = useQueries({
     queries: [

@@ -17,11 +17,9 @@
 export interface CommentListResponse {
   PlaceComments: PlaceCommentsDetail[];
   PlaceRating: number;
-  PlaceCommentsCount: number;
-  CurrentShowingComments: number;
-  CurrentShowingCommentsLimit: number;
-  CurrentShowingCommentsPage: number;
-  allCommentsForPlacePages: number;
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
 }
 export interface PlaceCommentsDetail {
   id: number;

@@ -1,27 +1,64 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
+import { useQuery } from '@tanstack/react-query';
+
+import { getAllPlacesConstants } from '@/api/place';
 import { articleStatusOptions } from '@/constants/data-management';
 import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
+import CustomDatePicker from '@/libs/shared/CustomDatePicker';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
+import { updateURLWithQueryParams } from '@/libs/utils/updateUrl';
 import { ArrowRight, Filter, Search } from '@/public/icon';
+import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
-const ArticleManagementHero = () => {
+type Props = {
+  onSubmit: () => void;
+};
+
+const ArticleManagementHero = ({ onSubmit }: Props) => {
   /**
    * const and variables
    * _______________________________________________________________________________
    */
+  const searchParams = useSearchParams();
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const methods = useForm({ defaultValues: { category: '', date: '', status: '' } });
-  const { control } = methods;
+  const { control, setValue, watch, reset } = useFormContext();
   const router = useRouter();
 
+  /*
+   *** Services _________________________________________________________________________________________________________________________________________________________________
+   */
+  const { data: constantData } = useQuery({
+    queryKey: ['constant'],
+    queryFn: async () => getAllPlacesConstants(),
+  });
+
+  console.log('WATCH FOR HERO', watch());
+
+  /**
+   * functions
+   * _______________________________________________________________________________
+   */
+
+  const addFilter = () => {
+    const values = watch();
+    updateURLWithQueryParams(router, searchParams, values);
+    setIsOpen(false);
+  };
+
+  const removeFilter = () => {
+    reset();
+    updateURLWithQueryParams(router, searchParams, {});
+    setIsOpen(false);
+  };
   return (
     <>
       <Grid width={'100%'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 3fr auto' }}>
@@ -34,8 +71,8 @@ const ArticleManagementHero = () => {
             <Text {...typoVariant.body1}> افزودن نقطه</Text>
           </Flex>
         </Button>
-        <TextField placeholder='جستجو نام نقطه' />
-        <IconButton size={'3'} variant='soft'>
+        <Controller name='title' control={control} render={({ field }) => <TextField {...field} placeholder='جستجو نام نقطه' />} />
+        <IconButton size={'3'} variant='soft' onClick={onSubmit}>
           <Search />
         </IconButton>
       </Grid>
@@ -48,23 +85,19 @@ const ArticleManagementHero = () => {
         <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
         <Grid gapY={'4'} p={'4'}>
           <Controller
-            name='category'
+            name='categoryId'
             control={control}
             render={({ field }) => (
-              <SelectRoot {...field} placeholder='دسته بندی' lable='دسته بندی'>
-                {/* TODO: define select items */}
-              </SelectRoot>
-            )}
-          />
-          <Flex height={'77px'} align={'center'} justify={'center'} style={{ border: '2px solid red' }}>
-            date picker
-          </Flex>
-          <Controller
-            name='status'
-            control={control}
-            render={({ field }) => (
-              <SelectRoot {...field} placeholder='وضعیت انتشار' lable='وضعیت'>
-                {articleStatusOptions.map(item => (
+              <SelectRoot
+                {...field}
+                placeholder='دسته بندی'
+                lable='دسته بندی'
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {constantData?.categories.map(item => (
                   <SelectItem key={item.id} value={String(item.id)}>
                     {item.name}
                   </SelectItem>
@@ -72,8 +105,66 @@ const ArticleManagementHero = () => {
               </SelectRoot>
             )}
           />
+          <Flex direction={'column'} gap={'2'}>
+            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12], paddingInlineStart: 8 }}>
+              بازه زمانی
+            </Text>
+            <Grid width={'100%'} columns={'2'} gapX={'2'}>
+              <Controller
+                name='created_atStart'
+                control={control}
+                render={item => (
+                  <CustomDatePicker
+                    {...item}
+                    inputMode='none'
+                    placeholder='از تاریخ'
+                    value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
+                    onChangeValue={(val: any) => {
+                      setValue('created_atStart', new Date(val));
+                    }}
+                  />
+                )}
+              />
+              <Controller
+                name='created_atEnd'
+                control={control}
+                render={item => (
+                  <CustomDatePicker
+                    {...item}
+                    inputMode='none'
+                    placeholder='تا تاریخ'
+                    value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
+                    onChangeValue={(val: any) => {
+                      setValue('created_atEnd', new Date(val));
+                    }}
+                  />
+                )}
+              />
+            </Grid>
+          </Flex>
+          <Controller
+            name='is_published'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                placeholder='وضعیت انتشار'
+                lable='وضعیت'
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {articleStatusOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
         </Grid>
-        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => setIsOpen(false)} isFull={true} />
+        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onSubmit={() => addFilter()} onCloseButton={() => removeFilter()} isFull={true} />
       </Modal>
     </>
   );

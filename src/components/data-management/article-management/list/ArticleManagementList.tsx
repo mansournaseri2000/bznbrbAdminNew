@@ -2,22 +2,29 @@
 
 import React from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { ColumnDef } from '@tanstack/react-table';
 
 import { Button, Flex, Text } from '@/libs/primitives';
 import { Table } from '@/libs/shared';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-
-import TableData from './data.json';
+import { ArticleSDetail } from '@/types/data-management/article';
 
 interface ArticleDetail {
   title: string;
-  category: string;
-  status: boolean;
+  categoryName: string;
+  is_published: boolean;
+  id: number;
 }
 
-const ArticleManagementList = () => {
+type Props = {
+  data: ArticleSDetail[];
+};
+
+const ArticleManagementList = (props: Props) => {
+  const router = useRouter();
   const columns: ColumnDef<ArticleDetail>[] = [
     {
       accessorKey: 'index',
@@ -41,7 +48,7 @@ const ArticleManagementList = () => {
       },
     },
     {
-      accessorKey: 'category',
+      accessorKey: 'categoryName',
       header: 'دسته بندی',
       cell: info => {
         const value = info.getValue() as string | null;
@@ -53,7 +60,7 @@ const ArticleManagementList = () => {
       },
     },
     {
-      accessorKey: 'status',
+      accessorKey: 'is_published',
       header: 'وضعیت انتشار',
       cell: info => {
         const value = info.getValue() as boolean | null;
@@ -81,6 +88,7 @@ const ArticleManagementList = () => {
         const item = row.original;
         const handleClick = () => {
           console.log('item', item);
+          router.push(`/data-management/article-management/edit-article/${item.id}`);
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>
@@ -92,7 +100,7 @@ const ArticleManagementList = () => {
       },
     },
   ];
-  return <Table columns={columns as any} data={TableData as any} />;
+  return <Table columns={columns as any} data={props.data as any} />;
 };
 
 export default ArticleManagementList;

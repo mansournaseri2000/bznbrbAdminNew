@@ -16,8 +16,9 @@ export const pointTypeOptions = [
 ];
 
 export const articleStatusOptions = [
-  { id: 1, name: 'منتشر شده' },
-  { id: 2, name: 'منتشر نشده' },
+  { id: 1, name: 'منتشر شده', value: true },
+  { id: 2, name: 'منتشر نشده', value: false },
+  { id: 3, name: 'همه', value: 'none' },
 ];
 
 export const selectPointOptions = [

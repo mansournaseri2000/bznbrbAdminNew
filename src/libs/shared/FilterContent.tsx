@@ -165,7 +165,7 @@ const FilterContent = ({ province }: Props) => {
         </Text>
         <Grid gap={'16px'} columns={'2'}>
           <Controller
-            name={'departureDateStart'}
+            name={'returnDateStart'}
             control={control}
             render={item => (
               <CustomDatePicker
@@ -180,7 +180,7 @@ const FilterContent = ({ province }: Props) => {
             )}
           />
           <Controller
-            name={'departureDateEnd'}
+            name={'returnDateEnd'}
             control={control}
             render={item => (
               <CustomDatePicker

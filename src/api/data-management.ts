@@ -2,6 +2,7 @@
 import { ApiManagerV2 } from '@/libs/utils/axios.config';
 // import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
 import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
+import { ArticleListBody, ArticleListResponse } from '@/types/data-management/article';
 import { CommentListResponse, PlaceImproveContentResponse } from '@/types/data-management/point';
 import { PlaceListResponse } from '@/types/place';
 
@@ -14,7 +15,7 @@ const filterObject = (obj: InputObject): InputObject => {
   const result: InputObject = {};
   Object.keys(obj).forEach(key => {
     const value = obj[key];
-    if (value !== null && value !== '' && value !==0 && !(Array.isArray(value) && value.length === 0)) {
+    if (value !== null && value !== '' && value !== 0 && value !== 'none' && !(Array.isArray(value) && value.length === 0)) {
       result[key] = value;
     }
   });
@@ -57,13 +58,42 @@ export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
     isPublished: Boolean(params.isPublished),
   };
   const body = filterObject(obj);
-  console.log('🚀 ~ getAllPlacesFiltered ~ body:', body);
   const res = await DevApiManager.post<ApiData<PlaceListResponse>>('places/allPlacesWithFilter', body);
   return res.data.data;
 };
 
 export const getPlaceImproveContent = async (placeId: number) => {
   const res = await DevApiManager.get<ApiData<PlaceImproveContentResponse>>(`places/placeImproveContent/${placeId}`);
+  return res.data.data;
+};
+
+export const removePlaceImproveContent = async (id: number) => {
+  const res = await DevApiManager.delete(`/places/deletePlaceImproveContent/${id}`);
+  return res.data;
+};
+
+export const publishTravelMethod = async (id: number) => {
+  const res = await DevApiManager.patch(`/places/changeTravelMethodStatusById/${id}?status=true`);
+  return res.data;
+};
+
+export const removeTravelMethod = async (id: number) => {
+  const res = await DevApiManager.patch(`/places/changeTravelMethodStatusById/${id}?status=false`);
+  return res.data;
+};
+
+export const removeCommentForPlace = async (id: number) => {
+  const res = await DevApiManager.delete(`/comment/${id}`);
+  return res.data;
+};
+
+export const getArticleList = async (page: number, params: ArticleListBody) => {
+  const obj = {
+    ...params,
+    is_published: params.is_published === 'true' ? true : params.is_published === 'false' ? false : String( params.is_published),
+  };
+  const body = filterObject(obj);
+  const res = await DevApiManager.post<ApiData<ArticleListResponse>>(`/article/filter?limit=10&page=${page}`, body);
   return res.data.data;
 };
 

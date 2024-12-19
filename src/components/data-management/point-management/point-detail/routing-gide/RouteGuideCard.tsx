@@ -1,23 +1,25 @@
 'use client';
 
 import { Flex, IconButton, Text } from '@/libs/primitives';
-import { Bus, Check, Subway, Taxi, Trash } from '@/public/icon';
+import { Airplan, Bus, Car, Check, Hike, Ship, Subway, Taxi, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
+import { travelModeOptions } from '@/types/place/find-place';
 
 /**
  * props
  * _______________________________________________________________________________
  */
 type Props = {
-  title: string;
   description: string | null;
-  type: 'bus' | 'taxi' | 'subway';
+  type: travelModeOptions;
   id: number;
   cardType: 'route_guide' | 'route_sent';
+  onPublish?: () => void;
+  onDelete?: () => void;
 };
 
-const RouteGuideCard = ({ title, description, type, id, cardType }: Props) => {
+const RouteGuideCard = ({ description, type, id, cardType, onDelete, onPublish }: Props) => {
   /**
    * const and variables
    * _______________________________________________________________________________
@@ -32,13 +34,21 @@ const RouteGuideCard = ({ title, description, type, id, cardType }: Props) => {
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const renderElement = (type: 'bus' | 'taxi' | 'subway') => {
+  const renderElement = (type: travelModeOptions) => {
     switch (type) {
-      case 'bus':
+      case 'BUS':
         return <Bus />;
-      case 'taxi':
+      case 'TAXI':
         return <Taxi />;
-      case 'subway':
+      case 'AIRPLANE':
+        return <Airplan />;
+      case 'CAR':
+        return <Car />;
+      case 'HIKE':
+        return <Hike />;
+      case 'SHIP':
+        return <Ship />;
+      case 'TRAIN':
         return <Subway />;
       default:
         return <Taxi />;
@@ -64,7 +74,19 @@ const RouteGuideCard = ({ title, description, type, id, cardType }: Props) => {
     >
       <Flex justify={'between'}>
         <Text {...typoVariant.body2} style={{ color: id % 2 === 0 ? colorPalette.blue[9] : colorPalette.pink[9] }}>
-          {title}
+          {type === 'AIRPLANE'
+            ? 'هواپیما'
+            : type === 'BUS'
+            ? 'اتوبوس'
+            : type === 'CAR'
+            ? 'ماشین'
+            : type === 'HIKE'
+            ? 'پیاده روی'
+            : type === 'SHIP'
+            ? 'کشتی'
+            : type === 'TAXI'
+            ? 'تاکسی'
+            : type === 'TRAIN' && 'قطار'}
         </Text>
       </Flex>
       <Flex width={'100%'} justify={'between'} gap={'2'}>
@@ -73,10 +95,10 @@ const RouteGuideCard = ({ title, description, type, id, cardType }: Props) => {
         </Text>
         {cardType === 'route_sent' && (
           <Flex gap={'2'}>
-            <IconButton size={'3'} variant='soft'>
+            <IconButton size={'3'} variant='soft' onClick={onPublish}>
               <Check />
             </IconButton>
-            <IconButton size={'3'} colorVariant='PINK'>
+            <IconButton size={'3'} colorVariant='PINK' onClick={onDelete}>
               <Trash />
             </IconButton>
           </Flex>

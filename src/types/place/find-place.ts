@@ -41,7 +41,7 @@ export interface PlaceResponse {
   PlaceWorkTime: PlaceWorkTime[];
   features: Feature[];
   area: string;
-
+  PlaceTravelMethodSuggestions: PlaceTravelMethodSuggestionsDetail[];
   cost: string;
   renown: string;
 }
@@ -117,3 +117,12 @@ export interface Item {
   name: string;
   en_name: any;
 }
+
+export interface PlaceTravelMethodSuggestionsDetail {
+  travelMode: travelModeOptions;
+  description: string;
+  id: number;
+  status: boolean;
+}
+
+export type travelModeOptions = 'HIKE' | 'AIRPLANE' | 'BUS' | 'CAR' | 'SHIP' | 'TRAIN' | 'TAXI';

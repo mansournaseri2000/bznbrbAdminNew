@@ -16,12 +16,16 @@ const containerVariants: Variants = {
   closed: { opacity: 0, height: 0 },
 };
 
-const CommentCard = (props: PlaceCommentsDetail) => {
+type Props = PlaceCommentsDetail & {
+  onDelete?: () => void;
+};
+
+const CommentCard = (props: Props) => {
   /**
    * const and variables
    * _______________________________________________________________________________
    */
-  const { pic, fullName, date, content, likes, dislikes } = props;
+  const { pic, fullName, date, content, likes, dislikes, onDelete } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const MAX_CHARACTERS = 300;
   /**
@@ -49,7 +53,7 @@ const CommentCard = (props: PlaceCommentsDetail) => {
             </Text>
           </Flex>
         </Flex>
-        <IconButton size={'3'} colorVariant='PINK' style={{ borderRadius: 40 }}>
+        <IconButton size={'3'} colorVariant='PINK' onClick={onDelete} style={{ borderRadius: 40 }}>
           <Trash />
         </IconButton>
       </Flex>

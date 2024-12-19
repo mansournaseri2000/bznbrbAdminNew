@@ -19,7 +19,11 @@ type CardProps = PlaceImproveContentDataDetail & {
 };
 
 const DataCard: React.FC<CardProps> = (props: CardProps) => {
+  /*
+   *** Variables and Constant _________________________________________________________________________________________________________________________________________________________________
+   */
   const { name, provinceName, cityName, phone, website, email, content, type, index, onShowPoint, onDelete } = props;
+
   return (
     <Grid
       width={'100%'}
