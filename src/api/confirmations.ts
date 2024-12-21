@@ -36,3 +36,13 @@ export const getAllPendingComments = async (page: number) => {
   const res = await DevApiManager.get<ApiData<AllPendingCommentsResponse>>(`/comment/all?page=${page}&limit=10`);
   return res.data.data;
 };
+
+export const publishTravelSuggestion = async (id: number) => {
+  const res = await DevApiManager.patch(`/places/changeTravelMethodStatusById/${id}?status=true`);
+  return res.data;
+};
+
+export const removeTravelSuggestion = async (id: number) => {
+  const res = await DevApiManager.patch(`/places/changeTravelMethodStatusById/${id}?status=false`);
+  return res.data;
+};

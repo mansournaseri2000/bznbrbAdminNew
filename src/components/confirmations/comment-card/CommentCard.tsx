@@ -27,6 +27,11 @@ type modalStateType = {
 };
 
 const CommentCard = (props: CommentCardProps) => {
+  /* 
+    ****
+    const and variables
+    ****_____________________________________________________________________________
+   */
   const { content, commentDate, pic, id, index, fullName, placeName, placeCity, placeProvince, type, placeId, articleCity, articleProvince, articleTitle, articleId } = props;
 
   const [modalState, setModalState] = useState<modalStateType>({
@@ -109,11 +114,6 @@ const CommentCard = (props: CommentCardProps) => {
               <Text style={{ color: colorPalette.gray[9] }}>{convertTimestampToPersianDate(commentDate)}</Text>
             </Flex>
           </Flex>
-          {/* {type === 'ARTICLE' && (
-            <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'}>
-              <Text {...typoVariant.body3}>مشاهده مقاله</Text>
-            </Button>
-          )} */}
         </Flex>
         <Text {...typoVariant.paragraph1} style={{ color: colorPalette.gray[11] }}>
           {content}
