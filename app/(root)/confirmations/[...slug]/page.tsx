@@ -6,6 +6,7 @@ import ImproveDataManagement from '@/components/confirmations/improve-data-manag
 import PathGuid from '@/components/confirmations/path-guid/PathGuid';
 import TopComments from '@/components/confirmations/top-comments-management/TopComments';
 import TopCommentsManagement from '@/components/confirmations/top-comments-management/TopCommentsManagement';
+import Comments from '@/components/confirmations/comments/Comments';
 
 
 
@@ -14,8 +15,8 @@ import TopCommentsManagement from '@/components/confirmations/top-comments-manag
 const Confirmations = ({ params }: { params: { slug: string[] } }) => {
   const renderElement = () => {
     switch (params.slug[0]) {
-      // case 'comment':
-      //   return <Comment />;
+      case 'comment':
+        return <Comments />;
       case 'path-guid':
         return <PathGuid />;
       case 'image-sent':

@@ -7,13 +7,19 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getCategories } from '@/api/additional-detail';
 import { sortCategoryOptions } from '@/constants/additional-detail';
-import { Button, Flex, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import { Button, Flex, Modal, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import { typoVariant } from '@/theme/typo-variants';
 
 import CategoryItems from './category-items/CategoryItems';
 import CategoryModal from './category-modal/CategoryModal';
+import ModalHeader from '@/libs/shared/ModalHeader';
+import { Close } from '@/public/icon';
 
-const Categories = () => {
+type Props ={
+  type : 'add_category' | 'edit_category';
+}
+
+const Categories = ({type}:Props) => {
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
@@ -64,6 +70,9 @@ const Categories = () => {
           <CategoryItems key={item.id} {...item} />
         ))}
       </Flex>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <ModalHeader  title={type === 'add_category' ? 'افزودن دسته بندی' : 'ویرایش دسته بندی'} icon={<Close />} handleClose={() => setIsOpen(false)} />
+      </Modal>
       <CategoryModal isOpen={isOpen} setIsOpen={setIsOpen} type='edit_category' />
     </FormProvider>
   );

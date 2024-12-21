@@ -3,20 +3,21 @@
 import { useState } from 'react';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import { Box, Flex, Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { removeComment, updateComment } from '@/api/comment';
-import CommentInfo from '@/components/develop/comment/comment-info/CommentInfo';
 import { Button, Grid, IconButton, Modal, Text } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
+import { convertTimestampToPersianDate } from '@/libs/utils/convertTimestampToPersianDate';
 import { Check, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { CommentsDetail } from '@/types/comment/comment-list';
+import { AllCommentsDetail } from '@/types/confirmations/pending-comments';
 
-type CommentCardProps = CommentsDetail & {
+type CommentCardProps = AllCommentsDetail & {
   index: number;
 };
 
@@ -26,14 +27,13 @@ type modalStateType = {
 };
 
 const CommentCard = (props: CommentCardProps) => {
-  const { content, createdAt, users, id, places, index } = props;
+  const { content, commentDate, pic, id, index, fullName, placeName, placeCity, placeProvince, type, placeId, articleCity, articleProvince, articleTitle, articleId } = props;
 
   const [modalState, setModalState] = useState<modalStateType>({
     isOpen: false,
     key: 'remove',
   });
-
-  console.log('place', places);
+  const router = useRouter();
   const queryClient = useQueryClient();
   /* 
     ****
@@ -44,7 +44,7 @@ const CommentCard = (props: CommentCardProps) => {
     mutationFn: async () => updateComment(id),
     onSuccess: async data => {
       if (data.status === true) {
-        queryClient.invalidateQueries({ queryKey: ['all-comments'] });
+        queryClient.invalidateQueries({ queryKey: ['pending-comments'] });
         ToastSuccess('نظر مورد نظر با موفقیت منتشر شد');
         setModalState({ ...modalState, isOpen: false });
       } else {
@@ -57,7 +57,7 @@ const CommentCard = (props: CommentCardProps) => {
     mutationFn: async () => removeComment(id),
     onSuccess: async data => {
       if (data.status === true) {
-        queryClient.invalidateQueries({ queryKey: ['all-comments'] });
+        queryClient.invalidateQueries({ queryKey: ['pending-comments'] });
         ToastSuccess('نظر مورد نظر با موفقیت حذف شد');
         setModalState({ ...modalState, isOpen: false });
       } else {
@@ -80,29 +80,40 @@ const CommentCard = (props: CommentCardProps) => {
           border: index % 2 === 0 ? `1px solid ${colorPalette.blue[6]}` : `1px solid ${colorPalette.pink[6]}`,
         }}
       >
+        {/* {type === 'PLACE' && ( */}
         <Flex width={'100%'} justify={'between'} align={'center'}>
           <Flex direction={'column'} gap={'2'}>
             <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
-              {places?.name}
+              {type === 'PLACE' ? placeName : articleTitle}
             </Text>
             <Text {...typoVariant.description2} style={{ color: colorPalette.gray[11], opacity: '50%' }}>
-              {`${places?.Cities.Provinces.name} / ${places?.Cities.name}`}
+              {type === 'PLACE' ? `${placeProvince} / ${placeCity}` : `${articleProvince} / ${articleCity} `}
             </Text>
           </Flex>
-          <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'}>
-            <Text {...typoVariant.body3}>مشاهده نقطه</Text>
+          <Button
+            size={'3'}
+            colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'}
+            onClick={() => router.push(type === 'PLACE' ? `https://bezanimbiroon.ir/place/${placeId}?view=common` : `https://bezanimbiroon.ir/article/${articleId}`)}
+          >
+            <Text {...typoVariant.body3}>{type === 'PLACE' ? 'مشاهده نقطه' : 'مشاهده مقاله'}</Text>
           </Button>
         </Flex>
+        {/* )} */}
         <Flex width={'100%'} justify={'between'} align={'center'}>
           <Flex align={'center'} gap={'2'}>
             <Box style={{ width: 40, height: 40, position: 'relative', borderRadius: '50%' }}>
-              <Image src={users.pic ? users.pic : ''} alt='' fill style={{ borderRadius: '50%' }} />
+              <Image src={pic ? pic : ''} alt='' fill style={{ borderRadius: '50%' }} />
             </Box>
             <Flex direction={'column'} gap={'1'}>
-              <Text style={{ color: colorPalette.gray[11] }}>{`${users.name} ${users.last_name}`}</Text>
-              <Text style={{ color: colorPalette.gray[9] }}>{createdAt}</Text>
+              <Text style={{ color: colorPalette.gray[11] }}>{fullName}</Text>
+              <Text style={{ color: colorPalette.gray[9] }}>{convertTimestampToPersianDate(commentDate)}</Text>
             </Flex>
           </Flex>
+          {/* {type === 'ARTICLE' && (
+            <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'}>
+              <Text {...typoVariant.body3}>مشاهده مقاله</Text>
+            </Button>
+          )} */}
         </Flex>
         <Text {...typoVariant.paragraph1} style={{ color: colorPalette.gray[11] }}>
           {content}
@@ -120,34 +131,34 @@ const CommentCard = (props: CommentCardProps) => {
 
       <Modal isOpen={modalState.isOpen} onClose={() => setModalState({ ...modalState, isOpen: false })}>
         {modalState.key === 'update' && (
-          <Grid gapY={'24px'}>
+          <Grid gapY={'24px'} p={'5'}>
             <Text>آیا از انتشار این نظر اظمینان دارید؟ </Text>
             <Grid gap={'10px'} columns={'2'}>
               <Button onClick={() => updateCommentMutate()} variant='soft' size={'4'}>
-                <Text>{updateCommentIsPending ? <Spinner /> : 'بله'}</Text>
+                <Text {...typoVariant.body3}>{updateCommentIsPending ? <Spinner /> : 'بله'}</Text>
               </Button>
               <Button type='button' onClick={() => setModalState({ ...modalState, isOpen: false })} variant='solid' size={'4'}>
-                خیر
+                <Text {...typoVariant.body3}>خیر</Text>
               </Button>
             </Grid>
           </Grid>
         )}
         {modalState.key === 'remove' && (
-          <Grid gapY={'24px'}>
+          <Grid gapY={'24px'} p={'5'}>
             <Text>آیا از حذف این نظر اظمینان دارید؟ </Text>
             <Grid gap={'10px'} columns={'2'}>
               <Button onClick={() => removeCommentMutate()} variant='soft' size={'4'}>
-                <Text>{removeCommentIsPending ? <Spinner /> : 'بله'}</Text>
+                <Text {...typoVariant.body3}>{removeCommentIsPending ? <Spinner /> : 'بله'}</Text>
               </Button>
               <Button type='button' onClick={() => setModalState({ ...modalState, isOpen: false })} variant='solid' size={'4'}>
-                خیر
+                <Text {...typoVariant.body3}>خیر</Text>
               </Button>
             </Grid>
           </Grid>
         )}
-        {modalState.key === 'info' && (
+        {/* {modalState.key === 'info' && (
           <CommentInfo {...props} onUpdate={() => updateCommentMutate()} onRemove={() => removeCommentMutate()} updatePending={updateCommentIsPending} removePending={removeCommentIsPending} />
-        )}
+        )} */}
       </Modal>
     </>
   );

@@ -2,7 +2,7 @@
 import { ApiManagerV2 } from '@/libs/utils/axios.config';
 // import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
 import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
-import { ArticleListBody, ArticleListResponse } from '@/types/data-management/article';
+import { ArticleListBody, ArticleListResponse, CreateAndEditArticleBody } from '@/types/data-management/article';
 import { CommentListResponse, PlaceImproveContentResponse } from '@/types/data-management/point';
 import { PlaceListResponse } from '@/types/place';
 
@@ -90,11 +90,21 @@ export const removeCommentForPlace = async (id: number) => {
 export const getArticleList = async (page: number, params: ArticleListBody) => {
   const obj = {
     ...params,
-    is_published: params.is_published === 'true' ? true : params.is_published === 'false' ? false : String( params.is_published),
+    is_published: params.is_published === 'true' ? true : params.is_published === 'false' ? false : String(params.is_published),
   };
   const body = filterObject(obj);
   const res = await DevApiManager.post<ApiData<ArticleListResponse>>(`/article/filter?limit=10&page=${page}`, body);
   return res.data.data;
+};
+
+export const createArticle = async (params: CreateAndEditArticleBody) => {
+  const res = await DevApiManager.post<ApiData<CreateAndEditArticleBody>>('/article', params);
+  return res.data.data;
+};
+
+export const editArticle = async (id: number, params: CreateAndEditArticleBody) => {
+  const res = await DevApiManager.patch(`/article/edit/${id}`, params);
+  return res.data;
 };
 
 export interface AllPlacesBody {

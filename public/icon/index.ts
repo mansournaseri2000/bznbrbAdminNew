@@ -1,4 +1,5 @@
 export { default as StatisticsFigures } from './StatisticsFigures';
+export { default as Ads } from './Ads';
 export { default as Airplan } from './Airplan';
 export { default as Archive } from './Archive';
 export { default as ArrowLeftCustomButton } from './ArrowLeftCustomButton';
@@ -35,6 +36,7 @@ export { default as Shared } from './Shared';
 export { default as Ship } from './Ship';
 export { default as Star } from './Star';
 export { default as Subway } from './Subway';
+export { default as Support } from './Support';
 export { default as Taxi } from './Taxi';
 export { default as Trash } from './Trash';
 export { default as TriangleLeft } from './TriangleLeft';

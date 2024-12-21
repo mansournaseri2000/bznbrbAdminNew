@@ -13,12 +13,22 @@ import PointDetailRoot from '@/components/data-management/point-management/point
 import PointManagement from '@/components/data-management/point-management/PointManagement';
 import { PlaceResponse } from '@/types/place';
 
+// import { useForm } from 'react-hook-form';
+
 const DataManagement = ({ params }: { params: { slug: string[] } }) => {
+  /**
+   * const and variables
+   * _______________________________________________________________________________
+   */
   const status = params.slug[0];
   const placeID = params.slug[2];
 
-  // params.slug[1];
-  console.log('PARAMS', params.slug[2]);
+  console.log('ARTICLE ID', params.slug[2]);
+
+  /**
+   * services
+   * _______________________________________________________________________________
+   */
 
   const results = useQueries({
     queries: [
@@ -35,11 +45,10 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
       },
     ],
   });
+
   const [constantResult, editPlaceResult] = results;
   const { data: constantData } = constantResult;
   const { data: placeData, isLoading: placeIsLoading } = editPlaceResult;
-
-  // console.log('PlaceData', placeData);
 
   if (!constantData || placeIsLoading) return <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />;
 

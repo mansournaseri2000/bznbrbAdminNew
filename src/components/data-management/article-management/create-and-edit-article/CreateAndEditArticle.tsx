@@ -1,12 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
+import { createArticle, editArticle } from '@/api/data-management';
 import { getAllPlacesConstants } from '@/api/place';
 import ImageCreator from '@/components/develop/shared/image-creator/ImageCreator';
 import { SeoSettingsRoot } from '@/components/place';
@@ -32,37 +33,100 @@ const CreateAndEditArticle = ({ type, articleStatus }: Props) => {
    * _______________________________________________________________________________
    */
   const router = useRouter();
+  const params = useParams();
+
   const methods = useForm({
-    defaultValues: {
-      onTitr: '',
-      title: '',
-      url: '',
-      writer: '',
-      source: '',
-      category: '',
-      subCategory: '',
-      province: '',
-      city: '',
-      articleSummery: '',
-      summery: '',
-      articleTopic: '',
-      articleText: '',
-      showOnPage: false,
-      keyword: '',
-      meta_title: '',
-      meta_description: '',
-      metakeyword: '',
-    },
+    defaultValues:
+      type === 'create'
+        ? {
+            onTitr: '',
+            title: '',
+            url: '',
+            writer: '',
+            source: '',
+            category: '',
+            subCategory: '',
+            province: '',
+            city: '',
+            articleSummery: '',
+            summery: '',
+            articleTopic: '',
+            articleText: '',
+            showOnPage: false,
+            keyword: '',
+            meta_title: '',
+            meta_description: '',
+            metakeyword: '',
+          }
+        : type === 'edit'
+        ? {
+            onTitr: '',
+            title: '',
+            url: '',
+            writer: '',
+            source: '',
+            category: '',
+            subCategory: '',
+            province: '',
+            city: '',
+            articleSummery: '',
+            summery: '',
+            articleTopic: '',
+            articleText: '',
+            showOnPage: false,
+            keyword: '',
+            meta_title: '',
+            meta_description: '',
+            metakeyword: '',
+          }
+        : {},
   });
+
+  const { watch } = methods;
 
   /**
    * Services
    * _______________________________________________________________________________
    */
+
+  // ********** GET SERVICES ***********
+
   const { data: constantData } = useQuery({
     queryKey: ['constant'],
     queryFn: async () => getAllPlacesConstants(),
   });
+
+  // ********* ACTION SERVICES **********
+
+  const { mutate: createArticleMutate, isPending: createArticlePending } = useMutation({
+    mutationFn: async () => createArticle(watch() as any),
+    onSuccess: data => {
+      console.log('onSuccess', data);
+    },
+    onError: data => {
+      console.log('onError', data);
+    },
+  });
+
+  const {
+    mutate: editArticleMutate,
+    isPending: editArticlePending,
+    data: articleData,
+  } = useMutation({
+    mutationFn: async () => editArticle(Number(params.slug[2]), watch() as any),
+    onSuccess: data => {
+      console.log('onSuccess', data);
+    },
+    onError: data => {
+      console.log('onError', data);
+    },
+  });
+
+  useEffect(() => {
+    editArticleMutate();
+  }, []);
+
+  console.log('ARTICLE DATA0', articleData);
 
   return (
     <FormProvider {...methods}>

@@ -37,8 +37,6 @@ const PathGuid = () => {
       {travelSuggestionData?.filteredSuggestions.map((item, index) => (
         <PathGuidCard key={item.id} index={index} {...item} />
       ))}
-
-      {/* TODO: add pagination */}
       <Flex width={'100%'} align={'center'} justify={'between'}>
         <CustomPagination
           current={page}
