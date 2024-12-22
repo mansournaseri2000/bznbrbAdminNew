@@ -61,3 +61,13 @@ export const makeTopPicUserUpload = async (id: number) => {
   const res = await DevApiManager.patch(`/places/makeTopPlacePicUserUploads/${id}`);
   return res.data;
 };
+
+export const acceptPlaceImproveContent = async (id: number) => {
+  const res = await DevApiManager.patch(`/places/acceptPlaceImproveContent/${id}`);
+  return res.data;
+};
+
+export const deletePlaceImproveContent = async (id: number) => {
+  const res = await DevApiManager.delete(`/places/deletePlaceImproveContent/${id}`);
+  return res.data;
+};

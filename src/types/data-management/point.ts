@@ -171,5 +171,5 @@ export interface PlaceImproveContentDataDetail {
   provinceName: string;
   cityName: string;
   address: string;
-  content?: string;
+  placeId: number;
 }
