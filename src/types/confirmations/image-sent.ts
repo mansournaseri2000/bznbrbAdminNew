@@ -13,5 +13,5 @@ export interface FilteredPicsDetail {
   placeName: string;
   placeCity: string;
   placeProvince: string;
-  content?: string;
+  description: string;
 }

@@ -46,3 +46,18 @@ export const removeTravelSuggestion = async (id: number) => {
   const res = await DevApiManager.patch(`/places/changeTravelMethodStatusById/${id}?status=false`);
   return res.data;
 };
+
+export const acceptPicUserUpload = async (id: number) => {
+  const res = await DevApiManager.patch(`/places/acceptPlacePicUserUploads/${id}`);
+  return res.data;
+};
+
+export const deletePicUserUpload = async (id: number) => {
+  const res = await DevApiManager.delete(`/places/deletePlacePicUserUploads/${id}`);
+  return res.data;
+};
+
+export const makeTopPicUserUpload = async (id: number) => {
+  const res = await DevApiManager.patch(`/places/makeTopPlacePicUserUploads/${id}`);
+  return res.data;
+};
