@@ -1,23 +1,80 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
-import { Flex, IconButton, Text } from '@/libs/primitives';
-import { Pencil, Trash } from '@/public/icon';
+import { Spinner } from '@radix-ui/themes';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { deleteCommentById, updateCommentById } from '@/api/confirmations';
+import { Button, Flex, Grid, IconButton, Modal, Text, TextArea, TextField } from '@/libs/primitives';
+import ModalAction from '@/libs/shared/ModalAction';
+import ModalHeader from '@/libs/shared/ModalHeader';
+import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
+import { Close, Pencil, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { CommentsDetail } from '@/types/confirmations/top-comments';
 
-import ModalContent from '../add-comment/AddEditModalContent';
-
-type TopCommentItemProps = CommentsDetail & {
-  onDelete?: () => void;
+type Props = CommentsDetail & {
+  data: CommentsDetail;
 };
 
-const TopCommentItem: React.FC<TopCommentItemProps> = (props: TopCommentItemProps) => {
-  const { commentName, commentContent, onDelete } = props;
+type modalStateType = {
+  isOpen: boolean;
+  key: 'edit' | 'delete';
+};
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+const TopCommentItem = (props: Props) => {
+  /*
+   *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
+   */
+  const { commentName, commentContent, data, commentId } = props;
+  const [modalState, setModalState] = useState<modalStateType>({
+    isOpen: false,
+    key: 'edit',
+  });
+  const methods = useForm({
+    defaultValues: {
+      name: data.commentName,
+      content: data.commentContent,
+      type: 'COMMENT',
+    },
+  });
+  const { control, watch } = methods;
+  const queryClient = useQueryClient();
+
+  console.log('watch', watch());
+  /* 
+    ****
+    Services
+    ****_____________________________________________________________________________
+   */
+  const { mutate: updateCommentMutate, isPending: updateCommentPending } = useMutation({
+    mutationFn: async () => updateCommentById(commentId, watch() as any),
+    onSuccess: async data => {
+      if (data.status === true) {
+        queryClient.invalidateQueries({ queryKey: ['top-comments-item'] });
+        ToastSuccess('نظر مورد نظر با موفقیت بروزرسانی شد');
+        setModalState({ ...modalState, isOpen: false });
+      } else {
+        ToastError('لطفا دوباره تلاش نمایید');
+      }
+    },
+  });
+
+  const { mutate: deleteCommentMutate, isPending: deleteCommentPending } = useMutation({
+    mutationFn: async () => deleteCommentById(commentId),
+    onSuccess: async data => {
+      if (data.status === true) {
+        queryClient.invalidateQueries({ queryKey: ['top-comments-item'] });
+        ToastSuccess('نظر مورد نظر با موفقیت حذف شد');
+        setModalState({ ...modalState, isOpen: false });
+      } else {
+        ToastError('لطفا دوباره تلاش نمایید');
+      }
+    },
+  });
 
   return (
     <>
@@ -31,15 +88,45 @@ const TopCommentItem: React.FC<TopCommentItemProps> = (props: TopCommentItemProp
           </Text>
         </Flex>
         <Flex direction={'column'} gap={'2'}>
-          <IconButton size={'3'} onClick={() => setIsOpen(true)}>
+          <IconButton size={'3'} onClick={() => setModalState({ isOpen: true, key: 'edit' })}>
             <Pencil />
           </IconButton>
-          <IconButton size={'3'} colorVariant='PINK' onClick={onDelete}>
+          <IconButton size={'3'} colorVariant='PINK' onClick={() => setModalState({ isOpen: true, key: 'delete' })} disabled>
             <Trash />
           </IconButton>
         </Flex>
       </Flex>
-      <ModalContent type='edit' isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Modal isOpen={modalState.isOpen} onClose={() => setModalState({ ...modalState, isOpen: false })}>
+        {modalState.key === 'edit' && (
+          <>
+            <ModalHeader handleClose={() => setModalState({ ...modalState, isOpen: false })} title='ویرایش نظر برتر' icon={<Close />} />
+            <Flex direction={'column'} gap={'5'} p={'5'}>
+              <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان نقطه' style={{ width: '50%' }} />} />
+              <Controller name='content' control={control} render={({ field }) => <TextArea {...field} placeholder='متن نظر' />} />
+            </Flex>
+            <ModalAction
+              submitButtonText='ویرایش تغییرات'
+              closeButtonText='لغو و بازگشت'
+              onCloseButton={() => setModalState({ ...modalState, isOpen: false })}
+              onSubmit={() => updateCommentMutate()}
+              isLoading={updateCommentPending}
+            />
+          </>
+        )}
+        {modalState.key === 'delete' && (
+          <Grid gapY={'24px'} p={'5'}>
+            <Text>آیا از حذف این راهنمای مسیر اطمینان دارید؟ </Text>
+            <Grid gap={'10px'} columns={'2'}>
+              <Button variant='soft' size={'4'} onClick={() => deleteCommentMutate()}>
+                <Text {...typoVariant.body3}>{deleteCommentPending ? <Spinner /> : 'بله'}</Text>s
+              </Button>
+              <Button type='button' onClick={() => setModalState({ ...modalState, isOpen: false })} variant='solid' size={'4'}>
+                <Text {...typoVariant.body3}>خیر</Text>
+              </Button>
+            </Grid>
+          </Grid>
+        )}
+      </Modal>
     </>
   );
 };

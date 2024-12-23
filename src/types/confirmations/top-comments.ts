@@ -54,3 +54,15 @@ export interface CommentsDetail {
   commentName: string;
   commentUpdateTime: number;
 }
+
+export interface UpdateCommentBody {
+  name: string;
+  content: string;
+  type: 'COMMENT';
+}
+export interface CreateCommentBody {
+  name: string;
+  content: string;
+  type: 'COMMENT';
+  provincesId: number;
+}

@@ -3,7 +3,7 @@ import { ImageSentListResponse } from '@/types/confirmations/image-sent';
 import { ImproveDataListResponse } from '@/types/confirmations/improve-data';
 import { TravelMethodsSuggestionsResponse } from '@/types/confirmations/path-guid';
 import { AllPendingCommentsResponse } from '@/types/confirmations/pending-comments';
-import { CommentItemDetail, TopCommentsForProvinceResponse } from '@/types/confirmations/top-comments';
+import { CommentItemDetail, CreateCommentBody, TopCommentsForProvinceResponse, UpdateCommentBody } from '@/types/confirmations/top-comments';
 
 import { ApiData } from './types';
 
@@ -69,5 +69,20 @@ export const acceptPlaceImproveContent = async (id: number) => {
 
 export const deletePlaceImproveContent = async (id: number) => {
   const res = await DevApiManager.delete(`/places/deletePlaceImproveContent/${id}`);
+  return res.data;
+};
+
+export const updateCommentById = async (id: number, params: UpdateCommentBody) => {
+  const res = await DevApiManager.put<ApiData<UpdateCommentBody>>(`/ads/comments/${id}`, params);
+  return res.data;
+};
+
+export const deleteCommentById = async (id: number) => {
+  const res = await DevApiManager.delete(`/ads/comments/${id}`);
+  return res.data;
+};
+
+export const createComment = async (params: CreateCommentBody) => {
+  const res = await DevApiManager.post('/ads', params);
   return res.data;
 };

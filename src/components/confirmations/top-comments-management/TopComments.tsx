@@ -21,19 +21,20 @@ const TopComments = () => {
     isLoading: commentLoading,
     isFetching: commentFetching,
   } = useQuery({ queryKey: ['top-comments-item'], queryFn: async () => await getCommentsByProvinceId(Number(params.slug[2])) });
+
+  console.log('COMMENT DATA', commentItemData);
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
   const params = useParams();
   const numberOfComments = commentItemData?.comments.length || 0;
   const numberOfAddComments = 5 - numberOfComments;
-  console.log('params', params.slug[2]);
 
   if (commentLoading || commentFetching || !commentItemData) return <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} />;
   return (
     <Grid width={'100%'} gapY={'5'}>
       {commentItemData?.comments.map((item, index) => (
-        <>{item.commentName && item.commentContent ? <TopCommentItem key={index} {...item} /> : <AddComment key={index} />}</>
+        <>{item.commentName && item.commentContent ? <TopCommentItem key={index} {...item} data={commentItemData.comments[index]} /> : <AddComment key={index}  />}</>
       ))}{' '}
       {Array.from({ length: numberOfAddComments }).map((_, index) => (
         <AddComment key={`add-comment-${index}`} />
