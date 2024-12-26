@@ -6,7 +6,7 @@ import { motion, Variants } from 'framer-motion';
 import styled from 'styled-components';
 
 import { Button, Flex, Grid, IconButton, Text } from '@/libs/primitives';
-import { Pencil, TriangleUp } from '@/public/icon';
+import { Pencil, Trash, TriangleUp } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -14,8 +14,11 @@ type AccordionWrapperProps = {
   hero: string;
   withEdit?: boolean;
   withButton?: boolean;
+  withDelete?: boolean;
+  isDisableDelete?: boolean;
   onEdit?: (e: any) => void;
   onButtonSubmit?: (e: any) => void;
+  onDelete?: (e: any) => void;
   children: React.ReactNode;
 };
 
@@ -25,7 +28,7 @@ const containerVariants: Variants = {
 };
 
 const AccordionWrapper = (props: AccordionWrapperProps) => {
-  const { hero, children, withEdit = false, withButton = false, onEdit, onButtonSubmit } = props;
+  const { hero, children, withEdit = false, withButton = false, withDelete = false, isDisableDelete = false, onEdit, onButtonSubmit, onDelete } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleAccordion = () => {
@@ -50,11 +53,17 @@ const AccordionWrapper = (props: AccordionWrapperProps) => {
               <Text {...typoVariant.body1}>افزودن ویژگی</Text>
             </Button>
           )}
+          {withDelete && (
+            <IconButton variant='surface' size={'3'} onClick={onDelete} disabled={isDisableDelete}>
+              <TrashIcon />
+            </IconButton>
+          )}
           {withEdit && (
             <IconButton variant='surface' size={'3'} onClick={onEdit}>
               <Pencil />
             </IconButton>
           )}
+
           <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }} style={{ width: 32, height: 32, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Triangle />
           </motion.div>
@@ -82,6 +91,12 @@ const Wrapper = styled(Grid)<{ isOpen: boolean }>`
   }
 `;
 const Triangle = styled(TriangleUp)`
+  path {
+    fill: ${colorPalette.blue[10]};
+  }
+`;
+
+const TrashIcon = styled(Trash)`
   path {
     fill: ${colorPalette.blue[10]};
   }

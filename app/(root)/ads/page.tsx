@@ -1,14 +1,36 @@
+'use client';
+
 import React from 'react';
 
-import ProvinceDetailCard from '@/components/develop/confirmations/province-detail-card/ProvinceDetailCard';
-import { adsCardOptions } from '@/constants/ads';
+import { Spinner } from '@radix-ui/themes';
+import { useQuery } from '@tanstack/react-query';
+
+import { getAdsPages } from '@/api/ads';
+import AdPageCard from '@/components/ads/AdPageCard';
 import { Grid } from '@/libs/primitives';
+import { ToastError } from '@/libs/shared/toast/Toast';
 
 export default function Ads() {
+  /**
+   * Services
+   * _______________________________________________________________________________
+   */
+  const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['ads-page'], queryFn: async () => await getAdsPages() });
+  console.log('DATA', data);
+  /**
+   * Loading & Error
+   * _______________________________________________________________________________
+   */
+  if (isLoading || isFetching) return <Spinner style={{ margin: '50px auto', scale: 2 }} />;
+  if (!data || isError) return ToastError('مشکلی پیش آمده.لطفا مجددا تلاش نمایید');
+  /**
+   * JSX
+   * _______________________________________________________________________________
+   */
   return (
     <Grid width={'100%'} columns={'2'} gap={'5'}>
-      {adsCardOptions.map(item => (
-        <ProvinceDetailCard key={item.id} {...(item as any)} type='province' />
+      {data.map((item, index) => (
+        <AdPageCard key={index} holdersCount={item.holdersCount} adKey={item.key} label={item.label} latestUpdatedAt={item.latestUpdatedAt} type='banner' path={`/ads/${item.key}`} />
       ))}
     </Grid>
   );

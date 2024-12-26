@@ -1,52 +1,48 @@
+'use client';
+
 import React from 'react';
 
-import { Grid } from '@/libs/primitives';
+import { Spinner } from '@radix-ui/themes';
+import { useQuery } from '@tanstack/react-query';
 
-import ProvinceDetailCard from '../develop/confirmations/province-detail-card/ProvinceDetailCard';
+import { getBannerPage } from '@/api/ads';
+import { Grid } from '@/libs/primitives';
+import { ToastError } from '@/libs/shared/toast/Toast';
+
+import AdPageCard from './AdPageCard';
 
 const ProvinceListContainer = () => {
+  /**
+   * Services
+   * _______________________________________________________________________________
+   */
+  const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['banner-provinces'], queryFn: async () => await getBannerPage() });
+
+  console.log('DATA', data);
+  /**
+   * Loading & Error
+   * _______________________________________________________________________________
+   */
+  if (isLoading || isFetching) return <Spinner style={{ margin: '50px auto', scale: 2 }} />;
+  if (!data || isError) return ToastError('مشکلی پیش آمده.لطفا مجددا تلاش نمایید');
+  /**
+   * JSX
+   * _______________________________________________________________________________
+   */
   return (
     <Grid width={'100%'} columns={'2'} gap={'5'}>
-      <ProvinceDetailCard
-        type='provinceAds'
-        title='استان آذربایجان شرقی'
-        firstLabel='آخرین ویرایش'
-        secondLabel='بنر های خالی'
-        firstValue={'24 فروردین 1403'}
-        secondValue={'4 عدد'}
-        buttonText='مدیریت تبلیغات'
-        path='/ads/province-list/province-ad'
-      />
-      <ProvinceDetailCard
-        type='provinceAds'
-        title='استان آذربایجان شرقی'
-        firstLabel='آخرین ویرایش'
-        secondLabel='بنر های خالی'
-        firstValue={'24 فروردین 1403'}
-        secondValue={'4 عدد'}
-        buttonText='مدیریت تبلیغات'
-        path='/ads/province-list/province-ad'
-      />
-      <ProvinceDetailCard
-        type='provinceAds'
-        title='استان آذربایجان شرقی'
-        firstLabel='آخرین ویرایش'
-        secondLabel='بنر های خالی'
-        firstValue={'24 فروردین 1403'}
-        secondValue={'4 عدد'}
-        buttonText='مدیریت تبلیغات'
-        path='/ads/province-list/province-ad'
-      />
-      <ProvinceDetailCard
-        type='provinceAds'
-        title='استان آذربایجان شرقی'
-        firstLabel='آخرین ویرایش'
-        secondLabel='بنر های خالی'
-        firstValue={'24 فروردین 1403'}
-        secondValue={'4 عدد'}
-        buttonText='مدیریت تبلیغات'
-        path='/ads/province-list/province-ad'
-      />
+      {data.provinces.map(Item => (
+        <AdPageCard
+          adKey='city'
+          type='province_list'
+          key={Item.id}
+          label={Item.name}
+          holdersCount={Item.bannerCount}
+          latestUpdatedAt={Item.lastUpdated}
+          id={Item.id}
+          path={`/ads/province/province-ad/${Item.id}`}
+        />
+      ))}
     </Grid>
   );
 };

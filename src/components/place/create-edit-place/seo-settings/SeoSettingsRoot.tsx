@@ -225,3 +225,40 @@ const CloseIcon = styled(Close)`
     fill: ${colorPalette.pink[11]};
   }
 `;
+
+
+
+
+
+
+
+// {tagList.length === 0 ? (
+//   <Flex direction={'column'} gap={'5'}>
+//     <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11] }}>
+//       هنوز زیردسته بندی اضافه نشده است.
+//     </Text>
+//     <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
+//       از فیلد بالا استفاده کنید و زیردسته بندی را به لیست اضافه کنید.
+//     </Text>
+//   </Flex>
+// ) : (
+//   tagList.length > 0 && (
+//     <>
+//       {tagList.map(item => {
+//         return (
+//           <Flex key={item.id} width={'fit-content'} gap={'3'} p={'9.5px 16px'} align={'center'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
+//             <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+//               {item.label}
+//             </Text>
+//             <IconButton size={'1'} variant='surface'>
+//               <Pencil />
+//             </IconButton>
+//             <IconButton size={'1'} variant='surface'>
+//               <CustomClose />
+//             </IconButton>
+//           </Flex>
+//         );
+//       })}
+//     </>
+//   )
+// )}

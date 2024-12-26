@@ -78,6 +78,8 @@ export default function UserProfile({ params }: { params: { slug: number } }) {
     console.log('run');
   };
 
+  console.log('DATA', tripsData);
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>

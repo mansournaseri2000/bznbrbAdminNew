@@ -6,7 +6,7 @@ import { ApiData } from './types';
 interface InputObject {
   [key: string]: any;
 }
-const filterObject = (obj: InputObject): InputObject => {
+export const filterObject = (obj: InputObject): InputObject => {
   const result: InputObject = {};
   Object.keys(obj).forEach(key => {
     const value = obj[key];

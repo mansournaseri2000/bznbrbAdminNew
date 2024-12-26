@@ -16,31 +16,32 @@ import {
 } from '@/constants/ads';
 
 export default function SubAds({ params }: { params: { slug: string[] } }) {
+  console.log('PARAMS', params.slug[0]);
   const renderElement = () => {
     switch (params.slug[0]) {
-      case 'main':
+      case 'main_page':
         return <AdsContainer data={mainAdsOptions} />;
-      case 'trip-planner':
+      case 'planner':
         return <AdsContainer data={tripPlannerOptions} />;
-      case 'tour-planner':
+      case 'planner_trips':
         return <AdsContainer data={tourPlanner} />;
-      case 'trip-plan':
+      case 'tourmaker':
         return <AdsContainer data={tripPlanOptions} />;
-      case 'tour-list':
+      case 'tours':
         return <AdsContainer data={tourListOptions} />;
-      case 'article-list':
+      case 'article':
         return <AdsContainer data={articleListOptions} />;
-      case 'article-ad':
+      case 'articlelist':
         return <AdsContainer data={articleAdOptions} />;
-      case 'map':
+      case 'maps':
         return <AdsContainer data={mapOptions} />;
-      case 'point-info':
+      case 'place':
         return <AdsContainer data={pointInfoOptions} />;
-      case 'province-list':
+      case 'province':
         switch (params.slug[1]) {
           case 'province-ad':
             return <AdsContainer data={provinceAdOptions} />;
-          case 'cities':
+          case 'city':
             switch (params.slug[2]) {
               case 'cities-ad':
                 return <AdsContainer data={cityAdOptions} />;
@@ -48,6 +49,7 @@ export default function SubAds({ params }: { params: { slug: string[] } }) {
                 return <CitiesListContainer />;
             }
           default:
+            
             return <ProvinceListContainer />;
         }
     }

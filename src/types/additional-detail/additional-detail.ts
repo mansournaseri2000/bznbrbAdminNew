@@ -3,6 +3,7 @@ export interface CategoriesResponse {
   name: string;
   parent_id: number;
   children: ChildrenDetail[];
+  isEditable: boolean;
 }
 
 export interface ChildrenDetail {
@@ -10,6 +11,7 @@ export interface ChildrenDetail {
   name: string;
   parent_id: number;
   children: [];
+  isEditable: boolean;
 }
 export interface FeaturesResponse {
   id: number;
@@ -36,4 +38,12 @@ export interface AllProvincesByIdResponse {
 export interface Cities {
   id: number;
   name: string;
+}
+export interface CreateCategoryBody {
+  name: string;
+}
+
+export interface SubCategoryBody {
+  parent_id: number;
+  subCategoryNames: string[];
 }

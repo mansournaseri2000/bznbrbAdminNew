@@ -33,7 +33,7 @@ const AdCard = ({ id, pic, url, altText, description }: AdsListResponce) => {
           <Heading style={{ color: colorPalette.gray[11], fontSize: '32px', fontWeight: 500, lineHeight: '37.5px' }}>{id}</Heading>
           <Flex align={'center'} gap={'4'}>
             <IconButton
-              size={'2'}
+              size={'3'}
               onClick={() => {
                 setType('edit');
                 setIsOpen(true);
@@ -42,7 +42,7 @@ const AdCard = ({ id, pic, url, altText, description }: AdsListResponce) => {
               <Pencil />
             </IconButton>
             <IconButton
-              size={'2'}
+              size={'3'}
               variant='surface'
               onClick={() => {
                 setType('delete');

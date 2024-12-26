@@ -3,23 +3,21 @@
 import React, { useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
+import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 
 import { getCategories } from '@/api/additional-detail';
 import { sortCategoryOptions } from '@/constants/additional-detail';
 import { Button, Flex, Modal, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import ModalHeader from '@/libs/shared/ModalHeader';
+import { ToastError } from '@/libs/shared/toast/Toast';
+import { Close } from '@/public/icon';
 import { typoVariant } from '@/theme/typo-variants';
 
 import CategoryItems from './category-items/CategoryItems';
-import CategoryModal from './category-modal/CategoryModal';
-import ModalHeader from '@/libs/shared/ModalHeader';
-import { Close } from '@/public/icon';
+import CreateCategoryModal from './category-modal/CreateCategoryModal';
 
-type Props ={
-  type : 'add_category' | 'edit_category';
-}
-
-const Categories = ({type}:Props) => {
+const Categories = () => {
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
@@ -30,9 +28,23 @@ const Categories = ({type}:Props) => {
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
-  const { data: categoriesData } = useQuery({ queryKey: ['categories'], queryFn: async () => await getCategories() });
+  const {
+    data: categoriesData,
+    isLoading: categoriesLoading,
+    isFetching: categoriesFetching,
+    isError: categoriesError,
+  } = useQuery({ queryKey: ['categories'], queryFn: async () => await getCategories() });
 
   console.log('Categories Data', categoriesData);
+  /*
+   *** Loading & Error_________________________________________________________________________________________________________________________________________________________________
+   */
+  if (categoriesLoading || categoriesFetching) return <Spinner style={{ margin: '100px auto', scale: 2 }} />;
+  if (!categoriesData || categoriesError) return ToastError('مشکلی پیش آمده. لطفا مجددا تلاش نمایید');
+
+  /*
+   *** JSX_________________________________________________________________________________________________________________________________________________________________
+   */
   return (
     <FormProvider {...methods}>
       <Flex width={'100%'} direction={'column'} gap={'5'} p={'4'}>
@@ -71,9 +83,9 @@ const Categories = ({type}:Props) => {
         ))}
       </Flex>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-      <ModalHeader  title={type === 'add_category' ? 'افزودن دسته بندی' : 'ویرایش دسته بندی'} icon={<Close />} handleClose={() => setIsOpen(false)} />
+        <ModalHeader title={'افزودن دسته بندی'} icon={<Close />} handleClose={() => setIsOpen(false)} />
+        <CreateCategoryModal setIsOpen={setIsOpen} />
       </Modal>
-      <CategoryModal isOpen={isOpen} setIsOpen={setIsOpen} type='edit_category' />
     </FormProvider>
   );
 };
