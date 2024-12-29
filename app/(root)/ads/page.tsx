@@ -7,7 +7,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getAdsPages } from '@/api/ads';
 import AdPageCard from '@/components/ads/AdPageCard';
-import { Grid } from '@/libs/primitives';
+import Header from '@/layout/Header';
+import { Box, Flex, Grid } from '@/libs/primitives';
 import { ToastError } from '@/libs/shared/toast/Toast';
 
 export default function Ads() {
@@ -28,10 +29,15 @@ export default function Ads() {
    * _______________________________________________________________________________
    */
   return (
-    <Grid width={'100%'} columns={'2'} gap={'5'}>
-      {data.map((item, index) => (
-        <AdPageCard key={index} holdersCount={item.holdersCount} adKey={item.key} label={item.label} latestUpdatedAt={item.latestUpdatedAt} type='banner' path={`/ads/${item.key}`} />
-      ))}
-    </Grid>
+    <Flex direction={'column'}>
+      <Header title='مدیریت تبلیغات' isNavigation />
+      <Box p={'24px 110px 40px 40px '}>
+        <Grid width={'100%'} columns={{ initial: '1', sm: '2' }} gap={'5'}>
+          {data.map((item, index) => (
+            <AdPageCard key={index} holdersCount={item.holdersCount} adKey={item.key} label={item.label} latestUpdatedAt={item.latestUpdatedAt} type='banner' path={`/ads/${item.key}`} />
+          ))}
+        </Grid>
+      </Box>
+    </Flex>
   );
 }

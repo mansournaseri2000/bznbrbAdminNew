@@ -11,6 +11,8 @@ import CreateAndEditArticle from '@/components/data-management/article-managemen
 import CreateAndEditPoint from '@/components/data-management/point-management/create-and-edit-point/CreateAndEditPoint';
 import PointDetailRoot from '@/components/data-management/point-management/point-detail/PointDetailRoot';
 import PointManagement from '@/components/data-management/point-management/PointManagement';
+import Header from '@/layout/Header';
+import { Box, Flex } from '@/libs/primitives';
 import { PlaceResponse } from '@/types/place';
 
 // import { useForm } from 'react-hook-form';
@@ -51,7 +53,10 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   const { data: placeData, isLoading: placeIsLoading } = editPlaceResult;
 
   if (!constantData || placeIsLoading) return <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />;
-
+  /**
+   * Methods
+   * _______________________________________________________________________________
+   */
   const renderElement = () => {
     switch (params.slug[0]) {
       case 'point-management':
@@ -78,8 +83,34 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
         }
     }
   };
+  /**
+   * Method for handle title
+   * _______________________________________________________________________________
+   */
+  const getTitle = () => {
+    if (params.slug[0] === 'point-management') {
+      if (params.slug[1] === 'create-point') return 'ساخت نقطه';
+      if (params.slug[1] === 'point-detail') {
+        return params.slug[2] === 'edit-point' ? 'ویرایش نقطه' : 'اطلاعات نقطه';
+      }
+      return 'لیست نقاط';
+    }
 
-  return renderElement();
+    if (params.slug[0] === 'article-management') {
+      if (params.slug[1] === 'create-article') return 'ساخت مقاله';
+      if (params.slug[1] === 'edit-article') return 'ویرایش مقاله';
+      return 'لیست مقالات';
+    }
+
+    return '';
+  };
+
+  return (
+    <Flex direction={'column'}>
+      <Header title={getTitle()} isNavigation />
+      <Box p={'24px 110px 40px 40px '}>{renderElement()}</Box>
+    </Flex>
+  );
 };
 
 export default DataManagement;

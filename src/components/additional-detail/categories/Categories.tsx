@@ -47,7 +47,7 @@ const Categories = () => {
    */
   return (
     <FormProvider {...methods}>
-      <Flex width={'100%'} direction={'column'} gap={'5'} p={'4'}>
+      <Flex width={'100%'} direction={'column'} gap={'5'}>
         <Flex width={'100%'} align={'center'} justify={'between'}>
           <Button size={'4'} variant='ghost' onClick={() => setIsOpen(true)}>
             <Flex align={'center'} gap={'2'}>
