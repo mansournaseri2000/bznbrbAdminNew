@@ -8,7 +8,7 @@ import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 
 import { getAllPendingComments } from '@/api/confirmations';
-import { Flex, Grid } from '@/libs/primitives';
+import { Flex, Grid, Text } from '@/libs/primitives';
 import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
 import ItemsPerPage from '@/libs/shared/ItemsPerPage';
 import { ToastError } from '@/libs/shared/toast/Toast';
@@ -36,6 +36,8 @@ const Comments = () => {
   if (isLoading || isFetching) return <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '100px' }} />;
 
   if (isError) return ToastError('مشکلی پیش آمده . لطفا دوباره تلاش نمایید');
+  if (!data || data.AllComments.length === 0) return <Text>دیتایی موجود نیست</Text>;
+
   /**
    * JSX
    * _______________________________________________________________________________

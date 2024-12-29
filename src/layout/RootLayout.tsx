@@ -8,10 +8,21 @@ import styled from 'styled-components';
 
 import Header from './Header';
 import Sidebar from './Sidebar';
+// import { useParams } from 'next/navigation';
 
 // const Sidebar = dynamic(() => import('@/layout/Sidebar').then(module => module.default), { ssr: false });
 
+
+
 const RootLayout = ({ children }: { children: ReactNode }) => {
+  // const params = useParams()
+  // const renderElement =() =>{
+  //   switch(params.slug[0]){
+  //     case ""
+
+  //   }
+  // }
+
   return (
     <>
       <Header title='نقطه' isNavigation />
