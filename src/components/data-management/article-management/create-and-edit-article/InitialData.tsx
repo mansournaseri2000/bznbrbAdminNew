@@ -18,19 +18,19 @@ const InitialData = ({ categories, province }: Props) => {
    */
   const methods = useFormContext();
   const { control, setValue, watch } = methods;
-  const subCategory = categories.filter(item => item.id === Number(watch('category')))[0]?.children;
-  const provinceCities = province.filter(item => item.id === Number(watch('province')))[0]?.Cities;
+  const subCategory = categories.filter(item => item.id === Number(watch('parentCategoryId')))[0]?.children;
+  const provinceCities = province.filter(item => item.id === Number(watch('provincesId')))[0]?.Cities;
 
   return (
     <Grid width={'100%'} gap={'14px'}>
-      <Controller name='onTitr' control={control} render={({ field }) => <TextField {...field} placeholder='رو تیتر' />} />
+      <Controller name='on_titile' control={control} render={({ field }) => <TextField {...field} placeholder='رو تیتر' />} />
       <Controller name='title' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان مقاله' />} />
-      <Controller name='url' control={control} render={({ field }) => <TextField {...field} placeholder='Custom URL' />} />
+      <Controller name='slug' control={control} render={({ field }) => <TextField {...field} placeholder='Custom URL' />} />
       <Grid width={'100%'} columns={'2'} gap={'14px'}>
         <Controller name='writer' control={control} render={({ field }) => <TextField {...field} placeholder='نام نویسنده' />} />
         <Controller name='source' control={control} render={({ field }) => <TextField {...field} placeholder='منبع' />} />
         <Controller
-          name='category'
+          name='parentCategoryId'
           control={control}
           render={({ field }) => (
             <SelectRoot
@@ -39,7 +39,7 @@ const InitialData = ({ categories, province }: Props) => {
               value={String(field.value)}
               onValueChange={val => {
                 field.onChange(val);
-                setValue('subCategory', '');
+                setValue('categoryId', '');
               }}
             >
               {categories.map(item => (
@@ -51,7 +51,7 @@ const InitialData = ({ categories, province }: Props) => {
           )}
         />
         <Controller
-          name='subCategory'
+          name='categoryId'
           control={control}
           render={({ field }) => (
             <SelectRoot
@@ -72,7 +72,7 @@ const InitialData = ({ categories, province }: Props) => {
           )}
         />
         <Controller
-          name='province'
+          name='provincesId'
           control={control}
           render={({ field }) => (
             <SelectRoot
@@ -81,7 +81,7 @@ const InitialData = ({ categories, province }: Props) => {
               value={String(field.value)}
               onValueChange={val => {
                 field.onChange(val);
-                setValue('city', '');
+                setValue('citiesId', '');
               }}
             >
               {province.map(item => (
@@ -93,7 +93,7 @@ const InitialData = ({ categories, province }: Props) => {
           )}
         />
         <Controller
-          name='city'
+          name='citiesId'
           control={control}
           render={({ field }) => (
             <SelectRoot

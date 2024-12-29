@@ -52,4 +52,5 @@ export interface CreateAndEditArticleBody {
   source_link: string;
   pic: string;
   isSlider: boolean;
+  places: [];
 }

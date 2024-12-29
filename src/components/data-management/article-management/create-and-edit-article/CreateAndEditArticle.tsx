@@ -5,9 +5,10 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { useParams, useRouter } from 'next/navigation';
 
+import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { createArticle, editArticle } from '@/api/data-management';
+import { createArticle, editArticle, getArticleById } from '@/api/data-management';
 import { getAllPlacesConstants } from '@/api/place';
 import ImageCreator from '@/components/develop/shared/image-creator/ImageCreator';
 import { SeoSettingsRoot } from '@/components/place';
@@ -24,10 +25,10 @@ import TextContent from './TextContent';
 
 type Props = {
   type: 'create' | 'edit';
-  articleStatus?: boolean;
+  // articleStatus?: boolean;
 };
 
-const CreateAndEditArticle = ({ type, articleStatus }: Props) => {
+const CreateAndEditArticle = ({ type }: Props) => {
   /**
    * const and Variables
    * _______________________________________________________________________________
@@ -35,68 +36,90 @@ const CreateAndEditArticle = ({ type, articleStatus }: Props) => {
   const router = useRouter();
   const params = useParams();
 
-  const methods = useForm({
-    defaultValues:
-      type === 'create'
-        ? {
-            onTitr: '',
-            title: '',
-            url: '',
-            writer: '',
-            source: '',
-            category: '',
-            subCategory: '',
-            province: '',
-            city: '',
-            articleSummery: '',
-            summery: '',
-            articleTopic: '',
-            articleText: '',
-            showOnPage: false,
-            keyword: '',
-            meta_title: '',
-            meta_description: '',
-            metakeyword: '',
-          }
-        : type === 'edit'
-        ? {
-            onTitr: '',
-            title: '',
-            url: '',
-            writer: '',
-            source: '',
-            category: '',
-            subCategory: '',
-            province: '',
-            city: '',
-            articleSummery: '',
-            summery: '',
-            articleTopic: '',
-            articleText: '',
-            showOnPage: false,
-            keyword: '',
-            meta_title: '',
-            meta_description: '',
-            metakeyword: '',
-          }
-        : {},
-  });
-
-  const { watch } = methods;
-
   /**
-   * Services
+   * Get Services
    * _______________________________________________________________________________
    */
-
-  // ********** GET SERVICES ***********
 
   const { data: constantData } = useQuery({
     queryKey: ['constant'],
     queryFn: async () => getAllPlacesConstants(),
   });
 
-  // ********* ACTION SERVICES **********
+  const { data: articleByIdData } = useQuery({ queryKey: ['article-data'], queryFn: async () => await getArticleById(Number(params.slug[2])) });
+
+  console.log('ARTICLE DATA BY ID', articleByIdData);
+
+  const methods = useForm({
+    defaultValues:
+      type === 'create'
+        ? {
+            title: '',
+            content: '',
+            writer: '',
+            on_titile: '',
+            source: '',
+            summery: '',
+            brief: '',
+            slug: '',
+            tableOfContent: '',
+            inMain: false,
+            inTop: false,
+            provincesId: '',
+            citiesId: '',
+            tags: [],
+            keywords: [],
+            meta_title: '',
+            meta_description: '',
+            view: null,
+            status: false,
+            is_published: false,
+            categoryId: '',
+            parentCategoryId: '',
+            source_link: '',
+            pic: '',
+            isSlider: false,
+            mainPoint: null,
+            relationPoints: [],
+          }
+        : type === 'edit'
+        ? {
+            title: articleByIdData?.title,
+            content: '',
+            writer: '',
+            on_titile: '',
+            source: '',
+            summery: '',
+            brief: '',
+            slug: '',
+            tableOfContent: '',
+            inMain: false,
+            inTop: false,
+            provincesId: null,
+            citiesId: null,
+            tags: [],
+            keywords: [],
+            meta_title: '',
+            meta_description: '',
+            view: null,
+            status: false,
+            is_published: false,
+            categoryId: null,
+            parentCategoryId: null,
+            source_link: '',
+            pic: '',
+            isSlider: false,
+          }
+        : {},
+  });
+
+  const { watch } = methods;
+  // console.log('WATCH', watch());
+
+  /**
+   * Action Services
+   * _______________________________________________________________________________
+   */
 
   const { mutate: createArticleMutate, isPending: createArticlePending } = useMutation({
     mutationFn: async () => createArticle(watch() as any),
@@ -108,11 +131,7 @@ const CreateAndEditArticle = ({ type, articleStatus }: Props) => {
     },
   });
 
-  const {
-    mutate: editArticleMutate,
-    isPending: editArticlePending,
-    data: articleData,
-  } = useMutation({
+  const { mutate: editArticleMutate, isPending: editArticlePending } = useMutation({
     mutationFn: async () => editArticle(Number(params.slug[2]), watch() as any),
     onSuccess: data => {
       console.log('onSuccess', data);
@@ -126,7 +145,7 @@ const CreateAndEditArticle = ({ type, articleStatus }: Props) => {
     editArticleMutate();
   }, []);
 
-  console.log('ARTICLE DATA0', articleData);
+  // console.log('ARTICLE DATA0', articleData);
 
   return (
     <FormProvider {...methods}>
@@ -137,12 +156,12 @@ const CreateAndEditArticle = ({ type, articleStatus }: Props) => {
               <Text {...typoVariant.body2} style={{ color: colorPalette.gray[9] }}>
                 وضعیت مقاله
               </Text>
-              <Text {...typoVariant.body1} style={{ color: articleStatus === true ? colorPalette.blue[11] : colorPalette.pink[11] }}>
-                {articleStatus === true ? 'منتشر شده' : 'منتشر نشده'}
+              <Text {...typoVariant.body1} style={{ color: watch('status') === true ? colorPalette.blue[11] : colorPalette.pink[11] }}>
+                {watch('status') === true ? 'منتشر شده' : 'منتشر نشده'}
               </Text>
             </Flex>
-            <Button size={'3'} variant={articleStatus === true ? 'solid' : 'soft'} colorVariant={articleStatus === true ? 'PINK' : 'BLUE'}>
-              <Text {...typoVariant.body1}>{articleStatus === true ? 'لغو انتشار' : 'انتشار مقاله'}</Text>
+            <Button size={'3'} variant={watch('status') === true ? 'solid' : 'soft'} colorVariant={watch('status') === true ? 'PINK' : 'BLUE'}>
+              <Text {...typoVariant.body1}>{watch('status') === true ? 'لغو انتشار' : 'انتشار مقاله'}</Text>
             </Button>
           </Flex>
         )}
@@ -152,25 +171,16 @@ const CreateAndEditArticle = ({ type, articleStatus }: Props) => {
         <AccordionWrapper hero='محتوای متنی'>
           <TextContent />
         </AccordionWrapper>
-        {type === 'edit' && (
-          <AccordionWrapper hero='نقطه مقاله'>
-            <ArticlePoint
-              pic='/image/add-point-image.png'
-              pointName='نام و عنوان point'
-              province='تهران'
-              city=' سه راه تهرانپارس'
-              score='4.7'
-              comment={2321}
-              description='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است'
-              tag={['بوم گردی', 'کوهستانی', 'مناسب کمپ']}
-            />
-          </AccordionWrapper>
-        )}
-        <AccordionWrapper hero='نقطه مرتبط'>
-          <RelatedPoint type={type} />
+
+        <AccordionWrapper hero='نقطه مقاله'>
+          <ArticlePoint />
+        </AccordionWrapper>
+
+        <AccordionWrapper hero='نقاط مرتبط'>
+          <RelatedPoint />
         </AccordionWrapper>
         <AccordionWrapper hero='تصاویر شاخص'>
-          <FeaturedImages type='edit' />
+          <FeaturedImages type={type} />
         </AccordionWrapper>
         {type === 'edit' && (
           <AccordionWrapper hero='تصاویر'>
@@ -181,8 +191,9 @@ const CreateAndEditArticle = ({ type, articleStatus }: Props) => {
           <SeoSettingsRoot />
         </AccordionWrapper>
         <Flex p={'4'} gap={'5'} style={{ backgroundColor: colorPalette.gray[2], border: `1px solid ${colorPalette.gray[6]}`, borderRadius: 8 }}>
-          <Button size={'3'} variant='soft' style={{ padding: '13.5px 48.5px' }}>
-            <Text {...typoVariant.body1}>ثبت</Text>
+          <Button size={'3'} variant='soft' style={{ padding: '13.5px 48.5px' }} onClick={() => (type === 'create' ? createArticleMutate() : editArticleMutate())}>
+            {type === 'create' && createArticlePending ? <Spinner /> : <Text {...typoVariant.body1}>ثبت</Text>}
+            {type === 'edit' && editArticlePending ? <Spinner /> : <Text {...typoVariant.body1}>ثبت</Text>}
           </Button>
           <Button size={'3'} colorVariant='PINK' onClick={() => router.back()} style={{ padding: '13.5px 48.5px' }}>
             <Text {...typoVariant.body1}>لغو</Text>

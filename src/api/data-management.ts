@@ -98,13 +98,26 @@ export const getArticleList = async (page: number, params: ArticleListBody) => {
 };
 
 export const createArticle = async (params: CreateAndEditArticleBody) => {
-  const res = await DevApiManager.post<ApiData<CreateAndEditArticleBody>>('/article', params);
+  const obj = {
+    ...params,
+    parentCategoryId: Number(params.parentCategoryId),
+    categoryId: Number(params.categoryId),
+    provincesId: Number(params.provincesId),
+    citiesId: Number(params.citiesId),
+  };
+  const body = filterObject(obj);
+  const res = await DevApiManager.post<ApiData<CreateAndEditArticleBody>>('/article', body);
   return res.data.data;
 };
 
 export const editArticle = async (id: number, params: CreateAndEditArticleBody) => {
   const res = await DevApiManager.patch(`/article/edit/${id}`, params);
   return res.data;
+};
+
+export const getArticleById = async (id: number) => {
+  const res = await DevApiManager.get<ApiData<CreateAndEditArticleBody>>(`/article/find/${id}`);
+  return res.data.data;
 };
 
 export interface AllPlacesBody {
