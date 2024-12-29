@@ -63,7 +63,7 @@ export const useGetCheckOtp = ({ cookies }: { cookies: Cookies }) => {
         });
         cookies.remove('mobile-number');
         ToastSuccess('شما با موفقیت وارد پنل شدید');
-        push('/?page=1');
+        push('/plans');
       } else {
         ToastError('لطفا بعد از چند دقیقه دوباره امتحان نمایید');
       }

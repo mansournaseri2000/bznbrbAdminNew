@@ -99,7 +99,7 @@ const RoutingGuide = ({ data, placeId }: Props) => {
           )}
           <Flex direction={'column'} gap={'16px'} style={{ flex: 1 }}>
             {data.map((item, index) => {
-              return <RouteGuideCard id={index} description={item.description} title={item.title} type={item.type as 'bus' | 'taxi' | 'subway'} key={index} cardType='route_guide' />;
+              return <RouteGuideCard id={index} description={item.description} type={item.type as 'bus' | 'taxi' | 'subway' as any} key={index} cardType='route_guide' />;
             })}
           </Flex>
         </Flex>

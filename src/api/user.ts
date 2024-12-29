@@ -10,7 +10,7 @@ export const filterObject = (obj: InputObject): InputObject => {
   const result: InputObject = {};
   Object.keys(obj).forEach(key => {
     const value = obj[key];
-    if (value !== null && value !== '' && !(Array.isArray(value) && value.length === 0)) {
+    if (value !== null && value !== '' && !(Array.isArray(value) && value.length === 0) && value !== 0 && value !== 'null') {
       result[key] = value;
     }
   });
@@ -35,13 +35,11 @@ export const getRecentTrips = async (params: RecentTripsBody) => {
     originProvinceId: Number([params.originProvinceId]),
     destinationCityId: Number(params.destinationCityId),
     destinationProvinceId: Number(params.destinationProvinceId),
-    departureDateStart: new Date(params.departureDateStart).getTime(),
+    departureDateStart: Boolean(new Date(params.departureDateStart).getTime()) ? new Date(params.departureDateStart).getTime() : null,
   };
   const body = filterObject(obj);
+
   const res = await DevApiManager.post<ApiData<RecentTripsResponse>>('trips/recentTrips', body, {
-    headers: {
-      userId: params.userId,
-    },
   });
   return res.data.data;
 };
