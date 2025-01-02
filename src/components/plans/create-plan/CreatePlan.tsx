@@ -101,7 +101,7 @@ const CreatePlan = ({ provinces }: Props) => {
       <FormProvider {...methods}>
         {/* TODO:define onSubmit */}
         <form>
-          <Flex direction={'column'} gap={'32px'} style={{ flex: 1 }} height={'100%'} p={'24px 24px 24px 40px'}>
+          <Flex direction={'column'} gap={'32px'} style={{ flex: 1 }} height={'100%'}>
             <BoxWrapper hero='از کجا به کجا بریم ؟'>
               <Grid gap={'4'}>
                 <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>

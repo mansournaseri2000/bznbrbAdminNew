@@ -9,11 +9,12 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getAllPlacesConstants } from '@/api/place';
 import { userDetailSortConstant } from '@/constants/users';
-import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
+import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { updateURLWithQueryParams } from '@/libs/utils/updateUrl';
-import { ArrowRight, Filter, Search } from '@/public/icon';
+import { ArrowRight, Filter } from '@/public/icon';
 import { typoVariant } from '@/theme/typo-variants';
 
 import FilterContent from '../../../libs/shared/FilterContent';
@@ -76,7 +77,7 @@ const PlansHero = (props: Props) => {
 
   return (
     <>
-      <Grid width={'100%'} columns={'5'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 2fr auto 1fr' }}>
+      <Grid width={'100%'} columns={'5'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 2fr  1fr' }}>
         <IconButton type='button' colorVariant='BLUE' variant='soft' size={'3'} onClick={() => setIsOpen(true)}>
           <Filter />
         </IconButton>
@@ -88,10 +89,10 @@ const PlansHero = (props: Props) => {
           </Flex>
         </Button>
 
-        <Controller name='searchQuery' control={control} render={({ field }) => <TextField {...field} placeholder='جستجوی نام کاربر' />} />
-        <IconButton size={'3'} variant='soft' onClick={props.onSubmit}>
+        <Controller name='searchQuery' control={control} render={({ field }) => <CustomSearch {...field} placeholder='جستجو' onClick={props.onSubmit} />} />
+        {/* <IconButton size={'3'} variant='soft' onClick={props.onSubmit}>
           <Search />
-        </IconButton>
+        </IconButton> */}
 
         <Controller
           name='sort'

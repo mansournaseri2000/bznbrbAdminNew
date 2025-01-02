@@ -66,7 +66,7 @@ const ArticleManagement = () => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Flex width={'100%'} direction={'column'} gap={'5'} p={'5'}>
+        <Flex width={'100%'} direction={'column'} gap={'5'}>
           <ArticleManagementHero onSubmit={() => onSubmit()} />
           {articleError ? (
             <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>

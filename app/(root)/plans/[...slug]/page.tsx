@@ -8,6 +8,8 @@ import { getAllPlacesConstants } from '@/api/place';
 import { getTrips } from '@/api/plans';
 import CreatePlan from '@/components/plans/create-plan/CreatePlan';
 import UserPlan from '@/components/plans/user-plan/UserPlan';
+import Header from '@/layout/Header';
+import { Box, Flex } from '@/libs/primitives';
 
 const PlansDetail = ({ params }: { params: { slug: string[] } }) => {
   const type = params.slug[0];
@@ -45,7 +47,12 @@ const PlansDetail = ({ params }: { params: { slug: string[] } }) => {
     }
   };
 
-  return renderElement();
+  return (
+    <Flex direction={'column'}>
+      <Header title={type === 'create-plan' ? 'ساخت برنامه' : 'برنامه'} isNavigation />
+      <Box p={'24px 110px 40px 40px '}>{renderElement()}</Box>
+    </Flex>
+  );
 };
 
 export default PlansDetail;

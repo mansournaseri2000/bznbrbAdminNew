@@ -283,7 +283,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid width={'100%'} gapY={'5'} p={'5'}>
+        <Grid width={'100%'} gapY={'5'}>
           <Controller
             name='placeCategory'
             control={control}

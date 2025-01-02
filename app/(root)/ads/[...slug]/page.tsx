@@ -14,6 +14,8 @@ import {
   tripPlannerOptions,
   tripPlanOptions,
 } from '@/constants/ads';
+import Header from '@/layout/Header';
+import { Box, Flex } from '@/libs/primitives';
 
 export default function SubAds({ params }: { params: { slug: string[] } }) {
   console.log('PARAMS', params.slug[0]);
@@ -49,10 +51,38 @@ export default function SubAds({ params }: { params: { slug: string[] } }) {
                 return <CitiesListContainer />;
             }
           default:
-            
             return <ProvinceListContainer />;
         }
     }
   };
-  return renderElement();
+
+  const getTitle = () => {
+    if (params.slug[0] === 'main_page') return 'تبلیغات صفحه اصلی';
+    if (params.slug[0] === 'planner') return 'تبلیغات برنامه ساز';
+    if (params.slug[0] === 'planner_trips') return 'تبلیغات تور ساز';
+    if (params.slug[0] === 'tourmaker') return 'تبلیغات برنامه سفر';
+    if (params.slug[0] === 'tours') return 'تبلیغات لیست تورها';
+    if (params.slug[0] === 'article') return 'تبلیغات لیست مقالات';
+    if (params.slug[0] === 'articlelist') return 'تبلیغات مقالات';
+    if (params.slug[0] === 'maps') return 'تبلیغات نقشه';
+    if (params.slug[0] === 'place') return 'تبلیغات نقطه';
+    if (params.slug[0] === 'province') {
+      if (params.slug[1] === 'province-ad') return 'تبلیغات استان ها';
+      if (params.slug[1] === 'city') {
+        if (params.slug[2] === 'cities-ad') {
+          return 'تبلیغات شهرستان ها';
+        }
+        return 'لیست شهرستان ها';
+      }
+      return 'لیست استان ها';
+    }
+    return '';
+  };
+
+  return (
+    <Flex direction={'column'}>
+      <Header title={getTitle()} isNavigation />
+      <Box p={'24px 110px 40px 40px '}>{renderElement()}</Box>
+    </Flex>
+  );
 }
