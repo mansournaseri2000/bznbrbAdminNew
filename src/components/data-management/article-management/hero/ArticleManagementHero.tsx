@@ -9,12 +9,13 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getAllPlacesConstants } from '@/api/place';
 import { articleStatusOptions } from '@/constants/data-management';
-import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
+import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
 import CustomDatePicker from '@/libs/shared/CustomDatePicker';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { updateURLWithQueryParams } from '@/libs/utils/updateUrl';
-import { ArrowRight, Filter, Search } from '@/public/icon';
+import { ArrowRight, Filter } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -59,22 +60,29 @@ const ArticleManagementHero = ({ onSubmit }: Props) => {
     updateURLWithQueryParams(router, searchParams, {});
     setIsOpen(false);
   };
+
+  const sample = (date: Date) => {
+    const currentDate = new Date(date);
+    currentDate.setDate(date.getDate() + 1); // Add one day
+
+    return new Date(currentDate);
+  };
   return (
     <>
-      <Grid width={'100%'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 3fr auto' }}>
-        <IconButton colorVariant='BLUE' variant='soft' size={'3'} onClick={() => setIsOpen(true)}>
+      <Grid width={'100%'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 3fr' }}>
+        <IconButton colorVariant='BLUE' variant='soft' size={'4'} onClick={() => setIsOpen(true)}>
           <Filter />
         </IconButton>
-        <Button colorVariant='BLUE' variant='ghost' size={'3'} onClick={() => router.push('/data-management/article-management/create-article')}>
+        <Button colorVariant='BLUE' variant='ghost' size={'4'} onClick={() => router.push('/data-management/article-management/create-article')}>
           <Flex gap={'2'} align={'center'}>
             <Text {...typoVariant.body1}>+</Text>
             <Text {...typoVariant.body1}> افزودن نقطه</Text>
           </Flex>
         </Button>
-        <Controller name='title' control={control} render={({ field }) => <TextField {...field} placeholder='جستجو نام نقطه' />} />
-        <IconButton size={'3'} variant='soft' onClick={onSubmit}>
+        <Controller name='title' control={control} render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام نقطه' onClick={onSubmit} />} />
+        {/* <IconButton size={'3'} variant='soft' onClick={onSubmit}>
           <Search />
-        </IconButton>
+        </IconButton> */}
       </Grid>
       {/* 
       ***
@@ -121,6 +129,7 @@ const ArticleManagementHero = ({ onSubmit }: Props) => {
                     value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                     onChangeValue={(val: any) => {
                       setValue('created_atStart', new Date(val));
+                      setValue('created_atEnd', sample(new Date(val)));
                     }}
                   />
                 )}
@@ -134,9 +143,11 @@ const ArticleManagementHero = ({ onSubmit }: Props) => {
                     inputMode='none'
                     placeholder='تا تاریخ'
                     value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
+                    minDate={watch('created_atStart')}
                     onChangeValue={(val: any) => {
                       setValue('created_atEnd', new Date(val));
                     }}
+                    disabled={!watch('created_atStart')}
                   />
                 )}
               />

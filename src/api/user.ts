@@ -24,6 +24,11 @@ export const getAllUsers = async (pageNumber: number) => {
 };
 
 export const getAllUsersWithParams = async (params: UserBody) => {
+  // const obj = {
+  //   ...params,
+  //   status: params.status === 'true' ? true : params.status === 'false' ? false : String(params.status),
+  // };
+  // const body = filterObject(obj);
   const res = await DevApiManager.post<ApiData<UserListResponse>>('user', params);
   return res.data.data;
 };
@@ -36,11 +41,13 @@ export const getRecentTrips = async (params: RecentTripsBody) => {
     destinationCityId: Number(params.destinationCityId),
     destinationProvinceId: Number(params.destinationProvinceId),
     departureDateStart: Boolean(new Date(params.departureDateStart).getTime()) ? new Date(params.departureDateStart).getTime() : null,
+    departureDateEnd: Boolean(new Date(params.departureDateEnd).getTime()) ? new Date(params.departureDateEnd).getTime() : null,
+    returnDateStart: Boolean(new Date(params.returnDateStart).getTime()) ? new Date(params.returnDateStart).getTime() : null,
+    returnDateEnd: Boolean(new Date(params.returnDateEnd).getTime()) ? new Date(params.returnDateEnd).getTime() : null,
   };
   const body = filterObject(obj);
 
-  const res = await DevApiManager.post<ApiData<RecentTripsResponse>>('trips/recentTrips', body, {
-  });
+  const res = await DevApiManager.post<ApiData<RecentTripsResponse>>('trips/recentTrips', body, {});
   return res.data.data;
 };
 
@@ -59,7 +66,7 @@ export type EditUserDetailResponse = Omit<UserInfoResponse, 'id'>;
 export interface UserBody {
   page: number;
   limit: number;
-  status: boolean;
+  status: boolean | string;
   searchQuery: string;
 }
 

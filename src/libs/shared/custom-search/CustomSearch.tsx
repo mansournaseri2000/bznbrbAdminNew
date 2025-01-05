@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 import styled from 'styled-components';
 
@@ -8,24 +8,39 @@ import { Flex, IconButton, TextField } from '@/libs/primitives';
 import { Search } from '@/public/icon';
 import { Boxshadow, colorPalette } from '@/theme';
 
-type Props = {
+type CustomSearchProps = {
   placeholder: string;
   onClick: () => void;
 };
 
-const CustomSearch = (props: Props) => {
-  const { placeholder, onClick } = props;
+const CustomSearch = forwardRef<HTMLDivElement, CustomSearchProps>(({ placeholder, onClick, ...rest }, ref) => {
   return (
-    <Wrapper>
+    <Wrapper {...rest} ref={ref}>
       <CustomTextField placeholder={placeholder} variant='surface' />
       <IconButton size={'4'} variant='soft' onClick={onClick}>
         <Search />
       </IconButton>
     </Wrapper>
   );
-};
+});
+
+CustomSearch.displayName = 'CustomSearch';
 
 export default CustomSearch;
+
+// const CustomSearch = (props: Props) => {
+//   const { placeholder, onClick } = props;
+//   return (
+//     <Wrapper>
+//       <CustomTextField placeholder={placeholder} variant='surface' />
+//       <IconButton size={'4'} variant='soft' onClick={onClick}>
+//         <Search />
+//       </IconButton>
+//     </Wrapper>
+//   );
+// };
+
+// export default CustomSearch;
 
 const Wrapper = styled(Flex)`
   border: 1px solid ${colorPalette.gray[7]};
