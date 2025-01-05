@@ -107,6 +107,7 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
 
   return (
     <Flex direction={'column'}>
+      
       <Header title={getTitle()} isNavigation />
       <Box p={'24px 110px 40px 40px '}>{renderElement()}</Box>
     </Flex>
