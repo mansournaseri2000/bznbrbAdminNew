@@ -8,9 +8,10 @@ import { useRouter } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { getAllPlacesConstants } from '@/api/place';
-import { Button, Flex, Grid, IconButton, Modal, Text, TextField } from '@/libs/primitives';
+import { Button, Flex, Grid, IconButton, Modal, Text } from '@/libs/primitives';
+import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import { ArrowRight, Filter, Search } from '@/public/icon';
+import { ArrowRight, Filter } from '@/public/icon';
 import { typoVariant } from '@/theme/typo-variants';
 
 import PointFilter from './PointFilter';
@@ -38,21 +39,18 @@ const PointManagementHero = () => {
 
   return (
     <>
-      <Grid width={'100%'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 3fr auto' }}>
-        <IconButton colorVariant='BLUE' variant='soft' size={'3'} onClick={() => setIsOpen(true)}>
+      <Grid width={'100%'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 3fr ' }}>
+        <IconButton colorVariant='BLUE' variant='soft' size={'4'} onClick={() => setIsOpen(true)}>
           <Filter />
         </IconButton>
-        <Button colorVariant='BLUE' variant='ghost' size={'3'} onClick={() => router.push('/data-management/point-management/create-point')}>
+        <Button colorVariant='BLUE' variant='ghost' size={'4'} onClick={() => router.push('/data-management/point-management/create-point')}>
           <Flex gap={'2'} align={'center'}>
             <Text {...typoVariant.body1}>+</Text>
             <Text {...typoVariant.body1}> افزودن نقطه</Text>
           </Flex>
         </Button>
 
-        <Controller name='searchQuery' control={control} render={({ field }) => <TextField {...field} placeholder='جستجو نام نقطه' />} />
-        <IconButton size={'3'} variant='soft' onClick={handleSubmit}>
-          <Search />
-        </IconButton>
+        <Controller name='searchQuery' control={control} render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام نقطه' onClick={handleSubmit} />} />
       </Grid>
       {/*** 
          MODAL_____________________________________________________________________________________________________________________

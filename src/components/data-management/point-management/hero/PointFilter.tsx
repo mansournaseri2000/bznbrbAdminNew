@@ -85,6 +85,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
               <SelectRoot
                 {...field}
                 placeholder='شهر'
+                disabled={!Boolean(city)}
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
@@ -130,6 +131,7 @@ const PointFilter = ({ province, categories, setIsOpen }: Props) => {
               <SelectRoot
                 {...field}
                 placeholder='زیردسته بندی'
+                disabled={!Boolean(subCategory)}
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);

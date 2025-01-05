@@ -28,26 +28,16 @@ const PointManagement = () => {
       cityId: '',
       parentCategoryId: '',
       arrayCatIds: [],
-      isInfoCompleted: true,
-      isPublished: false,
+      isInfoCompleted: '',
+      isPublished: '',
       searchQuery: '',
     },
   });
 
   const { watch, setValue, handleSubmit } = methods;
-  console.log('WATCH POINTTTTTTTTTTTTTTTTTT', watch());
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
-
-  // const {
-  //   data: pointData,
-  //   isError: pointError,
-  //   isLoading: pointLoading,
-  // } = useQuery({
-  //   queryKey: ['point-data'],
-  //   queryFn: async () => getPointByParams({ ...watch() }),
-  // });
 
   const {
     data: pointData,
@@ -69,10 +59,6 @@ const PointManagement = () => {
   }, []);
 
   console.log('PointData', pointData);
-
-  // const handleSearch = () => {
-  //   queryClient.invalidateQueries({ queryKey: ['point-data'] });
-  // };
 
   const onSubmit = () => {
     pointMutate(watch() as any);

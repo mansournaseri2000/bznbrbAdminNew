@@ -14,6 +14,7 @@ import { Box, Flex, Grid, Text } from '@/libs/primitives';
 import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
 import ItemsPerPage from '@/libs/shared/ItemsPerPage';
 import { updateUrlWithPageNumber } from '@/libs/utils';
+import { typoVariant } from '@/theme/typo-variants';
 
 export default function Plans({ searchParams }: { params: { slug: string }; searchParams: { page: string } }) {
   /*
@@ -22,7 +23,7 @@ export default function Plans({ searchParams }: { params: { slug: string }; sear
   const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
   const methods = useForm({
     defaultValues: {
-      page: 1,
+      page: page,
       limit: 10,
       searchQuery: '',
       sortDate: '',
@@ -82,7 +83,11 @@ export default function Plans({ searchParams }: { params: { slug: string }; sear
               {tripsError ? (
                 <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
               ) : tripsPending ? (
-                <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
+                <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '40px' }} />
+              ) : !tripsData ? (
+                <Flex width={'100%'} justify={'center'} mt={'6'}>
+                  <Text {...typoVariant.title1}>دیتایی موجود نیست</Text>
+                </Flex>
               ) : (
                 <PlansList data={tripsData?.latestTrips as any} />
               )}

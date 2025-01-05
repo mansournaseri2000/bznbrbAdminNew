@@ -45,8 +45,8 @@ const PlansHero = (props: Props) => {
    * _______________________________________________________________________________
    */
   const addFilter = () => {
-    const values = watch();
-    updateURLWithQueryParams(router, searchParams, values);
+    // const values = watch();
+    // updateURLWithQueryParams(router, searchParams, values);
     setIsOpen(false);
   };
 
@@ -77,12 +77,12 @@ const PlansHero = (props: Props) => {
 
   return (
     <>
-      <Grid width={'100%'} columns={'5'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 2fr  1fr' }}>
-        <IconButton type='button' colorVariant='BLUE' variant='soft' size={'3'} onClick={() => setIsOpen(true)}>
+      <Grid width={'100%'} columns={'5'} align={'center'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 2fr  1fr' }}>
+        <IconButton type='button' colorVariant='BLUE' variant='soft' size={'4'} onClick={() => setIsOpen(true)}>
           <Filter />
         </IconButton>
 
-        <Button colorVariant='BLUE' variant='ghost' size={'3'} onClick={() => router.push('/plans/create-plan')}>
+        <Button colorVariant='BLUE' variant='ghost' size={'4'} onClick={() => router.push('/plans/create-plan')}>
           <Flex gap={'2'} align={'center'}>
             <Text {...typoVariant.body1}>+</Text>
             <Text {...typoVariant.body1}> افزودن نقطه</Text>

@@ -1,10 +1,12 @@
 export const StatusFilterOption = [
   { id: 1, key: 'کامل', value: true },
   { id: 2, key: 'ناقص', value: false },
+  { id: 2, key: 'همه', value: null },
 ];
 export const isPublishedOptions = [
   { id: 1, key: 'منتشر شده', value: true },
   { id: 2, key: 'منتشر نشده', value: false },
+  { id: 2, key: 'همه', value: null },
 ];
 export const pointTypeOptions = [
   { id: 3, name: 'هنرگردی' },

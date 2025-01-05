@@ -4,8 +4,8 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { userTypeConstant } from '@/constants/users';
-import { Grid, IconButton, SelectItem, SelectRoot, TextField } from '@/libs/primitives';
-import { Search } from '@/public/icon';
+import { Grid, SelectItem, SelectRoot } from '@/libs/primitives';
+import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
 
 type Props = {
   onSubmit: () => void;
@@ -16,12 +16,8 @@ const UserHero = (props: Props) => {
 
   // console.log('Watch', watch());
   return (
-    <Grid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '3fr auto 1fr' }}>
-      <Controller name='searchQuery' control={control} render={({ field }) => <TextField {...field} placeholder='جستجوی  کاربر' style={{ borderRadius: 12 }} />} />
-
-      <IconButton size={'3'} variant='soft' onClick={props.onSubmit}>
-        <Search />
-      </IconButton>
+    <Grid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '3fr 1fr' }}>
+      <Controller name='searchQuery' control={control} render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام کاربر یا شماره تماس' onClick={props.onSubmit} />} />
 
       <Controller
         name='status'
@@ -33,7 +29,9 @@ const UserHero = (props: Props) => {
             value={String(field.value)}
             onValueChange={val => {
               field.onChange(val);
+              console.log('WWWWW', val);
             }}
+            size={'3'}
           >
             {userTypeConstant.map(item => (
               <SelectItem key={item.id} value={String(item.value)}>

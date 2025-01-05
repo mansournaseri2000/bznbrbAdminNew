@@ -20,8 +20,10 @@ export default function User({ searchParams }: { params: { slug: string }; searc
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
   const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
-  const methods = useForm({ defaultValues: { searchQuery: '', status: true, limit: 10, page: 1 } });
+  const methods = useForm({ defaultValues: { searchQuery: '', status: '', limit: 10, page: page } });
   const { watch, handleSubmit, setValue } = methods;
+
+  // console.log('WATCH', watch());
 
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
@@ -46,7 +48,7 @@ export default function User({ searchParams }: { params: { slug: string }; searc
     userMutate(watch());
   }, [watch('status'), watch('page')]);
 
-  console.log(userData, 'sample test');
+  // console.log(userData, 'sample test');
 
   const onSubmit = () => {
     userMutate(watch());

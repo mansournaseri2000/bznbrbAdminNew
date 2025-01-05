@@ -15,7 +15,7 @@ const filterObject = (obj: InputObject): InputObject => {
   const result: InputObject = {};
   Object.keys(obj).forEach(key => {
     const value = obj[key];
-    if (value !== null && value !== '' && value !== 0 && value !== 'none' && !(Array.isArray(value) && value.length === 0)) {
+    if (value !== null && value !== 'null' && value !== '' && value !== 0 && value !== 'none' && !(Array.isArray(value) && value.length === 0)) {
       result[key] = value;
     }
   });
@@ -54,8 +54,8 @@ export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
     provinceId: Number(params.provinceId),
     cityId: Number(params.cityId),
     parentCategoryId: Number(params.parentCategoryId),
-    isInfoCompleted: Boolean(params.isInfoCompleted),
-    isPublished: Boolean(params.isPublished),
+    isInfoCompleted: params.isInfoCompleted === 'true' ? true : params.isInfoCompleted === 'false' ? false : String(params.isInfoCompleted),
+    isPublished: params.isPublished === 'true' ? true : params.isPublished === 'false' ? false : String(params.isPublished),
   };
   const body = filterObject(obj);
   const res = await DevApiManager.post<ApiData<PlaceListResponse>>('places/allPlacesWithFilter', body);
@@ -127,7 +127,7 @@ export interface AllPlacesBody {
   cityId: number;
   parentCategoryId: number;
   arrayCatIds: number[];
-  isInfoCompleted: boolean;
-  isPublished: boolean;
+  isInfoCompleted: boolean | string;
+  isPublished: boolean | string;
   searchQuery: string;
 }
