@@ -3,7 +3,7 @@ import CitiesManagement from '@/components/additional-detail/cities/CitiesManage
 import FeatureManagement from '@/components/additional-detail/features/FeatureManagement';
 import ProvinceManagement from '@/components/additional-detail/province/ProvinceManagement';
 import Header from '@/layout/Header';
-import { Box, Flex } from '@/libs/primitives';
+import { Box, Flex, Grid } from '@/libs/primitives';
 
 export default function AdditionalDetail({ params }: { params: { slug: string[] } }) {
   const renderElement = () => {
@@ -40,7 +40,11 @@ export default function AdditionalDetail({ params }: { params: { slug: string[] 
   return (
     <Flex direction={'column'}>
       <Header title={getTitle()} isNavigation />
-      <Box p={'24px 110px 40px 40px '}>{renderElement()}</Box>
+      <Box p={'24px 110px 40px 40px '}>
+        <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
+          {renderElement()}
+        </Grid>
+      </Box>
     </Flex>
   );
 }

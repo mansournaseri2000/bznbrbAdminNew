@@ -75,7 +75,7 @@ const UserProfileHero = (props: Props) => {
   return (
     <>
       <Flex width={'100%'} align={'center'} justify={'between'}>
-        <IconButton colorVariant='BLUE' variant='soft' size={'3'} onClick={() => setIsOpen(true)}>
+        <IconButton colorVariant='BLUE' variant='soft' size={'4'} onClick={() => setIsOpen(true)}>
           <Filter />
         </IconButton>
 

@@ -24,12 +24,11 @@ export const getAllUsers = async (pageNumber: number) => {
 };
 
 export const getAllUsersWithParams = async (params: UserBody) => {
-  // const obj = {
-  //   ...params,
-  //   status: params.status === 'true' ? true : params.status === 'false' ? false : String(params.status),
-  // };
-  // const body = filterObject(obj);
-  const res = await DevApiManager.post<ApiData<UserListResponse>>('user', params);
+  const obj = {
+    ...params,
+  };
+  const body = filterObject(obj);
+  const res = await DevApiManager.post<ApiData<UserListResponse>>('user', body);
   return res.data.data;
 };
 
@@ -44,6 +43,7 @@ export const getRecentTrips = async (params: RecentTripsBody) => {
     departureDateEnd: Boolean(new Date(params.departureDateEnd).getTime()) ? new Date(params.departureDateEnd).getTime() : null,
     returnDateStart: Boolean(new Date(params.returnDateStart).getTime()) ? new Date(params.returnDateStart).getTime() : null,
     returnDateEnd: Boolean(new Date(params.returnDateEnd).getTime()) ? new Date(params.returnDateEnd).getTime() : null,
+    sort: null,
   };
   const body = filterObject(obj);
 

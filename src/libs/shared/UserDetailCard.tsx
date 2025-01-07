@@ -23,7 +23,7 @@ const UserDetailCard = (props: Props) => {
     <BoxWrapper hero='سازنده برنامه'>
       <Grid width={'100%'} columns={'3'} px={'4'} gapX={'5'} style={{ gridTemplateColumns: 'auto 3fr auto' }}>
         <Box width={'130px'} height={'130px'} position={'relative'}>
-          <Image src={pic ? pic : ''} alt='تصویر کاربر' fill style={{ borderRadius: '100px', border: `1px solid ${colorPalette.blue[9]}` }} />
+          <Image src={pic ? `https://uploader.darkube.app/${pic}` : ''} alt='تصویر کاربر' fill style={{ borderRadius: '100px', border: `1px solid ${colorPalette.blue[9]}` }} />
         </Box>
         <Grid width={'3'} columns={'3'} gapY={'5'}>
           <Item label='نام' value={name} />
@@ -68,7 +68,7 @@ const Item = ({ label, value }: { label: string; value: string | number }) => (
       {label}
     </Text>
     <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
-      {value}
+      {value ? value : '-'}
     </Text>
   </Flex>
 );

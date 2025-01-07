@@ -10,7 +10,7 @@ import { getAllUsersWithParams, UserBody } from '@/api/user';
 import UserHero from '@/components/user/hero/UserHero';
 import UserList from '@/components/user/list/UserList';
 import Header from '@/layout/Header';
-import { Box, Flex, Text } from '@/libs/primitives';
+import { Box, Flex, Grid, Text } from '@/libs/primitives';
 import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
 import ItemsPerPage from '@/libs/shared/ItemsPerPage';
 import { updateUrlWithPageNumber } from '@/libs/utils';
@@ -59,35 +59,37 @@ export default function User({ searchParams }: { params: { slug: string }; searc
     <Flex direction={'column'}>
       <Header title='لیست کاربران' isNavigation />
       <Box pr={'90px'}>
-        <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Flex width={'100%'} direction={'column'} gap={'5'} p={'5'}>
-              <UserHero onSubmit={() => onSubmit()} />
-              {userError ? (
-                <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
-              ) : userPending ? (
-                <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
-              ) : (
-                <UserList data={userData?.latestUsers as any} />
-              )}
-              {userData?.latestUsers && (
-                <Flex width={'100%'} align={'center'} justify={'between'}>
-                  <CustomPagination
-                    current={page}
-                    total={userData?.totalPages as number}
-                    onPageChange={p => {
-                      setPage(p);
-                      setValue('page', p);
-                      updateUrlWithPageNumber(p);
-                      onSubmit();
-                    }}
-                  />
-                  <ItemsPerPage data={userData?.latestUsers} currentPage={userData?.currentPage} totalCount={userData?.totalCount} />
-                </Flex>
-              )}
-            </Flex>
-          </form>
-        </FormProvider>
+        <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
+          <FormProvider {...methods}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Flex width={'100%'} direction={'column'} gap={'5'} p={'5'}>
+                <UserHero onSubmit={() => onSubmit()} />
+                {userError ? (
+                  <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
+                ) : userPending ? (
+                  <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
+                ) : (
+                  <UserList data={userData?.latestUsers as any} />
+                )}
+                {userData?.latestUsers && (
+                  <Flex width={'100%'} align={'center'} justify={'between'}>
+                    <CustomPagination
+                      current={page}
+                      total={userData?.totalPages as number}
+                      onPageChange={p => {
+                        setPage(p);
+                        setValue('page', p);
+                        updateUrlWithPageNumber(p);
+                        onSubmit();
+                      }}
+                    />
+                    <ItemsPerPage data={userData?.latestUsers} currentPage={userData?.currentPage} totalCount={userData?.totalCount} />
+                  </Flex>
+                )}
+              </Flex>
+            </form>
+          </FormProvider>
+        </Grid>
       </Box>
     </Flex>
   );

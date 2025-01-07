@@ -19,4 +19,6 @@ export default RootLayout;
 
 export const Main = styled.main`
   min-height: calc(100vh - 240px);
+  /* max-width: 1920px; */
+  /* margin: 0 auto; */
 `;

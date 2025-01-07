@@ -23,6 +23,10 @@ import { typoVariant } from '@/theme/typo-variants';
 
 export default function UserProfile({ params }: { params: { slug: number } }) {
   /*
+   *** Services_________________________________________________________________________________________________________________________________________________________________
+   */
+  const { data: userData, isLoading: userLoading, isFetching: userFetching } = useQuery({ queryKey: ['user_info'], queryFn: async () => getUserInfo(userId) });
+  /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -49,10 +53,7 @@ export default function UserProfile({ params }: { params: { slug: number } }) {
 
   const { watch, setValue, handleSubmit } = methods;
 
-  /*
-   *** Services_________________________________________________________________________________________________________________________________________________________________
-   */
-  const { data: userData, isLoading: userLoading, isFetching: userFetching } = useQuery({ queryKey: ['user_info'], queryFn: async () => getUserInfo(userId) });
+  console.log('USER Data', userData);
 
   const {
     data: tripsData,
@@ -70,6 +71,7 @@ export default function UserProfile({ params }: { params: { slug: number } }) {
   /*
    *** Hooks and Methods _________________________________________________________________________________________________________________________________________________________________
    */
+
   useEffect(() => {
     tripsMutate(watch() as any);
   }, []);
@@ -85,43 +87,45 @@ export default function UserProfile({ params }: { params: { slug: number } }) {
     <Flex direction={'column'}>
       <Header title='اطلاعات کاربر' isNavigation />
       <Box p={'24px 110px 40px 40px '}>
-        <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid width={'100%'} gapY={'5'}>
-              {/* TODO: fix data format for any */}
-              {userLoading || userFetching ? (
-                <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} />
-              ) : (
-                <UserDetailCard {...(userData?.userInfo as any)} type='USER' onEditInfo={() => setIsOpen(true)} />
-              )}
-              <Text {...typoVariant.title2} style={{ color: colorPalette.gray[12] }}>
-                برنامه های کاربر
-              </Text>
+        <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
+          <FormProvider {...methods}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Grid width={'100%'} gapY={'5'}>
+                {/* TODO: fix data format for any */}
+                {userLoading || userFetching ? (
+                  <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} />
+                ) : (
+                  <UserDetailCard {...(userData?.userInfo as any)} type='USER' onEditInfo={() => setIsOpen(true)} />
+                )}
+                <Text {...typoVariant.title2} style={{ color: colorPalette.gray[12] }}>
+                  برنامه های کاربر
+                </Text>
 
-              <UserProfileHero onSubmit={() => tripsMutate(watch() as any)} />
-              {tripPending ? <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} /> : <UserProfileList data={tripsData?.latestTrips ? tripsData.latestTrips : ([] as any)} />}
+                <UserProfileHero onSubmit={() => tripsMutate(watch() as any)} />
+                {tripPending ? <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} /> : <UserProfileList data={tripsData?.latestTrips ? tripsData.latestTrips : ([] as any)} />}
 
-              {tripsData?.latestTrips && (
-                <Flex width={'100%'} align={'center'} justify={'between'}>
-                  <CustomPagination
-                    current={watch('page')}
-                    total={tripsData?.totalPages}
-                    onPageChange={p => {
-                      setValue('page', p);
-                      updateUrlWithPageNumber(p);
-                      onSubmit();
-                    }}
-                  />
-                  <ItemsPerPage data={tripsData?.latestTrips} currentPage={tripsData?.currentPage} totalCount={tripsData?.totalCount} />
-                </Flex>
-              )}
-            </Grid>
-            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-              <ModalHeader title='ویرایش کاربر' icon={<Close />} handleClose={() => setIsOpen(false)} />
-              <EditUser onClose={() => setIsOpen(false)} userId={userId} data={userData as any} />
-            </Modal>
-          </form>
-        </FormProvider>
+                {tripsData?.latestTrips && (
+                  <Flex width={'100%'} align={'center'} justify={'between'}>
+                    <CustomPagination
+                      current={watch('page')}
+                      total={tripsData?.totalPages}
+                      onPageChange={p => {
+                        setValue('page', p);
+                        updateUrlWithPageNumber(p);
+                        onSubmit();
+                      }}
+                    />
+                    <ItemsPerPage data={tripsData?.latestTrips} currentPage={tripsData?.currentPage} totalCount={tripsData?.totalCount} />
+                  </Flex>
+                )}
+              </Grid>
+              <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+                <ModalHeader title='ویرایش کاربر' icon={<Close />} handleClose={() => setIsOpen(false)} />
+                <EditUser onClose={() => setIsOpen(false)} userId={userId} data={userData as any} />
+              </Modal>
+            </form>
+          </FormProvider>
+        </Grid>
       </Box>
     </Flex>
   );

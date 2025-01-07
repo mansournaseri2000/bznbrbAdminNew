@@ -76,39 +76,41 @@ export default function Plans({ searchParams }: { params: { slug: string }; sear
     <Flex direction={'column'}>
       <Header title='لیست برنامه ها' isNavigation />
       <Box pr={'90px'}>
-        <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid width={'100%'} gap={'4'} p={'5'}>
-              <PlansHero onSubmit={() => tripsMutate(watch() as any)} />
-              {tripsError ? (
-                <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
-              ) : tripsPending ? (
-                <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '40px' }} />
-              ) : !tripsData ? (
-                <Flex width={'100%'} justify={'center'} mt={'6'}>
-                  <Text {...typoVariant.title1}>دیتایی موجود نیست</Text>
-                </Flex>
-              ) : (
-                <PlansList data={tripsData?.latestTrips as any} />
-              )}
-              {tripsData?.latestTrips && (
-                <Flex width={'100%'} align={'center'} justify={'between'}>
-                  <CustomPagination
-                    current={page}
-                    total={tripsData.totalPages as number}
-                    onPageChange={p => {
-                      setPage(p);
-                      setValue('page', p);
-                      updateUrlWithPageNumber(p);
-                      onSubmit();
-                    }}
-                  />
-                  <ItemsPerPage data={tripsData?.latestTrips} currentPage={tripsData?.currentPage as number} totalCount={tripsData?.totalCount} />
-                </Flex>
-              )}
-            </Grid>
-          </form>
-        </FormProvider>
+        <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
+          <FormProvider {...methods}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Grid width={'100%'} gap={'4'} p={'5'}>
+                <PlansHero onSubmit={() => tripsMutate(watch() as any)} />
+                {tripsError ? (
+                  <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
+                ) : tripsPending ? (
+                  <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '40px' }} />
+                ) : !tripsData ? (
+                  <Flex width={'100%'} justify={'center'} mt={'6'}>
+                    <Text {...typoVariant.title1}>دیتایی موجود نیست</Text>
+                  </Flex>
+                ) : (
+                  <PlansList data={tripsData?.latestTrips as any} />
+                )}
+                {tripsData?.latestTrips && (
+                  <Flex width={'100%'} align={'center'} justify={'between'}>
+                    <CustomPagination
+                      current={page}
+                      total={tripsData.totalPages as number}
+                      onPageChange={p => {
+                        setPage(p);
+                        setValue('page', p);
+                        updateUrlWithPageNumber(p);
+                        onSubmit();
+                      }}
+                    />
+                    <ItemsPerPage data={tripsData?.latestTrips} currentPage={tripsData?.currentPage as number} totalCount={tripsData?.totalCount} />
+                  </Flex>
+                )}
+              </Grid>
+            </form>
+          </FormProvider>
+        </Grid>
       </Box>
     </Flex>
   );

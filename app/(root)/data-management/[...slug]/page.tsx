@@ -12,7 +12,7 @@ import CreateAndEditPoint from '@/components/data-management/point-management/cr
 import PointDetailRoot from '@/components/data-management/point-management/point-detail/PointDetailRoot';
 import PointManagement from '@/components/data-management/point-management/PointManagement';
 import Header from '@/layout/Header';
-import { Box, Flex } from '@/libs/primitives';
+import { Box, Flex, Grid } from '@/libs/primitives';
 import { PlaceResponse } from '@/types/place';
 
 // import { useForm } from 'react-hook-form';
@@ -107,9 +107,12 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
 
   return (
     <Flex direction={'column'}>
-      
       <Header title={getTitle()} isNavigation />
-      <Box p={'24px 110px 40px 40px '}>{renderElement()}</Box>
+      <Box p={'24px 110px 40px 40px '}>
+        <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
+          {renderElement()}
+        </Grid>
+      </Box>
     </Flex>
   );
 };

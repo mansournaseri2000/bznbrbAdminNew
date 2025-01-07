@@ -8,7 +8,7 @@ import PathGuid from '@/components/confirmations/path-guid/PathGuid';
 import TopComments from '@/components/confirmations/top-comments-management/TopComments';
 import TopCommentsManagement from '@/components/confirmations/top-comments-management/TopCommentsManagement';
 import Header from '@/layout/Header';
-import { Box, Flex } from '@/libs/primitives';
+import { Box, Flex, Grid } from '@/libs/primitives';
 
 //
 
@@ -51,7 +51,11 @@ const Confirmations = ({ params }: { params: { slug: string[] } }) => {
   return (
     <Flex direction={'column'}>
       <Header title={getTitle()} isNavigation />
-      <Box p={'24px 110px 40px 40px '}>{renderElement()}</Box>
+      <Box p={'24px 110px 40px 40px '}>
+        <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
+          {renderElement()}
+        </Grid>
+      </Box>
     </Flex>
   );
 };
