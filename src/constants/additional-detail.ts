@@ -17,6 +17,6 @@ export const createAndEditCategoryConstant = [
 ];
 
 export const sortCategoryOptions = [
-  { id: 1, name: 'الف - ی' },
-  { id: 1, name: 'ی - الف' },
+  { id: 1, name: 'الف - ی', value: 'asc' },
+  { id: 1, name: 'ی - الف', value: 'des' },
 ];

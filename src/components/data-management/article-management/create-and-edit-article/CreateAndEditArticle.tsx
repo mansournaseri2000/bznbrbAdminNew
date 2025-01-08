@@ -48,8 +48,6 @@ const CreateAndEditArticle = ({ type }: Props) => {
 
   const { data: articleByIdData } = useQuery({ queryKey: ['article-data'], queryFn: async () => await getArticleById(Number(params.slug[2])) });
 
-  console.log('ARTICLE DATA BY ID', articleByIdData);
-
   const methods = useForm({
     defaultValues:
       type === 'create'
@@ -85,36 +83,36 @@ const CreateAndEditArticle = ({ type }: Props) => {
         : type === 'edit'
         ? {
             title: articleByIdData?.title,
-            content: '',
-            writer: '',
-            on_titile: '',
-            source: '',
-            summery: '',
-            brief: '',
-            slug: '',
-            tableOfContent: '',
-            inMain: false,
-            inTop: false,
-            provincesId: null,
-            citiesId: null,
-            tags: [],
-            keywords: [],
-            meta_title: '',
-            meta_description: '',
-            view: null,
-            status: false,
-            is_published: false,
-            categoryId: null,
-            parentCategoryId: null,
-            source_link: '',
-            pic: '',
-            isSlider: false,
+            content: articleByIdData?.content,
+            writer: articleByIdData?.writer,
+            on_titile: articleByIdData?.on_titile,
+            source: articleByIdData?.source,
+            summery: articleByIdData?.summery,
+            brief: articleByIdData?.brief,
+            slug: articleByIdData?.slug,
+            tableOfContent: articleByIdData?.tableOfContent,
+            inMain: articleByIdData?.inMain,
+            inTop: articleByIdData?.inTop,
+            provincesId: articleByIdData?.provincesId,
+            citiesId: articleByIdData?.citiesId,
+            tags: articleByIdData?.tags,
+            keywords: articleByIdData?.keywords,
+            meta_title: articleByIdData?.meta_title,
+            meta_description: articleByIdData?.meta_description,
+            view: articleByIdData?.view,
+            status: articleByIdData?.status,
+            is_published: articleByIdData?.is_published,
+            categoryId: articleByIdData?.categoryId,
+            parentCategoryId: articleByIdData?.parentCategoryId,
+            source_link: articleByIdData?.source_link,
+            pic: articleByIdData?.pic,
+            isSlider: articleByIdData?.isSlider,
           }
         : {},
   });
 
   const { watch } = methods;
-  // console.log('WATCH', watch());
+  console.log('WATCH', watch());
 
   /**
    * Action Services
@@ -179,7 +177,7 @@ const CreateAndEditArticle = ({ type }: Props) => {
         <AccordionWrapper hero='نقاط مرتبط'>
           <RelatedPoint />
         </AccordionWrapper>
-        <AccordionWrapper hero='تصاویر شاخص'>
+        <AccordionWrapper hero='تصویر شاخص'>
           <FeaturedImages type={type} />
         </AccordionWrapper>
         {type === 'edit' && (
@@ -192,8 +190,7 @@ const CreateAndEditArticle = ({ type }: Props) => {
         </AccordionWrapper>
         <Flex p={'4'} gap={'5'} style={{ backgroundColor: colorPalette.gray[2], border: `1px solid ${colorPalette.gray[6]}`, borderRadius: 8 }}>
           <Button size={'3'} variant='soft' style={{ padding: '13.5px 48.5px' }} onClick={() => (type === 'create' ? createArticleMutate() : editArticleMutate())}>
-            {type === 'create' && createArticlePending ? <Spinner /> : <Text {...typoVariant.body1}>ثبت</Text>}
-            {type === 'edit' && editArticlePending ? <Spinner /> : <Text {...typoVariant.body1}>ثبت</Text>}
+            {createArticlePending || editArticlePending ? <Spinner /> : <Text {...typoVariant.body1}>ثبت</Text>}
           </Button>
           <Button size={'3'} colorVariant='PINK' onClick={() => router.back()} style={{ padding: '13.5px 48.5px' }}>
             <Text {...typoVariant.body1}>لغو</Text>

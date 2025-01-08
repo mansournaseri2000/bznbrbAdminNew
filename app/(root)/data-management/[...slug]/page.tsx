@@ -25,8 +25,6 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   const status = params.slug[0];
   const placeID = params.slug[2];
 
-  console.log('ARTICLE ID', params.slug[2]);
-
   /**
    * services
    * _______________________________________________________________________________

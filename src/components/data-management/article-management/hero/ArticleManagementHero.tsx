@@ -42,8 +42,6 @@ const ArticleManagementHero = ({ onSubmit }: Props) => {
     queryFn: async () => getAllPlacesConstants(),
   });
 
-  console.log('WATCH FOR HERO', watch());
-
   /**
    * functions
    * _______________________________________________________________________________
@@ -76,7 +74,7 @@ const ArticleManagementHero = ({ onSubmit }: Props) => {
         <Button colorVariant='BLUE' variant='ghost' size={'4'} onClick={() => router.push('/data-management/article-management/create-article')}>
           <Flex gap={'2'} align={'center'}>
             <Text {...typoVariant.body1}>+</Text>
-            <Text {...typoVariant.body1}> افزودن نقطه</Text>
+            <Text {...typoVariant.body1}> افزودن مقاله</Text>
           </Flex>
         </Button>
         <Controller name='title' control={control} render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام نقطه' onClick={onSubmit} />} />

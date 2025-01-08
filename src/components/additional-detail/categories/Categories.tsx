@@ -23,7 +23,7 @@ const Categories = () => {
    */
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const methods = useForm({ defaultValues: { sort: '' } });
-  const { control } = methods;
+  const { control, watch } = methods;
 
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
@@ -33,7 +33,7 @@ const Categories = () => {
     isLoading: categoriesLoading,
     isFetching: categoriesFetching,
     isError: categoriesError,
-  } = useQuery({ queryKey: ['categories'], queryFn: async () => await getCategories() });
+  } = useQuery({ queryKey: ['categories', watch('sort')], queryFn: async () => await getCategories(watch('sort')) });
 
   console.log('Categories Data', categoriesData);
   /*
@@ -69,7 +69,7 @@ const Categories = () => {
                   }}
                 >
                   {sortCategoryOptions.map(item => (
-                    <SelectItem key={item.id} value={String(item.id)}>
+                    <SelectItem key={item.id} value={item.value}>
                       {item.name}
                     </SelectItem>
                   ))}

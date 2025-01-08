@@ -47,3 +47,8 @@ export interface SubCategoryBody {
   parent_id: number;
   subCategoryNames: string[];
 }
+
+export interface addFeatureItemBody {
+  name:string,
+  featureGroupid:number
+}
