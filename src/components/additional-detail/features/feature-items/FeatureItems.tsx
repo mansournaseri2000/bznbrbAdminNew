@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Spinner } from '@radix-ui/themes';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { addFeatureItem, deleteFeatureGroup, editFeatureGroup } from '@/api/additional-detail';
+import { addFeatureItem, deleteFeatureGroup, editFeatureGroup, getFeatureGroupById } from '@/api/additional-detail';
 import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
@@ -29,7 +29,7 @@ const FeatureItems = (props: FeaturesResponse) => {
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
-  const { name, features, id } = props;
+  const { id } = props;
 
   const [modalState, setModalState] = useState<modalStateType>({ isOpen: false, key: 'edit' });
   const methods = useForm({ defaultValues: { name: '' } });
@@ -41,12 +41,16 @@ const FeatureItems = (props: FeaturesResponse) => {
    * Services
    * _______________________________________________________________________________
    */
+
+  const { data: featureGroupData } = useQuery({ queryKey: ['feature-group', id], queryFn: async () => await getFeatureGroupById(id), initialData: props });
+
   const { mutate: addFeatureMutate, isPending: addFeaturePending } = useMutation({
     mutationFn: async (body: addFeatureItemBody) => await addFeatureItem(body),
     onSuccess: data => {
       if (data.status === true) {
-        queryClient.invalidateQueries({ queryKey: ['features'] });
+        queryClient.invalidateQueries({ queryKey: ['feature-group'] });
         ToastSuccess('ویژگی مورد نظر با موفقیت ایجاد شد');
+        setModalState({ ...modalState, isOpen: false });
       } else {
         ToastError('لطفا دوباره تلاش نمایید');
       }
@@ -57,8 +61,9 @@ const FeatureItems = (props: FeaturesResponse) => {
     mutationFn: async () => await editFeatureGroup(id, watch()),
     onSuccess: data => {
       if (data.status === true) {
-        queryClient.invalidateQueries({ queryKey: ['features'] });
+        queryClient.invalidateQueries({ queryKey: ['feature-group'] });
         ToastSuccess('ویژگی مورد نظر با موفقیت ویرایش شد');
+        setModalState({ ...modalState, isOpen: false });
       } else {
         ToastError('لطفا دوباره تلاش نمایید');
       }
@@ -85,14 +90,15 @@ const FeatureItems = (props: FeaturesResponse) => {
     <>
       <Grid width={'100%'} gapY={'5'}>
         <AccordionWrapper
-          hero={name}
+          hero={featureGroupData?.name}
           withButton
           withDelete
-          isDisableDelete
+          // isDisableDelete
           onEdit={e => {
             e.stopPropagation();
-            setValue('name', name);
+            setValue('name', featureGroupData.name);
             setModalState({ key: 'edit', isOpen: true });
+            console.log('FeatureGroupData', featureGroupData);
           }}
           onButtonSubmit={e => {
             e.stopPropagation();
@@ -105,11 +111,11 @@ const FeatureItems = (props: FeaturesResponse) => {
           }}
         >
           <Flex width={'100%'} gap={'5'} align={'center'} wrap={'wrap'}>
-            {features.length === 0 ? (
+            {featureGroupData?.features?.length === 0 ? (
               <Text {...typoVariant.body1}>در حال حاضر دیتایی برای این ویژگی وجود ندارد</Text>
             ) : (
               <>
-                {features.map(item => (
+                {featureGroupData?.features.map(item => (
                   <FeatureCard key={item.id} title={item.name} id={item.id} />
                 ))}
               </>

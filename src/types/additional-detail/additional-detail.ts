@@ -49,6 +49,17 @@ export interface SubCategoryBody {
 }
 
 export interface addFeatureItemBody {
-  name:string,
-  featureGroupid:number
+  name: string;
+  featureGroupid: number;
+}
+export interface FeatureGroupResponse {
+  id: number;
+  name: string;
+  features: FeaturesDetail[];
+}
+
+export interface FeaturesDetail {
+  id: number;
+  name: string;
+  deletable: boolean;
 }

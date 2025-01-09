@@ -38,12 +38,16 @@ const FeatureCard = (props: Props) => {
    * Services
    * _______________________________________________________________________________
    */
+
+  // const { data: featureItemData } = useQuery({ queryKey: ['feature-item', id], queryFn: async () => await getFeatureItemById(id) });
+
   const { mutate: editFeatureMutate, isPending: editFeaturePending } = useMutation({
     mutationFn: async () => await editFeatureItem(id, watch()),
     onSuccess: data => {
       if (data.status === true) {
-        queryClient.invalidateQueries({ queryKey: ['features'] });
+        queryClient.invalidateQueries({ queryKey: ['feature-group'] });
         ToastSuccess('آیتم مورد نظر با موفقیت ویرایش شد');
+        setModalState({ ...modalState, isOpen: false });
       } else {
         ToastError('لطفا دوباره تلاش نمایید');
       }
@@ -54,8 +58,9 @@ const FeatureCard = (props: Props) => {
     mutationFn: async () => await deleteFeatureItem(id),
     onSuccess: data => {
       if (data.status === true) {
-        queryClient.invalidateQueries({ queryKey: ['features'] });
+        queryClient.invalidateQueries({ queryKey: ['feature-group'] });
         ToastSuccess('آیتم مورد نظر با موفقیت حذف شد');
+        setModalState({ ...modalState, isOpen: false });
       } else {
         ToastError('لطفا دوباره تلاش نمایید');
       }
@@ -69,7 +74,12 @@ const FeatureCard = (props: Props) => {
           {title}
         </Text>
         <Flex align={'center'} gap={'4'}>
-          <IconButton variant='surface' onClick={() => setModalState({ key: 'edit', isOpen: true })}>
+          <IconButton
+            variant='surface'
+            onClick={() => {
+              setModalState({ key: 'edit', isOpen: true });
+            }}
+          >
             <Pencil />
           </IconButton>
           <IconButton variant='surface' onClick={() => setModalState({ key: 'delete', isOpen: true })}>

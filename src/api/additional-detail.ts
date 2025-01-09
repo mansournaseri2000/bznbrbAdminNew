@@ -5,6 +5,8 @@ import {
   AllProvincesResponse,
   CategoriesResponse,
   CreateCategoryBody,
+  FeatureDetail,
+  FeatureGroupResponse,
   FeaturesResponse,
   SubCategoryBody,
 } from '@/types/additional-detail/additional-detail';
@@ -19,6 +21,16 @@ export const getCategories = async (sort: string) => {
 
 export const getFeatures = async () => {
   const res = await DevApiManager.get<ApiData<FeaturesResponse[]>>('/features');
+  return res.data.data;
+};
+
+export const getFeatureGroupById = async (id: number) => {
+  const res = await DevApiManager.get<ApiData<FeatureGroupResponse>>(`/features/getFeatureGroup/${id}`);
+  return res.data.data;
+};
+
+export const getFeatureItemById = async (id: number) => {
+  const res = await DevApiManager.get<ApiData<FeatureDetail>>(`/features/getFeature/${id}`);
   return res.data.data;
 };
 
