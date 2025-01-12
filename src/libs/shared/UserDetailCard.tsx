@@ -22,6 +22,7 @@ const UserDetailCard = (props: Props) => {
   return (
     <BoxWrapper hero='سازنده برنامه'>
       <Grid width={'100%'} columns={'3'} px={'4'} gapX={'5'} style={{ gridTemplateColumns: 'auto 3fr auto' }}>
+        
         <Box width={'130px'} height={'130px'} position={'relative'}>
           <Image src={pic ? `https://uploader.darkube.app/${pic}` : ''} alt='تصویر کاربر' fill style={{ borderRadius: '100px', border: `1px solid ${colorPalette.blue[9]}` }} />
         </Box>

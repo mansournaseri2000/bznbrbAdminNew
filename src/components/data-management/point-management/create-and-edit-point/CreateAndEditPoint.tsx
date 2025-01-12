@@ -123,7 +123,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
   const { push, back } = useRouter();
   const methods = useForm<fomrData | any>({
     defaultValues:
-      status == 'edit'
+      status == 'edit-point'
         ? {
             placeCategory: '',
             name: placeData?.name,
@@ -231,6 +231,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             PlaceWorkTimes: serializePlaceWorkTimeSchedule(placeWorkTimeSchedule),
           },
   });
+  const { watch } = methods;
   /**
    * hooks and methods
    * _______________________________________________________________________________
@@ -280,6 +281,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     // console.log(data, 'datadata');
   };
 
+  console.log('watch', watch());
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -311,10 +313,10 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             <PlaceInfo categoris={placeConstant ? placeConstant.categories : []} />
           </AccordionWrapper>
           <AccordionWrapper hero='تصویر شاخص'>
-            <PrimaryImage />
+            <PrimaryImage status={status} />
           </AccordionWrapper>
           <AccordionWrapper hero='گالری تصاویر'>
-            <ImageGallery />
+            <ImageGallery status={status} />
           </AccordionWrapper>
           <AccordionWrapper hero='موقعیت جغرافیایی'>
             <GeographicalLocationRoot province={placeConstant ? placeConstant.provinces : []} />

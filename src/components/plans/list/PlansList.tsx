@@ -15,7 +15,7 @@ import { typoVariant } from '@/theme/typo-variants';
 interface PlansListDetail {
   tripId: string;
   userId: number;
-  fullName: string;
+  userMobile: string;
   sourceCityName: string;
   destinationCity: string;
   departureDate: string;
@@ -39,8 +39,8 @@ const PlansList = (props: PlansListProps) => {
       ),
     },
     {
-      accessorKey: 'fullName',
-      header: 'نام کاربر سازنده',
+      accessorKey: 'userMobile',
+      header: 'شماره کاربر',
       cell: info => {
         const value = info.getValue() as string | null;
         return (

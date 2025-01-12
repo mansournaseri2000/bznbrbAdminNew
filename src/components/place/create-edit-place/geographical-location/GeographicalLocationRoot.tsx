@@ -4,7 +4,8 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
 
-import { Flex, Grid, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
+import { navigationVehicleOptions } from '@/constants/data-management';
+import { Button, Flex, Grid, SelectItem, SelectRoot, Text, TextArea, TextField } from '@/libs/primitives';
 import { Divider } from '@/libs/shared';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
@@ -31,11 +32,6 @@ const GeographicalLocationRoot = ({ province }: Props) => {
   const lat = useWatch({ name: 'lat' });
   const lng = useWatch({ name: 'lng' });
   const city = province.filter(item => item.id === Number(provinceId))[0]?.Cities;
-
-  /**
-   * useEffect
-   * _______________________________________________________________________________
-   */
 
   /**
    * useEffect
@@ -83,6 +79,7 @@ const GeographicalLocationRoot = ({ province }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              disabled={!Boolean(provinceId)}
               value={String(cityID)}
               onValueChange={val => {
                 field.onChange(val);
@@ -118,8 +115,16 @@ const GeographicalLocationRoot = ({ province }: Props) => {
         <Text {...typoVariant.title2} style={{ color: colorPalette.gray[12], fontWeight: 700 }}>
           چجوری بریم
         </Text>
-        <Flex width={'100%'} height={'208px'} align={'center'} justify={'center'} style={{ border: '2px solid red' }}>
-          buttons & text area
+        <Flex width={'100%'} direction={'column'} gap={'5'}>
+          <Flex width={'100%'} gap={'5'} align={'center'} style={{ overflow: 'auto' }}>
+            {navigationVehicleOptions.map(item => (
+              <Button key={item.id} size={'3'} style={{ paddingInline: 16 }}>
+                <Text {...typoVariant.body1}>{item.name}</Text>
+              </Button>
+            ))}
+          </Flex>
+          {/* TODO: add name for controller */}
+          <Controller name='' control={control} render={({ field }) => <TextArea {...field} placeholder='شرح مسیر' rows={5} />} />
         </Flex>
       </Flex>
     </Grid>

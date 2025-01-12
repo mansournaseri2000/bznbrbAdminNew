@@ -205,7 +205,9 @@ const PointDetailRoot = () => {
               </Flex>
             </>
           ) : (
-            <Text>دیتایی وجود ندارد</Text>
+            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+              دیتایی وجود ندارد
+            </Text>
           )}
         </AccordionWrapper>
         {/**
@@ -245,7 +247,9 @@ const PointDetailRoot = () => {
               </Flex>
             </Flex>
           ) : (
-            <Text>دیتایی وجود ندارد</Text>
+            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+              دیتایی وجود ندارد
+            </Text>
           )}
         </AccordionWrapper>
 
@@ -288,7 +292,9 @@ const PointDetailRoot = () => {
               </Flex>
             </>
           ) : (
-            <Text>در حال حاضر نظری ثبت نشده است</Text>
+            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+              در حال حاضر نظری ثبت نشده است
+            </Text>
           )}
         </SimpleWrapper>
 
@@ -297,10 +303,18 @@ const PointDetailRoot = () => {
          * _______________________________________________________________________________
          */}
         <SimpleWrapper hero='تصاویر ارسال شده'>
-          <Grid columns={'3'} gap={'5'}>
-            <ImageCard title='بهترين زمان براي بازديد از اين جاذبه فصل بهار و تابستان است.' image='/image/image-sent.png' />
-            <ImageCard title='بهترين زمان براي بازديد از اين جاذبه فصل بهار و تابستان است.' image='/image/image-sent.png' />
-            <ImageCard title='بهترين زمان براي بازديد از اين جاذبه فصل بهار و تابستان است.' image='/image/image-sent.png' />
+          <Grid columns={{ initial: '1', sm: '2', md: '3' }} gap={'5'}>
+            {pointData.UserSentPicturesForPlace.length === 0 ? (
+              <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+                در حال حاضر تصویری آپلود نشده است
+              </Text>
+            ) : (
+              <>
+                {pointData.UserSentPicturesForPlace.map((item, index) => (
+                  <ImageCard key={index} {...item} />
+                ))}
+              </>
+            )}
           </Grid>
         </SimpleWrapper>
       </Grid>

@@ -22,8 +22,10 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const status = params.slug[0];
+  const status = params.slug[1];
   const placeID = params.slug[2];
+
+  console.log('PARAMS', params.slug[2]);
 
   /**
    * services
