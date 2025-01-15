@@ -4,8 +4,9 @@ import { useCallback } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { RadioGroup, Slider } from '@radix-ui/themes';
+import styled from 'styled-components';
 
-import { categoriesConstants, cost, renownLevel } from '@/constants/place';
+import { categoriesConstants, cost, limitationsOption, renownLevel } from '@/constants/place';
 import { Flex, Grid, Text, TextField } from '@/libs/primitives';
 import { Divider } from '@/libs/shared';
 import { colorPalette } from '@/theme';
@@ -167,14 +168,14 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
         <Flex direction={'column'} gap={'16px'}>
           <Text>میزان اهمیت نقطه</Text>
           <Flex width={'50%'} gap={'10px'} align={'center'}>
-            <Slider defaultValue={[0]} value={[trip_value]} onValueChange={value => setValue('trip_value', value)} max={100} step={1} style={{ width: '50%' }} />
+            <CustomSlider defaultValue={[0]} value={[trip_value]} onValueChange={value => setValue('trip_value', value)} max={100} step={1} style={{ width: '50%' }} />
             <Text>{trip_value ?? 0}%</Text>
           </Flex>
         </Flex>
         <Flex direction={'column'} gap={'16px'}>
           <Text>رتبه بندی</Text>
           <Flex width={'50%'} gap={'10px'} align={'center'}>
-            <Slider defaultValue={[0]} value={[rating]} onValueChange={value => setValue('rating', value)} max={100} step={1} style={{ width: '100%' }} />
+            <CustomSlider defaultValue={[0]} value={[rating]} onValueChange={value => setValue('rating', value)} max={100} step={1} style={{ width: '100%' }} />
             <Text>{rating ?? 0}%</Text>
           </Flex>
         </Flex>
@@ -191,7 +192,7 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
               <Grid gap={'8px'} key={trip.id} mb='20px'>
                 <Text as='label'>{trip.name}</Text>
                 <Flex width={'50%'} gap={'10px'} align={'center'}>
-                  <Slider
+                  <CustomSlider
                     defaultValue={[tripType?.score ?? 0]}
                     value={[tripType?.score ?? 0]}
                     onValueChange={value => handleSliderChange(trip.id, Number(value))}
@@ -217,7 +218,7 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
               <Grid gap={'8px'} key={trip.id} mb='20px'>
                 <Text as='label'>{trip.name}</Text>
                 <Flex width={'50%'} gap={'10px'} align={'center'}>
-                  <Slider
+                  <CustomSlider
                     defaultValue={[category?.score ?? 0]}
                     value={[category?.score ?? 0]}
                     onValueChange={value => handleCategorySliderChange(trip.id, Number(value))}
@@ -251,7 +252,7 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
                   <Grid>
                     <Text as='label'>{trip.name}</Text>
                     <Flex width={'50%'} gap={'10px'} align={'center'}>
-                      <Slider
+                      <CustomSlider
                         defaultValue={[tripSeason?.score ?? 0]}
                         value={[tripSeason?.score ?? 0]}
                         onValueChange={value => handlePlaceTripSeasonsSliderChange(trip.id, Number(value))}
@@ -290,7 +291,7 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
               <Grid gap={'8px'} key={trip.id} mb='20px'>
                 <Text as='label'>{trip.name}</Text>
                 <Flex width={'50%'} gap={'10px'} align={'center'}>
-                  <Slider
+                  <CustomSlider
                     defaultValue={[tripLimitationsItem?.score ?? 0]}
                     value={[tripLimitationsItem?.score ?? 0]}
                     onValueChange={value => handleTripLimitationsSliderChange(trip.id, Number(value))}
@@ -313,14 +314,14 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
               alignItems: 'center',
               gap: '24px',
             }}
-            name='cost'
+            name='Place_TripLimitation'
             onValueChange={value => {
-              setValue('cost', value);
+              setValue('Place_TripLimitation', value);
             }}
           >
-            {cost.map(item => {
+            {limitationsOption.map(item => {
               return (
-                <RadioGroup.Item key={item.id} value={item.id} style={{ cursor: 'pointer' }}>
+                <RadioGroup.Item key={item.id} value={item.value} style={{ cursor: 'pointer' }}>
                   <Text>{item.name}</Text>
                 </RadioGroup.Item>
               );
@@ -338,3 +339,9 @@ export default AnalysisRoot;
  * styled-component
  * _______________________________________________________________________________
  */
+
+const CustomSlider = styled(Slider)`
+  .rt-SliderThumb::after {
+    background-color: ${colorPalette.pink[6]};
+  }
+`;

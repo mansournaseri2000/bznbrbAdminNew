@@ -25,7 +25,8 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   const status = params.slug[1];
   const placeID = params.slug[2];
 
-  console.log('PARAMS', params.slug[2]);
+  // console.log('Status', params.slug[1]);
+  // console.log('placeId', params.slug[2]);
 
   /**
    * services
@@ -41,7 +42,6 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
       {
         queryKey: ['place'],
         queryFn: async () => await getPlace(Number(placeID)),
-        enabled: status === 'edit',
         staleTime: 0,
         gcTime: 0,
       },
@@ -64,11 +64,10 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
           case 'create-point':
             return <CreateAndEditPoint placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />;
           case 'point-detail':
-            return params.slug[2] === 'edit-point' ? (
-              <CreateAndEditPoint placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />
-            ) : (
-              <PointDetailRoot />
-            );
+            return <PointDetailRoot />;
+
+          case 'edit-point':
+            return <CreateAndEditPoint placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />;
           default:
             return <PointManagement />;
         }

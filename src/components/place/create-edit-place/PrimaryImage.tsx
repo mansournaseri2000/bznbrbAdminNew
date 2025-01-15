@@ -5,12 +5,14 @@ import { Button, Flex, Heading, Text } from '@/libs/primitives';
 import ImagePicker2 from '@/libs/shared/ImagePicker2';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
+import { Picture } from '@/types/place/find-place';
 
 type Props = {
   status: string;
+  picture: Picture;
 };
 
-const PrimaryImage = ({ status }: Props) => {
+const PrimaryImage = ({ status, picture }: Props) => {
   return (
     <>
       {status === 'create-point' ? (
@@ -31,7 +33,7 @@ const PrimaryImage = ({ status }: Props) => {
           </ImagePicker2>
         </Flex>
       ) : (
-        <SelectPrimaryImage />
+        <SelectPrimaryImage picture={picture} />
       )}
     </>
   );

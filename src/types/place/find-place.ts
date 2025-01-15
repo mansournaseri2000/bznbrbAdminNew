@@ -133,4 +133,15 @@ export interface UserSentPicturesForPlaceDetail {
   path: string;
 }
 
+export interface TransportationData {
+  airplane: string | null;
+  bus: string | null;
+  car: string | null;
+  hike: string | null;
+  ship: string | null;
+  subway: string | null;
+  taxi: string | null;
+  train: string | null;
+}
+
 export type travelModeOptions = 'HIKE' | 'AIRPLANE' | 'BUS' | 'CAR' | 'SHIP' | 'TRAIN' | 'TAXI';

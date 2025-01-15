@@ -8,12 +8,14 @@ import { Button, Flex, Heading, Text } from '@/libs/primitives';
 import ImagePicker2 from '@/libs/shared/ImagePicker2';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
+import { Picture } from '@/types/place/find-place';
 
 type Props = {
   type: 'create' | 'edit';
+  picture: Picture;
 };
 
-const FeaturedImages = ({ type }: Props) => {
+const FeaturedImages = ({ type, picture }: Props) => {
   const { watch } = useFormContext();
   return (
     <>
@@ -35,7 +37,7 @@ const FeaturedImages = ({ type }: Props) => {
           </ImagePicker2>
         </Flex>
       ) : (
-        type === 'edit' && <SelectPrimaryImage />
+        type === 'edit' && <SelectPrimaryImage picture={picture} />
       )}
     </>
   );

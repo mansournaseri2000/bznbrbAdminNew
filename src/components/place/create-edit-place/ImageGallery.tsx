@@ -5,15 +5,17 @@ import { Button, Flex, Heading, Text } from '@/libs/primitives';
 import ImagePicker2 from '@/libs/shared/ImagePicker2';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
+import { UserSentPicturesForPlaceDetail } from '@/types/place/find-place';
 
 type Props = {
   status: string;
+  userPicUpload: UserSentPicturesForPlaceDetail[];
 };
 
-const ImageGallery = ({ status }: Props) => {
+const ImageGallery = ({ status, userPicUpload }: Props) => {
   return (
     <>
-      {status === 'create-point' ? (
+      {status === 'create-point' || userPicUpload.length === 0 ? (
         <Flex direction={'column'} gap={'6'} align={'center'} py={'87.5px'}>
           <Heading as='h3' size={'3'} style={{ color: colorPalette.gray[11] }}>
             هنوز تصاویر گالری اضافه نشده اند.
@@ -31,7 +33,11 @@ const ImageGallery = ({ status }: Props) => {
           </ImagePicker2>
         </Flex>
       ) : (
-        <ImageCreator />
+        <Flex width={'100%'} direction={'column'} gap={'5'}>
+          {userPicUpload.map(item => (
+            <ImageCreator key={item.id} userPicUpload={item} />
+          ))}
+        </Flex>
       )}
     </>
   );

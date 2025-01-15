@@ -22,14 +22,3 @@ export const articleStatusOptions = [
   { id: 2, name: 'منتشر نشده', value: false },
   { id: 3, name: 'همه', value: 'none' },
 ];
-
-export const navigationVehicleOptions = [
-  { id: 1, name: 'تاکسی', value: 'taxi' },
-  { id: 2, name: 'اتوبوس', value: 'bus' },
-  { id: 3, name: 'مترو', value: 'subway' },
-  { id: 4, name: 'ماشین شخصی', value: 'car' },
-  { id: 5, name: 'قطار', value: 'train' },
-  { id: 6, name: 'کشتی', value: 'ship' },
-  { id: 7, name: 'هواپیما', value: 'airplane' },
-  { id: 8, name: 'پیاده روی', value: 'hike' },
-];

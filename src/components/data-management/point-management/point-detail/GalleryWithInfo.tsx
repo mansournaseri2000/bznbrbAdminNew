@@ -46,7 +46,7 @@ const GalleryWithInfo = ({ data, commentList }: Props) => {
       {/* image _______________________________________________________________________________ */}
       <Flex width={'100%'} minHeight={'260px'} height={'40vw'} maxHeight={'600px'} position={'relative'}>
         <Flex position={'absolute'} top={'10px'} left={'10px'} gap={'16px'} style={{ zIndex: '1' }}>
-          <Button size={'3'} onClick={() => push(`edit-point/${placeId}`)}>
+          <Button size={'3'} onClick={() => push(`/data-management/point-management/edit-point/${placeId}   `)}>
             <Text {...typoVariant.body1}>ویرایش اطلاعات</Text>
           </Button>
 
@@ -66,7 +66,7 @@ const GalleryWithInfo = ({ data, commentList }: Props) => {
                   borderRadius: '4px',
                   cursor: 'pointer',
                 }}
-                src={`https://uploader.darkube.app/${item.path}`}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL_image}${item.path}`}
                 alt='image-gallery'
                 width={40}
                 height={40}
