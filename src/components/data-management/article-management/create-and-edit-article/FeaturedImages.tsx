@@ -3,19 +3,20 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import SelectPrimaryImage from '@/components/develop/data-management/select-primary-image/SelectPrimaryImage';
+// import SelectPrimaryImage from '@/components/develop/data-management/select-primary-image/SelectPrimaryImage';
 import { Button, Flex, Heading, Text } from '@/libs/primitives';
 import ImagePicker2 from '@/libs/shared/ImagePicker2';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { Picture } from '@/types/place/find-place';
 
-type Props = {
-  type: 'create' | 'edit';
-  picture: Picture;
-};
+// import { Picture } from '@/types/place/find-place';
 
-const FeaturedImages = ({ type, picture }: Props) => {
+// type Props = {
+//   type: 'create' | 'edit';
+//   picture: string;
+// };
+
+const FeaturedImages = () => {
   const { watch } = useFormContext();
   return (
     <>
@@ -37,7 +38,8 @@ const FeaturedImages = ({ type, picture }: Props) => {
           </ImagePicker2>
         </Flex>
       ) : (
-        type === 'edit' && <SelectPrimaryImage picture={picture} />
+        // type === 'edit' && <SelectPrimaryImage picture={picture} />
+        ''
       )}
     </>
   );
