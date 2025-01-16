@@ -15,7 +15,7 @@ import {
   tripPlanOptions,
 } from '@/constants/ads';
 import Header from '@/layout/Header';
-import { Box, Flex } from '@/libs/primitives';
+import { Box, Flex, Grid } from '@/libs/primitives';
 
 export default function SubAds({ params }: { params: { slug: string[] } }) {
   console.log('PARAMS', params.slug[0]);
@@ -82,7 +82,11 @@ export default function SubAds({ params }: { params: { slug: string[] } }) {
   return (
     <Flex direction={'column'}>
       <Header title={getTitle()} isNavigation />
-      <Box p={'24px 110px 40px 40px '}>{renderElement()}</Box>
+      <Box p={'24px 110px 40px 40px '}>
+        <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
+          {renderElement()}
+        </Grid>
+      </Box>
     </Flex>
   );
 }

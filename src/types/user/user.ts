@@ -54,4 +54,5 @@ export interface LatestTripsDetail {
   destinationCityProvinceId: number;
   departureDate: number;
   returnDate: number;
+  userMobile: string;
 }

@@ -255,3 +255,9 @@ export const categoriesConstants = [
     name: 'شهرگردی',
   },
 ];
+
+export const limitationsOption = [
+  { id: 1, name: 'هیچکدام', value: 'ALL' },
+  { id: 2, name: 'ورود آقایان ممنوع', value: 'MEN' },
+  { id: 3, name: 'ورود بانوان ممنوع', value: 'WOMEN' },
+];

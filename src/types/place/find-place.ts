@@ -44,6 +44,7 @@ export interface PlaceResponse {
   PlaceTravelMethodSuggestions: PlaceTravelMethodSuggestionsDetail[];
   cost: string;
   renown: string;
+  UserSentPicturesForPlace: UserSentPicturesForPlaceDetail[];
 }
 
 export interface Cities {
@@ -123,6 +124,24 @@ export interface PlaceTravelMethodSuggestionsDetail {
   description: string;
   id: number;
   status: boolean;
+}
+
+export interface UserSentPicturesForPlaceDetail {
+  description: string;
+  id: number;
+  isTop: boolean;
+  path: string;
+}
+
+export interface TransportationData {
+  airplane: string | null;
+  bus: string | null;
+  car: string | null;
+  hike: string | null;
+  ship: string | null;
+  subway: string | null;
+  taxi: string | null;
+  train: string | null;
 }
 
 export type travelModeOptions = 'HIKE' | 'AIRPLANE' | 'BUS' | 'CAR' | 'SHIP' | 'TRAIN' | 'TAXI';

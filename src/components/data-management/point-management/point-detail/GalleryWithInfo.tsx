@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 import { Skeleton } from '@radix-ui/themes';
 import styled from 'styled-components';
@@ -32,7 +32,8 @@ const GalleryWithInfo = ({ data, commentList }: Props) => {
    * _______________________________________________________________________________
    */
   const { push } = useRouter();
-
+  const params = useParams();
+  const placeId = params.slug[2];
   const [currentImage, setCurrentImage] = useState(data?.pictures[0]);
 
   /**
@@ -45,11 +46,11 @@ const GalleryWithInfo = ({ data, commentList }: Props) => {
       {/* image _______________________________________________________________________________ */}
       <Flex width={'100%'} minHeight={'260px'} height={'40vw'} maxHeight={'600px'} position={'relative'}>
         <Flex position={'absolute'} top={'10px'} left={'10px'} gap={'16px'} style={{ zIndex: '1' }}>
-          <Button size={'3'}>
+          <Button size={'3'} onClick={() => push(`/data-management/point-management/edit-point/${placeId}   `)}>
             <Text {...typoVariant.body1}>ویرایش اطلاعات</Text>
           </Button>
 
-          <IconButton size={'3'} colorVariant='PINK'>
+          <IconButton size={'3'} colorVariant='PINK' disabled>
             <Trash />
           </IconButton>
         </Flex>
@@ -65,7 +66,7 @@ const GalleryWithInfo = ({ data, commentList }: Props) => {
                   borderRadius: '4px',
                   cursor: 'pointer',
                 }}
-                src={`https://uploader.darkube.app/${item.path}`}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL_image}${item.path}`}
                 alt='image-gallery'
                 width={40}
                 height={40}

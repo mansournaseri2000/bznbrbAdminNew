@@ -61,7 +61,7 @@ export function findByChildId(items: any, id: any) {
 
 function serializeTripData(data: any[], tripsData: any[]) {
   return tripsData.map(trip => {
-    const matchingData = data.find(d => d.id === trip.id);
+    const matchingData = data?.find(d => d.id === trip.id);
 
     if (matchingData) {
       return {
@@ -79,7 +79,7 @@ function serializeTripData(data: any[], tripsData: any[]) {
 
 function serializeCategoryData(data: any[], categoryData: any[]) {
   return categoryData.map(trip => {
-    const matchingData = data.find(d => d.id === trip.id);
+    const matchingData = data?.find(d => d.id === trip.id);
 
     if (matchingData) {
       return {
@@ -97,7 +97,7 @@ function serializeCategoryData(data: any[], categoryData: any[]) {
 
 function serializeLimitaionData(data: any[], limitaionData: any[]) {
   return limitaionData.map(trip => {
-    const matchingData = data.find(d => d.id === trip.id);
+    const matchingData = data?.find(d => d.id === trip.id);
 
     if (matchingData) {
       return {
@@ -113,17 +113,35 @@ function serializeLimitaionData(data: any[], limitaionData: any[]) {
   });
 }
 
+function serializeModelObject(model: any) {
+  return Object.entries(model).map(([key, content]) => ({
+    key,
+    content,
+  }));
+}
+
 const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props) => {
   /**
    * const and variables
    * _______________________________________________________________________________
    */
+  console.log('DATA', placeData);
+  const model = {
+    taxi: placeData?.taxi,
+    bus: placeData?.bus,
+    subway: placeData?.subway,
+    car: placeData?.car,
+    train: placeData?.train,
+    airplane: placeData?.airplane,
+    hike: placeData?.hike,
+    ship: placeData?.ship,
+  };
 
   const queryClient = useQueryClient();
   const { push, back } = useRouter();
   const methods = useForm<fomrData | any>({
     defaultValues:
-      status == 'edit'
+      status == 'edit-point'
         ? {
             placeCategory: '',
             name: placeData?.name,
@@ -134,8 +152,8 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             basicInfosummary: placeData?.summary,
 
             isLoading: false,
-            uploadImage: null,
-            pictures: [],
+            uploadImage: placeData?.UserSentPicturesForPlace,
+            pictures: placeData?.pictures,
 
             provinceId: placeData?.Cities ? placeData?.Cities.Provinces.id : undefined,
             cityID: placeData?.Cities ? placeData?.Cities.id : undefined,
@@ -145,6 +163,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             lat: placeData?.lat,
             lng: placeData?.lng,
             area: placeData?.area,
+            vehicleOptions: serializeModelObject(model),
 
             airplane: placeData?.airplane,
             bus: placeData?.bus,
@@ -157,7 +176,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
 
             keywords: placeData?.keywords,
             metakeywords: placeData?.tags,
-            keyword: '',
+            keyword: placeData?.keywords,
             meta_description: placeData?.meta_description,
             meta_title: placeData?.meta_title,
             metakeyword: '',
@@ -199,6 +218,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             lat: '',
             lng: '',
             area: '',
+            vehicleOptions: '',
 
             cost: 'LOW',
             renown: 'LOW',
@@ -311,10 +331,10 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             <PlaceInfo categoris={placeConstant ? placeConstant.categories : []} />
           </AccordionWrapper>
           <AccordionWrapper hero='تصویر شاخص'>
-            <PrimaryImage />
+            <PrimaryImage status={status} picture={placeData?.pictures[0]} />
           </AccordionWrapper>
           <AccordionWrapper hero='گالری تصاویر'>
-            <ImageGallery />
+            <ImageGallery status={status} userPicUpload={placeData?.UserSentPicturesForPlace} />
           </AccordionWrapper>
           <AccordionWrapper hero='موقعیت جغرافیایی'>
             <GeographicalLocationRoot province={placeConstant ? placeConstant.provinces : []} />

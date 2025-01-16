@@ -13,7 +13,6 @@ import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text } f
 import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import { updateURLWithQueryParams } from '@/libs/utils/updateUrl';
 import { ArrowRight, Filter } from '@/public/icon';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -28,10 +27,12 @@ const PlansHero = (props: Props) => {
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const { control, watch, reset, setValue } = useFormContext();
-  console.log('Watch', watch());
+  const { control, reset, setValue } = useFormContext();
+  const searchParams = useSearchParams();
+  const getParam = (key: string) => searchParams.get(key) || '';
+
+  // console.log('Watch', watch());
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
    */
@@ -45,15 +46,30 @@ const PlansHero = (props: Props) => {
    * _______________________________________________________________________________
    */
   const addFilter = () => {
-    // const values = watch();
-    // updateURLWithQueryParams(router, searchParams, values);
     setIsOpen(false);
   };
 
   // TODO: fix update url for remove filters
   const removeFilter = () => {
-    reset();
-    updateURLWithQueryParams(router, searchParams, {});
+    reset({
+      page: 1,
+      limit: 10,
+      searchQuery: '',
+      sortDate: '',
+      targetDate: '',
+      userId: '',
+      originCityId: '',
+      originProvinceId: '',
+      destinationCityId: '',
+      destinationProvinceId: '',
+      departureDateStart: '',
+      departureDateEnd: '',
+      returnDateStart: '',
+      returnDateEnd: '',
+      sort: '',
+    });
+    router.replace('/plans');
+    props.onSubmit();
     setIsOpen(false);
   };
 
@@ -61,15 +77,10 @@ const PlansHero = (props: Props) => {
     switch (id) {
       case 1:
         return setValue('sortDate', 'des'), setValue('targetDate', 'dep');
-        break;
       case 2:
         return setValue('targetDate', 'dep'), setValue('sortDate', 'asc');
-        break;
-
       case 3:
         return setValue('targetDate', 'ret'), setValue('sortDate', 'des');
-        break;
-
       case 4:
         return setValue('targetDate', 'ret'), setValue('sortDate', 'asc');
     }
@@ -89,11 +100,11 @@ const PlansHero = (props: Props) => {
           </Flex>
         </Button>
 
-        <Controller name='searchQuery' control={control} render={({ field }) => <CustomSearch {...field} placeholder='جستجو' onClick={props.onSubmit} />} />
-        {/* <IconButton size={'3'} variant='soft' onClick={props.onSubmit}>
-          <Search />
-        </IconButton> */}
-
+        <Controller
+          name='searchQuery'
+          control={control}
+          render={({ field }) => <CustomSearch {...field} placeholder='جستجو' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} onClick={props.onSubmit} />}
+        />
         <Controller
           name='sort'
           control={control}

@@ -72,76 +72,78 @@ const UserPlan = ({ data, isLoading, userId }: Props) => {
   );
 
   return (
-    <Grid width={'100%'} gapY={'5'}>
-      {userLoading || userFetching ? (
-        <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} />
-      ) : (
-        <UserDetailCard {...(userData?.userInfo as any)} type='PLAN' onShowProfile={() => router.push(`/user/${userId}`)} />
-      )}
-      {/* 
+    <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
+      <Grid width={'100%'} gapY={'5'}>
+        {userLoading || userFetching ? (
+          <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} />
+        ) : (
+          <UserDetailCard {...(userData?.userInfo as any)} type='PLAN' onShowProfile={() => router.push(`/user/${userId}`)} />
+        )}
+        {/* 
         ***
         user planner_________________________________________________________________________________________________________________________________________
         ***
       */}
-      <Grid width={'100%'} gapX={'5'} style={{ gridTemplateColumns: '39% 59%' }}>
-        {/*
+        <Grid width={'100%'} gapX={'5'} style={{ gridTemplateColumns: '39% 59%' }}>
+          {/*
         ***
         Trip view for planner _________________________________________________________________________________________________________________________________________
         ***
       */}
-        <BoxWrapper hero='برنامه سفر' height={'auto'}>
-          <Flex direction={'column'}>{data?.days?.length > 0 && <DayList dayList={data.days} onChangeDay={handleChangeDayID} currentDayId={dayID} />}</Flex>
-          {data?.days?.length > 0 ? (
-            <LazyLoadWrapper>
-              <TripCommonView dayID={dayID} listItem={commonViewListItem} />
-            </LazyLoadWrapper>
-          ) : (
-            <>
-              {isLoading ? (
-                <Spinner size={'3'} style={{ marginInline: 'auto' }} />
-              ) : (
-                <Flex direction={'column'} height={'calc(100vh - 350px)'} justify={'center'} p={'16px'} gap={'24px'}>
-                  <Heading as='h3' size={'3'}>
-                    برای این نقطه برنامه ای ندارم!
-                  </Heading>
-                  <Text {...typoVariant.paragraph1} style={{ color: colorPalette.gray[11] }}>
-                    متاسفانه نمی تونم برای این نقطه برنامه ای بدم، اگر می خوای می تونی برگردی به صفحه اصلی یا دوباره بری به برنامه ساز تا نقطه دیگه ای رو برای سفر انتخاب کنی.
-                  </Text>
-                  <Flex gap={'16px'}>
-                    <Link href={CREATE_PLANNER}>
-                      <Button variant='surface' size={'2'} colorVariant='PINK'>
-                        <Text {...typoVariant.body1}>برنامه ساز</Text>
-                      </Button>
-                    </Link>
-                    <Link href={LANDING}>
-                      <Button variant='surface' size={'2'} colorVariant='BLUE'>
-                        <Text {...typoVariant.body1}>صفحه اصلی</Text>
-                      </Button>
-                    </Link>
+          <BoxWrapper hero='برنامه سفر' height={'auto'}>
+            <Flex direction={'column'}>{data?.days?.length > 0 && <DayList dayList={data.days} onChangeDay={handleChangeDayID} currentDayId={dayID} />}</Flex>
+            {data?.days?.length > 0 ? (
+              <LazyLoadWrapper>
+                <TripCommonView dayID={dayID} listItem={commonViewListItem} />
+              </LazyLoadWrapper>
+            ) : (
+              <>
+                {isLoading ? (
+                  <Spinner size={'3'} style={{ marginInline: 'auto' }} />
+                ) : (
+                  <Flex direction={'column'} height={'calc(100vh - 350px)'} justify={'center'} p={'16px'} gap={'24px'}>
+                    <Heading as='h3' size={'3'}>
+                      برای این نقطه برنامه ای ندارم!
+                    </Heading>
+                    <Text {...typoVariant.paragraph1} style={{ color: colorPalette.gray[11] }}>
+                      متاسفانه نمی تونم برای این نقطه برنامه ای بدم، اگر می خوای می تونی برگردی به صفحه اصلی یا دوباره بری به برنامه ساز تا نقطه دیگه ای رو برای سفر انتخاب کنی.
+                    </Text>
+                    <Flex gap={'16px'}>
+                      <Link href={CREATE_PLANNER}>
+                        <Button variant='surface' size={'2'} colorVariant='PINK'>
+                          <Text {...typoVariant.body1}>برنامه ساز</Text>
+                        </Button>
+                      </Link>
+                      <Link href={LANDING}>
+                        <Button variant='surface' size={'2'} colorVariant='BLUE'>
+                          <Text {...typoVariant.body1}>صفحه اصلی</Text>
+                        </Button>
+                      </Link>
+                    </Flex>
                   </Flex>
-                </Flex>
-              )}
-            </>
-          )}
-        </BoxWrapper>
-        {/* 
+                )}
+              </>
+            )}
+          </BoxWrapper>
+          {/* 
         ***
         MAP_________________________________________________________________________________________________________________________________________
         ***
       */}
-        {isLoading ? (
-          <Flex align={'center'} justify={'center'}>
-            <Spinner size={'3'} style={{ scale: 2 }} />
-          </Flex>
-        ) : (
-          <Flex position={'relative'} style={{ flex: 1 }}>
-            <TripMapView isEmpty={data?.days?.length === 0} locations={data?.days?.length > 0 ? mapViewListItem : ([35.6892, 51.389] as any)} center={getMapCenter(mapViewListItem)} />
-          </Flex>
-        )}
+          {isLoading ? (
+            <Flex align={'center'} justify={'center'}>
+              <Spinner size={'3'} style={{ scale: 2 }} />
+            </Flex>
+          ) : (
+            <Flex position={'relative'} style={{ flex: 1 }}>
+              <TripMapView isEmpty={data?.days?.length === 0} locations={data?.days?.length > 0 ? mapViewListItem : ([35.6892, 51.389] as any)} center={getMapCenter(mapViewListItem)} />
+            </Flex>
+          )}
 
-        {/* <Flex style={{ border: '1px solid red' }}>map</Flex> */}
+          {/* <Flex style={{ border: '1px solid red' }}>map</Flex> */}
+        </Grid>
+        {/* <UserPlanner /> */}
       </Grid>
-      {/* <UserPlanner /> */}
     </Grid>
   );
 };

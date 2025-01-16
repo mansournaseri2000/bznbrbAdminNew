@@ -1,12 +1,13 @@
 // import { ApiManagerV2 } from '@/libs/utils/axios.config';
-import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
+// import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
+import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
 import { TripResponse } from '@/types/plans/trip';
 
 import { ApiData } from './types';
 
 export const getTrips = async (id: string): Promise<ApiData<TripResponse> | null> => {
   try {
-    const res = await clientApiManagerV2.get<ApiData<TripResponse>>(`trips/${id}`);
+    const res = await DevApiManager.get<ApiData<TripResponse>>(`trips/id/${id}`);
     return res.data; // Return the response data on success
   } catch (error: any) {
     // Handle different types of errors
@@ -26,5 +27,3 @@ export const getTrips = async (id: string): Promise<ApiData<TripResponse> | null
     }
   }
 };
-
-

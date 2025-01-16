@@ -67,6 +67,7 @@ const PlaceInfo = ({ categoris }: Props) => {
             <SelectRoot
               {...field}
               value={String(subCategoryId)}
+              disabled={!Boolean(categoryId)}
               onValueChange={val => {
                 field.onChange(val);
                 setValue('cityID', '');

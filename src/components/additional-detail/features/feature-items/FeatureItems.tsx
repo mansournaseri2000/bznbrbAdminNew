@@ -1,50 +1,167 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
-import { Flex, Grid } from '@/libs/primitives';
+import { Spinner } from '@radix-ui/themes';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { addFeatureItem, deleteFeatureGroup, editFeatureGroup, getFeatureGroupById } from '@/api/additional-detail';
+import { Button, Flex, Grid, Modal, Text, TextField } from '@/libs/primitives';
+import ModalAction from '@/libs/shared/ModalAction';
+import ModalHeader from '@/libs/shared/ModalHeader';
+import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
-import { FeaturesResponse } from '@/types/additional-detail/additional-detail';
+import { Close } from '@/public/icon';
+import { typoVariant } from '@/theme/typo-variants';
+import { addFeatureItemBody, FeaturesResponse } from '@/types/additional-detail/additional-detail';
 
 import FeatureCard from '../feature-card/FeatureCard';
-import FeatureModal from '../feature-modal/FeatureModal';
 
-type KeyOptions = 'edit' | 'add' | '';
+// import FeatureModal from '../feature-modal/FeatureModal';
+
+type modalStateType = {
+  isOpen: boolean;
+  key: 'edit' | 'add' | 'delete';
+};
 
 const FeatureItems = (props: FeaturesResponse) => {
-  const { name, features } = props;
-  const [openEdit, setOpenEdit] = useState<boolean>(false);
-  const [openAdd, setOpenAdd] = useState<boolean>(false);
-  const [key, setKey] = useState<KeyOptions>('');
+  /*
+   *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
+   */
+  const { id } = props;
+
+  const [modalState, setModalState] = useState<modalStateType>({ isOpen: false, key: 'edit' });
+  const methods = useForm({ defaultValues: { name: '' } });
+  const { control, watch, reset, setValue } = methods;
+  const queryClient = useQueryClient();
+
+  console.log('NAME', watch());
+  /**
+   * Services
+   * _______________________________________________________________________________
+   */
+
+  const { data: featureGroupData } = useQuery({ queryKey: ['feature-group', id], queryFn: async () => await getFeatureGroupById(id), initialData: props });
+
+  const { mutate: addFeatureMutate, isPending: addFeaturePending } = useMutation({
+    mutationFn: async (body: addFeatureItemBody) => await addFeatureItem(body),
+    onSuccess: data => {
+      if (data.status === true) {
+        queryClient.invalidateQueries({ queryKey: ['feature-group'] });
+        ToastSuccess('ویژگی مورد نظر با موفقیت ایجاد شد');
+        setModalState({ ...modalState, isOpen: false });
+      } else {
+        ToastError('لطفا دوباره تلاش نمایید');
+      }
+    },
+  });
+
+  const { mutate: editFeatureGroupMutate, isPending: editFeatureGroupPending } = useMutation({
+    mutationFn: async () => await editFeatureGroup(id, watch()),
+    onSuccess: data => {
+      if (data.status === true) {
+        queryClient.invalidateQueries({ queryKey: ['feature-group'] });
+        ToastSuccess('ویژگی مورد نظر با موفقیت ویرایش شد');
+        setModalState({ ...modalState, isOpen: false });
+      } else {
+        ToastError('لطفا دوباره تلاش نمایید');
+      }
+    },
+  });
+
+  const { mutate: deleteFeatureGroupMutate, isPending: deleteFeatureGroupPending } = useMutation({
+    mutationFn: async () => await deleteFeatureGroup(id),
+    onSuccess: data => {
+      if (data.status === true) {
+        queryClient.invalidateQueries({ queryKey: ['features'] });
+        ToastSuccess('ویژگی مورد نظر با موفقیت حذف شد');
+      } else {
+        ToastError('لطفا دوباره تلاش نمایید');
+      }
+    },
+  });
+
+  /**
+   * JSX
+   * _______________________________________________________________________________
+   */
   return (
     <>
       <Grid width={'100%'} gapY={'5'}>
         <AccordionWrapper
-          hero={name}
+          hero={featureGroupData?.name}
           withButton
+          withDelete
+          // isDisableDelete
           onEdit={e => {
             e.stopPropagation();
-            setOpenEdit(true);
-            setKey('edit');
+            setValue('name', featureGroupData.name);
+            setModalState({ key: 'edit', isOpen: true });
+            console.log('FeatureGroupData', featureGroupData);
           }}
           onButtonSubmit={e => {
             e.stopPropagation();
-            setOpenAdd(true);
-            setKey('add');
+            reset({ name: '' });
+            setModalState({ key: 'add', isOpen: true });
+          }}
+          onDelete={e => {
+            e.stopPropagation();
+            setModalState({ key: 'delete', isOpen: true });
           }}
         >
           <Flex width={'100%'} gap={'5'} align={'center'} wrap={'wrap'}>
-            {features.map(item => (
-              <FeatureCard key={item.id} title={item.name} />
-            ))}
+            {featureGroupData?.features?.length === 0 ? (
+              <Text {...typoVariant.body1}>در حال حاضر دیتایی برای این ویژگی وجود ندارد</Text>
+            ) : (
+              <>
+                {featureGroupData?.features.map(item => (
+                  <FeatureCard key={item.id} title={item.name} id={item.id} />
+                ))}
+              </>
+            )}
           </Flex>
         </AccordionWrapper>
       </Grid>
-      {key === 'add' ? (
-        <FeatureModal type='add_feature_category' isOpen={openAdd} setIsOpen={setOpenAdd} />
-      ) : (
-        key === 'edit' && <FeatureModal type='edit_feature_category' isOpen={openEdit} setIsOpen={setOpenEdit} />
-      )}
+
+      <Modal isOpen={modalState.isOpen} onClose={() => setModalState({ ...modalState, isOpen: false })}>
+        {/*
+         *** for Edit OR Add Feature_________________________________________________________________________________________________________________________________________________________________
+         */}
+        {modalState.key !== 'delete' && (
+          <>
+            <ModalHeader title={modalState.key === 'edit' ? 'ویرایش دسته ویژگی' : 'افزودن دسته ویژگی'} icon={<Close />} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
+
+            <Flex width={'100%'} p={'4'} align={'center'} justify={'center'}>
+              <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان دسته ویژگی' style={{ width: '50%', margin: '0 auto' }} />} />
+            </Flex>
+
+            <ModalAction
+              submitButtonText='ثبت'
+              closeButtonText='لغو'
+              onCloseButton={() => setModalState({ ...modalState, isOpen: false })}
+              onSubmit={() => (modalState.key === 'add' ? addFeatureMutate({ name: watch('name'), featureGroupid: id }) : editFeatureGroupMutate())}
+              isLoading={modalState.key === 'add' ? addFeaturePending : editFeatureGroupPending}
+            />
+          </>
+        )}
+        {/*
+         *** For Delete Feature_________________________________________________________________________________________________________________________________________________________________
+         */}
+        {modalState.key === 'delete' && (
+          <Grid gapY={'24px'} p={'5'}>
+            <Text>آیا از حذف این ویژگی اطمینان دارید؟ </Text>
+            <Grid gap={'10px'} columns={'2'}>
+              <Button variant='soft' size={'4'} onClick={() => deleteFeatureGroupMutate()}>
+                <Text {...typoVariant.body3}>{deleteFeatureGroupPending ? <Spinner /> : 'بله'}</Text>
+              </Button>
+              <Button type='button' onClick={() => setModalState({ ...modalState, isOpen: false })} variant='solid' size={'4'}>
+                <Text {...typoVariant.body3}>خیر</Text>
+              </Button>
+            </Grid>
+          </Grid>
+        )}
+      </Modal>
     </>
   );
 };

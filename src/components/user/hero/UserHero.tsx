@@ -3,6 +3,8 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
+import { useSearchParams } from 'next/navigation';
+
 import { userTypeConstant } from '@/constants/users';
 import { Grid, SelectItem, SelectRoot } from '@/libs/primitives';
 import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
@@ -12,12 +14,18 @@ type Props = {
 };
 
 const UserHero = (props: Props) => {
+  /*
+   *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
+   */
   const { control } = useFormContext();
+
+  const searchParams = useSearchParams();
+  const getParam = (key: string) => searchParams.get(key) || '';
 
   // console.log('Watch', watch());
   return (
     <Grid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '3fr 1fr' }}>
-      <Controller name='searchQuery' control={control} render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام کاربر یا شماره تماس' onClick={props.onSubmit} />} />
+      <Controller name='searchQuery' control={control} render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام کاربر یا شماره تماس' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} onClick={props.onSubmit} />} />
 
       <Controller
         name='status'
@@ -29,7 +37,7 @@ const UserHero = (props: Props) => {
             value={String(field.value)}
             onValueChange={val => {
               field.onChange(val);
-              console.log('WWWWW', val);
+              props.onSubmit();
             }}
             size={'3'}
           >

@@ -22,16 +22,3 @@ export const articleStatusOptions = [
   { id: 2, name: 'منتشر نشده', value: false },
   { id: 3, name: 'همه', value: 'none' },
 ];
-
-export const selectPointOptions = [
-  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
-  { select: false, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
-  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
-  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
-  { select: false, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
-  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
-  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
-  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
-  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
-  { select: true, title: 'نام و یا عنوان نقطه', province: 'استان', city: 'شهرستان' },
-];

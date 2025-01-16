@@ -122,7 +122,7 @@ const EditCategoryModal = ({ setIsOpen, data }: Props) => {
   };
 
   return (
-    <Flex direction={'column'} p={'12px 16px'} gap={'4'}>
+    <Flex maxHeight={'700px'} direction={'column'} p={'12px 16px'} gap={'4'} style={{ overflow: 'auto' }}>
       <Flex align={'center'} gap={'3'}>
         <Controller name='categoryName' control={control} render={({ field }) => <TextField {...field} placeholder='نام دسته بندی' />} />
         <IconButton size={'3'} variant='soft' onClick={() => editCategoryNameMutate()}>

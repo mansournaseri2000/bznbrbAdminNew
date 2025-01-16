@@ -42,7 +42,7 @@ const UserList = ({ data }: { data: LatestUsersDetail }) => {
         const value = info.getValue() as string | null;
         return (
           <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
-            {value ? value : '-'}
+            {value && value.trim() !== '' ? value : '-'}
           </Text>
         );
       },
@@ -98,8 +98,9 @@ const UserList = ({ data }: { data: LatestUsersDetail }) => {
       id: 'details',
       cell: ({ row }) => {
         const item = row.original;
-        const handleClick = () => {
+        const handleClick = (e: React.MouseEvent) => {
           console.log('item', item);
+          e.preventDefault();
           router.push(`/user/${item.id}`);
         };
         return (

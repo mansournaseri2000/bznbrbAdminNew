@@ -11,12 +11,13 @@ import { Boxshadow, colorPalette } from '@/theme';
 type CustomSearchProps = {
   placeholder: string;
   onClick: () => void;
+  defaultValue?: string;
 };
 
-const CustomSearch = forwardRef<HTMLDivElement, CustomSearchProps>(({ placeholder, onClick, ...rest }, ref) => {
+const CustomSearch = forwardRef<HTMLDivElement, CustomSearchProps>(({ placeholder, defaultValue, onClick, ...rest }, ref) => {
   return (
-    <Wrapper {...rest} ref={ref}>
-      <CustomTextField placeholder={placeholder} variant='surface' />
+    <Wrapper {...rest} ref={ref} height={'fit-content'}>
+      <CustomTextField placeholder={placeholder} variant='surface' defaultValue={defaultValue} />
       <IconButton size={'4'} variant='soft' onClick={onClick}>
         <Search />
       </IconButton>
@@ -28,21 +29,8 @@ CustomSearch.displayName = 'CustomSearch';
 
 export default CustomSearch;
 
-// const CustomSearch = (props: Props) => {
-//   const { placeholder, onClick } = props;
-//   return (
-//     <Wrapper>
-//       <CustomTextField placeholder={placeholder} variant='surface' />
-//       <IconButton size={'4'} variant='soft' onClick={onClick}>
-//         <Search />
-//       </IconButton>
-//     </Wrapper>
-//   );
-// };
-
-// export default CustomSearch;
-
 const Wrapper = styled(Flex)`
+  align-items: center;
   border: 1px solid ${colorPalette.gray[7]};
   border-radius: 12px;
   padding-inline-start: 1rem;

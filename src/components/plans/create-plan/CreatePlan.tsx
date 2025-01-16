@@ -97,7 +97,7 @@ const CreatePlan = ({ provinces }: Props) => {
     return new Date(currentDate);
   };
   return (
-    <>
+    <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
       <FormProvider {...methods}>
         {/* TODO:define onSubmit */}
         <form>
@@ -591,7 +591,7 @@ const CreatePlan = ({ provinces }: Props) => {
           </Flex>
         </form>
       </FormProvider>
-    </>
+    </Grid>
   );
 };
 

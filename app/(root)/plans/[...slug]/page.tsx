@@ -14,7 +14,9 @@ import { Box, Flex } from '@/libs/primitives';
 const PlansDetail = ({ params }: { params: { slug: string[] } }) => {
   const type = params.slug[0];
   const userId = Number(params.slug[1]);
+  console.log('🚀 ~ PlansDetail ~ userId:', userId);
   const tripId = params.slug[2];
+  console.log('🚀 ~ PlansDetail ~ tripId:', tripId);
 
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________

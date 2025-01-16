@@ -113,7 +113,7 @@ const ImageSentCard: React.FC<CardProps> = (props: CardProps) => {
         </Flex>
         <Flex gap={'4'} px={'4'} align={'center'}>
           <Box width={'328px'} height={'150px'} position={'relative'}>
-            <Image width={328} height={150} src={`https://uploader.darkube.app/${picture}`} alt='user image sent' style={{ borderRadius: 8, objectFit: 'cover' }} />
+            <Image width={328} height={150} src={`${process.env.NEXT_PUBLIC_BASE_URL_image}${picture}`} alt='user image sent' style={{ borderRadius: 8, objectFit: 'cover' }} />
           </Box>
           <Grid height={'auto'}>
             <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11], textWrap: 'wrap', width: '100%' }}>

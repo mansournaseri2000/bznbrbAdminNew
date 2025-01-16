@@ -58,7 +58,7 @@ const PopupCard = ({ description, imageUrl, lat, lng, title, id }: Props) => {
   return (
     <Grid gap={'16px'}>
       <Flex gap={'8px'} align={'center'}>
-        <Image style={{ borderRadius: '10px' }} alt='map-image' width={60} height={60} priority src={`https://uploader.darkube.app/${imageUrl}`} />
+        <Image style={{ borderRadius: '10px' }} alt='map-image' width={60} height={60} priority src={`${process.env.NEXT_PUBLIC_BASE_URL_image}${imageUrl}`} />
         <Text {...typoVariant.title2} style={{ color: colorPalette.gray[11] }}>
           {title}
         </Text>

@@ -12,7 +12,7 @@ import CreateAndEditPoint from '@/components/data-management/point-management/cr
 import PointDetailRoot from '@/components/data-management/point-management/point-detail/PointDetailRoot';
 import PointManagement from '@/components/data-management/point-management/PointManagement';
 import Header from '@/layout/Header';
-import { Box, Flex } from '@/libs/primitives';
+import { Box, Flex, Grid } from '@/libs/primitives';
 import { PlaceResponse } from '@/types/place';
 
 // import { useForm } from 'react-hook-form';
@@ -22,10 +22,8 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const status = params.slug[0];
+  const status = params.slug[1];
   const placeID = params.slug[2];
-
-  console.log('ARTICLE ID', params.slug[2]);
 
   /**
    * services
@@ -41,7 +39,6 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
       {
         queryKey: ['place'],
         queryFn: async () => await getPlace(Number(placeID)),
-        enabled: status === 'edit',
         staleTime: 0,
         gcTime: 0,
       },
@@ -64,11 +61,10 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
           case 'create-point':
             return <CreateAndEditPoint placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />;
           case 'point-detail':
-            return params.slug[2] === 'edit-point' ? (
-              <CreateAndEditPoint placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />
-            ) : (
-              <PointDetailRoot />
-            );
+            return <PointDetailRoot />;
+
+          case 'edit-point':
+            return <CreateAndEditPoint placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />;
           default:
             return <PointManagement />;
         }
@@ -89,16 +85,15 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
    */
   const getTitle = () => {
     if (params.slug[0] === 'point-management') {
-      if (params.slug[1] === 'create-point') return 'ساخت نقطه';
-      if (params.slug[1] === 'point-detail') {
-        return params.slug[2] === 'edit-point' ? 'ویرایش نقطه' : 'اطلاعات نقطه';
-      }
+      if (status === 'create-point') return 'ساخت نقطه';
+      if (status === 'point-detail') return 'اطلاعات نقطه';
+      if (status === 'edit-point') return 'ویرایش نقطه';
       return 'لیست نقاط';
     }
 
     if (params.slug[0] === 'article-management') {
-      if (params.slug[1] === 'create-article') return 'ساخت مقاله';
-      if (params.slug[1] === 'edit-article') return 'ویرایش مقاله';
+      if (status === 'create-article') return 'ساخت مقاله';
+      if (status === 'edit-article') return 'ویرایش مقاله';
       return 'لیست مقالات';
     }
 
@@ -107,9 +102,12 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
 
   return (
     <Flex direction={'column'}>
-      
       <Header title={getTitle()} isNavigation />
-      <Box p={'24px 110px 40px 40px '}>{renderElement()}</Box>
+      <Box p={'24px 110px 40px 40px '}>
+        <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
+          {renderElement()}
+        </Grid>
+      </Box>
     </Flex>
   );
 };

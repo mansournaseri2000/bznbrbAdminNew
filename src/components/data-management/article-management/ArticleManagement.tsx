@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
 import { useMutation } from '@tanstack/react-query';
@@ -13,6 +13,7 @@ import { Flex, Text } from '@/libs/primitives';
 import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
 import ItemsPerPage from '@/libs/shared/ItemsPerPage';
 import { updateUrlWithPageNumber } from '@/libs/utils';
+import { generateSearchParams } from '@/libs/utils/generateSearchParams';
 import { ArticleListBody } from '@/types/data-management/article';
 
 import ArticleManagementHero from './hero/ArticleManagementHero';
@@ -22,21 +23,22 @@ const ArticleManagement = () => {
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
+  const { push } = useRouter();
+  const searchParams = useSearchParams();
+  const [page, setPage] = useState(searchParams.get('page') ? Number(searchParams.get('page')) : 1);
+  const getParam = (key: string) => searchParams.get(key) || '';
+
   const methods = useForm({
     defaultValues: {
-      title: '',
-      created_atStart: '',
-      created_atEnd: '',
-      categoryId: '',
-      is_published: '',
-      // updated_atStart: null,
-      // updated_atEnd: null,
-      // parentCategoryId: null,
+      title: getParam('title') || '',
+      created_atStart: getParam('created_atStart') || '',
+      created_atEnd: getParam('created_atEnd') || '',
+      categoryId: getParam('categoryId') || '',
+      is_published: getParam('is_published') || '',
     },
   });
   const { watch, handleSubmit } = methods;
-  const searchParams = useSearchParams();
-  const [page, setPage] = useState(searchParams.get('page') ? Number(searchParams.get('page')) : 1);
+
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
@@ -48,6 +50,20 @@ const ArticleManagement = () => {
   } = useMutation({
     mutationFn: async (body: ArticleListBody) => getArticleList(page, body),
     onSuccess: async data => {
+      const cleanedData = Object.fromEntries(
+        Object.entries(watch()).filter(
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ([_, value]) =>
+            value !== undefined &&
+            value !== '' &&
+            value !== 'none' &&
+            value !== null &&
+            !(Array.isArray(value) && value.length === 0) &&
+            !(typeof value === 'object' && value !== null && Object.keys(value).length === 0)
+        )
+      );
+      const searchParams = generateSearchParams(cleanedData);
+      push(`/data-management/article-management?${searchParams}`);
       console.log('data', data);
     },
     onError: async data => {
@@ -72,6 +88,8 @@ const ArticleManagement = () => {
             <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
           ) : articlePending ? (
             <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
+          ) : !articleData ? (
+            <Text>دیتایی وجود ندارد</Text>
           ) : (
             <ArticleManagementList data={articleData?.articles as any} />
           )}
