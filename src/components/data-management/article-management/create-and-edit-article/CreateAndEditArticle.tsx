@@ -10,7 +10,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { createArticle, editArticle, getArticleById } from '@/api/data-management';
 import { getAllPlacesConstants } from '@/api/place';
-import ImageCreator from '@/components/develop/shared/image-creator/ImageCreator';
+// import ImageCreator from '@/components/develop/shared/image-creator/ImageCreator';
 import { SeoSettingsRoot } from '@/components/place';
 import { Button, Flex, Grid, Text } from '@/libs/primitives';
 import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
@@ -178,13 +178,13 @@ const CreateAndEditArticle = ({ type }: Props) => {
           <RelatedPoint />
         </AccordionWrapper>
         <AccordionWrapper hero='تصویر شاخص'>
-          <FeaturedImages type={type} />
+          <FeaturedImages />
         </AccordionWrapper>
-        {type === 'edit' && (
+        {/* {type === 'edit' && (
           <AccordionWrapper hero='تصاویر'>
             <ImageCreator />
           </AccordionWrapper>
-        )}
+        )} */}
         <AccordionWrapper hero='تنظیمات SEO'>
           <SeoSettingsRoot />
         </AccordionWrapper>
