@@ -3,12 +3,11 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import { isPublishedOptions, StatusFilterOption } from '@/constants/data-management';
 import { Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
-import { updateURLWithQueryParams } from '@/libs/utils/updateUrl';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { Category, Province } from '@/types/place/place-constant';
@@ -17,40 +16,46 @@ type Props = {
   province: Province[];
   categories: Category[];
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onSubmit: () => void;
 };
 
-const PointFilter = ({ province, categories, setIsOpen }: Props) => {
+const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
   /**
    * Variables and Constant
    * _______________________________________________________________________________
    */
+  const { replace } = useRouter();
   const { control, setValue, watch, reset } = useFormContext();
   const city = province.filter(item => item.id === Number(watch('provinceId')))[0]?.Cities;
   const subCategory = categories.filter(item => item.id === Number(watch('parentCategoryId')))[0]?.children;
 
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  console.log('watch', watch());
-  console.log('subCategory', subCategory);
   /**
    * functions
    * _______________________________________________________________________________
    */
   const addFilter = () => {
-    const values = watch();
-    updateURLWithQueryParams(router, searchParams, values);
     setIsOpen(false);
   };
 
   const removeFilter = () => {
-    reset();
-    updateURLWithQueryParams(router, searchParams, {});
+    reset({
+      page: 1,
+      limit: 10,
+      provinceId: '',
+      cityId: '',
+      parentCategoryId: '',
+      arrayCatIds: [],
+      isInfoCompleted: '',
+      isPublished: '',
+      searchQuery: '',
+    });
+    replace('/data-management/point-management');
+    onSubmit();
     setIsOpen(false);
   };
 
   return (
-    <Grid height={'776px'} style={{ alignContent: 'space-between' }}>
+    <Grid maxHeight={'776px'} height={'100%'} style={{ alignContent: 'space-between' }}>
       <Grid width={'100%'} p={'4'} gapY={'4'}>
         <Grid gapY={'2'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>

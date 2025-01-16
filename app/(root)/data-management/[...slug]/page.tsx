@@ -25,9 +25,6 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   const status = params.slug[1];
   const placeID = params.slug[2];
 
-  // console.log('Status', params.slug[1]);
-  // console.log('placeId', params.slug[2]);
-
   /**
    * services
    * _______________________________________________________________________________
@@ -88,16 +85,15 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
    */
   const getTitle = () => {
     if (params.slug[0] === 'point-management') {
-      if (params.slug[1] === 'create-point') return 'ساخت نقطه';
-      if (params.slug[1] === 'point-detail') {
-        return params.slug[2] === 'edit-point' ? 'ویرایش نقطه' : 'اطلاعات نقطه';
-      }
+      if (status === 'create-point') return 'ساخت نقطه';
+      if (status === 'point-detail') return 'اطلاعات نقطه';
+      if (status === 'edit-point') return 'ویرایش نقطه';
       return 'لیست نقاط';
     }
 
     if (params.slug[0] === 'article-management') {
-      if (params.slug[1] === 'create-article') return 'ساخت مقاله';
-      if (params.slug[1] === 'edit-article') return 'ویرایش مقاله';
+      if (status === 'create-article') return 'ساخت مقاله';
+      if (status === 'edit-article') return 'ویرایش مقاله';
       return 'لیست مقالات';
     }
 

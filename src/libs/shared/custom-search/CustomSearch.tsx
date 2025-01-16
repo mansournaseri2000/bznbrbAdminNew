@@ -11,12 +11,13 @@ import { Boxshadow, colorPalette } from '@/theme';
 type CustomSearchProps = {
   placeholder: string;
   onClick: () => void;
+  defaultValue?: string;
 };
 
-const CustomSearch = forwardRef<HTMLDivElement, CustomSearchProps>(({ placeholder, onClick, ...rest }, ref) => {
+const CustomSearch = forwardRef<HTMLDivElement, CustomSearchProps>(({ placeholder, defaultValue, onClick, ...rest }, ref) => {
   return (
     <Wrapper {...rest} ref={ref} height={'fit-content'}>
-      <CustomTextField placeholder={placeholder} variant='surface' />
+      <CustomTextField placeholder={placeholder} variant='surface' defaultValue={defaultValue} />
       <IconButton size={'4'} variant='soft' onClick={onClick}>
         <Search />
       </IconButton>

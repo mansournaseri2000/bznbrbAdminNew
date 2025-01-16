@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -16,7 +16,11 @@ import { typoVariant } from '@/theme/typo-variants';
 
 import PointFilter from './PointFilter';
 
-const PointManagementHero = () => {
+type Props = {
+  onSubmit: () => void;
+};
+
+const PointManagementHero = ({ onSubmit }: Props) => {
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
@@ -24,6 +28,9 @@ const PointManagementHero = () => {
   const router = useRouter();
   const { control } = useFormContext();
   const queryClient = useQueryClient();
+
+  const searchParams = useSearchParams();
+  const getParam = (key: string) => searchParams.get(key) || '';
 
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
@@ -40,7 +47,7 @@ const PointManagementHero = () => {
   return (
     <>
       <Grid width={'100%'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 3fr ' }}>
-        <IconButton colorVariant='BLUE' variant='soft' size={'4'} onClick={() => setIsOpen(true)}>
+        <IconButton colorVariant='BLUE' variant='soft' size={'4'} type='button' onClick={() => setIsOpen(true)}>
           <Filter />
         </IconButton>
         <Button colorVariant='BLUE' variant='ghost' size={'4'} onClick={() => router.push('/data-management/point-management/create-point')}>
@@ -50,14 +57,18 @@ const PointManagementHero = () => {
           </Flex>
         </Button>
 
-        <Controller name='searchQuery' control={control} render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام نقطه' onClick={handleSubmit} />} />
+        <Controller
+          name='searchQuery'
+          control={control}
+          render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام نقطه' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} onClick={handleSubmit} />}
+        />
       </Grid>
       {/*** 
          MODAL_____________________________________________________________________________________________________________________
         ***/}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
-        <PointFilter province={constantData?.provinces ? constantData.provinces : []} categories={constantData?.categories ? constantData.categories : []} setIsOpen={setIsOpen} />
+        <PointFilter province={constantData?.provinces ? constantData.provinces : []} categories={constantData?.categories ? constantData.categories : []} setIsOpen={setIsOpen} onSubmit={onSubmit} />
       </Modal>
     </>
   );

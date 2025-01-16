@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,11 +13,11 @@ import { Flex, IconButton, Modal, SelectItem, SelectRoot } from '@/libs/primitiv
 import FilterContent from '@/libs/shared/FilterContent';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import { updateURLWithQueryParams } from '@/libs/utils/updateUrl';
 import { ArrowRight, Filter } from '@/public/icon';
 
 type Props = {
   onSubmit: () => void;
+  userId: number;
 };
 
 const UserProfileHero = (props: Props) => {
@@ -25,9 +25,8 @@ const UserProfileHero = (props: Props) => {
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const { control, watch, reset, setValue } = useFormContext();
+  const { control, reset, setValue } = useFormContext();
 
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
@@ -42,15 +41,28 @@ const UserProfileHero = (props: Props) => {
    * _______________________________________________________________________________
    */
   const addFilter = () => {
-    const values = watch();
-    updateURLWithQueryParams(router, searchParams, values);
     setIsOpen(false);
   };
 
   // TODO: fix update url for remove filters
   const removeFilter = () => {
-    reset();
-    updateURLWithQueryParams(router, searchParams, {});
+    reset({
+      page: 1,
+      limit: 10,
+      sortDate: '',
+      targetDate: '',
+      userId: '',
+      originCityId: '',
+      originProvinceId: '',
+      destinationCityId: '',
+      destinationProvinceId: '',
+      departureDateStart: '',
+      departureDateEnd: '',
+      returnDateStart: '',
+      returnDateEnd: '',
+      sort: '',
+    });
+    router.replace(`/user/${props.userId}`);
     setIsOpen(false);
   };
 

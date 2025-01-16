@@ -44,10 +44,15 @@ export const getRecentTrips = async (params: RecentTripsBody) => {
     returnDateStart: Boolean(new Date(params.returnDateStart).getTime()) ? new Date(params.returnDateStart).getTime() : null,
     returnDateEnd: Boolean(new Date(params.returnDateEnd).getTime()) ? new Date(params.returnDateEnd).getTime() : null,
     sort: null,
+    userId: null,
   };
   const body = filterObject(obj);
 
-  const res = await DevApiManager.post<ApiData<RecentTripsResponse>>('trips/recentTrips', body, {});
+  const res = await DevApiManager.post<ApiData<RecentTripsResponse>>('trips/recentTrips', body, {
+    headers: {
+      userId: params.userId,
+    },
+  });
   return res.data.data;
 };
 

@@ -98,8 +98,9 @@ const UserList = ({ data }: { data: LatestUsersDetail }) => {
       id: 'details',
       cell: ({ row }) => {
         const item = row.original;
-        const handleClick = () => {
+        const handleClick = (e: React.MouseEvent) => {
           console.log('item', item);
+          e.preventDefault();
           router.push(`/user/${item.id}`);
         };
         return (
