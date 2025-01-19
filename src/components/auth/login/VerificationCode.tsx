@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,11 +9,13 @@ import Cookies from 'universal-cookie';
 import * as Yup from 'yup';
 
 import { useGetCheckOtp, useGetMobileRegister } from '@/api/auth';
-import { Button, Flex, Grid, Text, TextField } from '@/libs/primitives';
+import { useCountdown } from '@/libs/hooks';
+import { Box, Button, Flex, Grid, Text, TextField } from '@/libs/primitives';
+import { AuthLog } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
-import Timer from './Timer';
+// import Timer from './Timer';
 
 /**
  * yup validation
@@ -36,8 +38,11 @@ const VerificationCode = () => {
    */
   const cookie = new Cookies(null, { path: '/' });
   const mobileNumber = cookie.get('mobile-number');
-  const [isEnd, setIsEnd] = useState(false);
+  // const [isEnd, setIsEnd] = useState(false);
+  const { minutes, seconds, isEnded, reset } = useCountdown(120000);
+
   const {
+    watch,
     register,
     handleSubmit,
     formState: { errors },
@@ -63,11 +68,14 @@ const VerificationCode = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = data => {
     checkOtpMutate({ mobile: mobileNumber, otp: data.verificationCode });
+    reset();
   };
 
-  const handleEndTime = (value: boolean) => {
-    setIsEnd(value);
-  };
+  // const handleEndTime = (value: boolean) => {
+  //   setIsEnd(value);
+  // };
+
+  console.log('Mobile', mobileNumber);
 
   /**
    * template
@@ -77,11 +85,19 @@ const VerificationCode = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Flex width={'100%'} direction={'column'} minHeight={'90vh'}>
-        <Flex p={'24px 16px'} width={{ initial: '100%' }} maxWidth={{ initial: '100%', md: '500px' }} m='auto' justify={'between'} direction={'column'} gap={'40px'}>
+        <Flex p={'24px 16px'} width={{ initial: '100%' }} maxWidth={'500px'} m='auto' justify={'between'} direction={'column'} gap={'40px'}>
+          <Flex direction={'column'} gap={'5'} width={'100%'}>
+            <Box mx={'auto'}>
+              <AuthLog width={'164px'} height={'124px'} />
+            </Box>
+            <Text {...typoVariant.paragraph1} style={{ color: colorPalette.gray[11] }}>
+              {`کد تایید ارسال شده به شماره موبایل ${Boolean(mobileNumber) ? mobileNumber : ''} را وارد کنید.`}
+            </Text>
+          </Flex>
           <Flex direction={'column'} gap={'10px'}>
             <TextField type='number' errorText={errors.verificationCode?.message} autoFocus id='verificationCode' {...register('verificationCode')} size={'3'} placeholder='کد تایید' />
-            <Grid gap={'16px'}>
-              <Button variant='soft' size={'4'}>
+            <Grid gap={'16px'} columns={'2'}>
+              <Button variant='soft' disabled={String(watch('verificationCode')).length < 6} size={'4'}>
                 {checkOtpIsPending ? (
                   <Spinner />
                 ) : (
@@ -92,8 +108,9 @@ const VerificationCode = () => {
               </Button>
               <Button
                 onClick={() => {
-                  if (isEnd) {
+                  if (isEnded) {
                     mobileRegisterMutate(mobileNumber);
+                    reset();
                   }
                 }}
                 type='button'
@@ -101,8 +118,17 @@ const VerificationCode = () => {
                 colorVariant='PINK'
               >
                 <Flex gap={'5px'}>
-                  {!isEnd && <Timer handleEndTime={handleEndTime} />}
-                  {isEnd && !mobileRegisterIsPending && (
+                  {/* {!isEnded && <Timer handleEndTime={handleEndTime} />} */}
+                  {!isEnded && (
+                    <Text
+                      {...typoVariant.body2}
+                      style={{
+                        color: colorPalette.pink[11],
+                        paddingRight: '10px',
+                      }}
+                    >{`${minutes}:${seconds}`}</Text>
+                  )}
+                  {isEnded && !mobileRegisterIsPending && (
                     <Text {...typoVariant.body1} style={{ color: colorPalette.pink[11] }}>
                       ارسال مجدد
                     </Text>
