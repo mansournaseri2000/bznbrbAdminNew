@@ -57,8 +57,6 @@ const UserPlan = ({ data, isLoading, userId }: Props) => {
 
   const { commonViewListItem, mapViewListItem } = useGetTripViewList(dayID, data?.days);
 
-  console.log('data', data);
-
   /*
     ***
     functions_______________________________________________________________________________

@@ -43,6 +43,7 @@ export default function UserProfile({
     departureDateEnd: string;
     returnDateStart: string;
     returnDateEnd: string;
+    sort: string;
   };
 }) {
   /*
@@ -72,7 +73,7 @@ export default function UserProfile({
       departureDateEnd: searchParams.departureDateEnd ? Number(searchParams.departureDateEnd) : '',
       returnDateStart: searchParams.returnDateStart ? Number(searchParams.returnDateStart) : '',
       returnDateEnd: searchParams.returnDateEnd ? Number(searchParams.returnDateEnd) : '',
-      sort: '',
+      sort: searchParams.sort || '',
     },
   });
 
@@ -88,8 +89,8 @@ export default function UserProfile({
     mutationFn: async (body: RecentTripsBody) => getRecentTrips(body),
     onSuccess: async data => {
       const cleanedData = Object.fromEntries(
-        Object.entries(watch()).filter(
-          ([key, value]) =>
+        Object.entries(watch()).filter(([key, value]) => {
+          if (
             key !== 'userId' &&
             value !== undefined &&
             value !== '' &&
@@ -97,13 +98,26 @@ export default function UserProfile({
             value !== null &&
             !(Array.isArray(value) && value.length === 0) &&
             !(Array.isArray(value) && value.every(item => item === '')) &&
-            !(Array.isArray(value) && value.every(item => item === 'none')) &&
-            !(typeof value === 'object' && value !== null && Object.keys(value).length === 0)
-        )
+            !(Array.isArray(value) && value.every(item => item === 'none'))
+          ) {
+            if (['departureDateStart', 'departureDateEnd', 'returnDateStart', 'returnDateEnd'].includes(key)) {
+              return new Date(value).getTime();
+            }
+            return true;
+          }
+          return false;
+        })
       );
+
+      Object.keys(cleanedData).forEach(key => {
+        if (['departureDateStart', 'departureDateEnd', 'returnDateStart', 'returnDateEnd'].includes(key)) {
+          cleanedData[key] = new Date(cleanedData[key]).getTime();
+        }
+      });
+
       const searchParams = generateSearchParams(cleanedData);
       push(`/user/${userId}?${searchParams}`);
-      console.log('OnSuccess', data);
+      console.log('data', data);
     },
     onError: async data => {
       console.log('OnError', data);

@@ -30,11 +30,11 @@ const ArticleManagement = () => {
 
   const methods = useForm({
     defaultValues: {
-      title: getParam('title') || '',
-      created_atStart: getParam('created_atStart') || '',
-      created_atEnd: getParam('created_atEnd') || '',
-      categoryId: getParam('categoryId') || '',
-      is_published: getParam('is_published') || '',
+      title: getParam('title') ? getParam('title') : '',
+      created_atStart: getParam('created_atStart') ? Number(getParam('created_atStart')) : '',
+      created_atEnd: getParam('created_atEnd') ? Number(getParam('created_atEnd')) : '',
+      categoryId: getParam('categoryId') ? Number(getParam('categoryId')) : '',
+      is_published: getParam('is_published') ? getParam('is_published') : '',
     },
   });
   const { watch, handleSubmit } = methods;
@@ -51,17 +51,31 @@ const ArticleManagement = () => {
     mutationFn: async (body: ArticleListBody) => getArticleList(page, body),
     onSuccess: async data => {
       const cleanedData = Object.fromEntries(
-        Object.entries(watch()).filter(
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          ([_, value]) =>
+        Object.entries(watch()).filter(([key, value]) => {
+          if (
             value !== undefined &&
             value !== '' &&
             value !== 'none' &&
             value !== null &&
             !(Array.isArray(value) && value.length === 0) &&
-            !(typeof value === 'object' && value !== null && Object.keys(value).length === 0)
-        )
+            !(Array.isArray(value) && value.every(item => item === '')) &&
+            !(Array.isArray(value) && value.every(item => item === 'none'))
+          ) {
+            if (['created_atStart', 'created_atEnd'].includes(key)) {
+              return new Date(value).getTime();
+            }
+            return true;
+          }
+          return false;
+        })
       );
+
+      Object.keys(cleanedData).forEach(key => {
+        if (['created_atStart', 'created_atEnd'].includes(key)) {
+          cleanedData[key] = new Date(cleanedData[key]).getTime();
+        }
+      });
+
       const searchParams = generateSearchParams(cleanedData);
       push(`/data-management/article-management?${searchParams}`);
       console.log('data', data);

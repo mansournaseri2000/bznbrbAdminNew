@@ -28,10 +28,6 @@ type Props = {
 };
 
 const PointManagementList = (props: Props) => {
-  // const [placeItem, setPlaceItem] = useState<PlacesDetail>(props?.data[0]);
-  // const [isOpen, setIsOpen] = useState(false);
-
-  // const { push } = useRouter();
   const router = useRouter();
 
   const columns: ColumnDef<PointListDetail>[] = [
@@ -131,8 +127,9 @@ const PointManagementList = (props: Props) => {
       id: 'details',
       cell: ({ row }) => {
         const item = row.original;
-        const handleClick = () => {
+        const handleClick = (e: React.MouseEvent) => {
           console.log('item', item);
+          e.preventDefault();
           router.push(`/data-management/point-management/point-detail/${item.id}`);
         };
         return (

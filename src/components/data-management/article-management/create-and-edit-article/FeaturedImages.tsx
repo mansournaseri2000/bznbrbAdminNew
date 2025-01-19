@@ -20,7 +20,7 @@ const FeaturedImages = () => {
   const { watch } = useFormContext();
   return (
     <>
-      {watch('pic').length === 0 ? (
+      {watch('pic')?.length === 0 ? (
         <Flex width={'100%'} direction={'column'} justify={'center'} align={'center'} gap={'32px'}>
           <Heading as='h3' size={'3'} style={{ color: colorPalette.gray[11] }}>
             هنوز تصویر شاخصی اضافه نشده است.

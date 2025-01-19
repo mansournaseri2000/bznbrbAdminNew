@@ -31,7 +31,7 @@ const PlansDetail = ({ params }: { params: { slug: string[] } }) => {
     queryFn: async () => getAllPlacesConstants(),
   });
 
-  console.log('data', data);
+  // console.log('data', data);
 
   const renderElement = () => {
     switch (type) {

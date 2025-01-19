@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -27,7 +27,9 @@ const UserProfileHero = (props: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const { control, reset, setValue } = useFormContext();
+  const searchParams = useSearchParams();
 
+  const getParam = (key: string) => searchParams.get(key) || '';
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
    */
@@ -51,7 +53,7 @@ const UserProfileHero = (props: Props) => {
       limit: 10,
       sortDate: '',
       targetDate: '',
-      userId: '',
+      userId: props.userId,
       originCityId: '',
       originProvinceId: '',
       destinationCityId: '',
@@ -63,6 +65,7 @@ const UserProfileHero = (props: Props) => {
       sort: '',
     });
     router.replace(`/user/${props.userId}`);
+    props.onSubmit();
     setIsOpen(false);
   };
 
@@ -87,7 +90,7 @@ const UserProfileHero = (props: Props) => {
   return (
     <>
       <Flex width={'100%'} align={'center'} justify={'between'}>
-        <IconButton colorVariant='BLUE' variant='soft' size={'4'} onClick={() => setIsOpen(true)}>
+        <IconButton colorVariant='BLUE' variant='soft' type='button' size={'4'} onClick={() => setIsOpen(true)}>
           <Filter />
         </IconButton>
 
@@ -100,7 +103,7 @@ const UserProfileHero = (props: Props) => {
                 size={'3'}
                 {...field}
                 placeholder='مرتب سازی بر اساس'
-                value={String(field.value)}
+                value={String(field.value || getParam('sort'))}
                 onValueChange={val => {
                   const currentItem = userDetailSortConstant.find(item => item.id === Number(val));
                   handleSortItems(currentItem?.id as any);
@@ -121,7 +124,7 @@ const UserProfileHero = (props: Props) => {
       </Flex>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
-        <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
+        <FilterContent province={constantData?.provinces ? constantData.provinces : []} onSubmit={props.onSubmit} />
         <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} />
       </Modal>
     </>

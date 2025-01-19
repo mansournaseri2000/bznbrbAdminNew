@@ -12,9 +12,10 @@ import CustomDatePicker from './CustomDatePicker';
 
 type Props = {
   province: Province[];
+  onSubmit: () => void;
 };
 
-const FilterContent = ({ province }: Props) => {
+const FilterContent = ({ province, onSubmit }: Props) => {
   /**
    * Variables and Constant
    * _______________________________________________________________________________
@@ -153,6 +154,7 @@ const FilterContent = ({ province }: Props) => {
                 onChangeValue={(val: any) => {
                   setValue('departureDateStart', new Date(val));
                   setValue('departureDateEnd', sample(new Date(val)));
+                  onSubmit();
                 }}
               />
             )}
@@ -169,6 +171,7 @@ const FilterContent = ({ province }: Props) => {
                 placeholder='تا تاریخ'
                 onChangeValue={(val: any) => {
                   setValue('departureDateEnd', new Date(val));
+                  onSubmit();
                 }}
                 disabled={!watch('departureDateStart')}
               />
@@ -193,6 +196,7 @@ const FilterContent = ({ province }: Props) => {
                 onChangeValue={(val: any) => {
                   setValue('returnDateStart', new Date(val));
                   setValue('returnDateEnd', sample(new Date(val)));
+                  onSubmit();
                 }}
               />
             )}
@@ -209,6 +213,7 @@ const FilterContent = ({ province }: Props) => {
                 placeholder='تا تاریخ'
                 onChangeValue={(val: any) => {
                   setValue('returnDateEnd', new Date(val));
+                  onSubmit();
                 }}
                 disabled={!watch('returnDateStart')}
               />

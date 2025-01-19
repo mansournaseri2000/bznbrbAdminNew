@@ -93,7 +93,7 @@ const PlansHero = (props: Props) => {
           <Filter />
         </IconButton>
 
-        <Button colorVariant='BLUE' variant='ghost' size={'4'} onClick={() => router.push('/plans/create-plan')}>
+        <Button colorVariant='BLUE' variant='ghost' type='button' size={'4'} onClick={() => router.push('/plans/create-plan')}>
           <Flex gap={'2'} align={'center'}>
             <Text {...typoVariant.body1}>+</Text>
             <Text {...typoVariant.body1}> افزودن نقطه</Text>
@@ -113,7 +113,7 @@ const PlansHero = (props: Props) => {
               {...field}
               placeholder='مرتب سازی بر اساس'
               size={'3'}
-              value={String(field.value)}
+              value={String(field.value || getParam('sort'))}
               onValueChange={val => {
                 const currentItem = userDetailSortConstant.find(item => item.id === Number(val));
                 handleSortItems(currentItem?.id as any);
@@ -132,7 +132,7 @@ const PlansHero = (props: Props) => {
       </Grid>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
-        <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
+        <FilterContent province={constantData?.provinces ? constantData.provinces : []} onSubmit={props.onSubmit} />
         <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} />
       </Modal>
     </>
