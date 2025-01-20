@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
 
-import { Button, Flex, Grid, SelectItem, SelectRoot, Text, TextArea, TextField } from '@/libs/primitives';
-import { Divider } from '@/libs/shared';
-import { colorPalette } from '@/theme';
-import { typoVariant } from '@/theme/typo-variants';
+import { Grid, SelectItem, SelectRoot, TextField } from '@/libs/primitives';
+// import { Divider } from '@/libs/shared';
+// import { colorPalette } from '@/theme';
+// import { typoVariant } from '@/theme/typo-variants';
 import { Province } from '@/types/place/place-constant';
 
 const PlaceMap = dynamic(() => import('./PlaceMap'), { ssr: false });
@@ -27,57 +27,57 @@ const GeographicalLocationRoot = ({ province }: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const { control, setValue, watch } = useFormContext();
+  const { control, setValue } = useFormContext();
   const provinceId = useWatch({ name: 'provinceId' });
   const cityID = useWatch({ name: 'cityID' });
   const lat = useWatch({ name: 'lat' });
   const lng = useWatch({ name: 'lng' });
   const city = province.filter(item => item.id === Number(provinceId))[0]?.Cities;
 
-  const [state, setState] = useState<string>(watch('vehicleOptions')[0]?.key);
-  const [index, setIndex] = useState(0);
+  // const [state, setState] = useState<string>(watch('vehicleOptions')[0]?.key);
+  // const [index, setIndex] = useState(0);
 
-  const vehicleOptions = useWatch({ control, name: 'vehicleOptions' }) || [];
+  // const vehicleOptions = useWatch({ control, name: 'vehicleOptions' }) || [];
 
-  const watchedContent = useWatch({
-    control,
-    name: `vehicleOptions[${index}].content`,
-    defaultValue: vehicleOptions[index]?.content || '',
-  });
+  // const watchedContent = useWatch({
+  //   control,
+  //   name: `vehicleOptions[${index}].content`,
+  //   defaultValue: vehicleOptions[index]?.content || '',
+  // });
 
-  const [content, setContent] = useState(watchedContent); // Local state for managing content
+  // const [content, setContent] = useState(watchedContent); 
 
   /**
    * useEffect
    * _______________________________________________________________________________
    */
-  useEffect(() => {
-    setContent(watch(`vehicleOptions[${index}].content`)); // Update content with the watched value
-  }, [index]);
+  // useEffect(() => {
+  //   setContent(watch(`vehicleOptions[${index}].content`)); 
+  // }, [index]);
   /**
-   * hooks and methods
+   * hooks and methods 
    * _______________________________________________________________________________
    */
-  const handleButtonNames = (value: string) => {
-    switch (value) {
-      case 'taxi':
-        return 'تاکسی';
-      case 'car':
-        return 'ماشین شخصی';
-      case 'train':
-        return 'قطار';
-      case 'subway':
-        return 'مترو';
-      case 'ship':
-        return 'کشتی';
-      case 'airplane':
-        return 'هواپیما';
-      case 'hike':
-        return 'پیاده روی';
-      case 'bus':
-        return 'اتوبوس';
-    }
-  };
+  // const handleButtonNames = (value: string) => {
+  //   switch (value) {
+  //     case 'taxi':
+  //       return 'تاکسی';
+  //     case 'car':
+  //       return 'ماشین شخصی';
+  //     case 'train':
+  //       return 'قطار';
+  //     case 'subway':
+  //       return 'مترو';
+  //     case 'ship':
+  //       return 'کشتی';
+  //     case 'airplane':
+  //       return 'هواپیما';
+  //     case 'hike':
+  //       return 'پیاده روی';
+  //     case 'bus':
+  //       return 'اتوبوس';
+  //   }
+  // };
 
   /**
    * template
@@ -158,7 +158,7 @@ const GeographicalLocationRoot = ({ province }: Props) => {
        ***
        */}
       <PlaceMap location={Boolean(lat) || Boolean(lng) ? [Number(lat), Number(lng)] : [0, 0]} />
-      <Divider style={{ color: colorPalette.gray[6], marginTop: 12 }} />
+      {/* <Divider style={{ color: colorPalette.gray[6], marginTop: 12 }} /> */}
       {/*
        ***
         BOTTOM section for navigation Vehicles
@@ -167,7 +167,7 @@ const GeographicalLocationRoot = ({ province }: Props) => {
        _______________________________________________________________________________
        ***
        */}
-      <Flex direction={'column'} gap={'28px'}>
+      {/* <Flex direction={'column'} gap={'28px'}>
         <Text {...typoVariant.title2} style={{ color: colorPalette.gray[12], fontWeight: 700 }}>
           چجوری بریم
         </Text>
@@ -207,7 +207,7 @@ const GeographicalLocationRoot = ({ province }: Props) => {
             )}
           />
         </Flex>
-      </Flex>
+      </Flex> */}
     </Grid>
   );
 };

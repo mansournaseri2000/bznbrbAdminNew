@@ -22,7 +22,7 @@ const SelectPrimaryImage = ({ picture }: Props) => {
     <FormProvider {...methods}>
       <Grid width={'100%'} gapX={'10px'} p={'12px'} style={{ gridTemplateColumns: 'auto 2fr auto', border: `1px solid ${colorPalette.gray[6]}`, borderRadius: 8 }}>
         <Box width={'610px'} height={'342px'} position={'relative'}>
-          <Image src={`${process.env.NEXT_PUBLIC_BASE_URL_image}${picture.path}`} alt='تصویر شاخص' fill style={{ borderRadius: 8 }} />
+          <Image src={picture ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${picture.path}` : ''} alt='تصویر شاخص' fill style={{ borderRadius: 8 }} />
         </Box>
         <Flex direction={'column'} gap={'2'}>
           <Controller name='text' control={control} render={({ field }) => <TextField {...field} placeholder='Alt Text' style={{ borderRadius: 12 }} />} />

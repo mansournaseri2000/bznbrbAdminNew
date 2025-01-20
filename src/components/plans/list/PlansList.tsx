@@ -105,7 +105,7 @@ const PlansList = (props: PlansListProps) => {
         const handleClick = (e: React.MouseEvent) => {
           console.log('item', item);
           e.preventDefault();
-          router.push(`/plans/user-plan/${item.userId}/${item.tripId}`);
+          router.push(`/plans/user-plan/${item.tripId}`);
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>

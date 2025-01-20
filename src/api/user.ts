@@ -57,7 +57,12 @@ export const getRecentTrips = async (params: RecentTripsBody) => {
 };
 
 export const editUser = async (id: number, params: EditUserDetailResponse) => {
-  const res = await DevApiManager.patch<ApiData<EditUserDetailResponse>>(`user/profile/partiallyEditUser/${id}`, params);
+  const obj = {
+    ...params,
+    mobile: null,
+  };
+  const body = filterObject(obj);
+  const res = await DevApiManager.patch<ApiData<EditUserDetailResponse>>(`user/profile/partiallyEditUser/${id}`, body);
   return res.data;
 };
 

@@ -7,12 +7,12 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import styled from 'styled-components';
 
+import { Boxshadow, colorPalette } from '@/theme';
 import { MapView } from '@/types/plans/trip';
 
 // import { breakpoints } from '@/theme';
 import MapCenterUpdater from './MapCenterUpdater';
 import PopupCard from './PopupCard';
-import { Boxshadow, colorPalette } from '@/theme';
 
 // Fix for default marker icon issue in Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -29,7 +29,7 @@ type Props = {
 };
 
 const TripMapView: React.FC<Props> = ({ locations, center, isEmpty }) => {
-  const latlngs = isEmpty ? [] : locations.map(item => [item.lat, item.lng]);
+  const latlngs = isEmpty ? [] : locations.map(item => [Number(item.lat), Number(item.lng)]);
 
   return (
     <>
@@ -63,7 +63,7 @@ const TripMapView: React.FC<Props> = ({ locations, center, isEmpty }) => {
           {locations.map((item, index) => (
             <Marker
               key={index}
-              position={[item.lat, item.lng]}
+              position={Boolean(item.lat) && Boolean(item.lng) ? [Number(item.lat), Number(item.lng)] : [0, 0]}
               icon={L.divIcon({
                 html: `
               <div style="position: relative; display: inline-block;">
@@ -84,7 +84,15 @@ const TripMapView: React.FC<Props> = ({ locations, center, isEmpty }) => {
             >
               <Popup>
                 <Theme style={{ direction: 'rtl' }}>
-                  <PopupCard description={item?.description} imageUrl={item?.pic[0]?.path} lat={item?.lat} lng={item?.lng} title={item?.title} key={index} id={item?.point_id} />
+                  <PopupCard
+                    description={item?.description}
+                    imageUrl={Boolean(item.pic) ? item?.pic[0]?.path : ''}
+                    lat={Boolean(item.lat) ? item?.lat : 0}
+                    lng={Boolean(item.lng) ? item?.lng : 0}
+                    title={item?.title}
+                    key={index}
+                    id={item?.point_id}
+                  />
                 </Theme>
               </Popup>
             </Marker>

@@ -64,7 +64,7 @@ const AddComment = ({ handleClose, data, dayID, pointID }: Props) => {
   } = useForm<FormData>({
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      comment: data.days?.find(day => day.day_id === dayID)?.commonView?.find(view => view.point_id === pointID)?.comment || '',
+      comment: data.trip.data.days?.find(day => day.day_id === dayID)?.commonView?.find(view => view.point_id === pointID)?.comment || '',
     },
   });
 

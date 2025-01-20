@@ -42,7 +42,6 @@ const EditUser = ({ onClose, userId, data }: Props) => {
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
-  // const { control, setValue, watch } = useFormContext();
   const { control, setValue, watch } = useForm({
     defaultValues: {
       name: data?.userInfo.name,
@@ -102,7 +101,7 @@ const EditUser = ({ onClose, userId, data }: Props) => {
             />
           )}
         />
-        <Controller name='mobile' control={control} render={({ field }) => <TextField {...field} placeholder='شماره تماس' />} />
+        <Controller name='mobile' control={control} render={({ field }) => <TextField disabled {...field} placeholder='شماره تماس' />} />
         <Controller name='email' control={control} render={({ field }) => <TextField {...field} placeholder='ایمیل' />} />
       </Grid>
       <ModalAction
