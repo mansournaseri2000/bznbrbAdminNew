@@ -173,3 +173,7 @@ export interface PlaceImproveContentDataDetail {
   address: string;
   placeId: number;
 }
+
+export type CreatePointButtonTypes = 'place-info' | 'geographical-location' | 'routing' | 'description' | 'features-facilities' | 'analysis' | 'travel-time' | 'seo-setting';
+
+export type EditPointButtonTypes = CreatePointButtonTypes | 'images' | 'improve-content' | 'comments';

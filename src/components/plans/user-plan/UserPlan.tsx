@@ -7,9 +7,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
-import { useQuery } from '@tanstack/react-query';
 
-import { getUserInfo } from '@/api/user';
+// import { useQuery } from '@tanstack/react-query';
+// import { getUserInfo } from '@/api/user';
 import { useGetTripViewList } from '@/libs/hooks/useGetTripViewList';
 import { Button, Flex, Grid, Heading, Text } from '@/libs/primitives';
 import LazyLoadWrapper from '@/libs/shared/LazyLoadWrapper';
@@ -20,6 +20,7 @@ import { typoVariant } from '@/theme/typo-variants';
 import { TripResponse } from '@/types/plans/trip';
 
 import UserDetailCard from '../../../libs/shared/UserDetailCard';
+import AdminDetailCard from '../admin-detail-card/AdminDetailCard';
 import TripCommonView from './common-view/TripCommonView';
 import DayList from './day-list/DayList';
 
@@ -27,23 +28,16 @@ const TripMapView = dynamic(() => import('@/components/plans/user-plan/map-view/
 
 type Props = {
   data: TripResponse;
-  tripID: string;
-  userId: number;
   isLoading: boolean;
 };
 
-const UserPlan = ({ data, isLoading, userId }: Props) => {
-  /*
-   *** Services_________________________________________________________________________________________________________________________________________________________________
-   */
-  const { data: userData, isLoading: userLoading, isFetching: userFetching } = useQuery({ queryKey: ['user_info'], queryFn: async () => getUserInfo(userId) });
-
+const UserPlan = ({ data, isLoading }: Props) => {
   /*
     *** 
     variables and constant_______________________________________________________________________________
     ***
   */
-  const [dayID, setDayID] = useState<number>(data?.days?.length > 0 ? data?.days[0]?.day_id : 0);
+  const [dayID, setDayID] = useState<number>(data?.trip.data.days?.length > 0 ? data?.trip.data.days[0]?.day_id : 0);
   const router = useRouter();
   /*
     ***
@@ -52,12 +46,10 @@ const UserPlan = ({ data, isLoading, userId }: Props) => {
   */
 
   useEffect(() => {
-    setDayID(data?.days[0]?.day_id);
+    setDayID(data?.trip.data.days[0]?.day_id);
   }, [data]);
 
-  const { commonViewListItem, mapViewListItem } = useGetTripViewList(dayID, data?.days);
-
-  console.log('data', data);
+  const { commonViewListItem, mapViewListItem } = useGetTripViewList(dayID, data?.trip.data.days);
 
   /*
     ***
@@ -74,10 +66,16 @@ const UserPlan = ({ data, isLoading, userId }: Props) => {
   return (
     <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
       <Grid width={'100%'} gapY={'5'}>
-        {userLoading || userFetching ? (
+        {isLoading ? (
           <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} />
         ) : (
-          <UserDetailCard {...(userData?.userInfo as any)} type='PLAN' onShowProfile={() => router.push(`/user/${userId}`)} />
+          <>
+            {!data?.user.isAdmin ? (
+              <UserDetailCard {...(data?.user as any)} pic={data?.user.profile} type='PLAN' onShowProfile={() => router.push(`/user/${data?.user.id}`)} />
+            ) : (
+              <AdminDetailCard fullName={data?.user.fullName ? data.user.fullName : ''} createTime={data?.user.createTime ? data.user.createTime : 0} />
+            )}
+          </>
         )}
         {/* 
         ***
@@ -91,8 +89,8 @@ const UserPlan = ({ data, isLoading, userId }: Props) => {
         ***
       */}
           <BoxWrapper hero='برنامه سفر' height={'auto'}>
-            <Flex direction={'column'}>{data?.days?.length > 0 && <DayList dayList={data.days} onChangeDay={handleChangeDayID} currentDayId={dayID} />}</Flex>
-            {data?.days?.length > 0 ? (
+            <Flex direction={'column'}>{data?.trip.data.days?.length > 0 && <DayList dayList={data.trip.data.days} onChangeDay={handleChangeDayID} currentDayId={dayID} />}</Flex>
+            {data?.trip.data.days?.length > 0 ? (
               <LazyLoadWrapper>
                 <TripCommonView dayID={dayID} listItem={commonViewListItem} />
               </LazyLoadWrapper>
@@ -136,13 +134,14 @@ const UserPlan = ({ data, isLoading, userId }: Props) => {
             </Flex>
           ) : (
             <Flex position={'relative'} style={{ flex: 1 }}>
-              <TripMapView isEmpty={data?.days?.length === 0} locations={data?.days?.length > 0 ? mapViewListItem : ([35.6892, 51.389] as any)} center={getMapCenter(mapViewListItem)} />
+              <TripMapView
+                isEmpty={data?.trip.data.days?.length === 0}
+                locations={data?.trip.data.days?.length > 0 ? mapViewListItem : ([35.6892, 51.389] as any)}
+                center={getMapCenter(mapViewListItem)}
+              />
             </Flex>
           )}
-
-          {/* <Flex style={{ border: '1px solid red' }}>map</Flex> */}
         </Grid>
-        {/* <UserPlanner /> */}
       </Grid>
     </Grid>
   );

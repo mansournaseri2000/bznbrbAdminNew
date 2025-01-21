@@ -13,10 +13,8 @@ import { Box, Flex } from '@/libs/primitives';
 
 const PlansDetail = ({ params }: { params: { slug: string[] } }) => {
   const type = params.slug[0];
-  const userId = Number(params.slug[1]);
-  console.log('🚀 ~ PlansDetail ~ userId:', userId);
-  const tripId = params.slug[2];
-  console.log('🚀 ~ PlansDetail ~ tripId:', tripId);
+  // const userId = Number(params.slug[1]);
+  const tripId = params.slug[1];
 
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
@@ -31,7 +29,7 @@ const PlansDetail = ({ params }: { params: { slug: string[] } }) => {
     queryFn: async () => getAllPlacesConstants(),
   });
 
-  console.log('data', data);
+  // console.log('data', data);
 
   const renderElement = () => {
     switch (type) {
@@ -40,7 +38,7 @@ const PlansDetail = ({ params }: { params: { slug: string[] } }) => {
       case 'user-plan':
         switch (tripId) {
           case tripId:
-            return <UserPlan data={data?.data as any} tripID={tripId} userId={userId} isLoading={isLoading} />;
+            return <UserPlan data={data?.data as any} isLoading={isLoading} />;
           default:
             return null;
         }

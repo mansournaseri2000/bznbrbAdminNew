@@ -16,9 +16,9 @@
       "static/chunks/6648-2ae15bcb8e9db446.js",
       "static/chunks/7138-fb549812a7102d66.js",
       "static/chunks/4684-0511974fef1702d4.js",
-      "static/chunks/6396-9f53fd8ad5de7c1a.js",
-      "static/chunks/3882-26487f1488d408f1.js",
-      "static/chunks/341-562c85000733203d.js"
+      "static/chunks/6396-ecd6173ed2e1e83d.js",
+      "static/chunks/722-f2262a2a75448b0d.js",
+      "static/chunks/341-df66858581685768.js"
     ]
   },
   "src/components/data-management/article-management/create-and-edit-article/TextContent.tsx -> react-draft-wysiwyg": {
@@ -52,7 +52,7 @@
     "files": [
       "static/css/d3e383b9ef67ddcb.css",
       "static/chunks/d0deef33.a258e96be4bdf431.js",
-      "static/chunks/8848.40b819ba5560a383.js"
+      "static/chunks/8848.60d368ffefd7a8cb.js"
     ]
   },
   "src/components/employee/action-list/pagination/ActionListPagination.tsx -> react-responsive-pagination": {
@@ -94,7 +94,7 @@
     "files": [
       "static/css/d3e383b9ef67ddcb.css",
       "static/chunks/d0deef33.a258e96be4bdf431.js",
-      "static/chunks/8329.e82d82867fd93efe.js"
+      "static/chunks/8329.6863c682b2ab9bcb.js"
     ]
   },
   "src/components/user/list/UserList.tsx -> @/libs/shared/Table": {

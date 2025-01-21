@@ -14,7 +14,7 @@ import { ArticleSDetail } from '@/types/data-management/article';
 
 interface ArticleDetail {
   title: string;
-  categoryName: string;
+  Category: string;
   is_published: boolean;
   id: number;
 }
@@ -48,7 +48,7 @@ const ArticleManagementList = (props: Props) => {
       },
     },
     {
-      accessorKey: 'categoryName',
+      accessorKey: 'Category.name',
       header: 'دسته بندی',
       cell: info => {
         const value = info.getValue() as string | null;
@@ -86,8 +86,9 @@ const ArticleManagementList = (props: Props) => {
       id: 'details',
       cell: ({ row }) => {
         const item = row.original;
-        const handleClick = () => {
+        const handleClick = (e: React.MouseEvent) => {
           console.log('item', item);
+          e.preventDefault();
           router.push(`/data-management/article-management/edit-article/${item.id}`);
         };
         return (

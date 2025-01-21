@@ -5,6 +5,7 @@ export { default as Archive } from './Archive';
 export { default as ArrowLeftCustomButton } from './ArrowLeftCustomButton';
 export { default as ArrowRight } from './ArrowRight';
 export { default as AuthBackground } from './AuthBackground';
+export { default as AuthLog } from './AuthLog';
 export { default as BlueTriangleLeft } from './BlueTriangleLeft';
 export { default as BlueTriangleRight } from './BlueTriangleRight';
 export { default as Bus } from './Bus';

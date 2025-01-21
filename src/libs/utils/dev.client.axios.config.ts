@@ -5,7 +5,7 @@ import Cookies from 'universal-cookie';
 
 // Create an instance of axios
 export const DevApiManager = axios.create({
-  baseURL: 'https://api-dev.darkube.app/v1/',
+  baseURL: 'https://apibznpaneldev.darkube.app/v1/',
   // baseURL: 'http://37.32.8.14:3005/v1/',
   headers: {
     'Content-Type': 'application/json',

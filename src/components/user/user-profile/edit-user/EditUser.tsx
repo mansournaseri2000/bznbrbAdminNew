@@ -1,11 +1,13 @@
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+import Image from 'next/image';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { editUser, EditUserDetailResponse } from '@/api/user';
 import { genderConstant } from '@/constants/users';
-import { Flex, Grid, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
+import { Box, Flex, Grid, SelectItem, SelectRoot, TextField } from '@/libs/primitives';
 import CustomDatePicker from '@/libs/shared/CustomDatePicker';
 import ModalAction from '@/libs/shared/ModalAction';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
@@ -42,7 +44,6 @@ const EditUser = ({ onClose, userId, data }: Props) => {
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
-  // const { control, setValue, watch } = useFormContext();
   const { control, setValue, watch } = useForm({
     defaultValues: {
       name: data?.userInfo.name,
@@ -60,9 +61,14 @@ const EditUser = ({ onClose, userId, data }: Props) => {
   return (
     <Grid width={'100%'} gap={'5'} style={{ backgroundColor: colorPalette.gray[2] }}>
       <Flex width={'100%'} justify={'center'} mt={'5'}>
-        <Flex width={'120px'} height={'120px'} justify={'center'} align={'center'} style={{ border: '1px solid gray', borderRadius: '100%' }}>
-          <Text>image picker</Text>
-        </Flex>
+        <Box width={'120px'} height={'120px'} position={'relative'}>
+          <Image
+            src={watch('pic') ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${watch('pic')}` : ''}
+            alt='تصویر کاربر'
+            fill
+            style={{ borderRadius: '100px', border: `1px solid ${colorPalette.blue[9]}` }}
+          />
+        </Box>
       </Flex>
       <Grid columns={'2'} gap={'5'} px={'5'}>
         <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='نام' />} />
@@ -99,10 +105,11 @@ const EditUser = ({ onClose, userId, data }: Props) => {
               onChangeValue={(val: any) => {
                 setValue('birthday', Number(new Date(val)));
               }}
+              style={{ backgroundColor: colorPalette.gray[1] }}
             />
           )}
         />
-        <Controller name='mobile' control={control} render={({ field }) => <TextField {...field} placeholder='شماره تماس' />} />
+        <Controller name='mobile' control={control} render={({ field }) => <TextField disabled {...field} placeholder='شماره تماس' />} />
         <Controller name='email' control={control} render={({ field }) => <TextField {...field} placeholder='ایمیل' />} />
       </Grid>
       <ModalAction

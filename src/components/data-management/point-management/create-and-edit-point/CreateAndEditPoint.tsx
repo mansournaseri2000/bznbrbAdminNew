@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import React, { useState } from 'react';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -9,18 +9,21 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { createPlace, editPlace } from '@/api/place';
+import FilterCard from '@/components/develop/shared/filter-card/FilterCard';
 import { AnalysisRoot, FeaturesAndFacilities, GeographicalLocationRoot, PlaceInfo, SeoSettingsRoot } from '@/components/place';
 import { fomrData, placeCategories, placeTripLimitations, placeTripSeasons, placeTripTypes } from '@/components/place/create-edit-place/defaultValues';
 import ImageGallery from '@/components/place/create-edit-place/ImageGallery';
 import PrimaryImage from '@/components/place/create-edit-place/PrimaryImage';
-import { pointTypeOptions } from '@/constants/data-management';
+import RoutingGuid from '@/components/place/create-edit-place/routing-guid/RoutingGuid';
+import { createPointTabsOptions, editPointTabsOptions } from '@/constants/data-management';
 import { categoriesConstants, placeWorkTimeSchedule, seasons } from '@/constants/place';
-import { Button, Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import { Button, Flex, Grid, SelectRoot, Text } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
-import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
+import SimpleWrapper2 from '@/libs/shared/wrapper/SimpleWrapper2';
 import { serializeCategories, serializeFeatures, serializePlaceWorkTimeSchedule, serializeTripLimitations, serializeTripSeasons } from '@/libs/utils';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
+import { CreatePointButtonTypes, EditPointButtonTypes } from '@/types/data-management/point';
 import { PlaceConstantResponse, PlaceResponse } from '@/types/place';
 
 const Description = dynamic(() => import('@/components/place/create-edit-place/description/Description'), {
@@ -125,6 +128,12 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
    * const and variables
    * _______________________________________________________________________________
    */
+
+  const [buttonState, setButtonState] = useState<typeof status extends 'create-point' ? CreatePointButtonTypes : EditPointButtonTypes>(status === 'create-point' ? 'place-info' : 'place-info');
+
+  // const [buttonState, setButtonState] = useState<CreatePointButtonTypes>('place-info');
+  // const [editButtonState, setEditButtonState] = useState<EditPointButtonTypes>('place-info');
+
   console.log('DATA', placeData);
   const model = {
     taxi: placeData?.taxi,
@@ -218,7 +227,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             lat: '',
             lng: '',
             area: '',
-            vehicleOptions: '',
+            vehicleOptions: serializeModelObject(model),
 
             cost: 'LOW',
             renown: 'LOW',
@@ -255,7 +264,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const { handleSubmit, control } = methods;
+  const { handleSubmit } = methods;
 
   const { mutate: editPlaceMutate } = useMutation({
     mutationFn: async (params: fomrData) => editPlace(params, placeID),
@@ -304,61 +313,126 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid width={'100%'} gapY={'5'}>
-          <Controller
-            name='placeCategory'
-            control={control}
-            render={({ field }) => (
-              <Flex width={'100%'} maxWidth={'352px'}>
-                <SelectRoot
-                  {...field}
-                  placeholder='نوع نقطه'
-                  size={'3'}
-                  value={String(field.value)}
-                  onValueChange={val => {
-                    field.onChange(val);
-                  }}
-                >
-                  {pointTypeOptions.map(item => (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
+          <Grid width={'100%'} columns={'3'} gap={'5'}>
+            <FilterCard label='نوع نقطه'>
+              <SelectRoot placeholder='نقطه'></SelectRoot>
+            </FilterCard>
+            <FilterCard label='انتشار'>
+              <SelectRoot placeholder='پیش نویس'></SelectRoot>
+            </FilterCard>
+            <FilterCard label='وضعیت'>
+              <SelectRoot placeholder='فعال'></SelectRoot>
+            </FilterCard>
+          </Grid>
+
+          <Flex width={'100%'} gap={'11px'} pb={'4'} align={'center'} style={{ overflowX: 'auto', borderBottom: `1px solid ${colorPalette.gray[6]}` }}>
+            {status === 'create-point' ? (
+              <>
+                {createPointTabsOptions.map((item, index) => (
+                  <Button size={'3'} type='button' variant={buttonState === item.key ? 'soft' : 'solid'} key={index} onClick={() => setButtonState(item.key)}>
+                    <Text {...typoVariant.body1}>{item.label}</Text>
+                  </Button>
+                ))}
+              </>
+            ) : (
+              status === 'edit-point' && (
+                <>
+                  {editPointTabsOptions.map((item, index) => (
+                    <Button size={'3'} type='button' variant={buttonState === item.key ? 'soft' : 'solid'} key={index} onClick={() => setButtonState(item.key)}>
+                      <Text {...typoVariant.body1}>{item.label}</Text>
+                    </Button>
                   ))}
-                </SelectRoot>
-              </Flex>
+                </>
+              )
             )}
-          />
-          <AccordionWrapper hero='اطلاعات نقطه'>
-            <PlaceInfo categoris={placeConstant ? placeConstant.categories : []} />
-          </AccordionWrapper>
+          </Flex>
+
+          {buttonState === 'place-info' && (
+            <SimpleWrapper2 type='changeAble' hero='اطلاعات نقطه'>
+              <PlaceInfo categoris={placeConstant ? placeConstant.categories : []} />
+            </SimpleWrapper2>
+          )}
+
+          {buttonState === 'geographical-location' && (
+            <SimpleWrapper2 type='changeAble' hero='موقعیت جغرافیایی'>
+              <GeographicalLocationRoot province={placeConstant ? placeConstant.provinces : []} />
+            </SimpleWrapper2>
+          )}
+
+          {buttonState === 'routing' && (
+            <SimpleWrapper2 type='changeAble' hero='چجوری برم'>
+              <RoutingGuid />
+            </SimpleWrapper2>
+          )}
+
+          {buttonState === 'description' && (
+            <SimpleWrapper2 type='changeAble' hero='توضیحات'>
+              <Description details={placeConstant ? placeConstant.details : []} key={'Description'} />
+            </SimpleWrapper2>
+          )}
+
+          {buttonState === 'features-facilities' && (
+            <SimpleWrapper2 type='changeAble' hero='ویژگی ها و امکانات'>
+              <FeaturesAndFacilities featureItems={placeConstant ? placeConstant.features : []} />
+            </SimpleWrapper2>
+          )}
+
+          {buttonState === 'analysis' && (
+            <SimpleWrapper2 type='changeAble' hero='تحلیل بزنیم بیرون'>
+              <AnalysisRoot
+                tripLimitations={placeConstant ? placeConstant.tripLimitations : []}
+                seasons={placeConstant ? seasons : []}
+                tripDatas={placeConstant ? placeConstant.tripDatas : []}
+                Categories={placeConstant?.categories ? placeConstant.categories : []}
+              />
+            </SimpleWrapper2>
+          )}
+
+          {buttonState === 'travel-time' && (
+            <SimpleWrapper2 type='changeAble' hero='کی برم'>
+              <TravelTime />
+            </SimpleWrapper2>
+          )}
+
+          {buttonState === 'seo-setting' && (
+            <SimpleWrapper2 type='changeAble' hero='تنظیمات سئو'>
+              <SeoSettingsRoot />
+            </SimpleWrapper2>
+          )}
+
+          {buttonState === 'images' && (
+            <Flex direction={'column'} gap={'5'}>
+              <SimpleWrapper2 type='changeAble' hero='تصویر شاخص'>
+                <PrimaryImage status={status} picture={placeData?.pictures[0]} />
+              </SimpleWrapper2>
+              <SimpleWrapper2 type='changeAble' hero='گالری تصاویر'>
+                <ImageGallery status={status} userPicUpload={placeData?.UserSentPicturesForPlace} />
+              </SimpleWrapper2>
+              <SimpleWrapper2 type='readOnly' hero='تصاویر ارسال شده'>
+                تصاویر ارسال شده
+              </SimpleWrapper2>
+            </Flex>
+          )}
+
+          {buttonState === 'improve-content' && (
+            <SimpleWrapper2 type='readOnly' hero='اصلاح اطلاعات ارسال شده'>
+              اصلاح اطلاعات ارسال شده
+            </SimpleWrapper2>
+          )}
+
+          {buttonState === 'comments' && (
+            <SimpleWrapper2 type='readOnly' hero='نظرات'>
+              نظرات
+            </SimpleWrapper2>
+          )}
+          {/* 
           <AccordionWrapper hero='تصویر شاخص'>
             <PrimaryImage status={status} picture={placeData?.pictures[0]} />
           </AccordionWrapper>
           <AccordionWrapper hero='گالری تصاویر'>
             <ImageGallery status={status} userPicUpload={placeData?.UserSentPicturesForPlace} />
-          </AccordionWrapper>
-          <AccordionWrapper hero='موقعیت جغرافیایی'>
-            <GeographicalLocationRoot province={placeConstant ? placeConstant.provinces : []} />
-          </AccordionWrapper>
-          <AccordionWrapper hero='توضیحات'>
-            <Description details={placeConstant ? placeConstant.details : []} key={'Description'} />
-          </AccordionWrapper>
-          <AccordionWrapper hero='ویژگی ها و امکانات'>
-            <FeaturesAndFacilities featureItems={placeConstant ? placeConstant.features : []} />
-          </AccordionWrapper>
-          <AccordionWrapper hero='تحلیل بزنیم بیرون'>
-            <AnalysisRoot
-              tripLimitations={placeConstant ? placeConstant.tripLimitations : []}
-              seasons={placeConstant ? seasons : []}
-              tripDatas={placeConstant ? placeConstant.tripDatas : []}
-              Categories={placeConstant?.categories ? placeConstant.categories : []}
-            />
-          </AccordionWrapper>
-          <AccordionWrapper hero='تنظیمات SEO'>
-            <SeoSettingsRoot />
-          </AccordionWrapper>
-          <AccordionWrapper hero='کی برم ؟'>
-            <TravelTime />
-          </AccordionWrapper>
+          </AccordionWrapper> */}
+
           <Flex width={'100%'} align={'center'} gap={'5'} p={'4'} style={{ border: `1px solid ${colorPalette.gray[6]}`, borderRadius: 8, backgroundColor: colorPalette.gray[2] }}>
             <Button size={'3'} variant='soft' style={{ paddingInline: 48.5 }}>
               <Text {...typoVariant.body1}>ثبت</Text>

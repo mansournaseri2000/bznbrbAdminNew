@@ -50,7 +50,7 @@ const PointManagementHero = ({ onSubmit }: Props) => {
         <IconButton colorVariant='BLUE' variant='soft' size={'4'} type='button' onClick={() => setIsOpen(true)}>
           <Filter />
         </IconButton>
-        <Button colorVariant='BLUE' variant='ghost' size={'4'} onClick={() => router.push('/data-management/point-management/create-point')}>
+        <Button colorVariant='BLUE' variant='ghost' type='button' size={'4'} onClick={() => router.push('/data-management/point-management/create-point')}>
           <Flex gap={'2'} align={'center'}>
             <Text {...typoVariant.body1}>+</Text>
             <Text {...typoVariant.body1}> افزودن نقطه</Text>

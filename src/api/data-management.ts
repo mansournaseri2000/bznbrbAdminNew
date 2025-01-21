@@ -90,6 +90,7 @@ export const removeCommentForPlace = async (id: number) => {
 export const getArticleList = async (page: number, params: ArticleListBody) => {
   const obj = {
     ...params,
+    categoryId: Number(params.categoryId),
     is_published: params.is_published === 'true' ? true : params.is_published === 'false' ? false : String(params.is_published),
   };
   const body = filterObject(obj);
