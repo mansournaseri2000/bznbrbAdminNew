@@ -38,7 +38,7 @@ const PlansDetail = ({ params }: { params: { slug: string[] } }) => {
       case 'user-plan':
         switch (tripId) {
           case tripId:
-            return <UserPlan data={data?.data as any} tripID={tripId} isLoading={isLoading} />;
+            return <UserPlan data={data?.data as any} isLoading={isLoading} />;
           default:
             return null;
         }
