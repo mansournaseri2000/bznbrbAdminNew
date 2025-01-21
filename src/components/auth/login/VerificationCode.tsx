@@ -66,6 +66,8 @@ const VerificationCode = () => {
     cookies: cookie,
   });
 
+  console.log('Cookie', cookie);
+
   const onSubmit: SubmitHandler<IFormInput> = data => {
     checkOtpMutate({ mobile: mobileNumber, otp: data.verificationCode });
     reset();

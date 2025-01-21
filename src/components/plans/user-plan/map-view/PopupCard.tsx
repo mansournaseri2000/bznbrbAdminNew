@@ -1,7 +1,6 @@
 'use client';
 
 import Image, { StaticImageData } from 'next/image';
-import { useRouter } from 'next/navigation';
 
 import styled from 'styled-components';
 
@@ -29,7 +28,6 @@ const PopupCard = ({ description, imageUrl, lat, lng, title, id }: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const { push } = useRouter();
 
   /**
    * useEffect
@@ -47,7 +45,7 @@ const PopupCard = ({ description, imageUrl, lat, lng, title, id }: Props) => {
   };
 
   const handleRedirectToPlace = (id: number) => {
-    push(`/place/${id}?view=common`);
+    window.open(`https://bezanimbiroon.ir/place/${id}`, '_blank');
   };
 
   /**

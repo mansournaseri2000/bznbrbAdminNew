@@ -61,9 +61,9 @@ const TripCommonView = ({ listItem, dayID }: Props) => {
                         id: item.point_id,
                       })
                     }
+                    point_id={item.point_id}
                     isExpand={item.point_id === isExpand.id ? true : false}
                     dayID={dayID}
-                    // addCommentData={addCommentData}
                     count={index}
                     description={item.description}
                     distanceToNextDestination={Number(item.distance.toFixed(0))}

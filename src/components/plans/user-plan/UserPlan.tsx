@@ -28,16 +28,10 @@ const TripMapView = dynamic(() => import('@/components/plans/user-plan/map-view/
 
 type Props = {
   data: TripResponse;
-  tripID: string;
   isLoading: boolean;
 };
 
 const UserPlan = ({ data, isLoading }: Props) => {
-  /*
-   *** Services_________________________________________________________________________________________________________________________________________________________________
-   */
-  // const { data: userData, isLoading: userLoading, isFetching: userFetching } = useQuery({ queryKey: ['user_info'], queryFn: async () => getUserInfo(userId) });
-
   /*
     *** 
     variables and constant_______________________________________________________________________________
@@ -56,8 +50,6 @@ const UserPlan = ({ data, isLoading }: Props) => {
   }, [data]);
 
   const { commonViewListItem, mapViewListItem } = useGetTripViewList(dayID, data?.trip.data.days);
-
-  console.log('DATA FOR TRIPSSSSSSSS', data);
 
   /*
     ***

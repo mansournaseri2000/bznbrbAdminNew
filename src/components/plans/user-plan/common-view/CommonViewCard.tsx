@@ -23,26 +23,18 @@ type Props = {
   tripID: number;
   count: number;
   comment: string;
-  // addCommentData: TripResponse;
   dayID: number;
   isExpand: boolean;
+  point_id: number;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const CommonViewCard = forwardRef<HTMLDivElement, Props>((props: Props, ref: ForwardedRef<HTMLDivElement>) => {
-  const { description, distanceToNextDestination, time, title, count, comment, isExpand, ...rest } = props;
-  // const { user } = useUser();
-  // const cookie = new Cookies();
-  // const { push } = useRouter();
-  // const { isDesktop, isMobile, isTablet } = useDeviceType();
-  // const [key, setKey] = useState<'edit' | 'trash' | 'comment' | ''>('');
-  // const [isOpen, setIsOpen] = useState(false);
+  const { description, distanceToNextDestination, time, title, count, comment, point_id, isExpand, ...rest } = props;
 
-  // const handleClose = () => {
-  //   setIsOpen(false);
-  // };
+  console.log('POINT ID', point_id);
 
   const handleChildClick = (e: { stopPropagation: () => void }) => {
-    // key: 'trash' | 'redirect' | 'edit' | 'comment'
+    //  key: 'redirect' | 'comment'
     e.stopPropagation();
 
     // switch (key) {
@@ -73,6 +65,10 @@ const CommonViewCard = forwardRef<HTMLDivElement, Props>((props: Props, ref: For
     //     break;
     //   default:
     // }
+  };
+
+  const handleRedirectToPlace = () => {
+    window.open(`https://bezanimbiroon.ir/place/${point_id}`, '_blank');
   };
 
   return (
@@ -119,7 +115,7 @@ const CommonViewCard = forwardRef<HTMLDivElement, Props>((props: Props, ref: For
                     marginInlineStart: 'auto',
                   }}
                   variant='soft'
-                  onClick={e => handleChildClick(e)}
+                  onClick={() => handleRedirectToPlace()}
                   // , 'redirect'
                 >
                   <TriangleLeft color='#fff' />
