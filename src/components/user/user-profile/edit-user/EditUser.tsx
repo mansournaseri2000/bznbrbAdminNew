@@ -21,27 +21,6 @@ type Props = {
 
 const EditUser = ({ onClose, userId, data }: Props) => {
   /*
-   *** Services_________________________________________________________________________________________________________________________________________________________________
-   */
-  const { mutate: updateUser, isPending: userPending } = useMutation({
-    mutationFn: async (body: EditUserDetailResponse) => editUser(userId, body),
-    onSuccess: async data => {
-      if (data.status === true) {
-        queryClient.invalidateQueries({ queryKey: ['user_info'] });
-        ToastSuccess('اطلاعات مورد نظر با موفقیت بروزرسانی شد');
-        onClose();
-      } else {
-        ToastError('لطفا دوباره امتحان نمایید');
-      }
-    },
-    onError: err => {
-      console.log(err);
-    },
-  });
-
-  console.log('USER_DATA', data.userInfo);
-
-  /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
   const { control, setValue, watch } = useForm({
@@ -57,6 +36,28 @@ const EditUser = ({ onClose, userId, data }: Props) => {
     },
   });
   const queryClient = useQueryClient();
+
+  /*
+   *** Services_________________________________________________________________________________________________________________________________________________________________
+   */
+  const { mutate: updateUser, isPending: userPending } = useMutation({
+    mutationFn: async (body: EditUserDetailResponse) => editUser(userId, body),
+    onSuccess: async data => {
+      if (data.status === true) {
+        onClose();
+        ToastSuccess('اطلاعات مورد نظر با موفقیت بروزرسانی شد');
+        queryClient.invalidateQueries({ queryKey: ['user_info'] });
+      } else {
+        ToastError('لطفا دوباره امتحان نمایید');
+      }
+    },
+    onError: err => {
+      console.log(err);
+      console.log('NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
+    },
+  });
+
+  // console.log('USER_DATA', data.userInfo);
 
   return (
     <Grid width={'100%'} gap={'5'} style={{ backgroundColor: colorPalette.gray[2] }}>

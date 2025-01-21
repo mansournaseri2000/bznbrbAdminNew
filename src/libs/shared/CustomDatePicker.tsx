@@ -28,6 +28,13 @@ type DatePickerComponent = {
 
 const CustomDatePicker = forwardRef<HTMLInputElement, DatePickerComponent>(({ onChangeValue, calendarPosition = 'bottom-right', errorText, ...rest }, ref) => {
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.setAttribute('readonly', 'true'); // Prevent keyboard input
+    }
+  }, []);
+
   useEffect(() => {
     const handleInput = (event: Event) => {
       const target = event.target as HTMLInputElement;
@@ -37,12 +44,33 @@ const CustomDatePicker = forwardRef<HTMLInputElement, DatePickerComponent>(({ on
     };
 
     if (inputRef.current) {
+      inputRef.current.setAttribute('readonly', 'true'); // Prevent keyboard input
       inputRef.current.addEventListener('input', handleInput);
     }
 
     return () => {
       if (inputRef.current) {
+        // inputRef.current.setAttribute('readonly', 'true'); // Prevent keyboard input
         inputRef.current.removeEventListener('input', handleInput);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') {
+        // Prevent any key input except Tab for accessibility
+        event.preventDefault();
+      }
+    };
+
+    if (inputRef.current) {
+      inputRef.current.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      if (inputRef.current) {
+        inputRef.current.removeEventListener('keydown', handleKeyDown);
       }
     };
   }, []);

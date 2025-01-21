@@ -132,7 +132,7 @@ const PlansHero = (props: Props) => {
       </Grid>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
-        <FilterContent province={constantData?.provinces ? constantData.provinces : []} onSubmit={props.onSubmit} />
+        <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
         <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} />
       </Modal>
     </>

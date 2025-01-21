@@ -9,6 +9,7 @@ import styled from 'styled-components';
 
 import { sidebarOptions } from '@/constants/sidebar';
 import { Flex, Grid, Text } from '@/libs/primitives';
+import { useUser } from '@/libs/providers/AuthProvider';
 import { BznText, Exit, ProfileLogo } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
@@ -17,6 +18,11 @@ import SidebarItems from './SidebarItems';
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { dispatch } = useUser();
+
+  const handleLogout = () => {
+    dispatch({ type: 'LOGOUT' });
+  };
 
   return (
     <motion.div
@@ -63,26 +69,26 @@ const Sidebar = () => {
         </Grid>
         <Grid width={'fit-content'}>
           <Flex height={'fit-content'} gap={'2'} p={'4'}>
-            <Link href={''}>
-              <Flex px={'4'} gap={'2'} align={'center'}>
-                <Exit width={'16px'} height={'16px'} />
-                <CollapseWrapper
-                  animate={{
-                    maxWidth: isExpanded ? '100%' : '1px',
-                    opacity: isExpanded ? 1 : 0,
-                  }}
-                  initial={{ maxWidth: '0px', opacity: 0 }}
-                  transition={{
-                    maxWidth: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
-                    opacity: { duration: 0.2, ease: 'easeInOut' },
-                  }}
-                >
-                  <Text {...typoVariant.body3} style={{ color: colorPalette.pink[11] }}>
-                    خروج از حساب کاربری
-                  </Text>
-                </CollapseWrapper>
-              </Flex>
-            </Link>
+            {/* <Link href={'/auth/login/receiveCode'}> */}
+            <Flex px={'4'} gap={'2'} align={'center'} onClick={handleLogout} style={{ cursor: 'pointer' }}>
+              <Exit width={'16px'} height={'16px'} />
+              <CollapseWrapper
+                animate={{
+                  maxWidth: isExpanded ? '100%' : '1px',
+                  opacity: isExpanded ? 1 : 0,
+                }}
+                initial={{ maxWidth: '0px', opacity: 0 }}
+                transition={{
+                  maxWidth: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+                  opacity: { duration: 0.2, ease: 'easeInOut' },
+                }}
+              >
+                <Text {...typoVariant.body3} style={{ color: colorPalette.pink[11] }}>
+                  خروج از حساب کاربری
+                </Text>
+              </CollapseWrapper>
+            </Flex>
+            {/* </Link> */}
           </Flex>
         </Grid>
       </Grid>

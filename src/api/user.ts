@@ -60,6 +60,7 @@ export const editUser = async (id: number, params: EditUserDetailResponse) => {
   const obj = {
     ...params,
     mobile: null,
+    pic: null,
   };
   const body = filterObject(obj);
   const res = await DevApiManager.patch<ApiData<EditUserDetailResponse>>(`user/profile/partiallyEditUser/${id}`, body);
