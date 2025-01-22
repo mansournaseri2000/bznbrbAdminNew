@@ -62,9 +62,8 @@ const AddComment = () => {
           </Flex>
         </Button>
       </Flex>
-      {/* <ModalContent type='create' isOpen={isOpen} setIsOpen={setIsOpen} /> */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader handleClose={() => () => setIsOpen(false)} title='ویرایش نظر برتر' icon={<Close />} />
+        <ModalHeader handleClose={() => setIsOpen(false)} title='ثبت نظر برتر' icon={<Close />} />
         <Flex direction={'column'} gap={'5'} p={'5'}>
           <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان نقطه' style={{ width: '50%' }} />} />
           <Controller name='content' control={control} render={({ field }) => <TextArea {...field} placeholder='متن نظر' />} />

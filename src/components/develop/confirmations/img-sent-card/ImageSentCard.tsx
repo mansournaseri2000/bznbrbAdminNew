@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -33,7 +32,6 @@ const ImageSentCard: React.FC<CardProps> = (props: CardProps) => {
     ****_____________________________________________________________________________
    */
   const { index, placeName, placeProvince, placeCity, picture, description, placeId, id } = props;
-  const router = useRouter();
 
   const [modalState, setModalState] = useState<modalStateType>({
     isOpen: false,
@@ -86,6 +84,16 @@ const ImageSentCard: React.FC<CardProps> = (props: CardProps) => {
     },
   });
 
+  /* 
+    ****
+    Methods
+    ****_____________________________________________________________________________
+   */
+
+  const handleRedirect = () => {
+    window.open(`https://bezanimbiroon.ir/place/${placeId}?view=common`, '_blank');
+  };
+
   return (
     <>
       <Grid
@@ -107,7 +115,7 @@ const ImageSentCard: React.FC<CardProps> = (props: CardProps) => {
               {placeProvince} / {placeCity}
             </Text>
           </Flex>
-          <Button colorVariant='BLUE' size={'3'} onClick={() => router.push(`https://bezanimbiroon.ir/place/${placeId}?view=common`)}>
+          <Button colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} size={'3'} onClick={handleRedirect}>
             <Text {...typoVariant.body3}>مشاهده نقطه</Text>
           </Button>
         </Flex>
@@ -123,13 +131,13 @@ const ImageSentCard: React.FC<CardProps> = (props: CardProps) => {
         </Flex>
 
         <Flex width={'100%'} align={'center'} gap={'2'} justify={'end'}>
-          <Button size={'3'} colorVariant='PINK' onClick={() => setModalState({ isOpen: true, key: 'isTop' })}>
+          <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} onClick={() => setModalState({ isOpen: true, key: 'isTop' })}>
             <Text {...typoVariant.body1}>تصویر برتر</Text>
           </Button>
-          <Button size={'3'} colorVariant='BLUE' variant='soft' onClick={() => setModalState({ isOpen: true, key: 'accept' })}>
+          <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} variant='soft' onClick={() => setModalState({ isOpen: true, key: 'accept' })}>
             <Flex align={'center'} gap={'2'}>
               <Check />
-              <Text {...typoVariant.body1}>تایید و انتشار</Text>
+              <Text {...typoVariant.body1}>تایید</Text>
             </Flex>
           </Button>
           <IconButton size={'3'} colorVariant='PINK' style={{ borderRadius: 12 }} onClick={() => setModalState({ isOpen: true, key: 'delete' })} disabled>

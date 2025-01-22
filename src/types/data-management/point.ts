@@ -168,10 +168,13 @@ export interface PlaceImproveContentDataDetail {
   phone: string;
   website: string;
   email: string;
-  provinceName: string;
+  placeProvinceName: string;
+  placeCityName: string;
   cityName: string;
+  provinceName: string;
   address: string;
   placeId: number;
+  placeName: string;
 }
 
 export type CreatePointButtonTypes = 'place-info' | 'geographical-location' | 'routing' | 'description' | 'features-facilities' | 'analysis' | 'travel-time' | 'seo-setting';

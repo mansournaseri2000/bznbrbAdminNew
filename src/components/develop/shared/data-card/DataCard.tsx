@@ -2,8 +2,6 @@
 
 import React, { useState } from 'react';
 
-import { useRouter } from 'next/navigation';
-
 import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
@@ -32,8 +30,7 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
   /*
    *** Variables and Constant _________________________________________________________________________________________________________________________________________________________________
    */
-  const { name, provinceName, cityName, phone, website, email, type, index, onDelete, address, id, placeId } = props;
-  const router = useRouter();
+  const { name, placeProvinceName, cityName, provinceName, phone, website, email, type, index, onDelete, address, id, placeId, placeName, placeCityName } = props;
   const [modalState, setModalState] = useState<modalStateType>({
     isOpen: false,
     key: 'remove',
@@ -72,6 +69,15 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
       }
     },
   });
+  /* 
+    ****
+    Methods
+    ****_____________________________________________________________________________
+   */
+
+  const handleRedirect = () => {
+    window.open(`https://bezanimbiroon.ir/place/${placeId}?view=common`, '_blank');
+  };
 
   return (
     <>
@@ -89,13 +95,13 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
           <Flex width={'100%'} justify={'between'} align={'center'}>
             <Flex direction={'column'} gap={'2'}>
               <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
-                {name}
+                {placeName}
               </Text>
               <Text {...typoVariant.description2} style={{ color: colorPalette.gray[11] }}>
-                {`${provinceName} / ${cityName}`}
+                {`${placeProvinceName} / ${placeCityName}`}
               </Text>
             </Flex>
-            <Button colorVariant='BLUE' size={'3'} onClick={() => router.push(`https://bezanimbiroon.ir/place/${placeId}?view=common`)}>
+            <Button colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} size={'3'} onClick={handleRedirect}>
               <Text {...typoVariant.body3}>مشاهده نقطه</Text>
             </Button>
           </Flex>
@@ -115,7 +121,7 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
             </Text>
           </Grid>
           {type === 'point_detail' && (
-            <IconButton size={'3'} colorVariant='PINK' style={{ borderRadius: 12 }} onClick={onDelete}>
+            <IconButton size={'3'} colorVariant='PINK' style={{ borderRadius: 12 }} onClick={onDelete} disabled>
               <Trash />
             </IconButton>
           )}
@@ -123,7 +129,7 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
 
         {type === 'improve_data_management' && (
           <Flex width={'100%'} align={'center'} justify={'end'} gap={'2'}>
-            <Button size={'3'} variant='soft' style={{ padding: '7px 18px' }} onClick={() => setModalState({ isOpen: true, key: 'publish' })}>
+            <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} variant='soft' style={{ padding: '7px 18px' }} onClick={() => setModalState({ isOpen: true, key: 'publish' })}>
               <Flex align={'center'} gap={'2'}>
                 <Check />
                 <Text {...typoVariant.body3}>تایید</Text>
@@ -175,7 +181,7 @@ const Item = ({ label, value }: { label: string; value: string }) => (
       {label}
     </Text>
     <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
-      {value}
+      {value ? value : 'ــ'}
     </Text>
   </Flex>
 );

@@ -58,6 +58,7 @@ export default function UserProfile({
    */
   const { push } = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [showFilter, setShowFilter] = useState<boolean>(false);
   const userId = Number(params.slug);
   const queryClient = useQueryClient();
 
@@ -120,6 +121,7 @@ export default function UserProfile({
 
       const searchParams = generateSearchParams(cleanedData);
       push(`/user/${userId}?${searchParams}`);
+      setShowFilter(false);
       console.log('data', data);
     },
     onError: async data => {
@@ -213,7 +215,7 @@ export default function UserProfile({
                   برنامه های کاربر
                 </Text>
 
-                <UserProfileHero onSubmit={() => tripsMutate(watch() as any)} userId={userId} />
+                <UserProfileHero onSubmit={() => tripsMutate(watch() as any)} userId={userId} isOpen={showFilter} setIsOpen={setShowFilter} isPending={tripPending} />
                 {tripPending ? <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} /> : <UserProfileList data={tripsData?.latestTrips ? tripsData.latestTrips : ([] as any)} />}
 
                 {tripsData?.latestTrips && (

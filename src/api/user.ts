@@ -43,6 +43,7 @@ export const getRecentTrips = async (params: RecentTripsBody) => {
     departureDateEnd: Boolean(new Date(params.departureDateEnd).getTime()) ? new Date(params.departureDateEnd).getTime() : null,
     returnDateStart: Boolean(new Date(params.returnDateStart).getTime()) ? new Date(params.returnDateStart).getTime() : null,
     returnDateEnd: Boolean(new Date(params.returnDateEnd).getTime()) ? new Date(params.returnDateEnd).getTime() : null,
+    createdAt: Boolean(new Date(params.createdAt).getTime()) ? new Date(params.returnDateEnd).getTime() : null,
     sort: null,
     userId: null,
   };
@@ -60,6 +61,7 @@ export const editUser = async (id: number, params: EditUserDetailResponse) => {
   const obj = {
     ...params,
     mobile: null,
+    pic: null,
   };
   const body = filterObject(obj);
   const res = await DevApiManager.patch<ApiData<EditUserDetailResponse>>(`user/profile/partiallyEditUser/${id}`, body);
@@ -95,4 +97,5 @@ export interface RecentTripsBody {
   departureDateEnd: number | string;
   returnDateStart: number | string;
   returnDateEnd: number | string;
+  createdAt: number | string;
 }

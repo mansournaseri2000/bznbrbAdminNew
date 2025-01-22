@@ -35,7 +35,7 @@ const ImproveDataManagement = () => {
   return (
     <Grid width={'100%'} gapY={'5'} p={'5'}>
       {improveData?.PlaceImproveContent.map((item, index) => (
-        <DataCard type='improve_data_management' key={item.id} index={index} {...item} />
+        <DataCard type='improve_data_management' key={item.id} index={index} {...(item as any)} />
       ))}
 
       <Flex width={'100%'} align={'center'} justify={'between'}>

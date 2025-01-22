@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[3722],{3722:function(e,t,n){n.r(t);var r=n(57437),l=n(1845),s=n(21949);t.default=e=>{let{text:t,id:n}=e;return(0,r.jsx)("p",{id:n,...s.p.body3,style:{color:l.K.gray[11],fontSize:"14px"},dangerouslySetInnerHTML:{__html:t}})}}}]);

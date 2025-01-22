@@ -103,7 +103,6 @@ const PlansList = (props: PlansListProps) => {
       cell: ({ row }) => {
         const item = row.original;
         const handleClick = (e: React.MouseEvent) => {
-          console.log('item', item);
           e.preventDefault();
           router.push(`/plans/user-plan/${item.tripId}`);
         };

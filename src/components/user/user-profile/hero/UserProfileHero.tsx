@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -18,13 +18,16 @@ import { ArrowRight, Filter } from '@/public/icon';
 type Props = {
   onSubmit: () => void;
   userId: number;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isPending: boolean;
 };
 
-const UserProfileHero = (props: Props) => {
+const UserProfileHero = ({ onSubmit, isOpen, setIsOpen, userId, isPending }: Props) => {
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  // const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const { control, reset, setValue } = useFormContext();
   const searchParams = useSearchParams();
@@ -43,7 +46,7 @@ const UserProfileHero = (props: Props) => {
    * _______________________________________________________________________________
    */
   const addFilter = () => {
-    setIsOpen(false);
+    onSubmit();
   };
 
   // TODO: fix update url for remove filters
@@ -53,7 +56,7 @@ const UserProfileHero = (props: Props) => {
       limit: 10,
       sortDate: '',
       targetDate: '',
-      userId: props.userId,
+      userId: userId,
       originCityId: '',
       originProvinceId: '',
       destinationCityId: '',
@@ -64,8 +67,8 @@ const UserProfileHero = (props: Props) => {
       returnDateEnd: '',
       sort: '',
     });
-    router.replace(`/user/${props.userId}`);
-    props.onSubmit();
+    router.replace(`/user/${userId}`);
+    onSubmit();
     setIsOpen(false);
   };
 
@@ -108,7 +111,7 @@ const UserProfileHero = (props: Props) => {
                   const currentItem = userDetailSortConstant.find(item => item.id === Number(val));
                   handleSortItems(currentItem?.id as any);
                   field.onChange(val);
-                  props.onSubmit();
+                  onSubmit();
                 }}
               >
                 {userDetailSortConstant.map(item => (
@@ -124,8 +127,8 @@ const UserProfileHero = (props: Props) => {
       </Flex>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
-        <FilterContent province={constantData?.provinces ? constantData.provinces : []} onSubmit={props.onSubmit} />
-        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} />
+        <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
+        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} isLoading={isPending} />
       </Modal>
     </>
   );

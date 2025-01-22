@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -20,19 +20,21 @@ import FilterContent from '../../../libs/shared/FilterContent';
 
 type Props = {
   onSubmit: () => void;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isPending: boolean;
 };
 
-const PlansHero = (props: Props) => {
+const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  // const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const { control, reset, setValue } = useFormContext();
   const searchParams = useSearchParams();
   const getParam = (key: string) => searchParams.get(key) || '';
 
-  // console.log('Watch', watch());
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
    */
@@ -46,7 +48,7 @@ const PlansHero = (props: Props) => {
    * _______________________________________________________________________________
    */
   const addFilter = () => {
-    setIsOpen(false);
+    onSubmit();
   };
 
   // TODO: fix update url for remove filters
@@ -69,7 +71,7 @@ const PlansHero = (props: Props) => {
       sort: '',
     });
     router.replace('/plans');
-    props.onSubmit();
+    onSubmit();
     setIsOpen(false);
   };
 
@@ -103,7 +105,7 @@ const PlansHero = (props: Props) => {
         <Controller
           name='searchQuery'
           control={control}
-          render={({ field }) => <CustomSearch {...field} placeholder='جستجو' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} onClick={props.onSubmit} />}
+          render={({ field }) => <CustomSearch {...field} placeholder='جستجو' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} onClick={onSubmit} />}
         />
         <Controller
           name='sort'
@@ -118,7 +120,7 @@ const PlansHero = (props: Props) => {
                 const currentItem = userDetailSortConstant.find(item => item.id === Number(val));
                 handleSortItems(currentItem?.id as any);
                 field.onChange(val);
-                props.onSubmit();
+                onSubmit();
               }}
             >
               {userDetailSortConstant.map(item => (
@@ -132,8 +134,8 @@ const PlansHero = (props: Props) => {
       </Grid>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
-        <FilterContent province={constantData?.provinces ? constantData.provinces : []} onSubmit={props.onSubmit} />
-        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} />
+        <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
+        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} isLoading={isPending} />
       </Modal>
     </>
   );
