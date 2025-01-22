@@ -30,7 +30,7 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
   /*
    *** Variables and Constant _________________________________________________________________________________________________________________________________________________________________
    */
-  const { name, provinceName, cityName, phone, website, email, type, index, onDelete, address, id, placeId } = props;
+  const { name, placeProvinceName, cityName, provinceName, phone, website, email, type, index, onDelete, address, id, placeId, placeName, placeCityName } = props;
   const [modalState, setModalState] = useState<modalStateType>({
     isOpen: false,
     key: 'remove',
@@ -95,10 +95,10 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
           <Flex width={'100%'} justify={'between'} align={'center'}>
             <Flex direction={'column'} gap={'2'}>
               <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
-                {name}
+                {placeName}
               </Text>
               <Text {...typoVariant.description2} style={{ color: colorPalette.gray[11] }}>
-                {`${provinceName} / ${cityName}`}
+                {`${placeProvinceName} / ${placeCityName}`}
               </Text>
             </Flex>
             <Button colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} size={'3'} onClick={handleRedirect}>
@@ -121,7 +121,7 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
             </Text>
           </Grid>
           {type === 'point_detail' && (
-            <IconButton size={'3'} colorVariant='PINK' style={{ borderRadius: 12 }} onClick={onDelete}>
+            <IconButton size={'3'} colorVariant='PINK' style={{ borderRadius: 12 }} onClick={onDelete} disabled>
               <Trash />
             </IconButton>
           )}
