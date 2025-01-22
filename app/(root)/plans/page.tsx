@@ -46,6 +46,7 @@ export default function Plans({
    */
   const { replace } = useRouter();
   const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const methods = useForm({
     defaultValues: {
@@ -107,6 +108,8 @@ export default function Plans({
 
       const searchParams = generateSearchParams(cleanedData);
       replace(`/plans?${searchParams}`);
+
+      setIsOpen(false);
       console.log('data', data);
     },
 
@@ -133,7 +136,7 @@ export default function Plans({
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Grid width={'100%'} gap={'4'} p={'5'}>
-                <PlansHero onSubmit={() => tripsMutate(watch() as any)} />
+                <PlansHero onSubmit={() => tripsMutate(watch() as any)} isOpen={isOpen} setIsOpen={setIsOpen} isPending={tripsPending} />
                 {tripsError ? (
                   <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
                 ) : tripsPending ? (

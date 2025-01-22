@@ -3,7 +3,6 @@
 import { useState } from 'react';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
 import { Box, Flex, Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -38,7 +37,7 @@ const CommentCard = (props: CommentCardProps) => {
     isOpen: false,
     key: 'remove',
   });
-  const router = useRouter();
+
   const queryClient = useQueryClient();
   /* 
     ****
@@ -73,6 +72,20 @@ const CommentCard = (props: CommentCardProps) => {
       console.log(err, 'Err');
     },
   });
+
+  /* 
+    ****
+    Methods
+    ****_____________________________________________________________________________
+   */
+  const handleRedirect = () => {
+    if (type === 'PLACE') {
+      window.open(`https://bezanimbiroon.ir/place/${placeId}?view=common`, '_blank');
+    } else {
+      window.open(`https://bezanimbiroon.ir/article/${articleId}`, '_blank');
+    }
+  };
+
   return (
     <>
       <Grid
@@ -92,22 +105,24 @@ const CommentCard = (props: CommentCardProps) => {
               {type === 'PLACE' ? placeName : articleTitle}
             </Text>
             <Text {...typoVariant.description2} style={{ color: colorPalette.gray[11], opacity: '50%' }}>
-              {type === 'PLACE' ? `${placeProvince} / ${placeCity}` : `${articleProvince} / ${articleCity} `}
+              {type === 'PLACE'
+                ? Boolean(placeProvince) && Boolean(placeCity)
+                  ? `${placeProvince} / ${placeCity}`
+                  : ''
+                : Boolean(articleProvince) && Boolean(articleCity)
+                ? `${articleProvince} / ${articleCity} `
+                : ''}
             </Text>
           </Flex>
-          <Button
-            size={'3'}
-            colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'}
-            onClick={() => router.push(type === 'PLACE' ? `https://bezanimbiroon.ir/place/${placeId}?view=common` : `https://bezanimbiroon.ir/article/${articleId}`)}
-          >
-            <Text {...typoVariant.body3}>{type === 'PLACE' ? 'مشاهده نقطه' : 'مشاهده مقاله'}</Text>
+          <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} onClick={handleRedirect}>
+            <Text {...typoVariant.body3}>{type === 'PLACE' ? 'مشاهده نقطه' : type === 'ARTICLE' && 'مشاهده مقاله'}</Text>
           </Button>
         </Flex>
         {/* )} */}
         <Flex width={'100%'} justify={'between'} align={'center'}>
           <Flex align={'center'} gap={'2'}>
             <Box style={{ width: 40, height: 40, position: 'relative', borderRadius: '50%' }}>
-              <Image src={pic ? pic : ''} alt='' fill style={{ borderRadius: '50%' }} />
+              <Image src={pic ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${pic}` : ''} alt='' fill style={{ borderRadius: '50%' }} />
             </Box>
             <Flex direction={'column'} gap={'1'}>
               <Text style={{ color: colorPalette.gray[11] }}>{fullName}</Text>
@@ -119,11 +134,11 @@ const CommentCard = (props: CommentCardProps) => {
           {content}
         </Text>
         <Flex gap={'4'} justify={'end'}>
-          <Button size={'3'} colorVariant='BLUE' variant='soft' onClick={() => setModalState({ isOpen: true, key: 'update' })}>
+          <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} variant='soft' onClick={() => setModalState({ isOpen: true, key: 'update' })}>
             <Check />
             <Text {...typoVariant.body3}>تایید و انتشار</Text>
           </Button>
-          <IconButton size={'3'} radius='full' colorVariant='PINK' onClick={() => setModalState({ isOpen: true, key: 'remove' })}>
+          <IconButton size={'3'} radius='full' colorVariant='PINK' disabled onClick={() => setModalState({ isOpen: true, key: 'remove' })}>
             <Trash />
           </IconButton>
         </Flex>
@@ -156,18 +171,9 @@ const CommentCard = (props: CommentCardProps) => {
             </Grid>
           </Grid>
         )}
-        {/* {modalState.key === 'info' && (
-          <CommentInfo {...props} onUpdate={() => updateCommentMutate()} onRemove={() => removeCommentMutate()} updatePending={updateCommentIsPending} removePending={removeCommentIsPending} />
-        )} */}
       </Modal>
     </>
   );
 };
 
 export default CommentCard;
-
-// const CardWrapper = styled(Flex)`
-//   width: 100%;
-//   border-radius: 4px;
-//   border: 1px solid #d4d4d4;
-// `;

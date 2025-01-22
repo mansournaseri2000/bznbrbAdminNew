@@ -18,6 +18,7 @@ interface UserProfileListDetail {
   createAt: string;
   departureDate: string;
   returnDate: string;
+  tripId: string;
 }
 
 type UserProfileListProps = {
@@ -62,13 +63,13 @@ const UserProfileList = ({ data }: UserProfileListProps) => {
       },
     },
     {
-      accessorKey: 'createAt',
+      accessorKey: 'createdAt',
       header: 'تاریخ ساخت برنامه',
       cell: info => {
         const value = info.getValue() as string | null;
         return (
           <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
-            {value ? value : '-'}
+            {value ? convertTimestampToPersianDate(value) : '-'}
           </Text>
         );
       },
@@ -101,10 +102,9 @@ const UserProfileList = ({ data }: UserProfileListProps) => {
       id: 'details',
       cell: ({ row }) => {
         const item = row.original;
-        const handleClick = () => {
-          console.log('item', item);
-          //   TODO: fix link as a dynamic by using id
-          router.push('/plans/user-plan');
+        const handleClick = (e: React.MouseEvent) => {
+          e.preventDefault();
+          router.push(`/plans/user-plan/${item.tripId}`);
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>
