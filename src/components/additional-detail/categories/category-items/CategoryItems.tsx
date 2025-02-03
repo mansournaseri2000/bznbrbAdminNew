@@ -21,7 +21,6 @@ import CustomAddItem from '@/libs/shared/custom-add-item/CustomAddItem';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
-import { Close } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { CategoriesResponse } from '@/types/additional-detail/additional-detail';
@@ -166,7 +165,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
         */}
         {modalState.key === 'edit-category' && (
           <>
-            <ModalHeader title={'ویرایش دسته بندی'} icon={<Close />} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
+            <ModalHeader title={'ویرایش دسته بندی'} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
             <EditCategoryModal setIsOpen={() => setModalState({ key: 'edit-category', isOpen: false })} data={props} />
           </>
         )}

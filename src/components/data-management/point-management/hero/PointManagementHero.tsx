@@ -11,7 +11,7 @@ import { getAllPlacesConstants } from '@/api/place';
 import { Button, Flex, Grid, IconButton, Modal, Text } from '@/libs/primitives';
 import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import { ArrowRight, Filter } from '@/public/icon';
+import { Filter } from '@/public/icon';
 import { typoVariant } from '@/theme/typo-variants';
 
 import PointFilter from './PointFilter';
@@ -67,7 +67,7 @@ const PointManagementHero = ({ onSubmit }: Props) => {
          MODAL_____________________________________________________________________________________________________________________
         ***/}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
+        <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
         <PointFilter province={constantData?.provinces ? constantData.provinces : []} categories={constantData?.categories ? constantData.categories : []} setIsOpen={setIsOpen} onSubmit={onSubmit} />
       </Modal>
     </>

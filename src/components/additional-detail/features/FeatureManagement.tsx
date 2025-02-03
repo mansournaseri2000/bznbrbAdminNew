@@ -9,7 +9,6 @@ import { getFeatures } from '@/api/additional-detail';
 import { Button, Flex, Modal, Text } from '@/libs/primitives';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { ToastError } from '@/libs/shared/toast/Toast';
-import { Close } from '@/public/icon';
 import { typoVariant } from '@/theme/typo-variants';
 
 import FeatureItems from './feature-items/FeatureItems';
@@ -49,7 +48,7 @@ const FeatureManagement = () => {
         ))}
       </Flex>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader title='افزودن دسته ویژگی' icon={<Close />} handleClose={() => setIsOpen(false)} />
+        <ModalHeader title='افزودن دسته ویژگی' handleClose={() => setIsOpen(false)} />
         <CreateFeatureModal data={featuresData} setIsOpen={setIsOpen} />
       </Modal>
     </>

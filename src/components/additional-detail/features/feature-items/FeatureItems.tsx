@@ -12,7 +12,6 @@ import CustomAddItem from '@/libs/shared/custom-add-item/CustomAddItem';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
-import { Close } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { FeaturesResponse } from '@/types/additional-detail/additional-detail';
@@ -157,7 +156,7 @@ const FeatureItems = forwardRef<HTMLDivElement, FeatureItemsProps>((props, ref) 
          */}
         {modalState.key !== 'delete' && (
           <>
-            <ModalHeader title={'ویرایش دسته ویژگی'} icon={<Close />} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
+            <ModalHeader title={'ویرایش دسته ویژگی'} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
             <EditFeatureModal setIsOpen={() => setModalState({ key: 'edit', isOpen: false })} data={props} />
           </>
         )}

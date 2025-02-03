@@ -89,7 +89,7 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
-                placeholder='شهر'
+                placeholder='شهرستان'
                 disabled={!Boolean(city)}
                 value={String(field.value)}
                 onValueChange={val => {
@@ -104,6 +104,16 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
               </SelectRoot>
             )}
           />
+        </Grid>
+        <Grid gapY={'2'}>
+          <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
+            بازه زمانی
+          </Text>
+        </Grid>
+        <Grid gapY={'2'}>
+          <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
+            نوع نقطه
+          </Text>
         </Grid>
         <Grid gapY={'2'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>

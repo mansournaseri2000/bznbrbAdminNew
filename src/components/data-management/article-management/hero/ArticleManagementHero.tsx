@@ -14,7 +14,7 @@ import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
 import CustomDatePicker from '@/libs/shared/CustomDatePicker';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import { ArrowRight, Filter } from '@/public/icon';
+import { Filter } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -94,7 +94,7 @@ const ArticleManagementHero = ({ onSubmit }: Props) => {
       ***
       */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
+        <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
         <Grid gapY={'4'} p={'4'}>
           <Controller
             name='categoryId'

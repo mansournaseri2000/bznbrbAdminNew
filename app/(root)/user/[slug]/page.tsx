@@ -21,7 +21,6 @@ import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import UserDetailCard from '@/libs/shared/UserDetailCard';
 import { updateUrlWithPageNumber } from '@/libs/utils';
 import { generateSearchParams } from '@/libs/utils/generateSearchParams';
-import { Close } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { UserInfoDetail } from '@/types/user/user';
@@ -234,7 +233,7 @@ export default function UserProfile({
                 )}
               </Grid>
               <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-                <ModalHeader title='ویرایش کاربر' icon={<Close />} handleClose={() => setIsOpen(false)} />
+                <ModalHeader title='ویرایش کاربر' handleClose={() => setIsOpen(false)} />
                 <EditUser onClose={() => setIsOpen(false)} userId={userId} data={userData as any} />
               </Modal>
             </form>

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import { ColumnDef } from '@tanstack/react-table';
 
-import { Button, Flex, Text } from '@/libs/primitives';
+import { Box, Button, Flex, Text } from '@/libs/primitives';
 import { Table } from '@/libs/shared';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
@@ -21,6 +21,7 @@ interface PointListDetail {
   parentCategory: string;
   category: string;
   isPlaceInfoComplete: boolean;
+  status: boolean;
 }
 
 type Props = {
@@ -45,10 +46,16 @@ const PointManagementList = (props: Props) => {
       header: ' نام نقطه',
       cell: info => {
         const value = info.getValue() as string | null;
+        const status = info.row.original.status;
         return (
-          <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
-            {value ? value : '-'}
-          </Text>
+          <Flex width={'100%'} align={'center'} gap={'3'} mr={'20px'}>
+            <Box width={'12px'} height={'12px'} style={{ borderRadius: 100, backgroundColor: status === true ? colorPalette.blue[6] : colorPalette.pink[6] }}>
+              {' '}
+            </Box>
+            <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
+              {value ? value : '-'}
+            </Text>
+          </Flex>
         );
       },
     },

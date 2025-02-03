@@ -13,7 +13,7 @@ import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text } f
 import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import { ArrowRight, Filter } from '@/public/icon';
+import { Filter } from '@/public/icon';
 import { typoVariant } from '@/theme/typo-variants';
 
 import FilterContent from '../../../libs/shared/FilterContent';
@@ -133,7 +133,7 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
         />
       </Grid>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
+        <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
         <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
         <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} isLoading={isPending} />
       </Modal>

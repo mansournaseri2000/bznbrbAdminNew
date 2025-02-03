@@ -11,7 +11,7 @@ import { Button, Flex, Grid, IconButton, Modal, Text, TextArea, TextField } from
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
-import { Close, Pencil, Trash } from '@/public/icon';
+import { Pencil, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { CommentsDetail } from '@/types/confirmations/top-comments';
@@ -99,7 +99,7 @@ const TopCommentItem = (props: Props) => {
       <Modal isOpen={modalState.isOpen} onClose={() => setModalState({ ...modalState, isOpen: false })}>
         {modalState.key === 'edit' && (
           <>
-            <ModalHeader handleClose={() => setModalState({ ...modalState, isOpen: false })} title='ویرایش نظر برتر' icon={<Close />} />
+            <ModalHeader handleClose={() => setModalState({ ...modalState, isOpen: false })} title='ویرایش نظر برتر' />
             <Flex direction={'column'} gap={'5'} p={'5'}>
               <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان نقطه' style={{ width: '50%' }} />} />
               <Controller name='content' control={control} render={({ field }) => <TextArea {...field} placeholder='متن نظر' />} />

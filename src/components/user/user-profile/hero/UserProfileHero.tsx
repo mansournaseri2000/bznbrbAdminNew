@@ -13,7 +13,7 @@ import { Flex, IconButton, Modal, SelectItem, SelectRoot } from '@/libs/primitiv
 import FilterContent from '@/libs/shared/FilterContent';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import { ArrowRight, Filter } from '@/public/icon';
+import { Filter } from '@/public/icon';
 
 type Props = {
   onSubmit: () => void;
@@ -126,7 +126,7 @@ const UserProfileHero = ({ onSubmit, isOpen, setIsOpen, userId, isPending }: Pro
         </Flex>
       </Flex>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
+        <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
         <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
         <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} isLoading={isPending} />
       </Modal>

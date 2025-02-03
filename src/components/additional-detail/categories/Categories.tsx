@@ -11,7 +11,6 @@ import { sortCategoryOptions } from '@/constants/additional-detail';
 import { Button, Flex, Modal, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { ToastError } from '@/libs/shared/toast/Toast';
-import { Close } from '@/public/icon';
 import { typoVariant } from '@/theme/typo-variants';
 
 import CategoryItems from './category-items/CategoryItems';
@@ -85,7 +84,7 @@ const Categories = () => {
         ))}
       </Flex>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader title={'افزودن دسته بندی'} icon={<Close />} handleClose={() => setIsOpen(false)} />
+        <ModalHeader title={'افزودن دسته بندی'} handleClose={() => setIsOpen(false)} />
         <CreateCategoryModal data={categoriesData} setIsOpen={setIsOpen} />
       </Modal>
     </FormProvider>

@@ -126,7 +126,7 @@ const ChipsItem = ({ label, hasMedia, type, id, data }: Props) => {
       */}
         {modalState.key === 'edit-subCategory' && (
           <>
-            <ModalHeader title={'ویرایش زیر دسته بندی'} icon={<Close />} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
+            <ModalHeader title={'ویرایش زیر دسته بندی'} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
             <EditSubCategoryModal setIsOpen={() => setModalState({ key: 'edit-subCategory', isOpen: false })} data={data} />
           </>
         )}
@@ -157,7 +157,7 @@ const ChipsItem = ({ label, hasMedia, type, id, data }: Props) => {
       */}
         {modalState.key === 'edit-feature' && (
           <>
-            <ModalHeader title={'ویرایش ویژگی'} icon={<Close />} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
+            <ModalHeader title={'ویرایش ویژگی'} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
             <EditFeatureItemModal setIsOpen={() => setModalState({ key: 'edit-feature', isOpen: false })} data={data} />
           </>
         )}

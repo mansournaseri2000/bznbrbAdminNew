@@ -12,7 +12,6 @@ import { Button, Flex, Modal, Text, TextArea, TextField } from '@/libs/primitive
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
-import { Close } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -63,7 +62,7 @@ const AddComment = () => {
         </Button>
       </Flex>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader handleClose={() => setIsOpen(false)} title='ثبت نظر برتر' icon={<Close />} />
+        <ModalHeader handleClose={() => setIsOpen(false)} title='ثبت نظر برتر' />
         <Flex direction={'column'} gap={'5'} p={'5'}>
           <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان نقطه' style={{ width: '50%' }} />} />
           <Controller name='content' control={control} render={({ field }) => <TextArea {...field} placeholder='متن نظر' />} />

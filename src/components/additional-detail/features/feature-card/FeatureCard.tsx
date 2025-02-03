@@ -11,7 +11,7 @@ import { Button, Flex, Grid, IconButton, Modal, Text, TextField } from '@/libs/p
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
-import { Close, Pencil, Trash } from '@/public/icon';
+import { Pencil, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -90,7 +90,7 @@ const FeatureCard = (props: Props) => {
       <Modal isOpen={modalState.isOpen} onClose={() => setModalState({ ...modalState, isOpen: false })}>
         {modalState.key === 'edit' && (
           <>
-            <ModalHeader title='ویرایش ویژگی' icon={<Close />} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
+            <ModalHeader title='ویرایش ویژگی' handleClose={() => setModalState({ ...modalState, isOpen: false })} />
             <Flex width={'100%'} p={'4'} align={'center'} justify={'center'}>
               <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان دسته ویژگی' style={{ width: '50%', margin: '0 auto' }} />} />
             </Flex>
