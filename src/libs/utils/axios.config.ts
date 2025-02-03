@@ -3,12 +3,18 @@ import { redirect } from 'next/navigation';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 
+const username = process.env.NEXT_PUBLIC_USERNAME;
+const password = process.env.NEXT_PUBLIC_PASSWORD;
+const credentials = `${username}:${password}`;
+const encodedCredentials = Buffer.from(credentials).toString('base64');
+
 // Create an instance of axios
 export const ApiManager = axios.create({
   baseURL: 'https://apibznpaneldev.darkube.app/v1/',
   // baseURL: 'http://37.32.8.14:3005/v1/',
   headers: {
     'Content-Type': 'application/json',
+    'up-auth': `Basic ${encodedCredentials}`,
   },
 });
 
@@ -17,6 +23,7 @@ export const ApiManagerV2 = axios.create({
   // baseURL: 'http://37.32.8.14:3005/v2/',
   headers: {
     'Content-Type': 'application/json',
+    'up-auth': `Basic ${encodedCredentials}`,
   },
 });
 

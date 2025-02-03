@@ -22,6 +22,7 @@ const Categories = () => {
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<number | null>(null);
   const methods = useForm({ defaultValues: { sort: '' } });
   const { control, watch } = methods;
 
@@ -35,12 +36,13 @@ const Categories = () => {
     isError: categoriesError,
   } = useQuery({ queryKey: ['categories', watch('sort')], queryFn: async () => await getCategories(watch('sort')) });
 
-  console.log('Categories Data', categoriesData);
   /*
    *** Loading & Error_________________________________________________________________________________________________________________________________________________________________
    */
   if (categoriesLoading || categoriesFetching) return <Spinner style={{ margin: '100px auto', scale: 2 }} />;
   if (!categoriesData || categoriesError) return ToastError('مشکلی پیش آمده. لطفا مجددا تلاش نمایید');
+
+  console.log('CATEGORIES', categoriesData);
 
   /*
    *** JSX_________________________________________________________________________________________________________________________________________________________________
@@ -78,13 +80,13 @@ const Categories = () => {
             />
           </Flex>
         </Flex>
-        {categoriesData?.map(item => (
-          <CategoryItems key={item.id} {...item} />
+        {categoriesData?.map((item, index) => (
+          <CategoryItems key={index} selected={selectedItem === index} onSelect={() => setSelectedItem(index)} currentIndex={index} {...item} />
         ))}
       </Flex>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title={'افزودن دسته بندی'} icon={<Close />} handleClose={() => setIsOpen(false)} />
-        <CreateCategoryModal setIsOpen={setIsOpen} />
+        <CreateCategoryModal data={categoriesData} setIsOpen={setIsOpen} />
       </Modal>
     </FormProvider>
   );

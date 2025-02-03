@@ -6,7 +6,7 @@ import { motion, Variants } from 'framer-motion';
 import styled from 'styled-components';
 
 import { Button, Flex, Grid, IconButton, Text } from '@/libs/primitives';
-import { Pencil, Trash, TriangleUp } from '@/public/icon';
+import { HasMedia, Pencil, Trash, TriangleUp } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -19,6 +19,7 @@ type AccordionWrapperProps = {
   onEdit?: (e: any) => void;
   onButtonSubmit?: (e: any) => void;
   onDelete?: (e: any) => void;
+  hasMedia?: boolean;
   children: React.ReactNode;
 };
 
@@ -28,7 +29,7 @@ const containerVariants: Variants = {
 };
 
 const AccordionWrapper = (props: AccordionWrapperProps) => {
-  const { hero, children, withEdit = false, withButton = false, withDelete = false, isDisableDelete = false, onEdit, onButtonSubmit, onDelete } = props;
+  const { hero, children, withEdit = false, withButton = false, withDelete = false, isDisableDelete = false, onEdit, onButtonSubmit, onDelete, hasMedia } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleAccordion = () => {
@@ -38,6 +39,7 @@ const AccordionWrapper = (props: AccordionWrapperProps) => {
     <Wrapper isOpen={isOpen}>
       <Flex className='style' width={'100%'} justify={'between'} align={'center'} p={'8px 16px'} onClick={toggleAccordion}>
         <Flex gap={'2'} align={'center'}>
+          {hasMedia && <HasMedia />}
           <Text {...typoVariant.title2} style={{ color: colorPalette.gray[11] }}>
             {hero}
           </Text>
@@ -53,17 +55,18 @@ const AccordionWrapper = (props: AccordionWrapperProps) => {
               <Text {...typoVariant.body1}>افزودن ویژگی</Text>
             </Button>
           )}
-          {withDelete && (
-            <IconButton variant='surface' size={'3'} onClick={onDelete} disabled={isDisableDelete}>
-              <TrashIcon />
-            </IconButton>
-          )}
+
           {withEdit && (
             <IconButton variant='surface' size={'3'} onClick={onEdit}>
               <Pencil />
             </IconButton>
           )}
 
+          {withDelete && (
+            <IconButton variant='surface' size={'3'} onClick={onDelete} disabled={isDisableDelete}>
+              <TrashIcon />
+            </IconButton>
+          )}
           <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }} style={{ width: 32, height: 32, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Triangle />
           </motion.div>
@@ -98,6 +101,6 @@ const Triangle = styled(TriangleUp)`
 
 const TrashIcon = styled(Trash)`
   path {
-    fill: ${colorPalette.blue[10]};
+    fill: ${colorPalette.pink[9]};
   }
 `;

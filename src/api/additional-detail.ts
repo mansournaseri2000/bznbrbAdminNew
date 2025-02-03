@@ -5,6 +5,7 @@ import {
   AllProvincesResponse,
   CategoriesResponse,
   CreateCategoryBody,
+  CreateFeatureGroupArrayBody,
   FeatureDetail,
   FeatureGroupResponse,
   FeaturesResponse,
@@ -34,8 +35,15 @@ export const getFeatureItemById = async (id: number) => {
   return res.data.data;
 };
 
-export const addFeatureGroup = async (params: { name: string }) => {
+export const addFeatureGroup = async (params: { name: string }[]) => {
   const res = await DevApiManager.post('/features/addFeatureGroup', params);
+  return res.data;
+};
+
+export const createFeatureGroupArray = async (params: CreateFeatureGroupArrayBody[]) => {
+  const res = await DevApiManager.post('/features/array', {
+    features: params,
+  });
   return res.data;
 };
 
@@ -78,6 +86,13 @@ export const createCategory = async (params: CreateCategoryBody) => {
   const res = await DevApiManager.post<ApiData<{ id: number }>>('/category/create', {
     parent_id: 0,
     name: params.name,
+  });
+  return res.data;
+};
+
+export const createCategoryList = async (params: CreateCategoryBody[]) => {
+  const res = await DevApiManager.post('/category/array', {
+    categories: params,
   });
   return res.data;
 };
