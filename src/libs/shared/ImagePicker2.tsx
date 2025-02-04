@@ -51,12 +51,11 @@ const ImagePicker2 = ({ name, children, errorText, style, localPath ,resetStore 
   const onDrop = async (files: File[], onChange: (value: File) => void) => {
     if (files && files[0]) {
       const selectedImage = files[0];
-      const compressedImage = await compressImage(selectedImage); // Compress the image
+      const compressedImage = await compressImage(selectedImage);
       onChange(URL.createObjectURL(compressedImage) as any);
-      setValue(name, compressedImage); // Set the compressed image in form state
+      setValue(name, compressedImage); 
       setValue(localPath, URL.createObjectURL(compressedImage) as any);
       setValue(resetStore, false);
-     
     }
   };
 

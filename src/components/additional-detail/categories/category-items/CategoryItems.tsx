@@ -59,8 +59,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
     data: singleCategoryData,
     isLoading: singleCategoryLoading,
     isFetching: singleCategoryFetching,
-    refetch,
-  } = useQuery({ queryKey: ['single-category', selected], queryFn: async () => getSingleCategory(id), staleTime: 0, gcTime: 0, initialData: props });
+  } = useQuery({ queryKey: ['single-category', selected], queryFn: async () => getSingleCategory(id), enabled: selected === true });
 
   const { mutate: deleteCategoryMutate, isPending: deleteCategoryPending } = useMutation({
     mutationFn: async () => deleteCategory(id),
@@ -99,7 +98,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
       ToastError('نام زیر دسته بندی نمی‌تواند خالی باشد');
       return;
     }
-    if (singleCategoryData.children.some(item => item.name === subCategoryItem)) {
+    if (singleCategoryData && singleCategoryData.children.some(item => item.name === subCategoryItem)) {
       ToastError('این زیر دسته بندی از قبل وجود دارد');
       return;
     }
@@ -108,7 +107,14 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
 
   return (
     <>
-      <Grid width={'100%'} gapY={'5'} ref={ref} onClick={onSelect}>
+      <Grid
+        width={'100%'}
+        gapY={'5'}
+        ref={ref}
+        onClick={() => {
+          onSelect();
+        }}
+      >
         <AccordionWrapper
           hero={name}
           withEdit
@@ -117,6 +123,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
           isDisableDelete={isEditable === false}
           onEdit={e => {
             e.stopPropagation();
+            onSelect();
             setModalState({ key: 'edit-category', isOpen: true });
           }}
           onDelete={e => {
@@ -169,7 +176,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
         {modalState.key === 'edit-category' && (
           <>
             <ModalHeader title={'ویرایش دسته بندی'} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
-            <EditCategoryModal refetch={refetch} setIsOpen={() => setModalState({ key: 'edit-category', isOpen: false })} data={props} />
+            <EditCategoryModal setIsOpen={() => setModalState({ key: 'edit-category', isOpen: false })} data={singleCategoryData as any} />
           </>
         )}
         {/* 
@@ -195,4 +202,4 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
   );
 });
 
-export default React.memo(CategoryItems);
+export default CategoryItems;

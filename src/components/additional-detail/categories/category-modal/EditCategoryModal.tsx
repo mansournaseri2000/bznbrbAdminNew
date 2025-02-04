@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -15,7 +15,6 @@ import { CategoriesResponse } from '@/types/additional-detail/additional-detail'
 type Props = {
   setIsOpen: React.Dispatch<React.SetStateAction<{ isOpen: boolean; key: 'edit-category' }>>;
   data: CategoriesResponse;
-  refetch:any
 };
 
 interface CategoryFormData {
@@ -31,7 +30,7 @@ interface CategoryFormData {
   isIcon: boolean;
 }
 
-const EditCategoryModal = ({ data, setIsOpen ,refetch}: Props) => {
+const EditCategoryModal = ({ data, setIsOpen }: Props) => {
   //   /*
   //    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
   //    */
@@ -55,54 +54,33 @@ const EditCategoryModal = ({ data, setIsOpen ,refetch}: Props) => {
 
   const { mutate: uploadImageMutate } = useMutation({
     mutationFn: async (body: Param) => await UploadImage(body),
-    onSuccess: data => {
-      if (data.status === true) {
-        ToastSuccess('تصویر با موفقیت آپلود شد');
-      } else {
-        ToastError('لطفا دوباره تلاش نمایید');
-      }
-    },
   });
 
   const { mutate: uploadIconMutate } = useMutation({
     mutationFn: async (body: Param) => await UploadIcon(body),
-    onSuccess: data => {
-      if (data.status === true) {
-        ToastSuccess('آیکون با موفقیت آپلود شد');
-      } else {
-        ToastError('لطفا دوباره تلاش');
-      }
-    },
   });
-
-   useEffect(() => {
-    
-      const timeout = setTimeout(() => {
-        refetch()
-      }, 1000); // 1-second delay
-    
-      return () => clearTimeout(timeout); // Cleanup function to avoid memory leaks
-    }, []); 
 
   const { mutate: editCategoryMutate, isPending: editCategoryPending } = useMutation({
     mutationFn: async () => await editCategory(data.id, watch('name') as any),
     onSuccess: localData => {
       if (localData.status === true) {
-        uploadImageMutate({
-          categoryId: String(data.id),
-          file: watch('imagePath') as any,
-          type: 'CATEGORY',
-        });
-        uploadIconMutate({
-          categoryId: String(data.id),
-          file: watch('iconPath') as any,
-          type: 'CATEGORY',
-        });
-   
-        queryClient.invalidateQueries({ queryKey: ['categories'] });
-        refetch()
+        if (watch('localImagePath')) {
+          uploadImageMutate({
+            categoryId: String(data.id),
+            file: watch('imagePath') as any,
+            type: 'CATEGORY',
+          });
+        }
 
-      
+        if (watch('localIconPath')) {
+          uploadIconMutate({
+            categoryId: String(data.id),
+            file: watch('iconPath') as any,
+            type: 'CATEGORY',
+          });
+        }
+
+        queryClient.invalidateQueries({ queryKey: ['categories'] });
         ToastSuccess('دسته بندی مورد نظر با موفقیت ویرایش شد');
         setIsOpen({ key: 'edit-category', isOpen: false });
       } else {
@@ -110,8 +88,6 @@ const EditCategoryModal = ({ data, setIsOpen ,refetch}: Props) => {
       }
     },
   });
-
-  console.log(data, 'data', watch());
 
   //   /**
   //    * Hooks and Methods

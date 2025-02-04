@@ -41,8 +41,6 @@ const Categories = () => {
   if (categoriesLoading || categoriesFetching) return <Spinner style={{ margin: '100px auto', scale: 2 }} />;
   if (!categoriesData || categoriesError) return ToastError('مشکلی پیش آمده. لطفا مجددا تلاش نمایید');
 
-  console.log('CATEGORIES', categoriesData);
-
   /*
    *** JSX_________________________________________________________________________________________________________________________________________________________________
    */
@@ -80,7 +78,7 @@ const Categories = () => {
           </Flex>
         </Flex>
         {categoriesData?.map((item, index) => (
-          <CategoryItems key={index} selected={selectedItem === index} onSelect={() => setSelectedItem(index)} currentIndex={index} {...item} />
+          <CategoryItems key={index} selected={selectedItem === item.id} onSelect={() => setSelectedItem(item.id)} currentIndex={index} {...item} />
         ))}
       </Flex>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
