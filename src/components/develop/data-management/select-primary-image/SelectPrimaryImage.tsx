@@ -6,8 +6,8 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import Image from 'next/image';
 
 import { Box, Flex, Grid, IconButton, TextArea, TextField } from '@/libs/primitives';
-import ImagePicker2 from '@/libs/shared/ImagePicker2';
-import { Pencil, Trash } from '@/public/icon';
+// import ImagePicker2 from '@/libs/shared/ImagePicker2';
+import {Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { Picture } from '@/types/place/find-place';
 
@@ -30,11 +30,11 @@ const SelectPrimaryImage = ({ picture }: Props) => {
         </Flex>
         <Flex direction={'column'} gap={'4'}>
           {/* TODO: change to upload file */}
-          <ImagePicker2 name='pictures'>
+          {/* <ImagePicker2 name='pictures'>
             <IconButton size={'3'} type='button'>
               <Pencil />
             </IconButton>
-          </ImagePicker2>
+          </ImagePicker2> */}
           <IconButton size={'3'} variant='surface' colorVariant='PINK'>
             <Trash />
           </IconButton>

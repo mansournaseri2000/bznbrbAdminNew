@@ -1,4 +1,4 @@
-import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
+import { DevApiManager, UploaderApiManager } from '@/libs/utils/dev.client.axios.config';
 import {
   addFeatureItemBody,
   AllProvincesByIdResponse,
@@ -142,3 +142,44 @@ export interface AllProvincesBody {
   provinceId: number;
   sortProvincesBy: 'asc' | 'des' | '';
 }
+
+export type Param = {
+  type: string;
+  categoryId: number | string;
+  file: File;
+};
+
+export const UploadImage = async (params: Param) => {
+  const formData = new FormData();
+
+  formData.append('type', params.type);
+  formData.append('categoryId', params.categoryId.toString());
+  formData.append('file', params.file);
+
+  const res = await UploaderApiManager.post<ApiData<{ data: string }>>('image', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return res.data;
+};
+
+export const UploadIcon = async (params: Param) => {
+  const formData = new FormData();
+
+  formData.append('type', params.type);
+  formData.append('categoryId', params.categoryId.toString());
+  formData.append('file', params.file);
+
+  const res = await UploaderApiManager.post<ApiData<{ data: string }>>('svg', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  console.log(res,"test");
+  
+
+  return res.data;
+};

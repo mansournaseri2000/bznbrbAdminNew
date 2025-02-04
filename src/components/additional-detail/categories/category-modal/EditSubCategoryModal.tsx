@@ -2,9 +2,9 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Flex, TextField } from '@/libs/primitives';
-import ImagePicker2 from '@/libs/shared/ImagePicker2';
+// import ImagePicker2 from '@/libs/shared/ImagePicker2';
 import ModalAction from '@/libs/shared/ModalAction';
-import Uploader from '@/libs/shared/uploader/Uploader';
+// import Uploader from '@/libs/shared/uploader/Uploader';
 import { ChildrenDetail } from '@/types/additional-detail/additional-detail';
 
 type Props = {
@@ -20,12 +20,12 @@ const EditSubCategoryModal = ({ data, setIsOpen }: Props) => {
     <>
       <Flex direction={'column'} align={'center'} p={'12px 16px'} gap={'4'}>
         <Flex gap={'3'}>
-          <ImagePicker2 name=''>
+          {/* <ImagePicker2 name=''>
             <Uploader type='pic' />
           </ImagePicker2>
           <ImagePicker2 name=''>
             <Uploader type='icon' />
-          </ImagePicker2>
+          </ImagePicker2> */}s
         </Flex>
         <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='' style={{ width: '50%', margin: '0 auto' }} />} />
       </Flex>

@@ -39,6 +39,18 @@ const PointManagement = () => {
       isInfoCompleted: getParam('isInfoCompleted') || '',
       isPublished: getParam('isPublished') || '',
       searchQuery: getParam('searchQuery') || '',
+
+      startDate: getParam('startDate') || '',
+      endDate: getParam('endDate') || '',
+      mainPic: getParam('mainPic') || '',
+      gallery: getParam('gallery') || '',
+      info: getParam('info') || '',
+      coordinates: getParam('coordinates') || '',
+      description: getParam('description') || '',
+      features: getParam('features') || '',
+      analyse: getParam('analyse') || '',
+      seo: getParam('seo') || '',
+      workTime: getParam('workTime') || '',
     },
   });
 

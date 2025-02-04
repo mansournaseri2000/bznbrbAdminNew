@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import { isPublishedOptions, StatusFilterOption } from '@/constants/data-management';
 import { Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import CustomDatePicker from '@/libs/shared/CustomDatePicker';
 import ModalAction from '@/libs/shared/ModalAction';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
@@ -48,10 +49,28 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
       isInfoCompleted: '',
       isPublished: '',
       searchQuery: '',
+      startDate: '',
+      endDate: '',
+      mainPic: '',
+      gallery: '',
+      info: '',
+      coordinates: '',
+      description: '',
+      features: '',
+      analyse: '',
+      seo: '',
+      workTime: '',
     });
     replace('/data-management/point-management');
     onSubmit();
     setIsOpen(false);
+  };
+
+  const sample = (date: Date) => {
+    const currentDate = new Date(date);
+    currentDate.setDate(date.getDate() + 1); // Add one day
+
+    return new Date(currentDate);
   };
 
   return (
@@ -109,6 +128,41 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             بازه زمانی
           </Text>
+          <Grid gap={'16px'} columns={'2'}>
+            <Controller
+              name='startDate'
+              control={control}
+              render={item => (
+                <CustomDatePicker
+                  {...item}
+                  inputMode='none'
+                  placeholder='از تاریخ'
+                  value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
+                  onChangeValue={(val: any) => {
+                    setValue('startDate', new Date(val));
+                    setValue('endDate', sample(new Date(val)));
+                  }}
+                />
+              )}
+            />
+            <Controller
+              name='endDate'
+              control={control}
+              render={item => (
+                <CustomDatePicker
+                  {...item}
+                  inputMode='none'
+                  placeholder='تا تاریخ'
+                  value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
+                  minDate={watch('startDate')}
+                  onChangeValue={(val: any) => {
+                    setValue('endDate', new Date(val));
+                  }}
+                  disabled={!watch('startDate')}
+                />
+              )}
+            />
+          </Grid>
         </Grid>
         <Grid gapY={'2'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>

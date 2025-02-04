@@ -10,7 +10,7 @@ const encodedCredentials = Buffer.from(credentials).toString('base64');
 
 // Create an instance of axios
 export const ApiManager = axios.create({
-  baseURL: 'https://apibznpaneldev.darkube.app/v1/',
+  baseURL: 'https://api-admin-dev.darkube.app/v1/',
   // baseURL: 'http://37.32.8.14:3005/v1/',
   headers: {
     'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ export const ApiManager = axios.create({
 });
 
 export const ApiManagerV2 = axios.create({
-  baseURL: 'https://apibznpaneldev.darkube.app/v1/',
+  baseURL: 'https://api-admin-dev.darkube.app/v1/',
   // baseURL: 'http://37.32.8.14:3005/v2/',
   headers: {
     'Content-Type': 'application/json',
@@ -58,22 +58,7 @@ ApiManagerV2.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-// Request Interceptor
-// ApiManager.interceptors.request.use(
-//   config => {
-//     // You can add tokens or modify headers here if needed
-//     const token = localStorage.getItem('token'); // Example token fetching
-//     if (token) {
-//       config.headers['Authorization'] = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   error => {
-//     // Handle request errors (like network issues)
-//     console.error('Request error:', error);
-//     return Promise.reject(error);
-//   }
-// );
+
 
 // Response Interceptor
 ApiManager.interceptors.response.use(

@@ -59,13 +59,15 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
     data: singleCategoryData,
     isLoading: singleCategoryLoading,
     isFetching: singleCategoryFetching,
-  } = useQuery({ queryKey: ['single-category', selected], queryFn: async () => getSingleCategory(id), initialData: props, enabled: selected === true });
+    refetch,
+  } = useQuery({ queryKey: ['single-category', selected], queryFn: async () => getSingleCategory(id), staleTime: 0, gcTime: 0, initialData: props });
 
   const { mutate: deleteCategoryMutate, isPending: deleteCategoryPending } = useMutation({
     mutationFn: async () => deleteCategory(id),
     onSuccess: async data => {
       if (data.status === true) {
         queryClient.invalidateQueries({ queryKey: ['categories'] });
+
         ToastSuccess('دسته بندی مورد نظر با موفقیت حذف شد');
         setModalState({ ...modalState, isOpen: false });
       } else {
@@ -86,6 +88,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
       }
     },
   });
+
   //   /**
   //    * Methods
   //    * _______________________________________________________________________________
@@ -166,7 +169,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
         {modalState.key === 'edit-category' && (
           <>
             <ModalHeader title={'ویرایش دسته بندی'} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
-            <EditCategoryModal setIsOpen={() => setModalState({ key: 'edit-category', isOpen: false })} data={props} />
+            <EditCategoryModal refetch={refetch} setIsOpen={() => setModalState({ key: 'edit-category', isOpen: false })} data={props} />
           </>
         )}
         {/* 
