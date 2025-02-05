@@ -86,9 +86,9 @@ const PlaceInfo = ({ categoris }: Props) => {
           )}
         />
       </Flex>
-      <Controller name='website' control={control} disabled render={({ field }) => <TextField {...field} placeholder='Custom URL' aria-label='textFiled' />} />
-      <Controller name='basicInfoDescription' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات نقطه' aria-label='TextArea' />} />
-      <Controller name='basicInfosummary' control={control} render={({ field }) => <TextArea {...field} placeholder='خلاصه توضیحات' aria-label='TextArea' />} />
+      <Controller name='website' control={control} disabled render={({ field }) => <TextField {...field} placeholder='slug' aria-label='textFiled' />} />
+      <Controller name='basicInfoDescription' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات تکمیلی' aria-label='TextArea' rows={6} />} />
+      <Controller name='basicInfosummary' control={control} render={({ field }) => <TextArea {...field} placeholder='خلاصه توضیحات' aria-label='TextArea' rows={6} />} />
     </Grid>
   );
 };

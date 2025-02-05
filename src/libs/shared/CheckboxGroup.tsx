@@ -28,7 +28,7 @@ const CheckboxGroup = ({ items, store, isRow = true }: Props) => {
       render={({ field }) => {
         const { value, onChange } = field;
 
-        const handleCheckboxChange = (checkboxValue: number) => {
+        const handleCheckboxChange = (checkboxValue: number | string) => {
           if (value?.includes(checkboxValue)) {
             onChange(value?.filter((v: number) => v !== checkboxValue));
           } else {
@@ -51,7 +51,15 @@ const CheckboxGroup = ({ items, store, isRow = true }: Props) => {
                 key={item.id}
               >
                 <Flex gap='2' style={{ cursor: 'pointer' }}>
-                  <Checkbox disabled={item.disable} value={item.value as any} checked={value?.includes(item.value)} onCheckedChange={() => handleCheckboxChange(item.value as any)} />
+                  <Checkbox
+                    disabled={item.disable}
+                    value={item.value as any}
+                    checked={value?.includes(item.value)}
+                    onCheckedChange={() => {
+                      handleCheckboxChange(item.value as any);
+                      console.log('onChange', item.value);
+                    }}
+                  />
                   <Text {...typoVariant.body2} style={{ color: item.disable ? colorPalette.gray[8] : colorPalette.gray[11] }}>
                     {item.key}
                   </Text>

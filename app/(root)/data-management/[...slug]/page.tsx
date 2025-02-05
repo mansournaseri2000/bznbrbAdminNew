@@ -37,10 +37,8 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
         queryFn: async () => await getAllPlacesConstants(),
       },
       {
-        queryKey: ['place'],
+        queryKey: ['place', placeID],
         queryFn: async () => await getPlace(Number(placeID)),
-        staleTime: 0,
-        gcTime: 0,
       },
     ],
   });
@@ -50,6 +48,7 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   const { data: placeData, isLoading: placeIsLoading } = editPlaceResult;
 
   if (!constantData || placeIsLoading) return <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />;
+
   /**
    * Methods
    * _______________________________________________________________________________

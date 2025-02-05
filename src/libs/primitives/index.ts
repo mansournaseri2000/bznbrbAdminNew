@@ -16,3 +16,4 @@ export { default as TextArea } from './components/TextArea';
 export { default as Slider } from './components/Slider';
 export { SelectItem, SelectRoot } from './components/RadixSelect';
 export { default as CheckboxGroup } from './components/CheckboxGroup';
+export { default as PopoverRoot } from './components/Popover';

@@ -23,7 +23,7 @@ const CustomAddItem = forwardRef<HTMLInputElement, CustomAddItemProps>(({ placeh
       {isLoading ? (
         <Spinner style={{ marginLeft: 20 }} />
       ) : (
-        <IconButton size={'4'} className='icon-button' variant='surface' onClick={onClick}>
+        <IconButton size={'4'} type='button' className='icon-button' variant='surface' onClick={onClick}>
           <PlusIcon style={{ color: colorPalette.pink[9] }} />
         </IconButton>
       )}

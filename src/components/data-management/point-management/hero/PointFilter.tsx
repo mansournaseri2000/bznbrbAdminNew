@@ -5,8 +5,9 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import { useRouter } from 'next/navigation';
 
-import { isPublishedOptions, StatusFilterOption } from '@/constants/data-management';
-import { Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import { booleanFilterOptions, isPublishedOptions, pointTypeOptions, StatusFilterOption } from '@/constants/data-management';
+import { Grid, PopoverRoot, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import CheckboxGroup from '@/libs/shared/CheckboxGroup';
 import CustomDatePicker from '@/libs/shared/CustomDatePicker';
 import ModalAction from '@/libs/shared/ModalAction';
 import { colorPalette } from '@/theme';
@@ -20,6 +21,16 @@ type Props = {
   onSubmit: () => void;
 };
 
+export function serializeSubCategoriesData(category: any) {
+  if (category) {
+    const test = category.map((item: any) => {
+      return { key: item.name, value: item.id, id: item.id, disable: false };
+    });
+
+    return test;
+  }
+}
+
 const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
   /**
    * Variables and Constant
@@ -31,7 +42,7 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
   const subCategory = categories.filter(item => item.id === Number(watch('parentCategoryId')))[0]?.children;
 
   /**
-   * functions
+   * Methods
    * _______________________________________________________________________________
    */
   const addFilter = () => {
@@ -46,7 +57,8 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
       cityId: '',
       parentCategoryId: '',
       arrayCatIds: [],
-      isInfoCompleted: '',
+      arrayTypes: [],
+      status: '',
       isPublished: '',
       searchQuery: '',
       startDate: '',
@@ -68,14 +80,22 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
 
   const sample = (date: Date) => {
     const currentDate = new Date(date);
-    currentDate.setDate(date.getDate() + 1); // Add one day
-
+    currentDate.setDate(date.getDate() + 1);
     return new Date(currentDate);
   };
 
+  console.log('watch', watch());
+  /**
+   * JSX
+   * _______________________________________________________________________________
+   */
   return (
-    <Grid maxHeight={'776px'} height={'100%'} style={{ alignContent: 'space-between' }}>
+    <Grid maxHeight={'776px'} height={'100%'} style={{ maxHeight: 750, overflowY: 'auto' }}>
       <Grid width={'100%'} p={'4'} gapY={'4'}>
+        {/*****
+          Point position
+         * _______________________________________________________________________________
+         *****/}
         <Grid gapY={'2'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             موقعیت نقطه
@@ -95,7 +115,6 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
               >
                 {province?.map(item => (
                   <SelectItem key={item.id} value={String(item.id)}>
-                    {/* TODO: fix item style */}
                     {item.name}
                   </SelectItem>
                 ))}
@@ -124,6 +143,10 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
             )}
           />
         </Grid>
+        {/*****
+         * Time period
+         * _______________________________________________________________________________
+         *****/}
         <Grid gapY={'2'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             بازه زمانی
@@ -164,11 +187,17 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
             />
           </Grid>
         </Grid>
-        <Grid gapY={'2'}>
-          <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
-            نوع نقطه
-          </Text>
-        </Grid>
+        {/*****
+         * Point Type
+         * _______________________________________________________________________________
+         *****/}
+        <PopoverRoot lable='نوع نقطه' placeholder='نوع نقطه'>
+          <CheckboxGroup isRow={false} items={pointTypeOptions} store='arrayTypes' />
+        </PopoverRoot>
+        {/*****
+         * Category Type
+         * _______________________________________________________________________________
+         *****/}
         <Grid gapY={'2'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             دسته بندی
@@ -193,39 +222,46 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
               </SelectRoot>
             )}
           />
-          <Controller
-            name='arrayCatIds'
-            control={control}
-            render={({ field }) => (
-              <SelectRoot
-                {...field}
-                placeholder='زیردسته بندی'
-                disabled={!Boolean(subCategory)}
-                value={String(field.value)}
-                onValueChange={val => {
-                  field.onChange(val);
-                }}
-              >
-                {subCategory?.map(item => (
-                  <SelectItem key={item.id} value={String(item.id)}>
-                    {item.name}
-                  </SelectItem>
-                ))}
-              </SelectRoot>
-            )}
-          />
+
+          <PopoverRoot placeholder='زیردسته بندی'>
+            <CheckboxGroup isRow={false} items={serializeSubCategoriesData(subCategory)} store='arrayCatIds' />
+          </PopoverRoot>
         </Grid>
+        {/*****
+         * Status Types
+         * _______________________________________________________________________________
+         *****/}
         <Grid gapY={'2'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             وضعیت
           </Text>
           <Controller
-            name='isInfoCompleted'
+            name='isPublished'
             control={control}
             render={({ field }) => (
               <SelectRoot
                 {...field}
-                placeholder='وضعیت اطلاعات'
+                placeholder='انتشار'
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {isPublishedOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='status'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                placeholder='وضعیت'
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
@@ -240,18 +276,18 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
             )}
           />
           <Controller
-            name='isPublished'
+            name='mainPic'
             control={control}
             render={({ field }) => (
               <SelectRoot
                 {...field}
-                placeholder='وضعیت انتشار'
+                placeholder='تصویر اصلی'
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
                 }}
               >
-                {isPublishedOptions.map(item => (
+                {booleanFilterOptions.map(item => (
                   <SelectItem key={item.id} value={String(item.value)}>
                     {item.key}
                   </SelectItem>
@@ -259,63 +295,146 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
               </SelectRoot>
             )}
           />
-          {/* <Popover.Root>
-            <Popover.Trigger>
-              <Button
-                style={{
-                  minHeight: '48px',
-                  paddingInline: '15px 10px',
-                  borderRadius: '12px',
-                  border: `1px solid ${colorPalette.gray[7]}`,
-                  color: colorPalette.gray[9],
-                  backgroundColor: colorPalette.gray[2],
+          <Controller
+            name='gallery'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                placeholder='تصویر گالری'
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
                 }}
-                variant='solid'
-                size={'4'}
               >
-                <Flex width={'100%'} align={'center'} justify={'between'}>
-                  <Text {...typoVariant.body2} style={{ color: colorPalette.gray[9] }}>
-                    وضعیت اطلاعات
-                  </Text>
-                  <CaretDownIcon style={{ scale: 1.6 }} color={colorPalette.pink[9]} />
-                </Flex>
-              </Button>
-            </Popover.Trigger>
-            <Popover.Content>
-              <Flex gap={'2'}>
-                <CheckboxGroup isRow={false} items={StatusFilterOption} store='isInfoCompleted' />
-              </Flex>
-            </Popover.Content>
-          </Popover.Root> */}
-
-          {/* <Popover.Root>
-            <Popover.Trigger>
-              <Button
-                style={{
-                  minHeight: '48px',
-                  paddingInline: '15px 10px',
-                  borderRadius: '12px',
-                  border: `1px solid ${colorPalette.gray[7]}`,
-                  color: colorPalette.gray[9],
-                  backgroundColor: colorPalette.gray[2],
+                {booleanFilterOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='info'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                placeholder='اطلاعات'
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
                 }}
-                variant='solid'
-                size={'4'}
               >
-                <Flex width={'100%'} align={'center'} justify={'between'}>
-                  <Text {...typoVariant.body2} style={{ color: colorPalette.gray[9] }}>
-                    وضعیت انتشار
-                  </Text>
-                  <CaretDownIcon style={{ scale: 1.6 }} color={colorPalette.pink[9]} />
-                </Flex>
-              </Button>
-            </Popover.Trigger>
-            <Popover.Content>
-              <Flex gap={'2'}>
-                <CheckboxGroup isRow={false} items={isPublishedOptions} store='isPublished' />
-              </Flex>
-            </Popover.Content>
-          </Popover.Root> */}
+                {booleanFilterOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='coordinates'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                placeholder='موقعیت جغرافیایی'
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {booleanFilterOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='description'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                placeholder='توضیحات'
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {booleanFilterOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='features'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                placeholder='امکانات'
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {booleanFilterOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='analyse'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                placeholder='تحلیل'
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {booleanFilterOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='seo'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                placeholder='سئو'
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {booleanFilterOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
         </Grid>
       </Grid>
       <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} />

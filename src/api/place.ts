@@ -234,7 +234,11 @@ export const createPlace = async (params: fomrData) => {
     trip_value,
     rating,
     suggested_time,
+    status,
+    type,
+    isPublished,
   } = params;
+
   const res = await ApiManager.post<ApiData<PlaceResponse>>('places/create', {
     name: name,
     city_id: cityID == 0 ? undefined : Number(cityID),
@@ -274,6 +278,9 @@ export const createPlace = async (params: fomrData) => {
     rating: Number(rating),
     trip_value: Number(trip_value),
     suggested_time: String(suggested_time),
+    type: type,
+    isPublished: isPublished === 'true' ? true : isPublished === 'false' ? false : String(isPublished),
+    status: status === 'true' ? true : status === 'false' ? false : String(status),
   });
   return res.data;
 };
@@ -333,6 +340,9 @@ export const editPlace = async (params: fomrData, id: number) => {
     rating,
     trip_value,
     suggested_time,
+    status,
+    type,
+    isPublished,
   } = params;
 
   const res = await ApiManager.put<ApiData<PlaceResponse>>(`places/update/${id}`, {
@@ -374,6 +384,9 @@ export const editPlace = async (params: fomrData, id: number) => {
     rating: Number(rating),
     trip_value: Number(trip_value),
     suggested_time: suggested_time,
+    type: type,
+    isPublished: isPublished === 'true' ? true : isPublished === 'false' ? false : String(isPublished),
+    status: status === 'true' ? true : status === 'false' ? false : String(status),
   });
 
   return res.data;

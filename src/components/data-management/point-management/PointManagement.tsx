@@ -14,6 +14,7 @@ import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
 import ItemsPerPage from '@/libs/shared/ItemsPerPage';
 import { updateUrlWithPageNumber } from '@/libs/utils';
 import { generateSearchParams } from '@/libs/utils/generateSearchParams';
+import { typoVariant } from '@/theme/typo-variants';
 
 import PointManagementHero from './hero/PointManagementHero';
 import PointManagementList from './list/PointManagementList';
@@ -32,25 +33,24 @@ const PointManagement = () => {
     defaultValues: {
       page: page,
       limit: Number(getParam('limit')) || 10,
+      searchQuery: getParam('searchQuery') || '',
       provinceId: Number(getParam('provinceId')) || '',
       cityId: Number(getParam('cityId')) || '',
-      parentCategoryId: getParam('parentCategoryId') || '',
+      parentCategoryId: Number(getParam('parentCategoryId')) || '',
       arrayCatIds: getParam('arrayCatIds') ? getParam('arrayCatIds').split(',').map(Number) : [],
-      isInfoCompleted: getParam('isInfoCompleted') || '',
-      isPublished: getParam('isPublished') || '',
-      searchQuery: getParam('searchQuery') || '',
-
-      startDate: getParam('startDate') || '',
-      endDate: getParam('endDate') || '',
-      mainPic: getParam('mainPic') || '',
-      gallery: getParam('gallery') || '',
-      info: getParam('info') || '',
-      coordinates: getParam('coordinates') || '',
-      description: getParam('description') || '',
-      features: getParam('features') || '',
-      analyse: getParam('analyse') || '',
-      seo: getParam('seo') || '',
-      workTime: getParam('workTime') || '',
+      arrayTypes: getParam('arrayTypes') ? getParam('arrayTypes').split(',').map(String) : [],
+      startDate: Number(getParam('startDate')) || '',
+      endDate: Number(getParam('endDate')) || '',
+      isPublished: getParam('isPublished') ? Boolean(getParam('isPublished')) : '',
+      status: getParam('status') ? Boolean(getParam('status')) : '',
+      mainPic: getParam('mainPic') ? Boolean(getParam('mainPic')) : '',
+      gallery: getParam('gallery') ? Boolean(getParam('gallery')) : '',
+      info: getParam('info') ? Boolean(getParam('info')) : '',
+      coordinates: getParam('coordinates') ? Boolean(getParam('coordinates')) : '',
+      description: getParam('description') ? Boolean(getParam('description')) : '',
+      features: getParam('features') ? Boolean(getParam('features')) : '',
+      analyse: getParam('analyse') ? Boolean(getParam('analyse')) : '',
+      seo: getParam('seo') ? Boolean(getParam('seo')) : '',
     },
   });
 
@@ -65,20 +65,36 @@ const PointManagement = () => {
     isError: pointError,
     isPending: pointPending,
   } = useMutation({
+    mutationKey: ['place-data'],
     mutationFn: async (body: AllPlacesBody) => getAllPlacesFiltered(body),
     onSuccess: async data => {
       const cleanedData = Object.fromEntries(
-        Object.entries(watch()).filter(
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          ([_, value]) =>
+        Object.entries(methods.watch()).filter(([key, value]) => {
+          if (
             value !== undefined &&
             value !== '' &&
             value !== 'none' &&
             value !== null &&
+            value !== 'null' &&
             !(Array.isArray(value) && value.length === 0) &&
-            !(typeof value === 'object' && value !== null && Object.keys(value).length === 0)
-        )
+            !(Array.isArray(value) && value.every(item => item === ('' as any))) &&
+            !(Array.isArray(value) && value.every(item => item === ('none' as any)))
+          ) {
+            if (['startDate', 'endDate'].includes(key)) {
+              return new Date(value as any).getTime();
+            }
+            return true;
+          }
+          return false;
+        })
       );
+
+      // Convert date fields to timestamps
+      Object.keys(cleanedData).forEach(key => {
+        if (['startDate', 'endDate'].includes(key)) {
+          cleanedData[key] = new Date(cleanedData[key] as any).getTime();
+        }
+      });
       const searchParams = generateSearchParams(cleanedData);
       push(`/data-management/point-management?${searchParams}`);
       console.log('data', data);
@@ -113,10 +129,13 @@ const PointManagement = () => {
             <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
           ) : pointPending ? (
             <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
+          ) : !pointData ? (
+            <Flex width={'100%'} justify={'center'} mt={'6'}>
+              <Text {...typoVariant.title1}>دیتایی موجود نیست</Text>
+            </Flex>
           ) : (
             <PointManagementList data={pointData?.allFilteredPlaces as any} />
           )}
-
           {pointData?.allFilteredPlaces && (
             <Flex width={'100%'} align={'center'} justify={'between'}>
               <CustomPagination

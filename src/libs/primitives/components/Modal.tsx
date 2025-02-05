@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import styled from 'styled-components';
@@ -24,6 +24,24 @@ const contentVariants = {
 };
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  useEffect(() => {
+    if (isOpen) {
+      // Hide body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      // Reset overflow when modal is closed
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+
+    // Cleanup on unmount or when modal closes
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -61,6 +79,9 @@ const ModalBackdrop = styled(motion.div)`
 const ModalContent = styled(motion.div)`
   background-color: white;
   border-radius: 10px;
-  min-width: 800px;
+  border-radius: 10px;
+  width: 80%;
+  max-height: 600px;
   max-width: 800px;
+  overflow: scroll;
 `;

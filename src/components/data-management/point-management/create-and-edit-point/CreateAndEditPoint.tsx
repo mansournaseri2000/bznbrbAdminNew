@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -15,9 +15,9 @@ import { fomrData, placeCategories, placeTripLimitations, placeTripSeasons, plac
 import ImageGallery from '@/components/place/create-edit-place/ImageGallery';
 import PrimaryImage from '@/components/place/create-edit-place/PrimaryImage';
 import RoutingGuid from '@/components/place/create-edit-place/routing-guid/RoutingGuid';
-import { createPointTabsOptions, editPointTabsOptions } from '@/constants/data-management';
+import { createPointTabsOptions, editPointTabsOptions, formPublishedOptions, formStatusOptions } from '@/constants/data-management';
 import { categoriesConstants, placeWorkTimeSchedule, seasons } from '@/constants/place';
-import { Button, Flex, Grid, SelectRoot, Text } from '@/libs/primitives';
+import { Button, Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import SimpleWrapper2 from '@/libs/shared/wrapper/SimpleWrapper2';
 import { serializeCategories, serializeFeatures, serializePlaceWorkTimeSchedule, serializeTripLimitations, serializeTripSeasons } from '@/libs/utils';
@@ -131,9 +131,6 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
 
   const [buttonState, setButtonState] = useState<typeof status extends 'create-point' ? CreatePointButtonTypes : EditPointButtonTypes>(status === 'create-point' ? 'place-info' : 'place-info');
 
-  // const [buttonState, setButtonState] = useState<CreatePointButtonTypes>('place-info');
-  // const [editButtonState, setEditButtonState] = useState<EditPointButtonTypes>('place-info');
-
   console.log('DATA', placeData);
   const model = {
     taxi: placeData?.taxi,
@@ -159,11 +156,9 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             website: placeData?.website,
             basicInfoDescription: placeData?.description,
             basicInfosummary: placeData?.summary,
-
             isLoading: false,
             uploadImage: placeData?.UserSentPicturesForPlace,
             pictures: placeData?.pictures,
-
             provinceId: placeData?.Cities ? placeData?.Cities.Provinces.id : undefined,
             cityID: placeData?.Cities ? placeData?.Cities.id : undefined,
             tell: placeData?.tell,
@@ -173,7 +168,6 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             lng: placeData?.lng,
             area: placeData?.area,
             vehicleOptions: serializeModelObject(model),
-
             airplane: placeData?.airplane,
             bus: placeData?.bus,
             car: placeData?.car,
@@ -182,20 +176,17 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             subway: placeData?.subway,
             taxi: placeData?.taxi,
             train: placeData?.train,
-
             keywords: placeData?.keywords,
             metakeywords: placeData?.tags,
             keyword: placeData?.keywords,
             meta_description: placeData?.meta_description,
             meta_title: placeData?.meta_title,
             metakeyword: '',
-
             cost: placeData?.cost,
             renown: placeData?.renown,
             rating: placeData?.rating,
             trip_value: placeData?.trip_value,
             suggested_time: placeData?.suggested_time,
-
             features: serializeFeatures(placeData?.features),
             TripTypes: serializeTripData(placeData?.Place_TripType, placeConstant.tripDatas),
             PlaceCategories: serializeCategoryData(placeData?.Place_Category, categoriesConstants),
@@ -203,6 +194,9 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             tripLimitations: serializeLimitaionData(placeData?.Place_TripLimitation, placeConstant.tripLimitations),
             PlaceDetails: placeData?.PlaceDetails,
             PlaceWorkTimes: placeData?.PlaceWorkTime,
+            status: placeData?.status,
+            type: placeData?.type,
+            isPublished: placeData?.isPublished,
           }
         : {
             placeCategory: '',
@@ -212,13 +206,10 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             website: '',
             basicInfoDescription: '',
             basicInfosummary: '',
-
             placeID: null,
-
             isLoading: false,
             uploadImage: null,
             pictures: [],
-
             provinceId: '',
             cityID: '',
             tell: '',
@@ -228,13 +219,11 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             lng: '',
             area: '',
             vehicleOptions: serializeModelObject(model),
-
             cost: 'LOW',
             renown: 'LOW',
             rating: 0,
             trip_value: 0,
             suggested_time: 0,
-
             airplane: null,
             bus: null,
             car: null,
@@ -243,14 +232,12 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             subway: null,
             taxi: null,
             train: null,
-
             keywords: '',
             metakeywords: '',
             keyword: '',
             meta_description: '',
             meta_title: '',
             metakeyword: '',
-
             features: [],
             TripTypes: placeTripTypes,
             PlaceCategories: serializeCategories(placeCategories),
@@ -258,13 +245,16 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             tripLimitations: serializeTripLimitations(placeTripLimitations),
             PlaceDetails: [],
             PlaceWorkTimes: serializePlaceWorkTimeSchedule(placeWorkTimeSchedule),
+            status: '',
+            type: '',
+            isPublished: '',
           },
   });
   /**
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const { handleSubmit } = methods;
+  const { handleSubmit, watch, control } = methods;
 
   const { mutate: editPlaceMutate } = useMutation({
     mutationFn: async (params: fomrData) => editPlace(params, placeID),
@@ -306,8 +296,9 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     } else {
       createPlaceMutate(data);
     }
-    // console.log(data, 'datadata');
   };
+
+  console.log('watch', watch());
 
   return (
     <FormProvider {...methods}>
@@ -315,13 +306,70 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
         <Grid width={'100%'} gapY={'5'}>
           <Grid width={'100%'} columns={'3'} gap={'5'}>
             <FilterCard label='نوع نقطه'>
-              <SelectRoot placeholder='نقطه'></SelectRoot>
+              <Controller
+                name='type'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder='نقطه'
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {placeConstant.PlaceType.map((item, index) => (
+                      <SelectItem key={index} value={item.id}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
             </FilterCard>
             <FilterCard label='انتشار'>
-              <SelectRoot placeholder='پیش نویس'></SelectRoot>
+              <Controller
+                name='isPublished'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder='انتشار'
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {formPublishedOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.value)}>
+                        {item.key}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
             </FilterCard>
             <FilterCard label='وضعیت'>
-              <SelectRoot placeholder='فعال'></SelectRoot>
+              <Controller
+                name='status'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder='وضعیت'
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {formStatusOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.value)}>
+                        {item.key}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
             </FilterCard>
           </Grid>
 

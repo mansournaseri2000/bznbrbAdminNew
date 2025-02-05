@@ -41,8 +41,8 @@ const EditCategoryModal = ({ data, setIsOpen }: Props) => {
       iconPath: data?.icon,
       localImagePath: null,
       localIconPath: null,
-      isBanner: Boolean(data.banner) ? true : false,
-      isIcon: Boolean(data.icon) ? true : false,
+      isBanner: Boolean(data?.banner) ? true : false,
+      isIcon: Boolean(data?.icon) ? true : false,
     },
   });
   const { control, watch } = methods;

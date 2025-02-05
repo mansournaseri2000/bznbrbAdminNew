@@ -137,7 +137,7 @@ const PointManagementList = (props: Props) => {
         const handleClick = (e: React.MouseEvent) => {
           console.log('item', item);
           e.preventDefault();
-          router.push(`/data-management/point-management/point-detail/${item.id}`);
+          router.push(`/data-management/point-management/edit-point/${item.id}`);
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>

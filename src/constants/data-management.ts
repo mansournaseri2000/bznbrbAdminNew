@@ -1,22 +1,39 @@
 import { CreatePointButtonTypes, EditPointButtonTypes } from '@/types/data-management/point';
 
 export const StatusFilterOption = [
-  { id: 1, key: 'کامل', value: true },
-  { id: 2, key: 'ناقص', value: false },
-  { id: 2, key: 'همه', value: null },
+  { id: 1, key: 'هیچکدام', value: null },
+  { id: 2, key: 'فعال', value: true },
+  { id: 3, key: 'غیر فعال', value: false },
 ];
 export const isPublishedOptions = [
-  { id: 1, key: 'منتشر شده', value: true },
-  { id: 2, key: 'منتشر نشده', value: false },
-  { id: 2, key: 'همه', value: null },
+  { id: 1, key: 'هیچکدام', value: null },
+  { id: 2, key: 'پیش نویس', value: false },
+  { id: 3, key: 'انتشار', value: true },
 ];
+
+export const booleanFilterOptions = [
+  { id: 1, key: 'هیچکدام', value: null },
+  { id: 2, key: 'دارد', value: true },
+  { id: 3, key: 'ندارد', value: false },
+];
+
+export const formStatusOptions = [
+  { id: 1, key: 'فعال', value: true },
+  { id: 2, key: 'غیر فعال', value: false },
+];
+
+export const formPublishedOptions = [
+  { id: 1, key: 'پیش نویس', value: false },
+  { id: 2, key: 'انتشار', value: true },
+];
+
 export const pointTypeOptions = [
-  { id: 3, name: 'هنرگردی' },
-  { id: 1, name: 'شکم گردی' },
-  { id: 2, name: 'مذهبی' },
-  { id: 4, name: 'هنرگردی' },
-  { id: 5, name: 'سرویس ها' },
-  { id: 6, name: 'فروشگاه' },
+  { id: 1, key: 'گردشگری', value: 'گردشگری', disable: false },
+  { id: 2, key: 'شکم گردی', value: 'شکم گردی', disable: false },
+  { id: 3, key: 'مذهبی', value: 'مذهبی', disable: false },
+  { id: 4, key: 'هنرگردی', value: 'هنرگردی', disable: false },
+  { id: 6, key: 'سرویس ها', value: 'سرویس ها', disable: false },
+  { id: 7, key: 'فروشگاه', value: 'فروشگاه', disable: false },
 ];
 
 export const articleStatusOptions = [

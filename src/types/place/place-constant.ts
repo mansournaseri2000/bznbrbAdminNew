@@ -7,6 +7,7 @@ export interface PlaceConstantResponse {
   seasons: Season[];
   provinces: Province[];
   cities: CityItems[];
+  PlaceType: PlaceType[];
 }
 
 export interface Detail {
@@ -70,5 +71,10 @@ export interface City {
 
 export interface CityItems {
   id: number;
+  name: string;
+}
+
+export interface PlaceType {
+  id: string;
   name: string;
 }

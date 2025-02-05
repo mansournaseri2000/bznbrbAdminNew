@@ -135,4 +135,8 @@ export type fomrData = {
 
   PlaceDetails: { detailId: number; descriptions: string }[];
   PlaceWorkTimes: placeWorkTimes[];
+
+  status: boolean | string;
+  type: string;
+  isPublished: boolean | string;
 };

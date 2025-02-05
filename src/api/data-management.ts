@@ -54,8 +54,18 @@ export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
     provinceId: Number(params.provinceId),
     cityId: Number(params.cityId),
     parentCategoryId: Number(params.parentCategoryId),
-    isInfoCompleted: params.isInfoCompleted === 'true' ? true : params.isInfoCompleted === 'false' ? false : String(params.isInfoCompleted),
     isPublished: params.isPublished === 'true' ? true : params.isPublished === 'false' ? false : String(params.isPublished),
+    status: params.status === 'true' ? true : params.status === 'false' ? false : String(params.status),
+    mainPic: params.mainPic === 'true' ? true : params.mainPic === 'false' ? false : String(params.mainPic),
+    gallery: params.gallery === 'true' ? true : params.gallery === 'false' ? false : String(params.gallery),
+    info: params.info === 'true' ? true : params.info === 'false' ? false : String(params.info),
+    coordinates: params.coordinates === 'true' ? true : params.coordinates === 'false' ? false : String(params.coordinates),
+    description: params.description === 'true' ? true : params.description === 'false' ? false : String(params.description),
+    features: params.features === 'true' ? true : params.features === 'false' ? false : String(params.features),
+    analyse: params.analyse === 'true' ? true : params.analyse === 'false' ? false : String(params.analyse),
+    seo: params.seo === 'true' ? true : params.seo === 'false' ? false : String(params.seo),
+    startDate: Boolean(new Date(params.startDate).getTime()) ? new Date(params.startDate).getTime() : null,
+    endDate: Boolean(new Date(params.endDate).getTime()) ? new Date(params.endDate).getTime() : null,
   };
   const body = filterObject(obj);
   const res = await DevApiManager.post<ApiData<PlaceListResponse>>('places/allPlacesWithFilter', body);
@@ -124,11 +134,23 @@ export const getArticleById = async (id: number) => {
 export interface AllPlacesBody {
   page: number;
   limit: number;
-  provinceId: number;
-  cityId: number;
-  parentCategoryId: number;
+  provinceId: number | string;
+  cityId: number | string;
+  parentCategoryId: number | string;
   arrayCatIds: number[];
-  isInfoCompleted: boolean | string;
+  arrayTypes: string[];
+  status: boolean | string;
   isPublished: boolean | string;
   searchQuery: string;
+  startDate: string | number;
+  endDate: string | number;
+  mainPic: boolean | string;
+  gallery: boolean | string;
+  info: boolean | string;
+  coordinates: boolean | string;
+  description: boolean | string;
+  features: boolean | string;
+  analyse: boolean | string;
+  seo: boolean | string;
+  workTime: boolean | string;
 }
