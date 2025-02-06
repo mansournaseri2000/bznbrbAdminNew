@@ -120,11 +120,10 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
               {address}
             </Text>
           </Grid>
-          {type === 'point_detail' && (
-            <IconButton size={'3'} colorVariant='PINK' style={{ borderRadius: 12 }} onClick={onDelete} disabled>
-              <Trash />
-            </IconButton>
-          )}
+
+          <IconButton size={'3'} type='button' colorVariant='PINK' style={{ borderRadius: 12 }} onClick={() => setModalState({ key: 'remove', isOpen: true })} disabled>
+            <Trash />
+          </IconButton>
         </GridWrapper>
 
         {type === 'improve_data_management' && (

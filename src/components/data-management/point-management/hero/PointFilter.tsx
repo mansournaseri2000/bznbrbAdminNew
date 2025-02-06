@@ -18,7 +18,7 @@ type Props = {
   province: Province[];
   categories: Category[];
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmit: () => void;
+  onSubmit: VoidFunction;
 };
 
 export function serializeSubCategoriesData(category: any) {

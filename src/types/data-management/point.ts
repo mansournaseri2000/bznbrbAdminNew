@@ -1,19 +1,3 @@
-// interface User {
-//   id: number;
-//   last_name: string;
-//   pic: string | null;
-//   name: string;
-//   mobile: string | number;
-// }
-// interface Comment {
-//   id: number;
-//   content: string;
-//   likes: number;
-//   dislikes: number;
-//   users: User;
-//   createdAt: string;
-//   CommentInteraction: { type: 'DISLIKE' | 'LIKE' }[];
-// }
 export interface CommentListResponse {
   PlaceComments: PlaceCommentsDetail[];
   PlaceRating: number;
@@ -180,3 +164,18 @@ export interface PlaceImproveContentDataDetail {
 export type CreatePointButtonTypes = 'place-info' | 'geographical-location' | 'routing' | 'description' | 'features-facilities' | 'analysis' | 'travel-time' | 'seo-setting';
 
 export type EditPointButtonTypes = CreatePointButtonTypes | 'images' | 'improve-content' | 'comments';
+
+export interface PlaceUserUploadsResponse {
+  filteredPics: FilteredPicsOptions[];
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+}
+
+export interface FilteredPicsOptions {
+  id: number;
+  status: boolean;
+  description: string;
+  isTop: boolean;
+  picture: string;
+}

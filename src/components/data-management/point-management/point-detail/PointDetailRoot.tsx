@@ -69,11 +69,11 @@ const PointDetailRoot = () => {
       },
       {
         queryKey: ['point-comment'],
-        queryFn: async () => await getPlaceComments(Number(params.slug[2])),
+        queryFn: async () => await getPlaceComments(Number(params.slug[2]), 1, 6),
       },
       {
         queryKey: ['improve-content'],
-        queryFn: async () => await getPlaceImproveContent(Number(params.slug[2])),
+        queryFn: async () => await getPlaceImproveContent(Number(params.slug[2]), 1, 6),
       },
     ],
   });
@@ -302,7 +302,7 @@ const PointDetailRoot = () => {
          * images
          * _______________________________________________________________________________
          */}
-        <SimpleWrapper hero='تصاویر ارسال شده'>
+        {/* <SimpleWrapper hero='تصاویر ارسال شده'>
           <Grid columns={{ initial: '1', sm: '2', md: '3' }} gap={'5'}>
             {pointData.UserSentPicturesForPlace.length === 0 ? (
               <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
@@ -316,7 +316,7 @@ const PointDetailRoot = () => {
               </>
             )}
           </Grid>
-        </SimpleWrapper>
+        </SimpleWrapper> */}
       </Grid>
 
       {/**

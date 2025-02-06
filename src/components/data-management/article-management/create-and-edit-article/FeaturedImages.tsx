@@ -3,8 +3,8 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-// import SelectPrimaryImage from '@/components/develop/data-management/select-primary-image/SelectPrimaryImage';
-import {  Flex, Heading, Text } from '@/libs/primitives';
+// import SelectedPrimaryImage from '@/components/develop/data-management/select-primary-image/SelectedPrimaryImage';
+import { Flex, Heading, Text } from '@/libs/primitives';
 // import ImagePicker2 from '@/libs/shared/ImagePicker2';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
@@ -38,7 +38,7 @@ const FeaturedImages = () => {
           </ImagePicker2> */}
         </Flex>
       ) : (
-        // type === 'edit' && <SelectPrimaryImage picture={picture} />
+        // type === 'edit' && <SelectedPrimaryImage picture={picture} />
         ''
       )}
     </>

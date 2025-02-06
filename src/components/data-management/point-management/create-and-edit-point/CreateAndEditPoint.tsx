@@ -11,8 +11,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPlace, editPlace } from '@/api/place';
 import FilterCard from '@/components/develop/shared/filter-card/FilterCard';
 import { AnalysisRoot, FeaturesAndFacilities, GeographicalLocationRoot, PlaceInfo, SeoSettingsRoot } from '@/components/place';
+import CommentPoint from '@/components/place/create-edit-place/CommentPoint';
 import { fomrData, placeCategories, placeTripLimitations, placeTripSeasons, placeTripTypes } from '@/components/place/create-edit-place/defaultValues';
 import ImageGallery from '@/components/place/create-edit-place/ImageGallery';
+import ImageSentPoint from '@/components/place/create-edit-place/ImageSentPoint';
+import ImproveContentPoint from '@/components/place/create-edit-place/ImproveContentPoint';
 import PrimaryImage from '@/components/place/create-edit-place/PrimaryImage';
 import RoutingGuid from '@/components/place/create-edit-place/routing-guid/RoutingGuid';
 import { createPointTabsOptions, editPointTabsOptions, formPublishedOptions, formStatusOptions } from '@/constants/data-management';
@@ -250,11 +253,11 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             isPublished: '',
           },
   });
+  const { handleSubmit, watch, control } = methods;
   /**
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const { handleSubmit, watch, control } = methods;
 
   const { mutate: editPlaceMutate } = useMutation({
     mutationFn: async (params: fomrData) => editPlace(params, placeID),
@@ -451,35 +454,28 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
           {buttonState === 'images' && (
             <Flex direction={'column'} gap={'5'}>
               <SimpleWrapper2 type='changeAble' hero='تصویر شاخص'>
-                <PrimaryImage status={status} picture={placeData?.pictures[0]} />
+                <PrimaryImage picture={placeData?.pictures[0]} />
               </SimpleWrapper2>
               <SimpleWrapper2 type='changeAble' hero='گالری تصاویر'>
-                <ImageGallery status={status} userPicUpload={placeData?.UserSentPicturesForPlace} />
+                <ImageGallery userPicUpload={placeData?.UserSentPicturesForPlace} />
               </SimpleWrapper2>
               <SimpleWrapper2 type='readOnly' hero='تصاویر ارسال شده'>
-                تصاویر ارسال شده
+                <ImageSentPoint id={placeID} />
               </SimpleWrapper2>
             </Flex>
           )}
 
           {buttonState === 'improve-content' && (
             <SimpleWrapper2 type='readOnly' hero='اصلاح اطلاعات ارسال شده'>
-              اصلاح اطلاعات ارسال شده
+              <ImproveContentPoint id={placeID} />
             </SimpleWrapper2>
           )}
 
           {buttonState === 'comments' && (
             <SimpleWrapper2 type='readOnly' hero='نظرات'>
-              نظرات
+              <CommentPoint id={placeID} />
             </SimpleWrapper2>
           )}
-          {/* 
-          <AccordionWrapper hero='تصویر شاخص'>
-            <PrimaryImage status={status} picture={placeData?.pictures[0]} />
-          </AccordionWrapper>
-          <AccordionWrapper hero='گالری تصاویر'>
-            <ImageGallery status={status} userPicUpload={placeData?.UserSentPicturesForPlace} />
-          </AccordionWrapper> */}
 
           <Flex width={'100%'} align={'center'} gap={'5'} p={'4'} style={{ border: `1px solid ${colorPalette.gray[6]}`, borderRadius: 8, backgroundColor: colorPalette.gray[2] }}>
             <Button size={'3'} variant='soft' style={{ paddingInline: 48.5 }}>

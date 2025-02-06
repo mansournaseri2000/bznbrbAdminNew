@@ -3,7 +3,7 @@ import { ApiManagerV2 } from '@/libs/utils/axios.config';
 // import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
 import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
 import { ArticleListBody, ArticleListResponse, CreateAndEditArticleBody } from '@/types/data-management/article';
-import { CommentListResponse, PlaceImproveContentResponse } from '@/types/data-management/point';
+import { CommentListResponse, PlaceImproveContentResponse, PlaceUserUploadsResponse } from '@/types/data-management/point';
 import { PlaceListResponse } from '@/types/place';
 
 import { ApiData } from './types';
@@ -42,8 +42,13 @@ const handleQueryParams = (obj: Record<string, any>) => {
   return queryParams.length ? `${queryParams.join('&')}` : '';
 };
 
-export const getPlaceComments = async (placeId: number) => {
-  const res = await DevApiManager.get<ApiData<CommentListResponse>>(`comment/placeComments/${placeId}`);
+export const getPlaceComments = async (placeId: number, page: number, limit: number) => {
+  const res = await DevApiManager.get<ApiData<CommentListResponse>>(`comment/placeComments/${placeId}`, {
+    headers: {
+      page: page,
+      limit: limit,
+    },
+  });
 
   return res.data.data;
 };
@@ -72,8 +77,13 @@ export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
   return res.data.data;
 };
 
-export const getPlaceImproveContent = async (placeId: number) => {
-  const res = await DevApiManager.get<ApiData<PlaceImproveContentResponse>>(`places/placeImproveContent/${placeId}`);
+export const getPlaceImproveContent = async (placeId: number, page: number, limit: number) => {
+  const res = await DevApiManager.get<ApiData<PlaceImproveContentResponse>>(`places/placeImproveContent/${placeId}`, {
+    headers: {
+      limit: limit,
+      page: page,
+    },
+  });
   return res.data.data;
 };
 
@@ -95,6 +105,16 @@ export const removeTravelMethod = async (id: number) => {
 export const removeCommentForPlace = async (id: number) => {
   const res = await DevApiManager.delete(`/comment/${id}`);
   return res.data;
+};
+
+export const getPlaceUserUploads = async (id: number, page: number, limit: number) => {
+  const res = await DevApiManager.get<ApiData<PlaceUserUploadsResponse>>(`/places/getPlaceUserUploads/${id}`, {
+    headers: {
+      limit: limit,
+      page: page,
+    },
+  });
+  return res.data.data;
 };
 
 export const getArticleList = async (page: number, params: ArticleListBody) => {

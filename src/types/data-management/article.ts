@@ -9,10 +9,18 @@ export interface ArticleSDetail {
   id: number;
   title: string;
   categoryId: number;
-  categoryName: string;
+  parentCategoryId: number;
   is_published: boolean;
   created_at: number;
   updated_at: number;
+  categoryName: string;
+  parentCategoryName: string;
+  cityId: number;
+  citiesName: string;
+  provinceId: number;
+  provinceName: string;
+  status: boolean;
+  writer: string;
 }
 
 export interface ArticleListBody {

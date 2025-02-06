@@ -14,6 +14,7 @@ import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
 import ItemsPerPage from '@/libs/shared/ItemsPerPage';
 import { updateUrlWithPageNumber } from '@/libs/utils';
 import { generateSearchParams } from '@/libs/utils/generateSearchParams';
+import { typoVariant } from '@/theme/typo-variants';
 import { ArticleListBody } from '@/types/data-management/article';
 
 import ArticleManagementHero from './hero/ArticleManagementHero';
@@ -34,7 +35,7 @@ const ArticleManagement = () => {
       created_atStart: getParam('created_atStart') ? Number(getParam('created_atStart')) : '',
       created_atEnd: getParam('created_atEnd') ? Number(getParam('created_atEnd')) : '',
       categoryId: getParam('categoryId') ? Number(getParam('categoryId')) : '',
-      is_published: getParam('is_published') ? getParam('is_published') : '',
+      is_published: getParam('is_published') ? Boolean(getParam('is_published')) : '',
     },
   });
   const { watch, handleSubmit } = methods;
@@ -62,7 +63,7 @@ const ArticleManagement = () => {
             !(Array.isArray(value) && value.every(item => item === 'none'))
           ) {
             if (['created_atStart', 'created_atEnd'].includes(key)) {
-              return new Date(value).getTime();
+              return new Date(value as any).getTime();
             }
             return true;
           }
@@ -72,7 +73,7 @@ const ArticleManagement = () => {
 
       Object.keys(cleanedData).forEach(key => {
         if (['created_atStart', 'created_atEnd'].includes(key)) {
-          cleanedData[key] = new Date(cleanedData[key]).getTime();
+          cleanedData[key] = new Date(cleanedData[key] as any).getTime();
         }
       });
 
@@ -103,7 +104,9 @@ const ArticleManagement = () => {
           ) : articlePending ? (
             <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
           ) : !articleData ? (
-            <Text>دیتایی وجود ندارد</Text>
+            <Flex width={'100%'} justify={'center'} mt={'6'}>
+              <Text {...typoVariant.title1}>دیتایی موجود نیست</Text>
+            </Flex>
           ) : (
             <ArticleManagementList data={articleData?.articles as any} />
           )}

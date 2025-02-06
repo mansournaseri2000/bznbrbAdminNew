@@ -10,6 +10,7 @@ export { default as BlueTriangleLeft } from './BlueTriangleLeft';
 export { default as BlueTriangleRight } from './BlueTriangleRight';
 export { default as Bus } from './Bus';
 export { default as BznText } from './BznText';
+export { default as Camera } from './Camera';
 export { default as Car } from './Car';
 export { default as Chart } from './Chart';
 export { default as CheckCircled } from './CheckCircled';
