@@ -6,10 +6,17 @@ type Category = {
   score: number;
 };
 
-export const serializeCategories = (categories: Category[]) => {
-  return categories?.map(category => ({
+export const serializeCategories = (categories: Category[] | any) => {
+  return categories?.map((category: any) => ({
     categoryId: category.id,
-    score: category.score,
+    score: 0,
+  }));
+};
+
+export const serializeTripTypes = (categories: Category[] | any) => {
+  return categories?.map((category: any) => ({
+    tripTypeId: category.id,
+    score: 0,
   }));
 };
 
@@ -23,8 +30,8 @@ type TripSeason = {
 export const serializeTripSeasons = (tripSeasons: TripSeason[]) => {
   return tripSeasons?.map(tripSeason => ({
     tripSeasonId: tripSeason.id,
-    score: tripSeason.score,
-    timing: tripSeason.timing,
+    score: tripSeason.score ? tripSeason.score : 0,
+    timing: tripSeason.timing ? tripSeason.timing : 0,
   }));
 };
 
@@ -37,7 +44,7 @@ type TripLimitation = {
 export const serializeTripLimitations = (tripLimitations: TripLimitation[]) => {
   return tripLimitations?.map(tripLimitation => ({
     tripLimitationId: tripLimitation.id,
-    score: tripLimitation.score,
+    score: 0,
   }));
 };
 
