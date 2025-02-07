@@ -46,7 +46,7 @@ const ArticleManagementHero = ({ onSubmit }: Props) => {
         <IconButton colorVariant='BLUE' variant='soft' size={'4'} type='button' onClick={() => setIsOpen(true)}>
           <Filter />
         </IconButton>
-        <Button colorVariant='BLUE' variant='ghost' size={'4'} onClick={() => router.push('/data-management/article-management/create-article')}>
+        <Button colorVariant='BLUE' type='button' variant='ghost' size={'4'} onClick={() => router.push('/data-management/article-management/create-article')}>
           <Flex gap={'2'} align={'center'}>
             <Text {...typoVariant.body1}>+</Text>
             <Text {...typoVariant.body1}> افزودن مقاله</Text>

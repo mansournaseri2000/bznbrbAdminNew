@@ -14,16 +14,18 @@ type CustomAddItemProps = {
   onClick: VoidFunction;
   defaultValue?: string;
   isLoading?: boolean;
+  disabled?: boolean;
+  fieldType?: 'number' | 'search' | 'time' | 'text' | 'hidden' | 'tel' | 'url' | 'email' | 'date' | 'datetime-local' | 'month' | 'password' | 'week' | undefined;
 };
 
-const CustomAddItem = forwardRef<HTMLInputElement, CustomAddItemProps>(({ placeholder, defaultValue, isLoading, onClick, ...rest }, ref) => {
+const CustomAddItem = forwardRef<HTMLInputElement, CustomAddItemProps>(({ placeholder, defaultValue, fieldType, disabled, isLoading, onClick, ...rest }, ref) => {
   return (
-    <Wrapper height={'fit-content'} gap={'2'}>
-      <CustomTextField {...rest} ref={ref} placeholder={placeholder} variant='surface' defaultValue={defaultValue} />
+    <Wrapper height={'fit-content'} gap={'2'} disabled={disabled as any}>
+      <CustomTextField {...rest} ref={ref} placeholder={placeholder} disabled={disabled} type={fieldType} variant='surface' defaultValue={defaultValue} />
       {isLoading ? (
         <Spinner style={{ marginLeft: 20 }} />
       ) : (
-        <IconButton size={'4'} type='button' className='icon-button' variant='surface' onClick={onClick}>
+        <IconButton size={'4'} type='button' className='icon-button' variant='surface' disabled={disabled} onClick={onClick}>
           <PlusIcon style={{ color: colorPalette.pink[9] }} />
         </IconButton>
       )}
@@ -35,10 +37,11 @@ CustomAddItem.displayName = 'CustomAddItem';
 
 export default CustomAddItem;
 
-const Wrapper = styled(Flex)`
+const Wrapper = styled(Flex)<{ disabled: boolean }>`
   width: 100%;
   align-items: center;
   border: 1px solid ${colorPalette.gray[7]};
+  background-color: ${({ disabled }) => (disabled ? colorPalette.gray[5] : 'transparent')};
   border-radius: 12px;
   padding: 6px;
   &:focus-within {
@@ -47,6 +50,7 @@ const Wrapper = styled(Flex)`
     border: 1px solid ${colorPalette.gray[3]};
   }
   .icon-button {
+    background-color: ${({ disabled }) => (disabled ? colorPalette.gray[5] : 'transparent')};
     @media (hover: hover) {
       background-color: transparent !important;
     }

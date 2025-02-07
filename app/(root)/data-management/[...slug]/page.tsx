@@ -5,6 +5,7 @@ import React from 'react';
 import { Spinner } from '@radix-ui/themes';
 import { useQueries } from '@tanstack/react-query';
 
+import { getArticleById } from '@/api/data-management';
 import { getAllPlacesConstants, getPlace } from '@/api/place';
 import ArticleManagement from '@/components/data-management/article-management/ArticleManagement';
 import CreateAndEditArticle from '@/components/data-management/article-management/create-and-edit-article/CreateAndEditArticle';
@@ -40,14 +41,19 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
         queryKey: ['place', placeID],
         queryFn: async () => await getPlace(Number(placeID)),
       },
+      {
+        queryKey: ['article-data'],
+        queryFn: async () => await getArticleById(Number(placeID)),
+      },
     ],
   });
 
-  const [constantResult, editPlaceResult] = results;
+  const [constantResult, editPlaceResult, articleByIdResult] = results;
   const { data: constantData } = constantResult;
   const { data: placeData, isLoading: placeIsLoading } = editPlaceResult;
+  const { data: articleByIdData, isLoading: articleByIdLoading } = articleByIdResult;
 
-  if (!constantData || placeIsLoading)
+  if (!constantData || placeIsLoading || articleByIdLoading)
     return (
       <Flex width={'100%'} height={'100vh'} justify={'center'} align={'center'}>
         <Spinner style={{ scale: 3 }} />
@@ -75,9 +81,9 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
       case 'article-management':
         switch (params.slug[1]) {
           case 'create-article':
-            return <CreateAndEditArticle type='create' />;
+            return <CreateAndEditArticle placeConstant={constantData} articleData={articleByIdData as any} type='create-article' />;
           case 'edit-article':
-            return <CreateAndEditArticle type='edit' />;
+            return <CreateAndEditArticle placeConstant={constantData} articleData={articleByIdData as any} type='edit-article' />;
           default:
             return <ArticleManagement />;
         }

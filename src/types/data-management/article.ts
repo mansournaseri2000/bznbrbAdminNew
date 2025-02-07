@@ -60,13 +60,23 @@ export interface CreateAndEditArticleBody {
   keywords: string[];
   meta_title: string;
   meta_description: string;
-  view: number;
-  status: boolean;
-  is_published: boolean;
+  status: boolean | string;
+  is_published: boolean | string;
+  type: string;
   categoryId: number;
   parentCategoryId: number;
   source_link: string;
   pic: string;
   isSlider: boolean;
-  places: [];
+  places: PlacesOptions[];
+  view: number;
 }
+
+export interface PlacesOptions {
+  placeId: number;
+  placeRelationType: 'MAIN' | 'RELATION';
+}
+
+export type CreateArticleButtonTypes = 'initial-data' | 'text-content' | 'related-points' | 'seo-setting';
+
+export type EditArticleButtonTypes = CreateArticleButtonTypes | 'images';

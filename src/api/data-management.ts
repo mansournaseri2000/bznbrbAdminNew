@@ -143,6 +143,8 @@ export const createArticle = async (params: CreateAndEditArticleBody) => {
     categoryId: Number(params.categoryId),
     provincesId: Number(params.provincesId),
     citiesId: Number(params.citiesId),
+    is_published: params.is_published === 'true' ? true : params.is_published === 'false' ? false : String(params.is_published),
+    status: params.status === 'true' ? true : params.status === 'false' ? false : String(params.status),
   };
   const body = filterObject(obj);
   const res = await DevApiManager.post<ApiData<CreateAndEditArticleBody>>('/article', body);
@@ -150,12 +152,22 @@ export const createArticle = async (params: CreateAndEditArticleBody) => {
 };
 
 export const editArticle = async (id: number, params: CreateAndEditArticleBody) => {
-  const res = await DevApiManager.patch(`/article/edit/${id}`, params);
+  const obj = {
+    ...params,
+    parentCategoryId: Number(params.parentCategoryId),
+    categoryId: Number(params.categoryId),
+    provincesId: Number(params.provincesId),
+    citiesId: Number(params.citiesId),
+    is_published: params.is_published === 'true' ? true : params.is_published === 'false' ? false : String(params.is_published),
+    status: params.status === 'true' ? true : params.status === 'false' ? false : String(params.status),
+  };
+  const body = filterObject(obj);
+  const res = await DevApiManager.patch(`/article/edit/${id}`, body);
   return res.data;
 };
 
 export const getArticleById = async (id: number) => {
-  const res = await DevApiManager.get<ApiData<CreateAndEditArticleBody>>(`/article/find/${id}`);
+  const res = await DevApiManager.get<ApiData<CreateAndEditArticleBody>>(`/article/id/${id}`);
   return res.data.data;
 };
 

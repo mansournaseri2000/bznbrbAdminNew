@@ -1,3 +1,4 @@
+import { CreateArticleButtonTypes, EditArticleButtonTypes } from '@/types/data-management/article';
 import { CreatePointButtonTypes, EditPointButtonTypes } from '@/types/data-management/point';
 
 export const StatusFilterOption = [
@@ -65,4 +66,19 @@ export const editPointTabsOptions: { label: string; key: EditPointButtonTypes }[
   { label: 'تصاویر', key: 'images' },
   { label: 'بهبود اطلاعات', key: 'improve-content' },
   { label: 'دیدگاه ها', key: 'comments' },
+];
+
+export const createArticleTabsOptions: { label: string; key: CreateArticleButtonTypes }[] = [
+  { label: 'اطلاعات اولیه', key: 'initial-data' },
+  { label: 'محتوای متنی', key: 'text-content' },
+  { label: 'نقاط مرتبط', key: 'related-points' },
+  { label: 'تنظیمات سئو', key: 'seo-setting' },
+];
+
+export const editArticleTabsOptions: { label: string; key: EditArticleButtonTypes }[] = [
+  { label: 'اطلاعات اولیه', key: 'initial-data' },
+  { label: 'محتوای متنی', key: 'text-content' },
+  { label: 'نقاط مرتبط', key: 'related-points' },
+  { label: 'تنظیمات سئو', key: 'seo-setting' },
+  { label: 'تصاویر', key: 'images' },
 ];

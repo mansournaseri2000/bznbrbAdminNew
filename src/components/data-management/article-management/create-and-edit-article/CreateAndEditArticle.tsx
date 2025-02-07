@@ -1,21 +1,23 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 
 import { useParams, useRouter } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
-import { createArticle, editArticle, getArticleById } from '@/api/data-management';
-import { getAllPlacesConstants } from '@/api/place';
-// import ImageCreator from '@/components/develop/shared/image-creator/ImageCreator';
+import { createArticle, editArticle } from '@/api/data-management';
+import FilterCard from '@/components/develop/shared/filter-card/FilterCard';
 import { SeoSettingsRoot } from '@/components/place';
-import { Button, Flex, Grid, Text } from '@/libs/primitives';
-import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
+import { createArticleTabsOptions, editArticleTabsOptions, formPublishedOptions, formStatusOptions } from '@/constants/data-management';
+import { Button, Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import SimpleWrapper2 from '@/libs/shared/wrapper/SimpleWrapper2';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
+import { CreateAndEditArticleBody, CreateArticleButtonTypes, EditArticleButtonTypes } from '@/types/data-management/article';
+import { PlaceConstantResponse } from '@/types/place';
 
 import ArticlePoint from './ArticlePoint';
 import FeaturedImages from './FeaturedImages';
@@ -24,33 +26,23 @@ import RelatedPoint from './related-point/RelatedPoint';
 import TextContent from './TextContent';
 
 type Props = {
-  type: 'create' | 'edit';
-  // articleStatus?: boolean;
+  type: 'create-article' | 'edit-article';
+  placeConstant: PlaceConstantResponse;
+  articleData: CreateAndEditArticleBody;
 };
 
-const CreateAndEditArticle = ({ type }: Props) => {
+const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
   /**
    * const and Variables
    * _______________________________________________________________________________
    */
   const router = useRouter();
   const params = useParams();
-
-  /**
-   * Get Services
-   * _______________________________________________________________________________
-   */
-
-  const { data: constantData } = useQuery({
-    queryKey: ['constant'],
-    queryFn: async () => getAllPlacesConstants(),
-  });
-
-  const { data: articleByIdData } = useQuery({ queryKey: ['article-data'], queryFn: async () => await getArticleById(Number(params.slug[2])) });
+  const [buttonState, setButtonState] = useState<typeof type extends 'create-article' ? CreateArticleButtonTypes : EditArticleButtonTypes>(type === 'create-article' ? 'initial-data' : 'initial-data');
 
   const methods = useForm({
     defaultValues:
-      type === 'create'
+      type === 'create-article'
         ? {
             title: '',
             content: '',
@@ -69,49 +61,52 @@ const CreateAndEditArticle = ({ type }: Props) => {
             keywords: [],
             meta_title: '',
             meta_description: '',
-            view: null,
-            status: false,
-            is_published: false,
+            status: '',
+            is_published: '',
+            type: '',
             categoryId: '',
             parentCategoryId: '',
             source_link: '',
             pic: '',
             isSlider: false,
             mainPoint: null,
-            relationPoints: [],
+            places: [],
+            view: null,
           }
-        : type === 'edit'
+        : type === 'edit-article'
         ? {
-            title: articleByIdData?.title,
-            content: articleByIdData?.content,
-            writer: articleByIdData?.writer,
-            on_titile: articleByIdData?.on_titile,
-            source: articleByIdData?.source,
-            summery: articleByIdData?.summery,
-            brief: articleByIdData?.brief,
-            slug: articleByIdData?.slug,
-            tableOfContent: articleByIdData?.tableOfContent,
-            inMain: articleByIdData?.inMain,
-            inTop: articleByIdData?.inTop,
-            provincesId: articleByIdData?.provincesId,
-            citiesId: articleByIdData?.citiesId,
-            tags: articleByIdData?.tags,
-            keywords: articleByIdData?.keywords,
-            meta_title: articleByIdData?.meta_title,
-            meta_description: articleByIdData?.meta_description,
-            view: articleByIdData?.view,
-            status: articleByIdData?.status,
-            is_published: articleByIdData?.is_published,
-            categoryId: articleByIdData?.categoryId,
-            parentCategoryId: articleByIdData?.parentCategoryId,
-            source_link: articleByIdData?.source_link,
-            pic: articleByIdData?.pic,
-            isSlider: articleByIdData?.isSlider,
+            title: articleData?.title,
+            content: articleData?.content,
+            writer: articleData?.writer,
+            on_titile: articleData?.on_titile,
+            source: articleData?.source,
+            summery: articleData?.summery,
+            brief: articleData?.brief,
+            slug: articleData?.slug,
+            tableOfContent: articleData?.tableOfContent,
+            inMain: articleData?.inMain,
+            inTop: articleData?.inTop,
+            provincesId: articleData?.provincesId,
+            citiesId: articleData?.citiesId,
+            tags: articleData?.tags,
+            keywords: articleData?.keywords,
+            meta_title: articleData?.meta_title,
+            meta_description: articleData?.meta_description,
+            view: articleData?.view,
+            status: articleData?.status,
+            is_published: articleData?.is_published,
+            type: articleData?.type,
+            categoryId: articleData?.categoryId,
+            parentCategoryId: articleData?.parentCategoryId,
+            source_link: articleData?.source_link,
+            pic: articleData?.pic,
+            isSlider: articleData?.isSlider,
+            places: articleData.places,
           }
         : {},
   });
 
-  const { watch } = methods;
+  const { watch, control } = methods;
   console.log('WATCH', watch());
 
   /**
@@ -143,53 +138,144 @@ const CreateAndEditArticle = ({ type }: Props) => {
     editArticleMutate();
   }, []);
 
-  // console.log('ARTICLE DATA0', articleData);
-
   return (
     <FormProvider {...methods}>
       <Grid width={'100%'} gapY={'5'}>
-        {type === 'edit' && (
-          <Flex width={'100%'} align={'center'} justify={'between'} p={'8px 16px'} style={{ border: `1px solid ${colorPalette.gray[6]}`, borderRadius: 8 }}>
-            <Flex align={'center'} gap={'2'}>
-              <Text {...typoVariant.body2} style={{ color: colorPalette.gray[9] }}>
-                وضعیت مقاله
-              </Text>
-              <Text {...typoVariant.body1} style={{ color: watch('status') === true ? colorPalette.blue[11] : colorPalette.pink[11] }}>
-                {watch('status') === true ? 'منتشر شده' : 'منتشر نشده'}
-              </Text>
-            </Flex>
-            <Button size={'3'} variant={watch('status') === true ? 'solid' : 'soft'} colorVariant={watch('status') === true ? 'PINK' : 'BLUE'}>
-              <Text {...typoVariant.body1}>{watch('status') === true ? 'لغو انتشار' : 'انتشار مقاله'}</Text>
-            </Button>
-          </Flex>
+        {/* 
+        ****
+        Hero for selects
+        ****_______________________________________________________________________________ */}
+        <Grid width={'100%'} columns={'3'} gap={'5'}>
+          <FilterCard label='نوع نقطه'>
+            <Controller
+              name='type'
+              control={control}
+              render={({ field }) => (
+                <SelectRoot
+                  {...field}
+                  placeholder='نقطه'
+                  value={String(field.value)}
+                  onValueChange={val => {
+                    field.onChange(val);
+                  }}
+                >
+                  {placeConstant.PlaceType.map((item, index) => (
+                    <SelectItem key={index} value={item.id}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
+                </SelectRoot>
+              )}
+            />
+          </FilterCard>
+
+          <FilterCard label='انتشار'>
+            <Controller
+              name='is_published'
+              control={control}
+              render={({ field }) => (
+                <SelectRoot
+                  {...field}
+                  placeholder='انتشار'
+                  value={String(field.value)}
+                  onValueChange={val => {
+                    field.onChange(val);
+                  }}
+                >
+                  {formPublishedOptions.map(item => (
+                    <SelectItem key={item.id} value={String(item.value)}>
+                      {item.key}
+                    </SelectItem>
+                  ))}
+                </SelectRoot>
+              )}
+            />
+          </FilterCard>
+
+          <FilterCard label='وضعیت'>
+            <Controller
+              name='status'
+              control={control}
+              render={({ field }) => (
+                <SelectRoot
+                  {...field}
+                  placeholder='وضعیت'
+                  value={String(field.value)}
+                  onValueChange={val => {
+                    field.onChange(val);
+                  }}
+                >
+                  {formStatusOptions.map(item => (
+                    <SelectItem key={item.id} value={String(item.value)}>
+                      {item.key}
+                    </SelectItem>
+                  ))}
+                </SelectRoot>
+              )}
+            />
+          </FilterCard>
+        </Grid>
+
+        {/* tab-hero-button _______________________________________________________________________________ */}
+        <Flex width={'100%'} gap={'11px'} pb={'4'} align={'center'} style={{ overflowX: 'auto', borderBottom: `1px solid ${colorPalette.gray[6]}` }}>
+          {type === 'create-article' ? (
+            <>
+              {createArticleTabsOptions.map((item, index) => (
+                <Button size={'3'} type='button' variant={buttonState === item.key ? 'soft' : 'solid'} key={index} onClick={() => setButtonState(item.key)}>
+                  <Text {...typoVariant.body1}>{item.label}</Text>
+                </Button>
+              ))}
+            </>
+          ) : (
+            type === 'edit-article' && (
+              <>
+                {editArticleTabsOptions.map((item, index) => (
+                  <Button size={'3'} type='button' variant={buttonState === item.key ? 'soft' : 'solid'} key={index} onClick={() => setButtonState(item.key)}>
+                    <Text {...typoVariant.body1}>{item.label}</Text>
+                  </Button>
+                ))}
+              </>
+            )
+          )}
+        </Flex>
+
+        {buttonState === 'initial-data' && (
+          <SimpleWrapper2 type='changeAble' hero='اطلاعات اولیه'>
+            <InitialData categories={placeConstant?.categories ? placeConstant.categories : []} province={placeConstant?.provinces ? placeConstant.provinces : []} />
+          </SimpleWrapper2>
         )}
-        <AccordionWrapper hero='اطلاعات اولیه'>
-          <InitialData categories={constantData?.categories ? constantData.categories : []} province={constantData?.provinces ? constantData.provinces : []} />
-        </AccordionWrapper>
-        <AccordionWrapper hero='محتوای متنی'>
-          <TextContent />
-        </AccordionWrapper>
 
-        <AccordionWrapper hero='نقطه مقاله'>
-          <ArticlePoint />
-        </AccordionWrapper>
+        {buttonState === 'text-content' && (
+          <SimpleWrapper2 type='changeAble' hero='محتوای متنی'>
+            <TextContent />
+          </SimpleWrapper2>
+        )}
 
-        <AccordionWrapper hero='نقاط مرتبط'>
-          <RelatedPoint />
-        </AccordionWrapper>
-        <AccordionWrapper hero='تصویر شاخص'>
-          <FeaturedImages />
-        </AccordionWrapper>
-        {/* {type === 'edit' && (
-          <AccordionWrapper hero='تصاویر'>
-            <ImageCreator />
-          </AccordionWrapper>
-        )} */}
-        <AccordionWrapper hero='تنظیمات SEO'>
-          <SeoSettingsRoot />
-        </AccordionWrapper>
+        {buttonState === 'related-points' && (
+          <>
+            <SimpleWrapper2 type='changeAble' hero='نقطه مقاله'>
+              <ArticlePoint />
+            </SimpleWrapper2>
+            <SimpleWrapper2 type='changeAble' hero='نقاط مرتبط'>
+              <RelatedPoint />
+            </SimpleWrapper2>
+          </>
+        )}
+
+        {buttonState === 'seo-setting' && (
+          <SimpleWrapper2 type='changeAble' hero='تنظیمات سئو'>
+            <SeoSettingsRoot />
+          </SimpleWrapper2>
+        )}
+
+        {buttonState === 'images' && (
+          <SimpleWrapper2 type='changeAble' hero='تصاویر'>
+            <FeaturedImages />
+          </SimpleWrapper2>
+        )}
+
         <Flex p={'4'} gap={'5'} style={{ backgroundColor: colorPalette.gray[2], border: `1px solid ${colorPalette.gray[6]}`, borderRadius: 8 }}>
-          <Button size={'3'} variant='soft' style={{ padding: '13.5px 48.5px' }} onClick={() => (type === 'create' ? createArticleMutate() : editArticleMutate())}>
+          <Button size={'3'} variant='soft' style={{ padding: '13.5px 48.5px' }} onClick={() => (type === 'create-article' ? createArticleMutate() : editArticleMutate())}>
             {createArticlePending || editArticlePending ? <Spinner /> : <Text {...typoVariant.body1}>ثبت</Text>}
           </Button>
           <Button size={'3'} colorVariant='PINK' onClick={() => router.back()} style={{ padding: '13.5px 48.5px' }}>

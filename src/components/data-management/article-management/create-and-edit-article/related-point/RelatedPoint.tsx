@@ -20,7 +20,7 @@ const RelatedPoint = () => {
     if (point) {
       const newPoints = [...points, Number(point)];
       setPoints(newPoints);
-      setValue('relationPoints', newPoints);
+      setValue('places', newPoints);
       setPoint('');
     }
   };
@@ -28,7 +28,7 @@ const RelatedPoint = () => {
   const removeRelatedPoint = (index: number) => {
     const newPoints = points.filter((_, i) => i !== index);
     setPoints(newPoints);
-    setValue('relationPoints', newPoints);
+    setValue('places', newPoints);
   };
   return (
     <Grid width={'100%'} gapY={'5'}>
@@ -52,9 +52,9 @@ const RelatedPoint = () => {
           ))}
         </Flex>
       ) : (
-        <Flex>
-          <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
-            نقطه ی مرتبط موجود نیست
+        <Flex p={'54.5px 16px'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
+          <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11] }}>
+            هنوز نقطه ای اضافه نشده است.
           </Text>
         </Flex>
       )}
