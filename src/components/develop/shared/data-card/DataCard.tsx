@@ -19,6 +19,7 @@ type CardProps = PlaceImproveContentDataDetail & {
   onDelete?: () => void;
   index: number;
   type: 'improve_data_management' | 'point_detail';
+  state: number;
 };
 
 type modalStateType = {
@@ -30,7 +31,7 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
   /*
    *** Variables and Constant _________________________________________________________________________________________________________________________________________________________________
    */
-  const { name, placeProvinceName, cityName, provinceName, phone, website, email, type, index, address, id, placeId, placeName, placeCityName } = props;
+  const { name, placeProvinceName, cityName, provinceName, phone, website, email, type, index, address, id, placeId, placeName, placeCityName, state } = props;
   const [modalState, setModalState] = useState<modalStateType>({
     isOpen: false,
     key: 'remove',
@@ -87,8 +88,8 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
         p={'4'}
         style={{
           borderRadius: 8,
-          backgroundColor: index % 2 === 0 ? colorPalette.blue[2] : colorPalette.pink[2],
-          border: index % 2 === 0 ? `1px solid ${colorPalette.blue[6]}` : `1px solid ${colorPalette.pink[6]}`,
+          backgroundColor: state % 2 === 0 ? colorPalette.blue[2] : colorPalette.pink[2],
+          border: state % 2 === 0 ? `1px solid ${colorPalette.blue[6]}` : `1px solid ${colorPalette.pink[6]}`,
         }}
       >
         {type === 'improve_data_management' && (

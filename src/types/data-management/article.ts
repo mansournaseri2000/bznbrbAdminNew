@@ -70,6 +70,7 @@ export interface CreateAndEditArticleBody {
   isSlider: boolean;
   places: PlacesOptions[];
   view: number;
+  id: number;
 }
 
 export interface PlacesOptions {
