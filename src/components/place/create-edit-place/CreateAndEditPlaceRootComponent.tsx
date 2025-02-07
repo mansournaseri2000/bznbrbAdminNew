@@ -13,7 +13,7 @@ import { createPlace, editPlace } from '@/api/place';
 import { AnalysisRoot, FeaturesAndFacilities, GeographicalLocationRoot, ImageGallery, Navigation, PlaceInfo, SeoSettingsRoot } from '@/components/place';
 import { fomrData, placeCategories, placeTripLimitations, placeTripSeasons, placeTripTypes } from '@/components/place/create-edit-place/defaultValues';
 import { categoriesConstants, placeWorkTimeSchedule, seasons } from '@/constants/place';
-import { Button, Grid, Heading, Text } from '@/libs/primitives';
+import { Button, Grid, Text } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { serializeCategories, serializeFeatures, serializePlaceWorkTimeSchedule, serializeTripLimitations, serializeTripSeasons } from '@/libs/utils';
 import { Boxshadow } from '@/theme';
@@ -287,14 +287,23 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid height={'max-content'} overflow={'auto'} gap={'20px'} width={'100%'} maxWidth={'1500px'} m={'auto'} p={'36px'} style={{ boxShadow: Boxshadow.shadow1, borderRadius: '8px' }}>
-          {status === 'edit' ? <Heading>ویرایش نقطه</Heading> : <Heading>ساخت نقطه</Heading>}
+        <Grid
+          height={'max-content'}
+          overflow={'auto'}
+          gap={'20px'}
+          width={'100%'}
+          maxWidth={'1500px'}
+          m={'auto'}
+          p={'36px'}
+          style={{ boxShadow: Boxshadow.shadow1, borderRadius: '8px', border: '1px solid red' }}
+        >
           <PlaceInfo categoris={placeConstant ? placeConstant.categories : []} />
           {status === 'edit' && <ImageGallery placeID={Number(placeID)} status={status} />}
           <GeographicalLocationRoot province={placeConstant ? placeConstant.provinces : []} />
           <Navigation />
           <FeaturesAndFacilities featureItems={placeConstant ? placeConstant.features : []} />
           <AnalysisRoot
+            constants={placeConstant}
             tripLimitations={placeConstant ? placeConstant.tripLimitations : []}
             seasons={placeConstant ? seasons : []}
             tripDatas={placeConstant ? placeConstant.tripDatas : []}

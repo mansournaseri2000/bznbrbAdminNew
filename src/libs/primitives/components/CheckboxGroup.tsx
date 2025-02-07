@@ -17,16 +17,13 @@ type Props = {
 
 const CheckboxGroup = ({ items, store, isRow = true }: Props) => {
   const { control } = useFormContext();
-  console.log('ITEMS', items);
   return (
     <Controller
       name={store}
       control={control}
-      defaultValue={[]} // Start with an empty array
+      defaultValue={[]} 
       render={({ field }) => {
         const { value = [], onChange } = field;
-        console.log('VALUE', value);
-        // Fallback to an empty array if value is undefined
 
         // Handle checkbox change to store objects in the format { "featureId": id }
         const handleCheckboxChange = (checkboxValue: number, isChecked: boolean) => {

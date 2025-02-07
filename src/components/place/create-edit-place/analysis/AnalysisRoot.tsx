@@ -6,7 +6,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { RadioGroup, Slider } from '@radix-ui/themes';
 import styled from 'styled-components';
 
-import { categoriesConstants, cost, limitationsOption, renownLevel } from '@/constants/place';
+import { cost, limitationsOption, renownLevel } from '@/constants/place';
 import { Flex, Grid, Text, TextField } from '@/libs/primitives';
 import { Divider } from '@/libs/shared';
 import { colorPalette } from '@/theme';
@@ -22,9 +22,10 @@ type Props = {
   Categories: Category[];
   seasons: Season[];
   tripLimitations: TripLimitation[];
+  constants: any;
 };
 
-const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
+const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
   /**
    * const and variables
    * _______________________________________________________________________________
@@ -207,19 +208,22 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
           })}
         </Grid>
       </Grid>
+
       {/* PlaceCategories _______________________________________________________________________________*/}
       <Divider style={{ color: colorPalette.gray[6] }} />
       <Grid gap={'16px'}>
         <Text>دسته‌بندی‌ها</Text>
         <Grid gap={'0px 30px'} columns={'2'}>
-          {categoriesConstants.map(trip => {
+          {constants.categories.map((trip: any) => {
             const category = placeCategoryItems?.find((item: { categoryId: number }) => item.categoryId === trip.id);
+            console.log(category, 'categorycategorycategorycategory');
+
             return (
               <Grid gap={'8px'} key={trip.id} mb='20px'>
                 <Text as='label'>{trip.name}</Text>
                 <Flex width={'50%'} gap={'10px'} align={'center'}>
                   <CustomSlider
-                    defaultValue={[category?.score ?? 0]}
+                    defaultValue={Boolean(category) ? [category?.score ?? 0] : [0, 0]}
                     value={[category?.score ?? 0]}
                     onValueChange={value => handleCategorySliderChange(trip.id, Number(value))}
                     max={100}
@@ -285,7 +289,7 @@ const AnalysisRoot = ({ tripDatas, seasons, tripLimitations }: Props) => {
       <Grid gap={'16px'}>
         <Text>محدودیت ها</Text>
         <Grid gap={'0px 30px'} columns={'2'}>
-          {tripLimitations.map(trip => {
+          {constants.tripLimitations.map((trip: any) => {
             const tripLimitationsItem = tripLimitationsItems?.find((item: { tripLimitationId: number }) => item.tripLimitationId === trip.id);
             return (
               <Grid gap={'8px'} key={trip.id} mb='20px'>

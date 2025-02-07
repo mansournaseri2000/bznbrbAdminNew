@@ -47,7 +47,12 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   const { data: constantData } = constantResult;
   const { data: placeData, isLoading: placeIsLoading } = editPlaceResult;
 
-  if (!constantData || placeIsLoading) return <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />;
+  if (!constantData || placeIsLoading)
+    return (
+      <Flex width={'100%'} height={'100vh'} justify={'center'} align={'center'}>
+        <Spinner style={{ scale: 3 }} />
+      </Flex>
+    );
 
   /**
    * Methods

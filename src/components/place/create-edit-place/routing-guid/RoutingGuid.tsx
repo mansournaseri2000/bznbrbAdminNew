@@ -12,9 +12,7 @@ const RoutingGuid = () => {
   const { control, watch } = useFormContext();
   const [state, setState] = useState<string>(watch('vehicleOptions')[0]?.key);
   const [index, setIndex] = useState(0);
-
   const vehicleOptions = useWatch({ control, name: 'vehicleOptions' }) || [];
-
   const watchedContent = useWatch({
     control,
     name: `vehicleOptions[${index}].content`,
@@ -51,8 +49,13 @@ const RoutingGuid = () => {
    * _______________________________________________________________________________
    */
   useEffect(() => {
-    setContent(watch(`vehicleOptions[${index}].content`)); // Update content with the watched value
+    setContent(watch(`vehicleOptions[${index}].content`));
   }, [index]);
+
+  /**
+   * template
+   * _______________________________________________________________________________
+   */
   return (
     <Flex direction={'column'} gap={'28px'}>
       <Flex width={'100%'} direction={'column'} gap={'5'}>
