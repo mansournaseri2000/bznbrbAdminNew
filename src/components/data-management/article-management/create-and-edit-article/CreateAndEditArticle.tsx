@@ -20,8 +20,9 @@ import { CreateAndEditArticleBody, CreateArticleButtonTypes, EditArticleButtonTy
 import { PlaceConstantResponse } from '@/types/place';
 
 import ArticlePoint from './ArticlePoint';
-import FeaturedImages from './FeaturedImages';
+import ImageGalleryArticle from './ImageGalleryArticle';
 import InitialData from './InitialData';
+import MainImageArticle from './MainImageArticle';
 import RelatedPoint from './related-point/RelatedPoint';
 import TextContent from './TextContent';
 
@@ -101,13 +102,12 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
             source_link: articleData?.source_link,
             pic: articleData?.pic,
             isSlider: articleData?.isSlider,
-            places: articleData.places,
+            places: articleData?.places,
           }
         : {},
   });
 
   const { watch, control } = methods;
-  console.log('WATCH', watch());
 
   /**
    * Action Services
@@ -269,9 +269,14 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
         )}
 
         {buttonState === 'images' && (
-          <SimpleWrapper2 type='changeAble' hero='تصاویر'>
-            <FeaturedImages />
-          </SimpleWrapper2>
+          <Flex direction={'column'} gap={'5'}>
+            <SimpleWrapper2 type='changeAble' hero='تصویر شاخص'>
+              <MainImageArticle constant={placeConstant} picture={articleData.pic} articleData={articleData} />
+            </SimpleWrapper2>
+            <SimpleWrapper2 type='changeAble' hero='گالری تصاویر'>
+              <ImageGalleryArticle articleId={articleData.id} constant={placeConstant} />
+            </SimpleWrapper2>
+          </Flex>
         )}
 
         <Flex p={'4'} gap={'5'} style={{ backgroundColor: colorPalette.gray[2], border: `1px solid ${colorPalette.gray[6]}`, borderRadius: 8 }}>

@@ -42,12 +42,7 @@ const handleQueryParams = (obj: Record<string, any>) => {
 };
 
 export const getPlaceComments = async (placeId: number, page: number, limit: number) => {
-  const res = await DevApiManager.get<ApiData<CommentListResponse>>(`comment/placeComments/${placeId}`, {
-    headers: {
-      page: page,
-      limit: limit,
-    },
-  });
+  const res = await DevApiManager.get<ApiData<CommentListResponse>>(`comment/placeComments/${placeId}?page=${page}&limit=4`, {});
 
   return res.data.data;
 };
@@ -77,12 +72,7 @@ export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
 };
 
 export const getPlaceImproveContent = async (placeId: number, page: number, limit: number) => {
-  const res = await DevApiManager.get<ApiData<PlaceImproveContentResponse>>(`places/placeImproveContent/${placeId}`, {
-    headers: {
-      limit: limit,
-      page: page,
-    },
-  });
+  const res = await DevApiManager.get<ApiData<PlaceImproveContentResponse>>(`places/placeImproveContent/${placeId}?page=${page}&limit=4`, {});
   return res.data.data;
 };
 

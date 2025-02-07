@@ -40,7 +40,7 @@ const ImproveContentPoint = ({ id }: Props) => {
       ) : (
         <Flex direction={'column'} gap={'5'}>
           {data?.PlaceImproveContent?.map((item, index) => (
-            <DataCard key={index} {...(item as any)} />
+            <DataCard key={index} state={index} {...(item as any)} />
           ))}
           {data?.PlaceImproveContent && (
             <Flex width={'100%'} align={'center'} justify={'between'} px={'5'}>
