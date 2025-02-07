@@ -15,13 +15,14 @@ type CustomAddItemProps = {
   defaultValue?: string;
   isLoading?: boolean;
   disabled?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
   fieldType?: 'number' | 'search' | 'time' | 'text' | 'hidden' | 'tel' | 'url' | 'email' | 'date' | 'datetime-local' | 'month' | 'password' | 'week' | undefined;
 };
 
-const CustomAddItem = forwardRef<HTMLInputElement, CustomAddItemProps>(({ placeholder, defaultValue, fieldType, disabled, isLoading, onClick, ...rest }, ref) => {
+const CustomAddItem = forwardRef<HTMLInputElement, CustomAddItemProps>(({ placeholder, defaultValue, fieldType, disabled, isLoading, onClick, onChange, ...rest }, ref) => {
   return (
     <Wrapper height={'fit-content'} gap={'2'} disabled={disabled as any}>
-      <CustomTextField {...rest} ref={ref} placeholder={placeholder} disabled={disabled} type={fieldType} variant='surface' defaultValue={defaultValue} />
+      <CustomTextField {...rest} ref={ref} placeholder={placeholder} disabled={disabled} type={fieldType} onChange={onChange} variant='surface' defaultValue={defaultValue} />
       {isLoading ? (
         <Spinner style={{ marginLeft: 20 }} />
       ) : (

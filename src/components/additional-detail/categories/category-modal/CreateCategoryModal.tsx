@@ -89,7 +89,7 @@ const CreateCategoryModal = ({ data, setIsOpen }: Props) => {
 
   return (
     <>
-      <Flex direction={'column'} p={'12px 16px'} gap={'4'} style={{border:"1px solid red"}}>
+      <Flex direction={'column'} p={'12px 16px'} gap={'4'}>
         <Box width={'50%'}>
           <Controller name='name' control={control} render={({ field }) => <CustomAddItem {...field} placeholder='افزودن دسته بندی' onClick={() => addCategory()} />} />
         </Box>
