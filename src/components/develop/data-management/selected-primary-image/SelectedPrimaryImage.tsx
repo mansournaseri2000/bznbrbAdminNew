@@ -54,7 +54,7 @@ const SelectedPrimaryImage = ({ picture }: Props) => {
        */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='ویرایش تصویر شاخص' handleClose={() => setIsOpen(false)} />
-        <EditPointPictureModal state='pictures' setIsOpen={setIsOpen} />
+        <EditPointPictureModal state='pictures' setIsOpen={setIsOpen} originPic={picture} />
       </Modal>
     </FormProvider>
   );

@@ -198,7 +198,6 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             isLoading: false,
             uploadImage: placeData?.UserSentPicturesForPlace,
             pictures: placeData?.pictures,
-
             cost: placeData?.cost,
             renown: placeData?.renown,
             rating: placeData?.rating,
@@ -441,6 +440,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             </SimpleWrapper2>
           )}
 
+          {/* AnalysisRoot  _______________________________________________________________________________ */}
           {buttonState === 'analysis' && (
             <SimpleWrapper2 type='changeAble' hero='تحلیل بزنیم بیرون'>
               <AnalysisRoot
@@ -453,25 +453,28 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             </SimpleWrapper2>
           )}
 
+          {/* travel-time  _______________________________________________________________________________ */}
           {buttonState === 'travel-time' && (
             <SimpleWrapper2 type='changeAble' hero='کی برم'>
               <TravelTime />
             </SimpleWrapper2>
           )}
 
+          {/* seo-setting  _______________________________________________________________________________ */}
           {buttonState === 'seo-setting' && (
             <SimpleWrapper2 type='changeAble' hero='تنظیمات سئو'>
               <SeoSettingsRoot />
             </SimpleWrapper2>
           )}
 
+          {/* images  _______________________________________________________________________________ */}
           {buttonState === 'images' && (
             <Flex direction={'column'} gap={'5'}>
               <SimpleWrapper2 type='changeAble' hero='تصویر شاخص'>
-                <PrimaryImage picture={placeData?.pictures[0]} />
+                <PrimaryImage constant={placeConstant} picture={placeData?.pictures.filter(item => item.type === 'MAIN')[0]} placeData={placeData} />
               </SimpleWrapper2>
               <SimpleWrapper2 type='changeAble' hero='گالری تصاویر'>
-                <ImageGallery userPicUpload={placeData?.UserSentPicturesForPlace} />
+                <ImageGallery constant={placeConstant} placeId={placeData.id} />
               </SimpleWrapper2>
               <SimpleWrapper2 type='readOnly' hero='تصاویر ارسال شده'>
                 <ImageSentPoint id={placeID} />
