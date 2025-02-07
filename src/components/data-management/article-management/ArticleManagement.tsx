@@ -34,8 +34,17 @@ const ArticleManagement = () => {
       title: getParam('title') ? getParam('title') : '',
       created_atStart: getParam('created_atStart') ? Number(getParam('created_atStart')) : '',
       created_atEnd: getParam('created_atEnd') ? Number(getParam('created_atEnd')) : '',
-      categoryId: getParam('categoryId') ? Number(getParam('categoryId')) : '',
+      provincesId: getParam('provincesId') ? Number(getParam('provincesId')) : '',
+      citiesId: getParam('citiesId') ? Number(getParam('citiesId')) : '',
+      parentCategoryId: getParam('parentCategoryId') ? Number(getParam('parentCategoryId')) : '',
+      arrayCatIds: getParam('arrayCatIds') ? getParam('arrayCatIds').split(',').map(Number) : [],
       is_published: getParam('is_published') ? Boolean(getParam('is_published')) : '',
+      status: getParam('status') ? Boolean(getParam('status')) : '',
+      base: getParam('base') ? Boolean(getParam('base')) : '',
+      text: getParam('text') ? Boolean(getParam('text')) : '',
+      related: getParam('related') ? Boolean(getParam('related')) : '',
+      seo: getParam('seo') ? Boolean(getParam('seo')) : '',
+      mainPic: getParam('mainPic') ? Boolean(getParam('mainPic')) : '',
     },
   });
   const { watch, handleSubmit } = methods;
@@ -59,8 +68,8 @@ const ArticleManagement = () => {
             value !== 'none' &&
             value !== null &&
             !(Array.isArray(value) && value.length === 0) &&
-            !(Array.isArray(value) && value.every(item => item === '')) &&
-            !(Array.isArray(value) && value.every(item => item === 'none'))
+            !(Array.isArray(value) && value.every(item => item === ('' as any))) &&
+            !(Array.isArray(value) && value.every(item => item === ('none' as any)))
           ) {
             if (['created_atStart', 'created_atEnd'].includes(key)) {
               return new Date(value as any).getTime();

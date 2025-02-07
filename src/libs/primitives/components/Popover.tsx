@@ -10,10 +10,11 @@ type PopoverComponentProps = React.ComponentProps<typeof Popover.Root> & {
   lable?: string;
   placeholder: string;
   style?: React.CSSProperties;
+  disabled?: boolean;
 };
 
 export const PopoverRoot = forwardRef<React.ElementRef<typeof Popover.Root>, PopoverComponentProps>(
-  ({ placeholder, lable, style, ...props }: PopoverComponentProps | any, forwardedRef: ForwardedRef<React.ElementRef<typeof Popover.Root>>) => {
+  ({ placeholder, lable, disabled, style, ...props }: PopoverComponentProps | any, forwardedRef: ForwardedRef<React.ElementRef<typeof Popover.Root>>) => {
     /**
      * const and variables
      * _______________________________________________________________________________
@@ -29,7 +30,7 @@ export const PopoverRoot = forwardRef<React.ElementRef<typeof Popover.Root>, Pop
           {lable}
         </Text>
         <Popover.Root {...props} ref={forwardedRef}>
-          <Popover.Trigger>
+          <Popover.Trigger disabled={disabled}>
             <Button
               style={{
                 minHeight: '48px',

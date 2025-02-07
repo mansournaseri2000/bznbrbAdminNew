@@ -7,7 +7,7 @@ import { motion, Variants } from 'framer-motion';
 
 import { Box, Button, Flex, Grid, IconButton, Text } from '@/libs/primitives';
 import { convertTimestampToPersianDate } from '@/libs/utils/convertTimestampToPersianDate';
-import { Dislike, Like, Trash } from '@/public/icon';
+import { Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { PlaceCommentsDetail } from '@/types/data-management/point';
@@ -26,7 +26,7 @@ const CommentCard = (props: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const { pic, fullName, date, content, likes, dislikes, onDelete } = props;
+  const { pic, fullName, date, content, onDelete } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const MAX_CHARACTERS = 300;
   /**

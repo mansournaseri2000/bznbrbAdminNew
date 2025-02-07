@@ -30,7 +30,7 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
   /*
    *** Variables and Constant _________________________________________________________________________________________________________________________________________________________________
    */
-  const { name, placeProvinceName, cityName, provinceName, phone, website, email, type, index, onDelete, address, id, placeId, placeName, placeCityName } = props;
+  const { name, placeProvinceName, cityName, provinceName, phone, website, email, type, index, address, id, placeId, placeName, placeCityName } = props;
   const [modalState, setModalState] = useState<modalStateType>({
     isOpen: false,
     key: 'remove',

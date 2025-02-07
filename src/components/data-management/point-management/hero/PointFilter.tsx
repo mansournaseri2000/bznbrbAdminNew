@@ -212,6 +212,7 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('arrayCatIds', '');
                 }}
               >
                 {categories.map(item => (
@@ -223,7 +224,7 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
             )}
           />
 
-          <PopoverRoot placeholder='زیردسته بندی'>
+          <PopoverRoot placeholder='زیردسته بندی' disabled={!Boolean(subCategory)}>
             <CheckboxGroup isRow={false} items={serializeSubCategoriesData(subCategory)} store='arrayCatIds' />
           </PopoverRoot>
         </Grid>

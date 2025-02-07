@@ -120,8 +120,16 @@ export const getPlaceUserUploads = async (id: number, page: number, limit: numbe
 export const getArticleList = async (page: number, params: ArticleListBody) => {
   const obj = {
     ...params,
-    categoryId: Number(params.categoryId),
+    provincesId: Number(params.provincesId),
+    citiesId: Number(params.citiesId),
+    parentCategoryId: Number(params.parentCategoryId),
     is_published: params.is_published === 'true' ? true : params.is_published === 'false' ? false : String(params.is_published),
+    status: params.status === 'true' ? true : params.status === 'false' ? false : String(params.status),
+    base: params.base === 'true' ? true : params.base === 'false' ? false : String(params.base),
+    text: params.text === 'true' ? true : params.text === 'false' ? false : String(params.text),
+    seo: params.seo === 'true' ? true : params.seo === 'false' ? false : String(params.seo),
+    mainPic: params.mainPic === 'true' ? true : params.mainPic === 'false' ? false : String(params.mainPic),
+    related: params.related === 'true' ? true : params.related === 'false' ? false : String(params.related),
   };
   const body = filterObject(obj);
   const res = await DevApiManager.post<ApiData<ArticleListResponse>>(`/article/filter?limit=10&page=${page}`, body);

@@ -11,7 +11,6 @@ import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { getPlaceComments, getPlaceImproveContent, publishTravelMethod, removeCommentForPlace, removePlaceImproveContent, removeTravelMethod } from '@/api/data-management';
 import { getPlace } from '@/api/place';
 import CommentCard from '@/components/develop/data-management/comment-card/CommentCard';
-import ImageCard from '@/components/develop/data-management/image-card/ImageCard';
 import DataCard from '@/components/develop/shared/data-card/DataCard';
 import { Box, Button, Flex, Grid, IconButton, Modal, Text } from '@/libs/primitives';
 import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
