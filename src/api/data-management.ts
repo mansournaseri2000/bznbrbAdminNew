@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ApiManagerV2 } from '@/libs/utils/axios.config';
-// import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
 import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
 import { ArticleListBody, ArticleListResponse, CreateAndEditArticleBody } from '@/types/data-management/article';
 import { CommentListResponse, PlaceImproveContentResponse, PlaceUserUploadsResponse } from '@/types/data-management/point';
@@ -108,10 +107,9 @@ export const removeCommentForPlace = async (id: number) => {
 };
 
 export const getPlaceUserUploads = async (id: number, page: number, limit: number) => {
-  const res = await DevApiManager.get<ApiData<PlaceUserUploadsResponse>>(`/places/getPlaceUserUploads/${id}`, {
+  const res = await DevApiManager.get<ApiData<PlaceUserUploadsResponse>>(`/places/getPlaceUserUploads/${id}?page=${page}&limit=6`, {
     headers: {
       limit: limit,
-      page: page,
     },
   });
   return res.data.data;

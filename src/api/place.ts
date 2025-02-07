@@ -397,3 +397,24 @@ export const addRoutingGuid = async (params: addRoutingGuidBody) => {
 
   return res.data;
 };
+
+export type ImageItem = {
+  id: number;
+  path: string;
+  description: string;
+  alt: string;
+  status: boolean;
+};
+
+type ImageGalleryResponse = {
+  gallery: ImageItem[];
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+};
+
+export const getImageGallery = async (id: number) => {
+  const res = await ApiManager.get<ApiData<ImageGalleryResponse>>(`places/gallery/${id}`);
+
+  return res.data.data;
+};

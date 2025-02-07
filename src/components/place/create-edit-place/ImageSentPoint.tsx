@@ -22,11 +22,17 @@ const ImageSentPoint = ({ id }: Props) => {
    * _______________________________________________________________________________
    */
   const [page, setPage] = useState<number>(1);
+
+  console.log(page,"pagepagepage");
+  
   /**
    * services
    * _______________________________________________________________________________
    */
   const { data } = useQuery({ queryKey: ['place-user-uploads', id, page], queryFn: async () => getPlaceUserUploads(id, page, 6) });
+
+  console.log(data,"ImageSentPointImageSentPointImageSentPointImageSentPoint");
+  
   return (
     <>
       {data?.filteredPics?.length === 0 ? (

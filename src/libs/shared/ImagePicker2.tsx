@@ -2,9 +2,9 @@
 
 import React, { ReactNode } from 'react';
 import Dropzone from 'react-dropzone';
+import imageCompression from 'browser-image-compression';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import imageCompression from 'browser-image-compression';
 
 import { Flex } from '../primitives';
 import ErrorText from './ErrorText';
