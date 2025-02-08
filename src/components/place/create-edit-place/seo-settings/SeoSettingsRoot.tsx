@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-
 import styled from 'styled-components';
 
 import { Box, Flex, Grid, IconButton, Text, TextArea, TextField } from '@/libs/primitives';
@@ -12,52 +11,58 @@ import { Close } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
-export const processStringToTags = (inputString: string | undefined): { label: string; id: number }[] => {
-  if (typeof inputString !== 'string') {
-    console.error('Invalid input: inputString is not a string');
+export const processStringToTags = (
+  input: string | string[] | undefined
+): { label: string; id: number }[] => {
+  if (!input || (typeof input !== 'string' && !Array.isArray(input))) {
+    console.error('Invalid input: input is neither a string nor an array of strings');
     return [];
   }
 
-  return inputString
-    .split(',')
-    .map((tag, index) => ({
-      id: index + 1,
-      label: tag.trim(),
-    }))
-    .filter(tag => tag.label !== '');
-};
+  // Scenario 1: Process as a comma-separated string
+  if (typeof input === 'string') {
+    return input
+      .split(',')
+      .map((tag, index) => ({
+        id: index + 1,
+        label: tag.trim(),
+      }))
+      .filter(tag => tag.label !== ''); // Filter out any empty labels after trimming
+  }
 
-export const convertTagsToString = (tags: { label: string; id: number }[]): string => {
-  return tags.map(tag => tag.label).join(', ');
-};
+  // Scenario 2: Process as an array of strings
+  if (Array.isArray(input)) {
+    return input
+      .map((tag, index) => ({
+        id: index + 1,
+        label: tag.trim(),
+      }))
+      .filter(tag => tag.label !== ''); // Filter out any empty labels after trimming
+  }
 
-/**
- * props
- * _______________________________________________________________________________
- */
+  return []; // Fallback in case of invalid input
+};
 
 const SeoSettingsRoot = () => {
-  /**
-   * const and variables
-   * _______________________________________________________________________________
-   */
   const { control, watch, setValue } = useFormContext();
+  
+  // Initialize states with appropriate types
   const [tagList, setTagList] = useState<{ id: number; label: string }[]>(processStringToTags(watch('keywords')));
   const [metaTagList, setMetaTagList] = useState<{ id: number; label: string }[]>(processStringToTags(watch('metakeywords')));
 
-  /**
-   * useEffect
-   * _______________________________________________________________________________
-   */
-
-  /**
-   * hooks and methods
-   * _______________________________________________________________________________
-   */
-
-  const addTag = ({ hookformStore, inputStore, localStore, updateLocalStore }: { hookformStore: string; inputStore: string; localStore: any; updateLocalStore: any }) => {
+  // Add new tag to list
+  const addTag = ({
+    hookformStore,
+    inputStore,
+    localStore,
+    updateLocalStore,
+  }: {
+    hookformStore: string;
+    inputStore: string;
+    localStore: { id: number; label: string }[];
+    updateLocalStore: React.Dispatch<React.SetStateAction<{ id: number; label: string }[]>>;
+  }) => {
     const pointName = watch(inputStore).trim();
-
     if (!pointName) return;
 
     const newTagObject = {
@@ -67,22 +72,34 @@ const SeoSettingsRoot = () => {
 
     const updatedTagList = [...localStore, newTagObject];
     const tagsAsString = convertTagsToString(updatedTagList); // Convert to comma-separated string
-    updateLocalStore(updatedTagList);
-    setValue(hookformStore, tagsAsString);
-    setValue(inputStore, '');
+    updateLocalStore(updatedTagList); // Update local state
+    setValue(hookformStore, tagsAsString); // Update form state
+    setValue(inputStore, ''); // Clear input
   };
 
-  const removeTag = ({ id, localStore, setLocalStore, hookformStore }: { id: number; localStore: any; setLocalStore: any; hookformStore: string }) => {
-    const updatedTagList = localStore.filter((tag: { id: number }) => tag.id !== id);
-    setLocalStore(updatedTagList);
-    const tagsAsString = convertTagsToString(updatedTagList);
-    setValue(hookformStore, tagsAsString);
+  // Remove tag from list
+  const removeTag = ({
+    id,
+    localStore,
+    setLocalStore,
+    hookformStore,
+  }: {
+    id: number;
+    localStore: { id: number; label: string }[];
+    setLocalStore: React.Dispatch<React.SetStateAction<{ id: number; label: string }[]>>;
+    hookformStore: string;
+  }) => {
+    const updatedTagList = localStore.filter(tag => tag.id !== id); // Filter out the tag with the given ID
+    setLocalStore(updatedTagList); // Update local state
+    const tagsAsString = convertTagsToString(updatedTagList); // Convert to string
+    setValue(hookformStore, tagsAsString); // Update form state
   };
 
-  /**
-   * template
-   * _______________________________________________________________________________
-   */
+  // Convert tags to comma-separated string
+  const convertTagsToString = (tags: { id: number; label: string }[]): string => {
+    return tags.map(tag => tag.label).join(',');
+  };
+
   return (
     <Grid pb={'16px'} gap={'24px'}>
       <Box width={'40%'}>
@@ -117,33 +134,27 @@ const SeoSettingsRoot = () => {
             </Text>
           </Flex>
         ) : (
-          tagList.length > 0 && (
-            <>
-              {tagList.map(item => {
-                return (
-                  <Flex key={item.id} align={'center'} gap={'10px'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
-                    <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
-                      {item.label}
-                    </Text>
-                    <IconButton
-                      type='button'
-                      variant='surface'
-                      onClick={() =>
-                        removeTag({
-                          id: item.id,
-                          localStore: tagList,
-                          setLocalStore: setTagList,
-                          hookformStore: 'keywords',
-                        })
-                      }
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  </Flex>
-                );
-              })}
-            </>
-          )
+          tagList.map(item => (
+            <Flex key={item.id} align={'center'} gap={'10px'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
+              <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+                {item.label}
+              </Text>
+              <IconButton
+                type='button'
+                variant='surface'
+                onClick={() =>
+                  removeTag({
+                    id: item.id,
+                    localStore: tagList,
+                    setLocalStore: setTagList,
+                    hookformStore: 'keywords',
+                  })
+                }
+              >
+                <CloseIcon />
+              </IconButton>
+            </Flex>
+          ))
         )}
       </Flex>
 
@@ -184,33 +195,27 @@ const SeoSettingsRoot = () => {
             </Text>
           </Flex>
         ) : (
-          metaTagList.length > 0 && (
-            <>
-              {metaTagList.map(item => {
-                return (
-                  <Flex key={item.id} align={'center'} gap={'10px'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
-                    <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
-                      {item.label}
-                    </Text>
-                    <IconButton
-                      type='button'
-                      variant='surface'
-                      onClick={() =>
-                        removeTag({
-                          id: item.id,
-                          localStore: metaTagList,
-                          setLocalStore: setMetaTagList,
-                          hookformStore: 'metakeywords',
-                        })
-                      }
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  </Flex>
-                );
-              })}
-            </>
-          )
+          metaTagList.map(item => (
+            <Flex key={item.id} align={'center'} gap={'10px'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
+              <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+                {item.label}
+              </Text>
+              <IconButton
+                type='button'
+                variant='surface'
+                onClick={() =>
+                  removeTag({
+                    id: item.id,
+                    localStore: metaTagList,
+                    setLocalStore: setMetaTagList,
+                    hookformStore: 'metakeywords',
+                  })
+                }
+              >
+                <CloseIcon />
+              </IconButton>
+            </Flex>
+          ))
         )}
       </Flex>
     </Grid>
@@ -219,10 +224,6 @@ const SeoSettingsRoot = () => {
 
 export default SeoSettingsRoot;
 
-/**
- * styled-component
- * _______________________________________________________________________________
- */
 const CloseIcon = styled(Close)`
   path {
     fill: ${colorPalette.pink[11]};

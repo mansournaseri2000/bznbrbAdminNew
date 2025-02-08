@@ -53,6 +53,7 @@ const ArticleFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => 
       seo: '',
       mainPic: '',
     });
+
     replace('/data-management/article-management');
     onSubmit();
     setIsOpen(false);
@@ -64,8 +65,6 @@ const ArticleFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => 
 
     return new Date(currentDate);
   };
-
-  console.log('watch', watch());
 
   /**
    * JSX

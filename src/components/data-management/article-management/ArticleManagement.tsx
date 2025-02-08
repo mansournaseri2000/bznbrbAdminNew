@@ -24,7 +24,7 @@ const ArticleManagement = () => {
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
-  const { push } = useRouter();
+  const { replace } = useRouter();
   const searchParams = useSearchParams();
   const [page, setPage] = useState(searchParams.get('page') ? Number(searchParams.get('page')) : 1);
   const getParam = (key: string) => searchParams.get(key) || '';
@@ -32,19 +32,19 @@ const ArticleManagement = () => {
   const methods = useForm({
     defaultValues: {
       title: getParam('title') ? getParam('title') : '',
-      created_atStart: getParam('created_atStart') ? Number(getParam('created_atStart')) : '',
-      created_atEnd: getParam('created_atEnd') ? Number(getParam('created_atEnd')) : '',
+      is_published: getParam('is_published') ? String(Boolean(getParam('is_published'))) : '',
+      status: getParam('status') ? String(Boolean(getParam('status'))) : '',
+      base: getParam('base') ? String(Boolean(getParam('base'))) : '',
+      text: getParam('text') ? String(Boolean(getParam('text'))) : '',
+      related: getParam('related') ? String(Boolean(getParam('related'))) : '',
+      seo: getParam('seo') ? String(Boolean(getParam('seo'))) : '',
+      mainPic: getParam('mainPic') ? String(Boolean(getParam('mainPic'))) : '',
       provincesId: getParam('provincesId') ? Number(getParam('provincesId')) : '',
       citiesId: getParam('citiesId') ? Number(getParam('citiesId')) : '',
+      created_atStart: getParam('created_atStart') ? Number(getParam('created_atStart')) : '',
+      created_atEnd: getParam('created_atEnd') ? Number(getParam('created_atEnd')) : '',
       parentCategoryId: getParam('parentCategoryId') ? Number(getParam('parentCategoryId')) : '',
       arrayCatIds: getParam('arrayCatIds') ? getParam('arrayCatIds').split(',').map(Number) : [],
-      is_published: getParam('is_published') ? Boolean(getParam('is_published')) : '',
-      status: getParam('status') ? Boolean(getParam('status')) : '',
-      base: getParam('base') ? Boolean(getParam('base')) : '',
-      text: getParam('text') ? Boolean(getParam('text')) : '',
-      related: getParam('related') ? Boolean(getParam('related')) : '',
-      seo: getParam('seo') ? Boolean(getParam('seo')) : '',
-      mainPic: getParam('mainPic') ? Boolean(getParam('mainPic')) : '',
     },
   });
   const { watch, handleSubmit } = methods;
@@ -59,7 +59,7 @@ const ArticleManagement = () => {
     isPending: articlePending,
   } = useMutation({
     mutationFn: async (body: ArticleListBody) => getArticleList(page, body),
-    onSuccess: async data => {
+    onSuccess: async () => {
       const cleanedData = Object.fromEntries(
         Object.entries(watch()).filter(([key, value]) => {
           if (
@@ -87,8 +87,7 @@ const ArticleManagement = () => {
       });
 
       const searchParams = generateSearchParams(cleanedData);
-      push(`/data-management/article-management?${searchParams}`);
-      console.log('data', data);
+      replace(`/data-management/article-management?${searchParams}`);
     },
     onError: async data => {
       console.log('DATA Error', data);

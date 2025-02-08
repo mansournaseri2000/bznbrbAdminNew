@@ -3,11 +3,12 @@
 import { useCallback } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { MinusIcon, PlusIcon, TimerIcon } from '@radix-ui/react-icons';
 import { RadioGroup, Slider } from '@radix-ui/themes';
 import styled from 'styled-components';
 
 import { cost, limitationsOption, renownLevel } from '@/constants/place';
-import { Flex, Grid, Text, TextField } from '@/libs/primitives';
+import { Flex, Grid, IconButton, Text, TextField } from '@/libs/primitives';
 import { Divider } from '@/libs/shared';
 import { colorPalette } from '@/theme';
 import { Category, Season, TripData, TripLimitation } from '@/types/place/place-constant';
@@ -85,9 +86,11 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
 
   const handlePlaceTripSeasonsTimingChange = useCallback(
     (id: number, value: number) => {
+      const clampedValue = Math.max(0, Math.min(24, value)); // Ensures the value is between 0 and 24
+
       setValue(
         'PlaceTripSeasons',
-        placeTripSeasonsItems.map((item: { tripSeasonId: number }) => (item.tripSeasonId === id ? { ...item, timing: value } : item)),
+        placeTripSeasonsItems.map((item: { tripSeasonId: number }) => (item.tripSeasonId === id ? { ...item, timing: clampedValue } : item)),
         { shouldDirty: true, shouldValidate: true }
       );
     },
@@ -104,6 +107,8 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
     },
     [tripLimitationsItems, setValue]
   );
+
+  console.log(placeTripSeasonsItems, 'placeTripSeasonsItems');
 
   /**
    * template
@@ -267,15 +272,40 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
                       <Text>{tripSeason?.score ?? 0}%</Text>
                     </Flex>
                   </Grid>
-                  <Grid style={{ border: '2px solid red' }}>
-                    {
+                  <Grid gap={'40px'} columns={'2'}>
+                    <Flex gap={'16px'} align={'center'}>
+                      <IconButton
+                        size={'3'}
+                        variant='surface'
+                        type='button'
+                        onClick={() => handlePlaceTripSeasonsTimingChange(tripSeason.tripSeasonId, (tripSeason?.timing || 0) - 1)}
+                        disabled={tripSeason?.timing <= 0}
+                      >
+                        <MinusIcon style={{ scale: '1.6' }} stroke={colorPalette.blue[9]} strokeWidth={'0.5px'} />
+                      </IconButton>
+
                       <TextField
                         type='number'
                         value={tripSeason?.timing}
-                        placeholder={'مدت اقامت پیشنهادی'}
+                        placeholder={'زمان مناسب'}
                         onChange={e => handlePlaceTripSeasonsTimingChange(tripSeason.tripSeasonId, Number(e.target.value))}
                       />
-                    }
+
+                      <IconButton
+                        size={'3'}
+                        variant='surface'
+                        type='button'
+                        onClick={() => handlePlaceTripSeasonsTimingChange(tripSeason.tripSeasonId, (tripSeason?.timing || 0) + 1)}
+                        disabled={tripSeason?.timing >= 24}
+                      >
+                        <PlusIcon style={{ scale: '1.6' }} stroke={colorPalette.blue[9]} strokeWidth={'0.5px'} />
+                      </IconButton>
+                    </Flex>
+
+                    <Flex align={'center'} position={'relative'}>
+                      <TextField type='number' placeholder='تا ساعت' />
+                      <TimerIcon style={{ position: 'absolute', left: '15', marginTop: '-8px' }} fill='red' stroke={colorPalette.pink[9]} strokeWidth={'0.5px'} />
+                    </Flex>
                   </Grid>
                 </Grid>
               );
@@ -309,7 +339,7 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
             );
           })}
         </Grid>
-        <Grid p={'4'} style={{ border: '2px solid red' }}>
+        <Grid p={'4'}>
           <RadioGroup.Root
             defaultValue={costValue}
             style={{

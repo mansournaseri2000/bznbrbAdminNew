@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
 import { useParams, useRouter } from 'next/navigation';
@@ -16,7 +16,7 @@ import { Button, Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primiti
 import SimpleWrapper2 from '@/libs/shared/wrapper/SimpleWrapper2';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { CreateAndEditArticleBody, CreateArticleButtonTypes, EditArticleButtonTypes } from '@/types/data-management/article';
+import { CreateAndEditArticleBody, CreateArticleButtonTypes, EditArticleButtonTypes, PlacesOptions } from '@/types/data-management/article';
 import { PlaceConstantResponse } from '@/types/place';
 
 import ArticlePoint from './ArticlePoint';
@@ -37,6 +37,18 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
    * const and Variables
    * _______________________________________________________________________________
    */
+
+  type PlaceData = {
+    placeId: number;
+    placeRelationType: string;
+  };
+
+  const getRelationPlaceIds = (data: PlaceData[]): number[] => {
+    return data
+      .filter(item => item.placeRelationType === 'RELATION') // Keep only "RELATION" type
+      .map(item => item.placeId); // Extract placeId
+  };
+
   const router = useRouter();
   const params = useParams();
   const [buttonState, setButtonState] = useState<typeof type extends 'create-article' ? CreateArticleButtonTypes : EditArticleButtonTypes>(type === 'create-article' ? 'initial-data' : 'initial-data');
@@ -52,13 +64,15 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
             source: '',
             summery: '',
             brief: '',
+            placeRelationType: articleData?.places ? articleData?.places.find((place: PlacesOptions) => place?.placeRelationType === 'MAIN')?.placeId : null,
+
             slug: '',
             tableOfContent: '',
             inMain: false,
             inTop: false,
             provincesId: '',
             citiesId: '',
-            tags: [],
+            metakeywords: [],
             keywords: [],
             meta_title: '',
             meta_description: '',
@@ -71,11 +85,18 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
             pic: '',
             isSlider: false,
             mainPoint: null,
-            places: [],
             view: null,
           }
         : type === 'edit-article'
         ? {
+            type: Boolean(articleData?.type) ? articleData?.type : '',
+            is_published: Boolean(articleData?.is_published) ? articleData?.is_published : '',
+            status: Boolean(articleData?.status) ? articleData?.status : '',
+            provincesId: Boolean(articleData?.provincesId) ? articleData?.provincesId : '',
+            citiesId: Boolean(articleData?.citiesId) ? articleData?.citiesId : '',
+            categoryId: Boolean(articleData?.categoryId) ? articleData?.categoryId : '',
+            parentCategoryId: Boolean(articleData?.parentCategoryId) ? articleData?.parentCategoryId : '',
+
             title: articleData?.title,
             content: articleData?.content,
             writer: articleData?.writer,
@@ -87,22 +108,17 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
             tableOfContent: articleData?.tableOfContent,
             inMain: articleData?.inMain,
             inTop: articleData?.inTop,
-            provincesId: articleData?.provincesId,
-            citiesId: articleData?.citiesId,
-            tags: articleData?.tags,
+            mainPoint: articleData.places ? articleData.places.find((place: PlacesOptions) => place.placeRelationType === 'MAIN')?.placeId : null,
+            placeRelationType: articleData.places ? getRelationPlaceIds(articleData.places) : null,
+
+            metakeywords: articleData?.tags,
             keywords: articleData?.keywords,
             meta_title: articleData?.meta_title,
             meta_description: articleData?.meta_description,
             view: articleData?.view,
-            status: articleData?.status,
-            is_published: articleData?.is_published,
-            type: articleData?.type,
-            categoryId: articleData?.categoryId,
-            parentCategoryId: articleData?.parentCategoryId,
             source_link: articleData?.source_link,
             pic: articleData?.pic,
             isSlider: articleData?.isSlider,
-            places: articleData?.places,
           }
         : {},
   });
@@ -134,9 +150,11 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
     },
   });
 
-  useEffect(() => {
-    editArticleMutate();
-  }, []);
+  console.log(articleData, 'articleDataarticleDataarticleData');
+
+  // useEffect(() => {
+  //   editArticleMutate();
+  // }, []);
 
   return (
     <FormProvider {...methods}>
@@ -159,7 +177,7 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
                     field.onChange(val);
                   }}
                 >
-                  {placeConstant.PlaceType.map((item, index) => (
+                  {placeConstant?.PlaceType.map((item, index) => (
                     <SelectItem key={index} value={item.id}>
                       {item.name}
                     </SelectItem>
@@ -247,7 +265,7 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
 
         {buttonState === 'text-content' && (
           <SimpleWrapper2 type='changeAble' hero='محتوای متنی'>
-            <TextContent />
+            <TextContent data={articleData} state={buttonState} />
           </SimpleWrapper2>
         )}
 

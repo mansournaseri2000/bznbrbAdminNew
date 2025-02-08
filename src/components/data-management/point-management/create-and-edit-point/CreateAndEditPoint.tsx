@@ -206,9 +206,9 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             PlaceDetails: placeData?.PlaceDetails,
           }
         : {
-            status: '',
-            type: '',
-            isPublished: '',
+            status: false,
+            type: 'RESTAURANT',
+            isPublished: false,
             name: '',
             category_id: '',
             sub_category_id: '',

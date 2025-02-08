@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { PlusIcon } from '@radix-ui/react-icons';
 import styled from 'styled-components';
@@ -12,47 +12,51 @@ import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
 const RelatedPoint = () => {
-  const { setValue } = useFormContext();
-  const [points, setPoints] = useState<number[]>([]);
-  const [point, setPoint] = useState<number | string>('');
+  const { setValue, watch, control } = useFormContext();
+  const [pointId, setPointId] = useState<number | string>('');
+  const placeRelationType = useWatch({ control, name: 'placeRelationType' }) || [];
 
-  const addRelatedPoint = () => {
-    if (point) {
-      const newPoints = [...points, Number(point)];
-      setPoints(newPoints);
-      setValue('places', newPoints);
-      setPoint('');
-    }
+  const handleRemove = (id: number) => {
+    const filteredItems = placeRelationType.filter((item: number) => item !== id);
+    setValue('placeRelationType', filteredItems);
   };
 
-  const removeRelatedPoint = (index: number) => {
-    const newPoints = points.filter((_, i) => i !== index);
-    setPoints(newPoints);
-    setValue('places', newPoints);
-  };
   return (
-    <Grid width={'100%'} gapY={'5'}>
-      <Flex width={'50%'} align={'center'} gap={'3'}>
-        <TextField type='number' value={point} onChange={e => setPoint(e.target.value)} placeholder='آیدی نقطه مرتبط اصلی' />
-        <IconButton type='button' variant='soft' size={'3'} onClick={addRelatedPoint} style={{ marginBottom: '10px' }}>
+    <Grid width='100%' gapY='5'>
+      <Flex width='50%' align='center' gap='3'>
+        <TextField type='number' value={pointId} onChange={e => setPointId(e.target.value)} placeholder='آیدی نقطه مرتبط اصلی' />
+        <IconButton
+          type='button'
+          variant='soft'
+          size='3'
+          style={{ marginBottom: '10px' }}
+          onClick={() => {
+            if (pointId) {
+              const newPoints = [...(watch('placeRelationType') || []), Number(pointId)];
+              setValue('placeRelationType', newPoints); // Update react-hook-form state
+              setPointId(''); // Reset input
+            }
+          }}
+        >
           <PlusIcon />
         </IconButton>
       </Flex>
-      {points.length > 0 ? (
-        <Flex width={'100%'} gap={'3'} wrap={'wrap'}>
-          {points.map((p, index) => (
-            <Flex key={index} width={'fit-content'} gap={'3'} p={'9.5px 16px'} align={'center'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
+
+      {placeRelationType.length > 0 ? (
+        <Flex width='100%' gap='3' wrap='wrap'>
+          {placeRelationType.map((p: number) => (
+            <Flex key={p} width='fit-content' gap='3' p='9.5px 16px' align='center' style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
               <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
                 {p}
               </Text>
-              <IconButton size={'1'} variant='surface' onClick={() => removeRelatedPoint(index)}>
+              <IconButton size='1' variant='surface' onClick={() => handleRemove(p)}>
                 <CustomCloseIcon />
               </IconButton>
             </Flex>
           ))}
         </Flex>
       ) : (
-        <Flex p={'54.5px 16px'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
+        <Flex p='54.5px 16px' style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
           <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11] }}>
             هنوز نقطه ای اضافه نشده است.
           </Text>

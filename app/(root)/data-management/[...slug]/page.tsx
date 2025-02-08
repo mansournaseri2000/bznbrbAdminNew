@@ -40,10 +40,12 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
       {
         queryKey: ['place', placeID],
         queryFn: async () => await getPlace(Number(placeID)),
+        enabled: status === 'create-point' || status === 'edit-point' || status === 'point-detail',
       },
       {
-        queryKey: ['article-data'],
+        queryKey: ['article-data', placeID],
         queryFn: async () => await getArticleById(Number(placeID)),
+        enabled: status === 'edit-article' || status === 'create-article',
       },
     ],
   });

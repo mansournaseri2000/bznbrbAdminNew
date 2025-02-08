@@ -279,8 +279,8 @@ export const createPlace = async (params: fomrData) => {
     trip_value: Number(trip_value),
     suggested_time: String(suggested_time),
     type: type,
-    isPublished: isPublished === 'true' ? true : isPublished === 'false' ? false : String(isPublished),
-    status: status === 'true' ? true : status === 'false' ? false : String(status),
+    isPublished: isPublished === 'true'|| isPublished === true ? true : isPublished === 'false' || isPublished === false ? false : String(isPublished),
+    status: status === 'true' || status === true ? true : status === 'false' || status === false ? false : String(status),
   });
   return res.data;
 };
