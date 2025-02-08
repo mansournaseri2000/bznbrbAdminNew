@@ -118,6 +118,8 @@ export const getArticleList = async (page: number, params: ArticleListBody) => {
     seo: params.seo === 'true' ? true : params.seo === 'false' ? false : String(params.seo),
     mainPic: params.mainPic === 'true' ? true : params.mainPic === 'false' ? false : String(params.mainPic),
     related: params.related === 'true' ? true : params.related === 'false' ? false : String(params.related),
+    created_atStart: Boolean(new Date(params.created_atStart).getTime()) ? new Date(params.created_atStart).getTime() : null,
+    created_atEnd: Boolean(new Date(params.created_atEnd).getTime()) ? new Date(params.created_atEnd).getTime() : null,
   };
   const body = filterObject(obj);
   const res = await DevApiManager.post<ApiData<ArticleListResponse>>(`/article/filter?limit=10&page=${page}`, body);

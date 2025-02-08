@@ -10,13 +10,10 @@ import { getAllPlacesConstants, getPlace } from '@/api/place';
 import ArticleManagement from '@/components/data-management/article-management/ArticleManagement';
 import CreateAndEditArticle from '@/components/data-management/article-management/create-and-edit-article/CreateAndEditArticle';
 import CreateAndEditPoint from '@/components/data-management/point-management/create-and-edit-point/CreateAndEditPoint';
-import PointDetailRoot from '@/components/data-management/point-management/point-detail/PointDetailRoot';
 import PointManagement from '@/components/data-management/point-management/PointManagement';
 import Header from '@/layout/Header';
 import { Box, Flex, Grid } from '@/libs/primitives';
 import { PlaceResponse } from '@/types/place';
-
-// import { useForm } from 'react-hook-form';
 
 const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   /**
@@ -72,9 +69,6 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
         switch (params.slug[1]) {
           case 'create-point':
             return <CreateAndEditPoint placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />;
-          case 'point-detail':
-            return <PointDetailRoot />;
-
           case 'edit-point':
             return <CreateAndEditPoint placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />;
           default:

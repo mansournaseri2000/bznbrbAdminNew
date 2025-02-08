@@ -5,18 +5,19 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import { useRouter } from 'next/navigation';
 
-import { booleanFilterOptions, isPublishedOptions, pointTypeOptions, StatusFilterOption } from '@/constants/data-management';
+import { booleanFilterOptions, isPublishedOptions, StatusFilterOption } from '@/constants/data-management';
 import { Grid, PopoverRoot, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import CheckboxGroup from '@/libs/shared/CheckboxGroup';
 import CustomDatePicker from '@/libs/shared/CustomDatePicker';
 import ModalAction from '@/libs/shared/ModalAction';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { Category, Province } from '@/types/place/place-constant';
+import { Category, PlaceType, Province } from '@/types/place/place-constant';
 
 type Props = {
   province: Province[];
   categories: Category[];
+  PlaceType: PlaceType[];
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: VoidFunction;
 };
@@ -31,7 +32,7 @@ export function serializeSubCategoriesData(category: any) {
   }
 }
 
-const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
+const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: Props) => {
   /**
    * Variables and Constant
    * _______________________________________________________________________________
@@ -90,12 +91,12 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
    * _______________________________________________________________________________
    */
   return (
-    <Grid maxHeight={'776px'} height={'100%'} style={{ maxHeight: 750, overflowY: 'auto' }}>
-      <Grid width={'100%'} p={'4'} gapY={'4'}>
+    <>
+      <Grid maxHeight={'776px'} width={'100%'} p={'4'} gapY={'4'} style={{ overflowY: 'auto' }}>
         {/*****
-          Point position
-         * _______________________________________________________________________________
-         *****/}
+        Point position
+       * _______________________________________________________________________________
+       *****/}
         <Grid gapY={'2'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             موقعیت نقطه
@@ -192,7 +193,7 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
          * _______________________________________________________________________________
          *****/}
         <PopoverRoot lable='نوع نقطه' placeholder='نوع نقطه'>
-          <CheckboxGroup isRow={false} items={pointTypeOptions} store='arrayTypes' />
+          <CheckboxGroup isRow={false} items={serializeSubCategoriesData(PlaceType)} store='arrayTypes' />
         </PopoverRoot>
         {/*****
          * Category Type
@@ -439,7 +440,7 @@ const PointFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
         </Grid>
       </Grid>
       <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} />
-    </Grid>
+    </>
   );
 };
 

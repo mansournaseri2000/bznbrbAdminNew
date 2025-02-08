@@ -10,7 +10,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const SimpleWrapper2 = ({ hero, type,children }: Props) => {
+const SimpleWrapper2 = ({ hero, type, children }: Props) => {
   return (
     <Grid width={'100%'} style={{ borderRadius: 8, border: `1px solid ${colorPalette.gray[6]}` }}>
       <Flex
@@ -24,7 +24,7 @@ const SimpleWrapper2 = ({ hero, type,children }: Props) => {
           {hero}
         </Text>
       </Flex>
-      <Grid gap={'16px'} p={'24px 16px 16px 16px'}>
+      <Grid gap={'16px'} p={'24px 16px 16px 16px'} style={{ backgroundColor: colorPalette.gray[2] }}>
         {children}
       </Grid>
     </Grid>

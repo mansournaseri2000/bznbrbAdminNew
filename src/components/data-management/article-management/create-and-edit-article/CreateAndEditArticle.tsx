@@ -124,6 +124,7 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
   });
 
   const { watch, control } = methods;
+  console.log('watch', watch());
 
   /**
    * Action Services

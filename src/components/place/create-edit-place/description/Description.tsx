@@ -2,21 +2,21 @@
 
 import { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), {
-  ssr: false,
-  loading: () => <Spinner />,
-});
-import { ContentState, convertFromHTML, convertToRaw, EditorState } from 'draft-js';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
 
 import { Spinner } from '@radix-ui/themes';
+import { ContentState, convertFromHTML, convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 
 import { Button, Flex, Grid, Text } from '@/libs/primitives';
 import { Detail } from '@/types/place/place-constant';
 
+const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), {
+  ssr: false,
+  loading: () => <Spinner />,
+});
 
 type Props = {
   details: Detail[];
@@ -95,9 +95,9 @@ const Description = ({ details }: Props) => {
           </Flex>
           <Editor
             editorStyle={{
-              minHeight: '150px',
+              minHeight: '144px',
               overflow: 'auto',
-              border: '1px solid #00000046',
+              border: '1px solid #CDCED7',
               borderRadius: '8px',
               padding: '8px',
               position: 'static',

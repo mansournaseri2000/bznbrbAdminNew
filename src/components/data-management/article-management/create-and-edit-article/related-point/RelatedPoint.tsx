@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import { Flex, Grid, IconButton, Text, TextField } from '@/libs/primitives';
 import { Close } from '@/public/icon';
-import { colorPalette } from '@/theme';
+import { Boxshadow, colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
 const RelatedPoint = () => {
@@ -23,23 +23,25 @@ const RelatedPoint = () => {
 
   return (
     <Grid width='100%' gapY='5'>
-      <Flex width='50%' align='center' gap='3'>
-        <TextField type='number' value={pointId} onChange={e => setPointId(e.target.value)} placeholder='آیدی نقطه مرتبط اصلی' />
-        <IconButton
-          type='button'
-          variant='soft'
-          size='3'
-          style={{ marginBottom: '10px' }}
-          onClick={() => {
-            if (pointId) {
-              const newPoints = [...(watch('placeRelationType') || []), Number(pointId)];
-              setValue('placeRelationType', newPoints); // Update react-hook-form state
-              setPointId(''); // Reset input
-            }
-          }}
-        >
-          <PlusIcon />
-        </IconButton>
+      <Flex width='40%' align='center' gap='3'>
+        <Wrapper>
+          <CustomTextField type='number' value={pointId} onChange={e => setPointId(e.target.value)} placeholder='افزودن نقطه مرتبط' />
+          <IconButton
+            size='4'
+            type='button'
+            className='icon-button'
+            variant='surface'
+            onClick={() => {
+              if (pointId) {
+                const newPoints = [...(watch('placeRelationType') || []), Number(pointId)];
+                setValue('placeRelationType', newPoints); // Update react-hook-form state
+                setPointId(''); // Reset input
+              }
+            }}
+          >
+            <PlusIcon style={{ color: colorPalette.pink[9] }} />
+          </IconButton>
+        </Wrapper>
       </Flex>
 
       {placeRelationType.length > 0 ? (
@@ -71,5 +73,44 @@ export default RelatedPoint;
 const CustomCloseIcon = styled(Close)`
   path {
     fill: ${colorPalette.pink[11]};
+  }
+`;
+
+const CustomTextField = styled(TextField)`
+  &.rt-TextFieldRoot:where(.rt-variant-surface) {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    margin-block-end: -10px;
+  }
+  &:focus-within {
+    outline: none !important;
+    border: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  @media (hover: hover) {
+    background-color: transparent !important;
+  }
+`;
+
+const Wrapper = styled(Flex)`
+  width: 100%;
+  align-items: center;
+  border: 1px solid ${colorPalette.gray[7]};
+  background-color: transparent;
+  border-radius: 12px;
+  padding: 6px;
+  &:focus-within {
+    background-color: ${colorPalette.blue[2]};
+    box-shadow: ${Boxshadow.shadow1};
+    border: 1px solid ${colorPalette.gray[3]};
+  }
+  .icon-button {
+    background-color: transparent;
+    @media (hover: hover) {
+      background-color: transparent !important;
+    }
   }
 `;

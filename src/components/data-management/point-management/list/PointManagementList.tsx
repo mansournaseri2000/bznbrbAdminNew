@@ -48,7 +48,7 @@ const PointManagementList = (props: Props) => {
         const value = info.getValue() as string | null;
         const status = info.row.original.status;
         return (
-          <Flex width={'100%'} align={'center'} gap={'3'} mr={'20px'}>
+          <Flex width={'100%'} align={'center'} justify={'center'} gap={'3'} mr={'20px'}>
             <Box width={'12px'} height={'12px'} style={{ borderRadius: 100, backgroundColor: status === true ? colorPalette.blue[6] : colorPalette.pink[6] }}>
               {' '}
             </Box>

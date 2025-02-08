@@ -68,7 +68,13 @@ const PointManagementHero = ({ onSubmit }: Props) => {
         ***/}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
-        <PointFilter province={constantData?.provinces ? constantData.provinces : []} categories={constantData?.categories ? constantData.categories : []} setIsOpen={setIsOpen} onSubmit={onSubmit} />
+        <PointFilter
+          province={constantData?.provinces ? constantData.provinces : []}
+          categories={constantData?.categories ? constantData.categories : []}
+          PlaceType={constantData?.PlaceType ? constantData.PlaceType : []}
+          setIsOpen={setIsOpen}
+          onSubmit={onSubmit}
+        />
       </Modal>
     </>
   );

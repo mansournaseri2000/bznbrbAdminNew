@@ -87,14 +87,48 @@ const TextContent = ({ data, state }: Props) => {
         <Controller
           name='tableOfContent'
           control={control}
-          render={() => <Editor editorState={editorStateTable} onEditorStateChange={handleEditorChangeTable} wrapperClassName='demo-wrapper' editorClassName='demo-editor' />}
+          render={() => (
+            <Editor
+              editorStyle={{
+                minHeight: '150px',
+                overflow: 'auto',
+                borderRadius: '8px',
+                padding: '8px',
+                position: 'static',
+                height: 'fit-content',
+                border: '1px solid #CDCED7',
+                backgroundColor: '#FCFCFD',
+              }}
+              editorState={editorStateTable}
+              onEditorStateChange={handleEditorChangeTable}
+              wrapperClassName='demo-wrapper'
+              editorClassName='demo-editor'
+            />
+          )}
         />
       </Flex>
 
       <Controller
         name='content'
         control={control}
-        render={() => <Editor editorState={editorStateContent} onEditorStateChange={handleEditorChangeContent} wrapperClassName='demo-wrapper' editorClassName='demo-editor' />}
+        render={() => (
+          <Editor
+            editorStyle={{
+              minHeight: '150px',
+              overflow: 'auto',
+              borderRadius: '8px',
+              padding: '8px',
+              position: 'static',
+              height: 'fit-content',
+              border: '1px solid #CDCED7',
+              backgroundColor: '#FCFCFD',
+            }}
+            editorState={editorStateContent}
+            onEditorStateChange={handleEditorChangeContent}
+            wrapperClassName='demo-wrapper'
+            editorClassName='demo-editor'
+          />
+        )}
       />
 
       <Controller
