@@ -178,7 +178,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             tripLimitations: serializeLimitaionData(placeData?.Place_TripLimitation, placeConstant.tripLimitations),
             features: serializeFeatures(placeData?.features),
             PlaceWorkTimes: placeData?.PlaceWorkTime,
-            PlaceTripSeasons: placeData?.Place_TripSeason.length > 0 ? serializeTripSeasons(placeData?.Place_TripSeason) : serializeTripSeasons(placeTripSeasons),
+            PlaceTripSeasons: placeData?.Place_TripSeason.length > 0 ? serializeTripSeasons(placeConstant.seasons as any) : serializeTripSeasons(placeTripSeasons),
             airplane: placeData?.airplane,
             bus: placeData?.bus,
             car: placeData?.car,
@@ -207,7 +207,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
           }
         : {
             status: false,
-            type: 'RESTAURANT',
+            type: 'PLACE',
             isPublished: false,
             name: '',
             category_id: '',
@@ -258,7 +258,8 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             PlaceDetails: [],
           },
   });
-  const { handleSubmit, watch, control } = methods;
+  const { handleSubmit, control } = methods;
+
   /**
    * hooks and methods
    * _______________________________________________________________________________
@@ -302,9 +303,6 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
       createPlaceMutate(data);
     }
   };
-
-  console.log(watch(), 'watchwatchwatch');
-  console.log(placeData, 'placeDataplaceData');
 
   return (
     <FormProvider {...methods}>

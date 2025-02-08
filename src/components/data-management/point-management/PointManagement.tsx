@@ -55,6 +55,9 @@ const PointManagement = () => {
   });
 
   const { watch, setValue, handleSubmit } = methods;
+
+  console.log(searchParams.get('seo'), 'searchParams', watch());
+
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
