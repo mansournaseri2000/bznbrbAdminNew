@@ -4,7 +4,6 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { fomrData } from '@/components/place/create-edit-place/defaultValues';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
-import { serializeTripType } from '@/libs/utils';
 import { ApiManager, ApiManagerV2 } from '@/libs/utils/axios.config';
 import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
 import { detailsSerializerForEdit, flattenPlaceWorkTime } from '@/libs/utils/place/place-seryalizer';
@@ -194,21 +193,12 @@ export const getPlaceSSR = async (id: number, status: string) => {
  * create-place services
  * _______________________________________________________________________________
  */
-export const createPlace = async (params: fomrData) => {
+export const createPlace = async (params: fomrData | any) => {
   const {
     name,
     basicInfoDescription,
-    sub_category_id,
     cityID,
     lat,
-    airplane,
-    car,
-    bus,
-    subway,
-    ship,
-    taxi,
-    train,
-    pictures,
     lng,
     address,
     tell,
@@ -220,13 +210,11 @@ export const createPlace = async (params: fomrData) => {
     metakeywords,
     keywords,
     features,
-    hike,
     PlaceDetails,
     TripTypes,
     PlaceTripSeasons,
     PlaceCategories,
     tripLimitations,
-    category_id,
     cost,
     renown,
     PlaceWorkTimes,
@@ -237,14 +225,15 @@ export const createPlace = async (params: fomrData) => {
     status,
     type,
     isPublished,
+    vehicleOptions,
+    category_id,
   } = params;
 
   const res = await ApiManager.post<ApiData<PlaceResponse>>('places/create', {
     name: name,
-    city_id: cityID == 0 ? undefined : Number(cityID),
     description: basicInfoDescription,
-    category_id: sub_category_id == 0 ? undefined : Number(sub_category_id),
-    parentCategory_id: category_id == 0 ? undefined : Number(category_id),
+    category_id: Number(category_id) === 0 ? undefined : Number(category_id),
+    city_id: Number(cityID) === 0 ? undefined : Number(cityID),
     lat: lat,
     lng: lng,
     address: address,
@@ -256,22 +245,21 @@ export const createPlace = async (params: fomrData) => {
     keywords: keywords,
     meta_description: meta_description,
     meta_title: meta_title,
-    airplane: airplane,
-    bus: bus,
-    car: car,
-    hike: hike,
-    ship: ship,
-    subway: subway,
-    taxi: taxi,
-    train: train,
+    airplane: vehicleOptions.filter((item: any) => item.key === 'airplane')[0].content,
+    bus: vehicleOptions.filter((item: any) => item.key === 'bus')[0].content,
+    car: vehicleOptions.filter((item: any) => item.key === 'car')[0].content,
+    hike: vehicleOptions.filter((item: any) => item.key === 'hike')[0].content,
+    ship: vehicleOptions.filter((item: any) => item.key === 'ship')[0].content,
+    subway: vehicleOptions.filter((item: any) => item.key === 'subway')[0].content,
+    taxi: vehicleOptions.filter((item: any) => item.key === 'subway')[0].content,
+    train: vehicleOptions.filter((item: any) => item.key === 'train')[0].content,
     PlaceFeatures: features,
     PlaceDetails: PlaceDetails,
-    TripTypes: serializeTripType(TripTypes as any),
+    TripTypes: TripTypes,
     PlaceWorkTimes: flattenPlaceWorkTime(PlaceWorkTimes as any),
     PlaceCategories: PlaceCategories,
     PlaceTripLimitations: tripLimitations,
     PlaceTripSeasons: PlaceTripSeasons,
-    pictures: pictures,
     cost: cost,
     renown: renown,
     area: area,
@@ -279,7 +267,7 @@ export const createPlace = async (params: fomrData) => {
     trip_value: Number(trip_value),
     suggested_time: String(suggested_time),
     type: type,
-    isPublished: isPublished === 'true'|| isPublished === true ? true : isPublished === 'false' || isPublished === false ? false : String(isPublished),
+    isPublished: isPublished === 'true' || isPublished === true ? true : isPublished === 'false' || isPublished === false ? false : String(isPublished),
     status: status === 'true' || status === true ? true : status === 'false' || status === false ? false : String(status),
   });
   return res.data;
@@ -314,7 +302,6 @@ export const editPlace = async (params: fomrData, id: number) => {
     ship,
     taxi,
     train,
-    pictures,
     lng,
     address,
     tell,
@@ -377,7 +364,6 @@ export const editPlace = async (params: fomrData, id: number) => {
     PlaceCategories: PlaceCategories,
     PlaceTripLimitations: tripLimitations,
     PlaceTripSeasons: PlaceTripSeasons,
-    pictures: pictures,
     cost: cost,
     renown: renown,
     area: area,

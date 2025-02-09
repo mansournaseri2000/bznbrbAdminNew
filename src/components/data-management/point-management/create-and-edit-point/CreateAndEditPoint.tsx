@@ -19,7 +19,7 @@ import ImproveContentPoint from '@/components/place/create-edit-place/ImproveCon
 import PrimaryImage from '@/components/place/create-edit-place/PrimaryImage';
 import RoutingGuid from '@/components/place/create-edit-place/routing-guid/RoutingGuid';
 import { createPointTabsOptions, editPointTabsOptions, formPublishedOptions, formStatusOptions } from '@/constants/data-management';
-import { placeWorkTimeSchedule, seasons } from '@/constants/place';
+import { placeWorkTimeSchedule } from '@/constants/place';
 import { Button, Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import SimpleWrapper2 from '@/libs/shared/wrapper/SimpleWrapper2';
@@ -146,7 +146,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     ship: Boolean(placeData?.ship) ? placeData?.ship : '',
   };
 
-  console.log(placeConstant, 'placeConstant');
+  console.log(placeConstant, 'placeConstant', placeData);
 
   const queryClient = useQueryClient();
   const { push, back } = useRouter();
@@ -161,14 +161,14 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             basicInfoDescription: placeData?.description,
             basicInfosummary: placeData?.summary,
             slug: placeData?.slug,
-            category_id: Boolean(placeData.parentCategory_id) ? placeData.parentCategory_id : '',
-            sub_category_id: Boolean(placeData.category_id) ? placeData.category_id : '',
+            category_id: Boolean(placeData?.parentCategory_id) ? placeData?.parentCategory_id : '',
+            sub_category_id: Boolean(placeData?.category_id) ? placeData?.category_id : '',
             provinceId: placeData?.Cities ? placeData?.Cities.Provinces.id : '',
             cityID: placeData?.Cities ? placeData?.Cities.id : '',
             area: placeData?.area,
             tell: placeData?.tell,
             email: placeData?.email,
-            website: placeData.website,
+            website: placeData?.website,
             address: placeData?.address,
             lat: placeData?.lat,
             lng: placeData?.lng,
@@ -178,7 +178,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             tripLimitations: serializeLimitaionData(placeData?.Place_TripLimitation, placeConstant.tripLimitations),
             features: serializeFeatures(placeData?.features),
             PlaceWorkTimes: placeData?.PlaceWorkTime,
-            PlaceTripSeasons: placeData?.Place_TripSeason.length > 0 ? serializeTripSeasons(placeConstant.seasons as any) : serializeTripSeasons(placeTripSeasons),
+            PlaceTripSeasons: placeData?.Place_TripSeason.length > 0 ? serializeTripSeasons(placeData.Place_TripSeason as any) : serializeTripSeasons(placeTripSeasons),
             airplane: placeData?.airplane,
             bus: placeData?.bus,
             car: placeData?.car,
@@ -206,6 +206,12 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             PlaceDetails: placeData?.PlaceDetails,
           }
         : {
+            vehicleOptions: serializeModelObject(model),
+            PlaceCategories: serializeCategories(placeConstant.categories),
+            TripTypes: serializeTripTypes(placeConstant.tripDatas),
+            PlaceTripSeasons: serializeTripSeasons(placeConstant.seasons as any),
+            tripLimitations: serializeTripLimitations(placeConstant.tripLimitations as any),
+            PlaceWorkTimes: serializePlaceWorkTimeSchedule(placeWorkTimeSchedule),
             status: false,
             type: 'PLACE',
             isPublished: false,
@@ -223,12 +229,6 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             lat: '',
             lng: '',
             area: '',
-            vehicleOptions: serializeModelObject(model),
-            PlaceCategories: serializeCategories(placeConstant.categories),
-            TripTypes: serializeTripTypes(placeConstant.tripDatas),
-            PlaceTripSeasons: serializeTripSeasons(placeConstant.seasons as any),
-            tripLimitations: serializeTripLimitations(placeConstant.tripLimitations as any),
-            PlaceWorkTimes: serializePlaceWorkTimeSchedule(placeWorkTimeSchedule),
             features: [],
             airplane: null,
             bus: null,
@@ -244,7 +244,6 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             meta_description: '',
             meta_title: '',
             metakeyword: '',
-
             placeCategory: '',
             placeID: null,
             isLoading: false,
@@ -258,7 +257,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             PlaceDetails: [],
           },
   });
-  const { handleSubmit, control } = methods;
+  const { handleSubmit, control, watch } = methods;
 
   /**
    * hooks and methods
@@ -287,7 +286,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
       if (data.status === true) {
         ToastSuccess('اطلاعات شما با موفقیت ثبت شد');
         queryClient.invalidateQueries({ queryKey: ['all-places'] });
-        push('/');
+        push('/data-management/point-management');
       } else {
         ToastError('لطفا دوباره امتحان نمایید');
       }
@@ -303,6 +302,8 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
       createPlaceMutate(data);
     }
   };
+
+  console.log(watch(), 'watchwatchwatchwatch', placeData);
 
   return (
     <FormProvider {...methods}>
@@ -444,7 +445,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
               <AnalysisRoot
                 constants={placeConstant}
                 tripLimitations={placeConstant ? placeConstant.tripLimitations : []}
-                seasons={placeConstant ? seasons : []}
+                seasons={placeConstant ? placeConstant.seasons : []}
                 tripDatas={placeConstant ? placeConstant.tripDatas : []}
                 Categories={placeConstant?.categories ? placeConstant.categories : []}
               />

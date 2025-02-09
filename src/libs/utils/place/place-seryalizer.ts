@@ -14,6 +14,8 @@ export const serializeCategories = (categories: Category[] | any) => {
 };
 
 export const serializeTripTypes = (categories: Category[] | any) => {
+  console.log(categories,"categoriescategoriescategories");
+  
   return categories?.map((category: any) => ({
     tripTypeId: category.id,
     score: 0,
@@ -28,6 +30,9 @@ type TripSeason = {
 };
 
 export const serializeTripSeasons = (tripSeasons: TripSeason[]) => {
+
+  console.log(tripSeasons,"tripSeasonstripSeasonstripSeasonstripSeasonstripSeasons");
+  
   return tripSeasons?.map(tripSeason => ({
     tripSeasonId: tripSeason.id,
     score: tripSeason.score ? tripSeason.score : 0,
