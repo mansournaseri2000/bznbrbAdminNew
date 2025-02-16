@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 
 export const middleware = async (request: NextRequest) => {
   // const token = request.cookies.get('token')?.value;
+  console.log(request);
   const response = NextResponse.next();
   // const { pathname } = request.nextUrl;
 

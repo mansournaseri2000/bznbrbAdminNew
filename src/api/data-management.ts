@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ApiManagerV2 } from '@/libs/utils/axios.config';
+import { AdminUploaderImage, ApiManager, ApiManagerV2 } from '@/libs/utils/axios.config';
 import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
 import { ArticleListBody, ArticleListResponse, CreateAndEditArticleBody } from '@/types/data-management/article';
 import { CommentListResponse, PlaceImproveContentResponse, PlaceUserUploadsResponse } from '@/types/data-management/point';
@@ -10,14 +10,24 @@ import { ApiData } from './types';
 interface InputObject {
   [key: string]: any;
 }
-const filterObject = (obj: InputObject): InputObject => {
+const filterObject = (obj: InputObject, isEmtyString?: boolean): InputObject => {
   const result: InputObject = {};
-  Object.keys(obj).forEach(key => {
-    const value = obj[key];
-    if (value !== null && value !== 'null' && value !== '' && value !== 0 && value !== 'none' && !(Array.isArray(value) && value.length === 0)) {
-      result[key] = value;
-    }
-  });
+
+  if (isEmtyString !== false) {
+    Object.keys(obj).forEach(key => {
+      const value = obj[key];
+      if (value !== null && value !== 'null' && value !== '' && value !== 0 && value !== 'none' && !(Array.isArray(value) && value.length === 0)) {
+        result[key] = value;
+      }
+    });
+  } else {
+    Object.keys(obj).forEach(key => {
+      const value = obj[key];
+      if (value !== null && value !== 'null' && value !== 0 && value !== 'none' && !(Array.isArray(value) && value.length === 0)) {
+        result[key] = value;
+      }
+    });
+  }
   return result;
 };
 
@@ -111,8 +121,8 @@ export const getArticleList = async (page: number, params: ArticleListBody) => {
     provincesId: Number(params.provincesId),
     citiesId: Number(params.citiesId),
     parentCategoryId: Number(params.parentCategoryId),
-    is_published: params.is_published === 'true' ? true : params.is_published === 'false' ? false : null,
-    status: params.status === 'true' ? true : params.status === 'false' ? false : String(params.status),
+    is_published: params.is_published === 'true' || params.is_published === true ? true : params.is_published === 'false' || params.is_published === false ? false : null,
+    status: params.status === 'true' || params.status === true ? true : params.status === 'false' || params.status === false ? false : null,
     base: params.base === 'true' ? true : params.base === 'false' ? false : String(params.base),
     text: params.text === 'true' ? true : params.text === 'false' ? false : String(params.text),
     seo: params.seo === 'true' ? true : params.seo === 'false' ? false : String(params.seo),
@@ -126,39 +136,93 @@ export const getArticleList = async (page: number, params: ArticleListBody) => {
   return res.data.data;
 };
 
+type PlaceRelation = {
+  placeId: number;
+  placeRelationType: 'MAIN' | 'RELATION';
+};
+
+function generatePlaceRelations(mainPoint?: number, placeRelationType?: number[]): PlaceRelation[] {
+  // Check if mainPoint is undefined or placeRelationType is empty/undefined
+  if (mainPoint === undefined || !Array.isArray(placeRelationType) || placeRelationType.length === 0) {
+    return [];
+  }
+
+  return [{ placeId: mainPoint, placeRelationType: 'MAIN' }, ...placeRelationType.map(id => ({ placeId: id, placeRelationType: 'RELATION' as const }))];
+}
+
 export const createArticle = async (params: CreateAndEditArticleBody) => {
   const obj = {
-    ...params,
     parentCategoryId: Number(params.parentCategoryId),
     categoryId: Number(params.categoryId),
     provincesId: Number(params.provincesId),
     citiesId: Number(params.citiesId),
-    is_published: params.is_published === 'true' ? true : params.is_published === 'false' ? false : String(params.is_published),
-    status: params.status === 'true' ? true : params.status === 'false' ? false : String(params.status),
+    is_published: params.is_published === 'true' || params.is_published === true ? true : params.is_published === 'false' || params.is_published === false ? false : String(params.is_published),
+    status: params.status === 'true' || params.status === true ? true : params.status === 'false' || params.status === false ? false : String(params.status),
+    title: params.title,
+    writer: params.writer,
+    tableOfContent: params.articleDetail[0].descriptions,
+    content: params.articleDetail[1].descriptions,
+    on_titile: params.on_titile,
+    source: params.source,
+    summery: params.summery,
+    brief: params.brief,
+    slug: params.slug,
+    inMain: params.inMain,
+    inTop: params.inTop,
+    tags: String(params.metakeywords).split(','),
+    keywords: String(params.keywords).split(','),
+    meta_title: params.meta_title,
+    meta_description: params.meta_description,
+    source_link: params.source_link,
+    isSlider: params.isSlider,
+    type: params.type,
+    places: generatePlaceRelations(Number(params.mainPoint), params.placeRelationType),
   };
+
   const body = filterObject(obj);
   const res = await DevApiManager.post<ApiData<CreateAndEditArticleBody>>('/article', body);
-  return res.data.data;
+  return res.data;
 };
 
 export const editArticle = async (id: number, params: CreateAndEditArticleBody) => {
+  console.log('run',params.articleDetail);
+
   const obj = {
-    ...params,
     parentCategoryId: Number(params.parentCategoryId),
     categoryId: Number(params.categoryId),
     provincesId: Number(params.provincesId),
     citiesId: Number(params.citiesId),
-    is_published: params.is_published === 'true' ? true : params.is_published === 'false' ? false : String(params.is_published),
-    status: params.status === 'true' ? true : params.status === 'false' ? false : String(params.status),
+    is_published: params.is_published === 'true' || params.is_published === true ? true : params.is_published === 'false' || params.is_published === false ? false : String(params.is_published),
+    status: params.status === 'true' || params.status === true ? true : params.status === 'false' || params.status === false ? false : String(params.status),
+    title: params.title,
+    writer: params.writer,
+    isSlider: params.isSlider,
+    on_titile: params.on_titile,
+    source: params.source,
+    summery: params.summery,
+    brief: params.brief,
+    slug: params.slug,
+    tableOfContent: params.articleDetail[0].descriptions,
+    content: params.articleDetail[1].descriptions,
+    inMain: params.inMain,
+    inTop: params.inTop,
+    tags: String(params.metakeywords).split(','),
+    keywords: String(params.keywords).split(','),
+    meta_title: params.meta_title,
+    meta_description: params.meta_description,
+    source_link: params.source_link,
+    type: params.type,
+    places: generatePlaceRelations(Number(params.mainPoint), params.placeRelationType),
   };
-  const body = filterObject(obj);
-  const res = await DevApiManager.patch(`/article/edit/${id}`, body);
+
+  const body = filterObject(obj, false);
+  const res = await DevApiManager.patch(`/article/id/${id}`, body);
   return res.data;
 };
 
 export const getArticleById = async (id: number) => {
   const res = await DevApiManager.get<ApiData<CreateAndEditArticleBody>>(`/article/id/${id}`);
-  return res.data.data;
+  return res.data;
 };
 
 export interface AllPlacesBody {
@@ -184,3 +248,96 @@ export interface AllPlacesBody {
   seo: boolean | string;
   workTime: boolean | string;
 }
+
+export type UploadMainImageParams = {
+  type: string;
+  articleId: number;
+  file: File;
+  summery: string;
+  slug: string;
+  alt: string;
+  description: string;
+  townId: number;
+};
+
+export const UploadMainImageArticle = async (params: UploadMainImageParams) => {
+  const formData = new FormData();
+
+  formData.append('type', params.type);
+  formData.append('placeId', params.articleId.toString());
+  formData.append('file', params.file);
+  formData.append('summery', params.summery);
+  formData.append('slug', params.slug);
+  formData.append('alt', params.alt);
+  formData.append('description', params.description);
+  formData.append('townId', params.townId.toString());
+
+  const res = await AdminUploaderImage.post<ApiData<{ data: string }>>('admin/uploads/image', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return res.data;
+};
+
+export type updateMainImageInfoBody = {
+  id: number;
+  type: string;
+  alt: string;
+  description: string;
+  summery: string;
+  townId: number;
+};
+
+export const updateMainImageInfo = async (params: updateMainImageInfoBody) => {
+  const res = await ApiManager.patch<ApiData<{ data: string }>>('upload/edit', params);
+
+  return res.data;
+};
+
+export type UploadImageArticleBody = {
+  type: string;
+  articleId: number;
+  file: File;
+  summery: string;
+  slug: string;
+  alt: string;
+  description: string;
+  townId: number;
+  articleImageType: string;
+};
+
+export const UploadImageArticle = async (body: UploadImageArticleBody) => {
+  const formData = new FormData();
+
+  formData.append('type', body.type);
+  formData.append('articleImageType', body.articleImageType);
+  formData.append('articleId', body.articleId.toString());
+  formData.append('file', body.file);
+  formData.append('summery', body.summery);
+  formData.append('slug', body.slug);
+  formData.append('alt', body.alt);
+  formData.append('description', body.description);
+  formData.append('townId', body.townId.toString());
+
+  const res = await AdminUploaderImage.post<ApiData<{ data: string }>>('admin/uploads/image', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return res;
+};
+
+export const removeMainImageArticle = async (id: number) => {
+  const res = await ApiManager.delete<ApiData<any>>(`places/deletePlacePicUserUploads/${id}`);
+
+  return res.data;
+};
+
+export const removeImageGalleryArticle = async (id: number) => {
+  const res = await ApiManager.delete<ApiData<any>>(`places/deletePlacePicUserUploads/${id}`);
+
+  return res.data;
+};

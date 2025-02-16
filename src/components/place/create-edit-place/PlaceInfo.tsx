@@ -46,6 +46,8 @@ const PlaceInfo = ({ categoris }: Props) => {
               placeholder={'دسته بندی'}
               value={String(categoryId)}
               onValueChange={val => {
+                console.log(field.value, 'category_id');
+
                 field.onChange(val);
                 setValue('sub_category_id', '');
               }}
@@ -70,8 +72,8 @@ const PlaceInfo = ({ categoris }: Props) => {
               value={String(subCategoryId)}
               disabled={!Boolean(categoryId)}
               onValueChange={val => {
+                console.log(field.value, 'test');
                 field.onChange(val);
-                setValue('cityID', '');
               }}
             >
               {subCategory &&

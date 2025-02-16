@@ -41,6 +41,8 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
       },
       {
         queryKey: ['article-data', placeID],
+        staleTime: 0,
+        gcTime: 0,
         queryFn: async () => await getArticleById(Number(placeID)),
         enabled: status === 'edit-article' || status === 'create-article',
       },
@@ -58,6 +60,8 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
         <Spinner style={{ scale: 3 }} />
       </Flex>
     );
+
+    
 
   /**
    * Methods
@@ -77,9 +81,9 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
       case 'article-management':
         switch (params.slug[1]) {
           case 'create-article':
-            return <CreateAndEditArticle placeConstant={constantData} articleData={articleByIdData as any} type='create-article' />;
+            return <CreateAndEditArticle placeConstant={constantData} articleData={articleByIdData?.data as any} type='create-article' />;
           case 'edit-article':
-            return <CreateAndEditArticle placeConstant={constantData} articleData={articleByIdData as any} type='edit-article' />;
+            return <CreateAndEditArticle placeConstant={constantData} articleData={articleByIdData?.data as any} type='edit-article' />;
           default:
             return <ArticleManagement />;
         }

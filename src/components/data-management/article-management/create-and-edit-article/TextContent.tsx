@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
 
@@ -8,8 +8,7 @@ import { Spinner } from '@radix-ui/themes';
 import { ContentState, convertFromHTML, convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 
-import { Button, Checkbox, Flex, Grid, Text, TextArea } from '@/libs/primitives';
-import { typoVariant } from '@/theme/typo-variants';
+import { Checkbox, Grid, TextArea } from '@/libs/primitives';
 
 // Import debounce to prevent excessive updates
 
@@ -18,118 +17,95 @@ const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Edito
   loading: () => <Spinner />,
 });
 
-type Props = {
-  data: any;
-  state: any;
-};
+const TextContent = () => {
+  const items = [
+    {
+      name: 'فهرست مطالب',
+      id: 1,
+    },
+    {
+      name: 'محتوای اصلی مقاله',
+      id: 2,
+    },
+  ];
 
-const TextContent = ({ data, state }: Props) => {
-  const { control, setValue, watch } = useFormContext();
+  const { setValue, getValues, control, watch } = useFormContext();
+  const PlaceDetails = useWatch({ name: 'articleDetail' });
 
-  const [editorStateTable, setEditorStateTable] = useState(EditorState.createEmpty());
-  const detailTable = watch('tableOfContent');
+  const [editorStates, setEditorStates] = useState(
+    items.reduce((acc, field) => {
+      const detail = PlaceDetails?.find((detail: { detailId: number }) => detail.detailId === field.id);
 
-  // Local state for the `content` editor
-  const [editorStateContent, setEditorStateContent] = useState(EditorState.createEmpty());
-  const detailContent = watch('content');
+      if (detail && detail.descriptions) {
+        const blocksFromHTML = convertFromHTML(detail.descriptions);
+        const contentState = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
+        acc[field.id] = EditorState.createWithContent(contentState);
+      } else {
+        acc[field.id] = EditorState.createEmpty();
+      }
 
-  // Initialize editor state when form values change (e.g., page load)
-  useEffect(() => {
-    if (detailTable && detailTable !== '') {
-      const blocksFromHTML = convertFromHTML(detailTable);
-      const contentState = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
-      setEditorStateTable(EditorState.createWithContent(contentState));
+      return acc;
+    }, {} as { [key: number]: EditorState })
+  );
+
+  // Function to handle editor state change and update descriptions dynamically
+  const handleEditorStateChange = (id: number, newState: EditorState) => {
+    setEditorStates(prev => ({
+      ...prev,
+      [id]: newState,
+    }));
+
+    // Convert editor content to HTML
+    const contentState = newState.getCurrentContent();
+    const descriptions = draftToHtml(convertToRaw(contentState)).trim();
+
+    // Prevent updating if content is empty
+    if (descriptions === '<p></p>' || descriptions === '') return;
+
+    // Update PlaceDetails in react-hook-form
+    const updatedDetails = getValues('articleDetail') || [];
+    const updatedIndex = updatedDetails.findIndex((detail: { detailId: number }) => detail.detailId === id);
+
+    if (updatedIndex !== -1) {
+      updatedDetails[updatedIndex].descriptions = descriptions;
+    } else {
+      updatedDetails.push({ detailId: id, descriptions });
     }
-  }, [detailTable, data, state]);
 
-  useEffect(() => {
-    if (detailContent && detailContent !== '') {
-      const blocksFromHTML = convertFromHTML(detailContent);
-      const contentState = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
-      setEditorStateContent(EditorState.createWithContent(contentState));
-    }
-  }, [detailContent, data, state]);
-
-  // Handle changes in the `tableOfContent` editor content
-  const handleEditorChangeTable = (newEditorState: EditorState) => {
-    setEditorStateTable(newEditorState);
+    setValue('articleDetail', updatedDetails, { shouldDirty: true });
   };
 
-  // Handle changes in the `content` editor content
-  const handleEditorChangeContent = (newEditorState: EditorState) => {
-    setEditorStateContent(newEditorState);
-  };
-
-  // Handle submit action
-  const onSubmit = () => {
-    // Extract content from both editors
-    const contentStateTable = editorStateTable.getCurrentContent();
-    const descriptionsTable = draftToHtml(convertToRaw(contentStateTable)).trim();
-
-    const contentStateContent = editorStateContent.getCurrentContent();
-    const descriptionsContent = draftToHtml(convertToRaw(contentStateContent)).trim();
-
-    // Update form state with both editor content
-    setValue('tableOfContent', descriptionsTable); // Update `tableOfContent`
-    setValue('content', descriptionsContent); // Update `content`
-  };
+  console.log(watch());
 
   return (
     <Grid width={'100%'} gapY={'5'}>
       <Controller name='brief' control={control} render={({ field }) => <TextArea {...field} placeholder='خلاصه مقاله' rows={4} />} />
       <Controller name='summery' control={control} render={({ field }) => <TextArea {...field} placeholder='summery' rows={4} />} />
 
-      {/* Table of Content Editor */}
-      <Flex direction={'column'} gap={'4'}>
-        <Button style={{ width: 'max-content', marginInlineStart: 'auto' }} size={'4'} type='button' variant='soft' onClick={onSubmit}>
-          <Text {...typoVariant.body1}>ثبت اطلاعات </Text>
-        </Button>
-        <Controller
-          name='tableOfContent'
-          control={control}
-          render={() => (
+      <Grid>
+        {items.map(item => {
+          return (
             <Editor
+              key={item.id}
               editorStyle={{
-                minHeight: '150px',
+                minHeight: '144px',
                 overflow: 'auto',
+                border: '1px solid #CDCED7',
                 borderRadius: '8px',
                 padding: '8px',
                 position: 'static',
                 height: 'fit-content',
-                border: '1px solid #CDCED7',
-                backgroundColor: '#FCFCFD',
               }}
-              editorState={editorStateTable}
-              onEditorStateChange={handleEditorChangeTable}
-              wrapperClassName='demo-wrapper'
-              editorClassName='demo-editor'
+              editorState={editorStates[item.id]}
+              toolbarClassName='toolbarClassName'
+              wrapperClassName='wrapperClassName'
+              editorClassName='editorClassName'
+              onEditorStateChange={newState => handleEditorStateChange(item.id, newState)}
+              placeholder={item.name}
             />
-          )}
-        />
-      </Flex>
-
-      <Controller
-        name='content'
-        control={control}
-        render={() => (
-          <Editor
-            editorStyle={{
-              minHeight: '150px',
-              overflow: 'auto',
-              borderRadius: '8px',
-              padding: '8px',
-              position: 'static',
-              height: 'fit-content',
-              border: '1px solid #CDCED7',
-              backgroundColor: '#FCFCFD',
-            }}
-            editorState={editorStateContent}
-            onEditorStateChange={handleEditorChangeContent}
-            wrapperClassName='demo-wrapper'
-            editorClassName='demo-editor'
-          />
-        )}
-      />
+          );
+        })}
+      </Grid>
 
       <Controller
         name='isSlider'

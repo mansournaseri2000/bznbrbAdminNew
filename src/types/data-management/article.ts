@@ -71,6 +71,13 @@ export interface CreateAndEditArticleBody {
   places: PlacesOptions[];
   view: number;
   id: number;
+  mainPoint: number | string;
+  placeRelationType: number[];
+  metakeywords: any;
+  articleDetail: {
+    detailId: number;
+    descriptions: string;
+  }[];
 }
 
 export interface PlacesOptions {

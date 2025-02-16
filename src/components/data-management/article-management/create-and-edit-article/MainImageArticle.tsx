@@ -1,16 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { Controller, useForm } from 'react-hook-form';
 
 import Image from 'next/image';
 
+import { Spinner } from '@radix-ui/themes';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import imageCompression from 'browser-image-compression';
 
+import { removeMainImageArticle, updateMainImageInfo, updateMainImageInfoBody, UploadImageArticle, UploadImageArticleBody } from '@/api/data-management';
 import { Box, Button, Flex, Grid, Heading, IconButton, Modal, SelectItem, SelectRoot, Text, TextArea, TextField } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
+import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { Camera, Pencil, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
@@ -31,19 +35,24 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
-
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [town, setTown] = useState<any>([]);
+  const [status, setStatus] = useState<'create' | 'edit'>('create');
+  const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const methods = useForm({
     defaultValues: {
+      imageFile: null,
       pic: picture ? picture : '',
       localPic: '',
-      provinceId: '',
-      cityID: '',
-      town: '',
-      alt: articleData?.meta_title ? articleData?.meta_title : '',
-      description: articleData?.description ? articleData?.description : '',
-      brief: '',
+      provinceId: articleData?.picInfo?.picProvince ? articleData?.picInfo?.picProvince : '',
+      cityID: articleData?.picInfo?.picCity ? articleData?.picInfo?.picCity : '',
+      townId: articleData?.picInfo?.picTown ? articleData?.picInfo?.picTown : '',
+      alt: articleData?.picInfo?.alt ? articleData?.picInfo?.alt : '',
+      description: articleData?.picInfo?.description ? articleData?.picInfo?.description : '',
+      brief: articleData?.picInfo?.summery ? articleData?.picInfo?.summery : '',
       isReset: picture ? true : false,
+      town: '',
     },
   });
   const { control, watch, setValue } = methods;
@@ -74,10 +83,71 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
       onChange(URL.createObjectURL(compressedImage) as any);
       setValue('localPic', URL.createObjectURL(compressedImage) as any);
       setValue('isReset', false);
+      setValue('imageFile', compressedImage as any);
     }
   };
 
-  /**
+  const { mutate: updateInfo, isPending: updateInfoIsPending } = useMutation({
+    mutationFn: async (body: updateMainImageInfoBody) => updateMainImageInfo(body),
+    onSuccess: async data => {
+      if (data.statusCode === 200) {
+        queryClient.invalidateQueries({ queryKey: ['place'] });
+        ToastSuccess('مشخصات تصویر با موفقیت به روز شد');
+        setIsOpen(false);
+      }
+    },
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (body: UploadImageArticleBody) => UploadImageArticle(body),
+    onSuccess: async data => {
+      console.log(data, 'datadatadatadatadata');
+      if (data.data.statusCode === 201) {
+        queryClient.invalidateQueries({ queryKey: ['article-data'] });
+        ToastSuccess('تصویر ارسالی با موفقیت اپلود شد');
+        setIsOpen(false);
+      }
+    },
+  });
+  const onSubmit = () => {
+    if (status === 'create') {
+      mutate({
+        articleImageType: 'MAIN',
+        type: 'ARTICLE',
+        alt: watch('alt'),
+        description: watch('description'),
+        file: watch('imageFile') as any,
+        articleId: articleData?.id,
+        slug: watch('alt'),
+        summery: watch('brief'),
+        townId: Number(watch('townId')),
+      });
+    } else {
+      updateInfo({
+        alt: watch('alt'),
+        description: watch('description'),
+        id: articleData.picInfo.id,
+        summery: watch('brief'),
+        townId: Number(watch('townId')),
+        type: 'ARTICLE',
+      });
+    }
+  };
+
+  const { mutate: removeImageMutate, isPending: removeImageIsPending } = useMutation({
+    mutationFn: async (id: number) => removeMainImageArticle(id),
+    onSuccess: async data => {
+      if (data.status === true) {
+        queryClient.invalidateQueries({ queryKey: ['place'] });
+        setIsOpenModal(false);
+        ToastSuccess('زیر دسته بندی مورد نظر با موفقیت حذف شد');
+      } else {
+        ToastError('لطفا دوباره تلاش نمایید');
+      }
+    },
+  });
+
+  /**f
    * useEffect
    * _______________________________________________________________________________
    */
@@ -87,8 +157,22 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
    * _______________________________________________________________________________
    */
 
-  console.log(picture,"picturepicturepicturepicture");
-  
+  useEffect(() => {
+    const cityID = watch('cityID');
+    const provinceID = watch('provinceId');
+
+    if (cityID && provinceID) {
+      const province = constant.provinces.find((item: any) => item.id === Number(provinceID));
+
+      if (province) {
+        const city = province.Cities?.find((item: any) => item.id === Number(cityID));
+
+        if (city) {
+          setTown(city.Town ?? []); // Ensure it's an array
+        }
+      }
+    }
+  }, [watch('cityID'), watch('provinceId')]);
 
   /**
    * template
@@ -105,7 +189,14 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
             دقت داشته باشید که تصویر شاخص اولین تصویر نقطه و تصویری است که بر روی کارت <br /> نقطه نمایش داده می شود!
           </Text>
 
-          <Button size={'4'} type='button' onClick={() => setIsOpen(true)}>
+          <Button
+            size={'4'}
+            type='button'
+            onClick={() => {
+              setStatus('create');
+              setIsOpen(true);
+            }}
+          >
             <Flex gap={'2'} align={'center'}>
               <Text {...typoVariant.body1}>+</Text>
               <Text {...typoVariant.body1}>افزودن تصویر شاخص</Text>
@@ -121,16 +212,31 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
             <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
               {picture}
             </Text>
-            <Controller name='alt' control={control} render={({ field }) => <TextField {...field} placeholder='Alt Text' style={{ borderRadius: 12 }} />} />
-            <Controller name='description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات تصویر' rows={6} style={{ borderRadius: 12 }} />} />
+            <Controller name='alt' control={control} render={({ field }) => <TextField {...field} readOnly placeholder='Alt Text' style={{ borderRadius: 12 }} />} />
+            <Controller name='description' control={control} render={({ field }) => <TextArea {...field} readOnly placeholder='توضیحات تصویر' rows={6} style={{ borderRadius: 12 }} />} />
           </Flex>
           <Flex direction={'column'} gap={'4'} px={'10px'}>
-            <IconButton size={'4'} type='button' onClick={() => setIsOpen(true)}>
+            <IconButton
+              size={'4'}
+              type='button'
+              onClick={() => {
+                setStatus('edit');
+                setIsOpen(true);
+              }}
+            >
               <Pencil />
             </IconButton>
 
-            <IconButton size={'4'} variant='ghost' colorVariant='PINK'>
-              <Trash />
+            <IconButton
+              size={'3'}
+              variant='ghost'
+              type='button'
+              colorVariant='PINK'
+              onClick={() => {
+                setIsOpenModal(true);
+              }}
+            >
+              <Trash height={24} />
             </IconButton>
           </Flex>
         </Grid>
@@ -176,43 +282,45 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
             ) : (
               <>
                 <Box width={'538px'} height={'350px'} position={'relative'} style={{ borderRadius: 8, border: `1px solid ${colorPalette.gray[3]}` }}>
-                  <Flex
-                    width={'30px'}
-                    height={'30px'}
-                    justify={'center'}
-                    align={'center'}
-                    style={{ cursor: 'pointer', position: 'absolute', backgroundColor: colorPalette.gray[3], borderRadius: '4px', border: `1px solid ${colorPalette.pink[9]}`, zIndex: '10' }}
-                    left={'0'}
-                    top={'0'}
-                  >
-                    <Controller
-                      name={'pic'}
-                      control={control}
-                      render={({ field }) => (
-                        <Flex width={'max-content'} position={'relative'} direction={'column'}>
-                          <Dropzone
-                            onDrop={files => {
-                              onDrop(files, field.onChange);
-                            }}
-                            accept={{
-                              'image/jpeg': ['.jpeg', '.jpg'],
-                              'image/png': ['.png'],
-                              'image/svg+xml': ['.svg'],
-                            }}
-                          >
-                            {({ getRootProps, getInputProps }) => (
-                              <div {...getRootProps()}>
-                                <input type='file' {...getInputProps()} />
-                                <Flex gap={'2'} justify={'center'} direction={'column'} align={'center'}>
-                                  <Trash />
-                                </Flex>
-                              </div>
-                            )}
-                          </Dropzone>
-                        </Flex>
-                      )}
-                    />
-                  </Flex>
+                  {status === 'create' && (
+                    <Flex
+                      width={'30px'}
+                      height={'30px'}
+                      justify={'center'}
+                      align={'center'}
+                      style={{ cursor: 'pointer', position: 'absolute', backgroundColor: colorPalette.gray[3], borderRadius: '4px', border: `1px solid ${colorPalette.pink[9]}`, zIndex: '10' }}
+                      left={'0'}
+                      top={'0'}
+                    >
+                      <Controller
+                        name={'pic'}
+                        control={control}
+                        render={({ field }) => (
+                          <Flex width={'max-content'} position={'relative'} direction={'column'}>
+                            <Dropzone
+                              onDrop={files => {
+                                onDrop(files, field.onChange);
+                              }}
+                              accept={{
+                                'image/jpeg': ['.jpeg', '.jpg'],
+                                'image/png': ['.png'],
+                                'image/svg+xml': ['.svg'],
+                              }}
+                            >
+                              {({ getRootProps, getInputProps }) => (
+                                <div {...getRootProps()}>
+                                  <input type='file' {...getInputProps()} />
+                                  <Flex gap={'2'} justify={'center'} direction={'column'} align={'center'}>
+                                    <Trash />
+                                  </Flex>
+                                </div>
+                              )}
+                            </Dropzone>
+                          </Flex>
+                        )}
+                      />
+                    </Flex>
+                  )}
                   <Image src={watch('isReset') ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${picture}` : watch('localPic')} alt='' fill style={{ borderRadius: 8, objectFit: 'fill' }} />
                 </Box>
                 <Grid width={'100%'} gap={'5'} columns={'3'}>
@@ -222,10 +330,11 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
                     render={({ field }) => (
                       <SelectRoot
                         {...field}
-                        value={watch('provinceId')}
+                        value={String(watch('provinceId'))}
                         onValueChange={val => {
                           field.onChange(val);
                           setValue('cityID', '');
+                          setValue('townId', '');
                         }}
                         placeholder={'استان'}
                       >
@@ -246,9 +355,10 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
                       <SelectRoot
                         {...field}
                         disabled={!Boolean(watch('provinceId'))}
-                        value={watch('cityID')}
+                        value={String(watch('cityID'))}
                         onValueChange={val => {
                           field.onChange(val);
+                          setValue('townId', '');
                         }}
                         placeholder={'شهرستان'}
                       >
@@ -262,7 +372,29 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
                       </SelectRoot>
                     )}
                   />
-                  <Controller name='town' control={control} render={({ field }) => <TextField {...field} placeholder='شهر' />} />
+                  <Controller
+                    name='townId'
+                    control={control}
+                    render={({ field }) => (
+                      <SelectRoot
+                        {...field}
+                        disabled={!Boolean(watch('provinceId')) || !Boolean(watch('cityID'))}
+                        value={String(watch('townId'))}
+                        onValueChange={val => {
+                          field.onChange(val);
+                        }}
+                        placeholder={'شهر'}
+                      >
+                        {town?.map((item: any) => {
+                          return (
+                            <SelectItem key={item.id} value={String(item.id)}>
+                              {item.name}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectRoot>
+                    )}
+                  />
                 </Grid>
                 <Controller name='alt' control={control} render={({ field }) => <TextField {...field} placeholder='متن جایگزین' />} />
                 <Controller name='description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات تصویر' rows={6} />} />
@@ -270,8 +402,29 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
               </>
             )}
           </Grid>
-          <ModalAction submitButtonText='ثبت و ارسال' closeButtonText='لفو و بازگشت' onCloseButton={() => setIsOpen(false)} />
+          <ModalAction
+            submitButtonText='ثبت و ارسال'
+            closeButtonText='لفو و بازگشت'
+            onCloseButton={() => setIsOpen(false)}
+            onSubmit={onSubmit}
+            isDisableSubmitBtn={!Boolean(watch('townId'))}
+            isLoading={isPending || updateInfoIsPending}
+          />
         </>
+      </Modal>
+
+      <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)}>
+        <Grid gapY={'24px'} p={'5'}>
+          <Text>آیا از حذف این تصویر اطمینان دارید؟ </Text>
+          <Grid gap={'10px'} columns={'2'}>
+            <Button type='button' onClick={() => removeImageMutate(Number(1))} variant='soft' size={'4'}>
+              <Text {...typoVariant.body3}>{removeImageIsPending ? <Spinner /> : 'بله'}</Text>
+            </Button>
+            <Button type='button' onClick={() => setIsOpenModal(false)} variant='solid' size={'4'}>
+              <Text {...typoVariant.body3}>خیر</Text>
+            </Button>
+          </Grid>
+        </Grid>
       </Modal>
     </>
   );

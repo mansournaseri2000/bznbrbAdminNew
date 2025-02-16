@@ -3,11 +3,11 @@
 import { useCallback } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { MinusIcon, PlusIcon, TimerIcon } from '@radix-ui/react-icons';
+import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
 import { RadioGroup, Slider } from '@radix-ui/themes';
 import styled from 'styled-components';
 
-import { cost, limitationsOption, renownLevel } from '@/constants/place';
+import { cost, renownLevel } from '@/constants/place';
 import { Flex, Grid, IconButton, Text, TextField } from '@/libs/primitives';
 import { Divider } from '@/libs/shared';
 import { colorPalette } from '@/theme';
@@ -31,7 +31,7 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const { setValue } = useFormContext();
+  const { setValue, watch } = useFormContext();
   const TripTypesItems = useWatch({ name: 'TripTypes' });
   const placeCategoryItems = useWatch({ name: 'PlaceCategories' });
   const placeTripSeasonsItems = useWatch({ name: 'PlaceTripSeasons' });
@@ -86,7 +86,7 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
 
   const handlePlaceTripSeasonsTimingChange = useCallback(
     (id: number, value: number) => {
-      const clampedValue = Math.max(0, Math.min(24, value)); // Ensures the value is between 0 and 24
+      const clampedValue = Math.max(0, value); // Ensures the value is at least 0, but has no upper limit
 
       setValue(
         'PlaceTripSeasons',
@@ -108,7 +108,18 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
     [tripLimitationsItems, setValue]
   );
 
-  console.log(placeTripSeasonsItems, 'placeTripSeasonsItems');
+  const handleTripLimitationsUntillChange = useCallback(
+    (id: number, value: any) => {
+      setValue(
+        'PlaceTripSeasons',
+        placeTripSeasonsItems.map(
+          (item: { tripSeasonId: number }) => (item.tripSeasonId === id ? { ...item, until: value } : item) // No unnecessary object spreading
+        ),
+        { shouldDirty: true, shouldValidate: true }
+      );
+    },
+    [placeTripSeasonsItems, setValue] // Ensure dependencies are correct
+  );
 
   /**
    * template
@@ -221,7 +232,6 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
         <Grid gap={'0px 30px'} columns={'2'}>
           {constants.categories.map((trip: any) => {
             const category = placeCategoryItems?.find((item: { categoryId: number }) => item.categoryId === trip.id);
-            console.log(category, 'categorycategorycategorycategory');
 
             return (
               <Grid gap={'8px'} key={trip.id} mb='20px'>
@@ -303,8 +313,23 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
                     </Flex>
 
                     <Flex align={'center'} position={'relative'}>
-                      <TextField type='number' placeholder='تا ساعت' />
-                      <TimerIcon style={{ position: 'absolute', left: '15', marginTop: '-8px' }} fill='red' stroke={colorPalette.pink[9]} strokeWidth={'0.5px'} />
+                      <TextField
+                        maxLength={5}
+                        value={tripSeason.until}
+                        onChange={e => {
+                          console.log(tripSeason.tripSeasonId, 'tripSeason.tripSeasonId');
+                          let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+                          if (value.length > 4) value = value.slice(0, 4); // Ensure a max of 4 digits (HHMM)
+
+                          if (value.length >= 3) {
+                            value = `${value.slice(0, 2)}:${value.slice(2, 4)}`; // Format to HH:MM
+                          }
+
+                          handleTripLimitationsUntillChange(tripSeason.tripSeasonId, value);
+                        }}
+                        placeholder='تا ساعت'
+                      />
                     </Flex>
                   </Grid>
                 </Grid>
@@ -339,29 +364,28 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
             );
           })}
         </Grid>
-        <Grid p={'4'}>
-          <RadioGroup.Root
-            defaultValue={costValue}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: '24px',
-            }}
-            name='Place_TripLimitation'
-            onValueChange={value => {
-              setValue('Place_TripLimitation', value);
-            }}
-          >
-            {limitationsOption.map(item => {
-              return (
-                <RadioGroup.Item key={item.id} value={item.value} style={{ cursor: 'pointer' }}>
-                  <Text>{item.name}</Text>
-                </RadioGroup.Item>
-              );
-            })}
-          </RadioGroup.Root>
-        </Grid>
+
+        <RadioGroup.Root
+          defaultValue={watch('gender')}
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: '24px',
+          }}
+          name='gender'
+          onValueChange={value => {
+            setValue('gender', value);
+          }}
+        >
+          {constants?.gender.map((item: any) => {
+            return (
+              <RadioGroup.Item key={item.id} value={item.name} style={{ cursor: 'pointer' }}>
+                <Text>{item.name === 'MALE' ? 'ورود آقایان ممنوع' : item.name === 'FEMALE' ? 'ورود بانوان ممنوع' : 'هیچکدام'}</Text>
+              </RadioGroup.Item>
+            );
+          })}
+        </RadioGroup.Root>
       </Grid>
     </Grid>
   );

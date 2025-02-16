@@ -6,6 +6,7 @@ import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-for
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
+import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { createPlace, editPlace } from '@/api/place';
@@ -19,7 +20,7 @@ import ImproveContentPoint from '@/components/place/create-edit-place/ImproveCon
 import PrimaryImage from '@/components/place/create-edit-place/PrimaryImage';
 import RoutingGuid from '@/components/place/create-edit-place/routing-guid/RoutingGuid';
 import { createPointTabsOptions, editPointTabsOptions, formPublishedOptions, formStatusOptions } from '@/constants/data-management';
-import { placeWorkTimeSchedule, seasons } from '@/constants/place';
+import { placeWorkTimeSchedule } from '@/constants/place';
 import { Button, Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import SimpleWrapper2 from '@/libs/shared/wrapper/SimpleWrapper2';
@@ -29,6 +30,8 @@ import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { CreatePointButtonTypes, EditPointButtonTypes } from '@/types/data-management/point';
 import { PlaceConstantResponse, PlaceResponse } from '@/types/place';
+
+import RoutingGuideList from './RoutingGuideList';
 
 const Description = dynamic(() => import('@/components/place/create-edit-place/description/Description'), {
   ssr: false,
@@ -133,6 +136,16 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
    * _______________________________________________________________________________
    */
 
+  const placeDetailsSerializer = (data: { id: number; description: string }[]) => {
+    if (data?.length > 0) {
+      return data.map(item => ({
+        detailId: item.id,
+        descriptions: item.description,
+      }));
+    }
+    return [];
+  };
+
   const [buttonState, setButtonState] = useState<typeof status extends 'create-point' ? CreatePointButtonTypes : EditPointButtonTypes>(status === 'create-point' ? 'place-info' : 'place-info');
 
   const model = {
@@ -146,47 +159,51 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     ship: Boolean(placeData?.ship) ? placeData?.ship : '',
   };
 
-  console.log(placeConstant, 'placeConstant');
-
   const queryClient = useQueryClient();
   const { push, back } = useRouter();
   const methods = useForm<fomrData | any>({
     defaultValues:
       status == 'edit-point'
         ? {
-            status: placeData?.status,
             type: placeData?.type,
-            isPublished: placeData?.isPublished,
+            status: placeData?.status,
+            isPublished: placeData?.isPublished ? placeData?.isPublished : false,
             name: placeData?.name,
+            category_id: Boolean(placeData?.category_id) ? findByChildId(placeConstant.categories, placeData.category_id).parent_id : '',
+            sub_category_id: Boolean(placeData?.category_id) ? placeData?.category_id : '',
+            slug: placeData?.slug,
             basicInfoDescription: placeData?.description,
             basicInfosummary: placeData?.summary,
-            slug: placeData?.slug,
-            category_id: Boolean(placeData.parentCategory_id) ? placeData.parentCategory_id : '',
-            sub_category_id: Boolean(placeData.category_id) ? placeData.category_id : '',
+
             provinceId: placeData?.Cities ? placeData?.Cities.Provinces.id : '',
             cityID: placeData?.Cities ? placeData?.Cities.id : '',
             area: placeData?.area,
+            townId: placeData?.Town?.id,
             tell: placeData?.tell,
+            website: placeData?.website,
             email: placeData?.email,
-            website: placeData.website,
             address: placeData?.address,
             lat: placeData?.lat,
             lng: placeData?.lng,
+
             vehicleOptions: serializeModelObject(model),
-            PlaceCategories: serializeCategoryData(placeData?.Place_Category, placeConstant.categories),
-            TripTypes: serializeTripData(placeData?.Place_TripType, placeConstant.tripDatas),
-            tripLimitations: serializeLimitaionData(placeData?.Place_TripLimitation, placeConstant.tripLimitations),
+
+            PlaceDetails: placeDetailsSerializer(placeData?.PlaceDetails),
+
             features: serializeFeatures(placeData?.features),
+
+            cost: placeData?.cost,
+            trip_value: placeData?.trip_value,
+            renown: placeData?.renown,
+            rating: placeData?.rating,
+            TripTypes: serializeTripData(placeData?.Place_TripType, placeConstant.tripDatas),
+            PlaceCategories: serializeCategoryData(placeData?.Place_Category, placeConstant.categories),
+            PlaceTripSeasons: placeData?.Place_TripSeason.length > 0 ? serializeTripSeasons(placeData.Place_TripSeason as any) : serializeTripSeasons(placeTripSeasons),
+            tripLimitations: serializeLimitaionData(placeData?.Place_TripLimitation, placeConstant.tripLimitations),
+            gender: placeData.gender,
+
             PlaceWorkTimes: placeData?.PlaceWorkTime,
-            PlaceTripSeasons: placeData?.Place_TripSeason.length > 0 ? serializeTripSeasons(placeConstant.seasons as any) : serializeTripSeasons(placeTripSeasons),
-            airplane: placeData?.airplane,
-            bus: placeData?.bus,
-            car: placeData?.car,
-            hike: placeData?.hike,
-            ship: placeData?.ship,
-            subway: placeData?.subway,
-            taxi: placeData?.taxi,
-            train: placeData?.train,
+
             keywords: placeData?.keywords,
             metakeywords: placeData?.tags,
             keyword: placeData?.keywords,
@@ -194,50 +211,51 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             meta_title: placeData?.meta_title,
             metakeyword: '',
 
-            placeCategory: '',
-            isLoading: false,
             uploadImage: placeData?.UserSentPicturesForPlace,
             pictures: placeData?.pictures,
-            cost: placeData?.cost,
-            renown: placeData?.renown,
-            rating: placeData?.rating,
-            trip_value: placeData?.trip_value,
             suggested_time: placeData?.suggested_time,
-            PlaceDetails: placeData?.PlaceDetails,
           }
         : {
-            status: false,
             type: 'PLACE',
             isPublished: false,
+            status: false,
+
             name: '',
             category_id: '',
             sub_category_id: '',
+            slug: '',
             basicInfoDescription: '',
             basicInfosummary: '',
-            slug: '',
-            provinceId: '',
+
             cityID: '',
+            provinceId: '',
+            townId: '',
             tell: '',
+            website: '',
             email: '',
             address: '',
             lat: '',
             lng: '',
-            area: '',
+
             vehicleOptions: serializeModelObject(model),
-            PlaceCategories: serializeCategories(placeConstant.categories),
-            TripTypes: serializeTripTypes(placeConstant.tripDatas),
-            PlaceTripSeasons: serializeTripSeasons(placeConstant.seasons as any),
-            tripLimitations: serializeTripLimitations(placeConstant.tripLimitations as any),
-            PlaceWorkTimes: serializePlaceWorkTimeSchedule(placeWorkTimeSchedule),
+
+            PlaceDetails: [],
+
             features: [],
-            airplane: null,
-            bus: null,
-            car: null,
-            hike: null,
-            ship: null,
-            subway: null,
-            taxi: null,
-            train: null,
+
+            cost: 'LOW',
+            renown: 'LOW',
+            rating: 0,
+            trip_value: 0,
+
+            TripTypes: serializeTripTypes(placeConstant?.tripDatas),
+            PlaceCategories: serializeCategories(placeConstant?.categories),
+            PlaceTripSeasons: serializeTripSeasons(placeConstant?.seasons as any),
+            tripLimitations: serializeTripLimitations(placeConstant?.tripLimitations as any),
+            gender: 'UNKNOWN',
+
+            PlaceWorkTimes: serializePlaceWorkTimeSchedule(placeWorkTimeSchedule),
+
             keywords: '',
             metakeywords: '',
             keyword: '',
@@ -245,33 +263,24 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             meta_title: '',
             metakeyword: '',
 
-            placeCategory: '',
-            placeID: null,
-            isLoading: false,
-            uploadImage: null,
             pictures: [],
-            cost: 'LOW',
-            renown: 'LOW',
-            rating: 0,
-            trip_value: 0,
             suggested_time: 0,
-            PlaceDetails: [],
           },
   });
-  const { handleSubmit, control } = methods;
+  const { handleSubmit, control, watch } = methods;
 
   /**
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const { mutate: editPlaceMutate } = useMutation({
+  const { mutate: editPlaceMutate, isPending: editPlaceLoading } = useMutation({
     mutationFn: async (params: fomrData) => editPlace(params, placeID),
     onSuccess: async data => {
       if (data.status === true) {
         ToastSuccess('اطلاعات شما با موفقیت ویرایش شد');
         queryClient.invalidateQueries({ queryKey: ['place'] });
         queryClient.invalidateQueries({ queryKey: ['all-places'] });
-        push('/');
+        push('/data-management/point-management');
       } else {
         ToastError('لطفا دوباره امتحان نمایید');
       }
@@ -281,15 +290,15 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     },
     gcTime: 0,
   });
-  const { mutate: createPlaceMutate } = useMutation({
+  const { mutate: createPlaceMutate, isPending: createPlaceIsLoading } = useMutation({
     mutationFn: async (params: fomrData) => createPlace(params),
     onSuccess: async data => {
-      if (data.status === true) {
+      if (data.statusCode === 201) {
         ToastSuccess('اطلاعات شما با موفقیت ثبت شد');
         queryClient.invalidateQueries({ queryKey: ['all-places'] });
-        push('/');
+        push('/data-management/point-management');
       } else {
-        ToastError('لطفا دوباره امتحان نمایید');
+        ToastError(String(data.message));
       }
     },
     onError: err => {
@@ -297,12 +306,14 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     },
   });
   const onSubmit: SubmitHandler<fomrData> = data => {
-    if (status === 'edit') {
+    if (status === 'edit-point') {
       editPlaceMutate(data);
     } else {
       createPlaceMutate(data);
     }
   };
+
+  console.log(watch(), 'watchwatchwatch');
 
   return (
     <FormProvider {...methods}>
@@ -381,7 +392,15 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
           </Grid>
 
           {/* tab-hero-button _______________________________________________________________________________ */}
-          <Flex width={'100%'} gap={'11px'} pb={'4'} align={'center'} style={{ overflowX: 'auto', borderBottom: `1px solid ${colorPalette.gray[6]}` }}>
+          <Flex
+            width={'100%'}
+            gap={'11px'}
+            p={'4'}
+            align={'center'}
+            style={{ overflowX: 'auto', backgroundColor: colorPalette.gray[1], border: `1px solid ${colorPalette.gray[6]}`, borderRadius: '8px', zIndex: '10' }}
+            position={'sticky'}
+            top={'70px'}
+          >
             {status === 'create-point' ? (
               <>
                 {createPointTabsOptions.map((item, index) => (
@@ -413,7 +432,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
           {/* geographical-location _______________________________________________________________________________ */}
           {buttonState === 'geographical-location' && (
             <SimpleWrapper2 type='changeAble' hero='موقعیت جغرافیایی'>
-              <GeographicalLocationRoot province={placeConstant ? placeConstant.provinces : []} />
+              <GeographicalLocationRoot constant={placeConstant} province={placeConstant ? placeConstant.provinces : []} />
             </SimpleWrapper2>
           )}
 
@@ -421,6 +440,12 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
           {buttonState === 'routing' && (
             <SimpleWrapper2 type='changeAble' hero='چجوری برم'>
               <RoutingGuid />
+            </SimpleWrapper2>
+          )}
+
+          {buttonState === 'routing' && status === 'edit-point' && (
+            <SimpleWrapper2 type='readOnly' hero='چجوری برم'>
+              <RoutingGuideList id={placeData.id} />
             </SimpleWrapper2>
           )}
 
@@ -444,7 +469,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
               <AnalysisRoot
                 constants={placeConstant}
                 tripLimitations={placeConstant ? placeConstant.tripLimitations : []}
-                seasons={placeConstant ? seasons : []}
+                seasons={placeConstant ? placeConstant.seasons : []}
                 tripDatas={placeConstant ? placeConstant.tripDatas : []}
                 Categories={placeConstant?.categories ? placeConstant.categories : []}
               />
@@ -494,7 +519,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
 
           <Flex width={'100%'} align={'center'} gap={'5'} p={'4'} style={{ border: `1px solid ${colorPalette.gray[6]}`, borderRadius: 8, backgroundColor: colorPalette.gray[2] }}>
             <Button size={'3'} variant='soft' style={{ paddingInline: 48.5 }}>
-              <Text {...typoVariant.body1}>ثبت</Text>
+              {createPlaceIsLoading || editPlaceLoading ? <Spinner /> : <Text {...typoVariant.body1}>ثبت</Text>}
             </Button>
             <Button size={'3'} colorVariant='PINK' style={{ paddingInline: 51 }} onClick={() => back}>
               <Text {...typoVariant.body1}>لغو</Text>

@@ -56,8 +56,6 @@ const PointManagement = () => {
 
   const { watch, setValue, handleSubmit } = methods;
 
-  console.log(searchParams.get('seo'), 'searchParams', watch());
-
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
@@ -110,8 +108,6 @@ const PointManagement = () => {
   useEffect(() => {
     pointMutate(watch() as any);
   }, []);
-
-  console.log('PointData', pointData);
 
   const onSubmit = () => {
     pointMutate(watch() as any);

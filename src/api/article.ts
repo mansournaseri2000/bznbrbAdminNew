@@ -17,8 +17,8 @@ type ImageGalleryResponse = {
   totalCount: number;
 };
 
-export const getImageGalleryArticle = async (id: number) => {
-  const res = await ApiManager.get<ApiData<ImageGalleryResponse>>(`article/gallery/${id}`);
+export const getImageGalleryArticle = async (id: number, page: number) => {
+  const res = await ApiManager.get<ApiData<ImageGalleryResponse>>(`article/gallery/${id}?page=${page}`);
 
   return res.data.data;
 };

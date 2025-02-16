@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
@@ -16,14 +17,16 @@ const PlaceMap = dynamic(() => import('./PlaceMap'), { ssr: false });
 
 type Props = {
   province: Province[];
+  constant: any;
 };
 
-const GeographicalLocationRoot = ({ province }: Props) => {
+const GeographicalLocationRoot = ({ province, constant }: Props) => {
   /**
    * const and variables
    * _______________________________________________________________________________
    */
-  const { control, setValue } = useFormContext();
+  const [town, setTown] = useState([]);
+  const { control, setValue, watch } = useFormContext();
   const provinceId = useWatch({ name: 'provinceId' });
   const cityID = useWatch({ name: 'cityID' });
   const lat = useWatch({ name: 'lat' });
@@ -34,6 +37,23 @@ const GeographicalLocationRoot = ({ province }: Props) => {
    * useEffect
    * _______________________________________________________________________________
    */
+
+  useEffect(() => {
+    const cityID = watch('cityID');
+    const provinceID = watch('provinceId');
+
+    if (cityID && provinceID) {
+      const province = constant.provinces.find((item: any) => item.id === Number(provinceID));
+
+      if (province) {
+        const city = province.Cities?.find((item: any) => item.id === Number(cityID));
+
+        if (city) {
+          setTown(city.Town ?? []); // Ensure it's an array
+        }
+      }
+    }
+  }, [watch('cityID'), watch('provinceId')]);
 
   /**
    * hooks and methods
@@ -93,8 +113,29 @@ const GeographicalLocationRoot = ({ province }: Props) => {
             </SelectRoot>
           )}
         />
-
-        <Controller name='area' control={control} render={({ field }) => <TextField style={{ marginTop: '-7px' }} {...field} placeholder='شهر' aria-label='textFiled' />} />
+        <Controller
+          name='townId'
+          control={control}
+          render={({ field }) => (
+            <SelectRoot
+              {...field}
+              disabled={!Boolean(watch('provinceId')) || !Boolean(watch('cityID'))}
+              value={String(watch('townId'))}
+              onValueChange={val => {
+                field.onChange(val);
+              }}
+              placeholder={'شهر'}
+            >
+              {town?.map((item: any) => {
+                return (
+                  <SelectItem key={item.id} value={String(item.id)}>
+                    {item.name}
+                  </SelectItem>
+                );
+              })}
+            </SelectRoot>
+          )}
+        />
       </Grid>
       <Grid columns={'3'} gap={'20px'}>
         <Controller name='tell' control={control} render={({ field }) => <TextField {...field} placeholder='تلفن' aria-label='textFiled' />} />

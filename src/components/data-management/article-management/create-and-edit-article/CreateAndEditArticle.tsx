@@ -6,13 +6,15 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useParams, useRouter } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { createArticle, editArticle } from '@/api/data-management';
 import FilterCard from '@/components/develop/shared/filter-card/FilterCard';
 import { SeoSettingsRoot } from '@/components/place';
 import { createArticleTabsOptions, editArticleTabsOptions, formPublishedOptions, formStatusOptions } from '@/constants/data-management';
+import { successMessage } from '@/constants/status-message';
 import { Button, Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import SimpleWrapper2 from '@/libs/shared/wrapper/SimpleWrapper2';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
@@ -38,6 +40,21 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
    * _______________________________________________________________________________
    */
 
+  const serializerArticleDetail = (tableOfContent: string, content: string) => {
+    const data = [
+      {
+        detailId: 1,
+        descriptions: Boolean(tableOfContent) ? tableOfContent : '',
+      },
+      {
+        detailId: 2,
+        descriptions: Boolean(content) ? content : '',
+      },
+    ];
+
+    return data;
+  };
+
   type PlaceData = {
     placeId: number;
     placeRelationType: string;
@@ -48,7 +65,7 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
       .filter(item => item.placeRelationType === 'RELATION') // Keep only "RELATION" type
       .map(item => item.placeId); // Extract placeId
   };
-
+  const queryClient = useQueryClient();
   const router = useRouter();
   const params = useParams();
   const [buttonState, setButtonState] = useState<typeof type extends 'create-article' ? CreateArticleButtonTypes : EditArticleButtonTypes>(type === 'create-article' ? 'initial-data' : 'initial-data');
@@ -57,6 +74,7 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
     defaultValues:
       type === 'create-article'
         ? {
+            articleDetail: [],
             title: '',
             content: '',
             writer: '',
@@ -65,7 +83,6 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
             summery: '',
             brief: '',
             placeRelationType: articleData?.places ? articleData?.places.find((place: PlacesOptions) => place?.placeRelationType === 'MAIN')?.placeId : null,
-
             slug: '',
             tableOfContent: '',
             inMain: false,
@@ -89,13 +106,14 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
           }
         : type === 'edit-article'
         ? {
+            articleDetail: serializerArticleDetail(articleData.tableOfContent, articleData.content),
             type: Boolean(articleData?.type) ? articleData?.type : '',
-            is_published: Boolean(articleData?.is_published) ? articleData?.is_published : '',
-            status: Boolean(articleData?.status) ? articleData?.status : '',
+            is_published: articleData?.is_published,
+            status: articleData?.status,
             provincesId: Boolean(articleData?.provincesId) ? articleData?.provincesId : '',
             citiesId: Boolean(articleData?.citiesId) ? articleData?.citiesId : '',
-            categoryId: Boolean(articleData?.categoryId) ? articleData?.categoryId : '',
-            parentCategoryId: Boolean(articleData?.parentCategoryId) ? articleData?.parentCategoryId : '',
+            categoryId: Number(articleData?.categoryId),
+            parentCategoryId: Number(articleData?.parentCategoryId),
 
             title: articleData?.title,
             content: articleData?.content,
@@ -108,8 +126,8 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
             tableOfContent: articleData?.tableOfContent,
             inMain: articleData?.inMain,
             inTop: articleData?.inTop,
-            mainPoint: articleData.places ? articleData.places.find((place: PlacesOptions) => place.placeRelationType === 'MAIN')?.placeId : null,
-            placeRelationType: articleData.places ? getRelationPlaceIds(articleData.places) : null,
+            mainPoint: articleData?.places ? articleData.places.find((place: PlacesOptions) => place.placeRelationType === 'MAIN')?.placeId : null,
+            placeRelationType: articleData?.places ? getRelationPlaceIds(articleData?.places) : null,
 
             metakeywords: articleData?.tags,
             keywords: articleData?.keywords,
@@ -124,7 +142,6 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
   });
 
   const { watch, control } = methods;
-  console.log('watch', watch());
 
   /**
    * Action Services
@@ -132,9 +149,15 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
    */
 
   const { mutate: createArticleMutate, isPending: createArticlePending } = useMutation({
-    mutationFn: async () => createArticle(watch() as any),
+    mutationFn: async (body: any) => createArticle(body),
     onSuccess: data => {
-      console.log('onSuccess', data);
+      if (data.statusCode === 201) {
+        router.push('/data-management/article-management');
+        queryClient.invalidateQueries({ queryKey: ['article-data'] });
+        ToastSuccess(successMessage);
+      } else {
+        ToastError(data.message);
+      }
     },
     onError: data => {
       console.log('onError', data);
@@ -142,9 +165,15 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
   });
 
   const { mutate: editArticleMutate, isPending: editArticlePending } = useMutation({
-    mutationFn: async () => editArticle(Number(params.slug[2]), watch() as any),
+    mutationFn: async (body: any) => editArticle(Number(params.slug[2]), body),
     onSuccess: data => {
-      console.log('onSuccess', data);
+      if (data.statusCode === 200) {
+        ToastSuccess(successMessage);
+        router.push('/data-management/article-management');
+        queryClient.invalidateQueries({ queryKey: ['article-data'] });
+      } else {
+        ToastError(data.message);
+      }
     },
     onError: data => {
       console.log('onError', data);
@@ -152,10 +181,6 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
   });
 
   console.log(articleData, 'articleDataarticleDataarticleData');
-
-  // useEffect(() => {
-  //   editArticleMutate();
-  // }, []);
 
   return (
     <FormProvider {...methods}>
@@ -236,7 +261,15 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
         </Grid>
 
         {/* tab-hero-button _______________________________________________________________________________ */}
-        <Flex width={'100%'} gap={'11px'} pb={'4'} align={'center'} style={{ overflowX: 'auto', borderBottom: `1px solid ${colorPalette.gray[6]}` }}>
+        <Flex
+          position={'sticky'}
+          top={'70px'}
+          width={'100%'}
+          gap={'11px'}
+          p={'4'}
+          align={'center'}
+          style={{ overflowX: 'auto', border: `1px solid ${colorPalette.gray[6]}`, backgroundColor: colorPalette.gray[2], borderRadius: '4px', zIndex: '2' }}
+        >
           {type === 'create-article' ? (
             <>
               {createArticleTabsOptions.map((item, index) => (
@@ -266,7 +299,7 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
 
         {buttonState === 'text-content' && (
           <SimpleWrapper2 type='changeAble' hero='محتوای متنی'>
-            <TextContent data={articleData} state={buttonState} />
+            <TextContent />
           </SimpleWrapper2>
         )}
 
@@ -290,16 +323,16 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
         {buttonState === 'images' && (
           <Flex direction={'column'} gap={'5'}>
             <SimpleWrapper2 type='changeAble' hero='تصویر شاخص'>
-              <MainImageArticle constant={placeConstant} picture={articleData.pic} articleData={articleData} />
+              <MainImageArticle constant={placeConstant} picture={articleData?.pic} articleData={articleData} />
             </SimpleWrapper2>
             <SimpleWrapper2 type='changeAble' hero='گالری تصاویر'>
-              <ImageGalleryArticle articleId={articleData.id} constant={placeConstant} />
+              <ImageGalleryArticle articleId={articleData?.id} constant={placeConstant} />
             </SimpleWrapper2>
           </Flex>
         )}
 
         <Flex p={'4'} gap={'5'} style={{ backgroundColor: colorPalette.gray[2], border: `1px solid ${colorPalette.gray[6]}`, borderRadius: 8 }}>
-          <Button size={'3'} variant='soft' style={{ padding: '13.5px 48.5px' }} onClick={() => (type === 'create-article' ? createArticleMutate() : editArticleMutate())}>
+          <Button size={'3'} variant='soft' style={{ padding: '13.5px 48.5px' }} onClick={() => (type === 'create-article' ? createArticleMutate(watch()) : editArticleMutate(watch()))}>
             {createArticlePending || editArticlePending ? <Spinner /> : <Text {...typoVariant.body1}>ثبت</Text>}
           </Button>
           <Button size={'3'} colorVariant='PINK' onClick={() => router.back()} style={{ padding: '13.5px 48.5px' }}>
