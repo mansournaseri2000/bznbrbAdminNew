@@ -30,6 +30,7 @@ CustomSearch.displayName = 'CustomSearch';
 export default CustomSearch;
 
 const Wrapper = styled(Flex)`
+  max-height: 48px;
   align-items: center;
   border: 1px solid ${colorPalette.gray[7]};
   border-radius: 12px;

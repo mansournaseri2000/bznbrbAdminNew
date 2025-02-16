@@ -59,7 +59,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
     data: singleCategoryData,
     isLoading: singleCategoryLoading,
     isFetching: singleCategoryFetching,
-  } = useQuery({ queryKey: ['single-category', selected], queryFn: async () => getSingleCategory(id), enabled: selected === true });
+  } = useQuery({ queryKey: ['single-category', id], queryFn: async () => getSingleCategory(id), initialData: props, enabled: selected });
 
   const { mutate: deleteCategoryMutate, isPending: deleteCategoryPending } = useMutation({
     mutationFn: async () => deleteCategory(id),
@@ -123,8 +123,8 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
           isDisableDelete={isEditable === false}
           onEdit={e => {
             e.stopPropagation();
-            onSelect();
             setModalState({ key: 'edit-category', isOpen: true });
+            onSelect();
           }}
           onDelete={e => {
             e.stopPropagation();
@@ -176,7 +176,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
         {modalState.key === 'edit-category' && (
           <>
             <ModalHeader title={'ویرایش دسته بندی'} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
-            <EditCategoryModal setIsOpen={() => setModalState({ key: 'edit-category', isOpen: false })} data={singleCategoryData as any} />
+            <EditCategoryModal setIsOpen={() => setModalState({ key: 'edit-category', isOpen: false })} data={singleCategoryData ?? { name: '', id: null }} />
           </>
         )}
         {/* 
@@ -186,7 +186,9 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
         */}
         {modalState.key === 'delete-category' && (
           <Grid gapY={'24px'} p={'5'}>
-            <Text>آیا از حذف این دسته بندی اطمینان دارید؟ </Text>
+            <Text>
+              آیا از حذف دسته بندی <span style={{ color: 'red', fontWeight: 'bold' }}>{name}</span> اطمینان دارید؟{' '}
+            </Text>
             <Grid gap={'10px'} columns={'2'}>
               <Button variant='soft' size={'4'} onClick={() => deleteCategoryMutate()}>
                 <Text {...typoVariant.body3}>{deleteCategoryPending ? <Spinner /> : 'بله'}</Text>

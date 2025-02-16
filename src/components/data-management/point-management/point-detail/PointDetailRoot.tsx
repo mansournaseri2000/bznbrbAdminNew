@@ -177,7 +177,6 @@ const PointDetailRoot = () => {
             <>
               {improveContentData?.PlaceImproveContent.map((item, index) => (
                 <DataCard
-                  state={index}
                   key={item.id}
                   {...item}
                   type='point_detail'

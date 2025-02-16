@@ -115,7 +115,7 @@ const ImageSentCard: React.FC<CardProps> = (props: CardProps) => {
               {placeProvince} / {placeCity}
             </Text>
           </Flex>
-          <Button colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} size={'3'} onClick={handleRedirect}>
+          <Button colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} size={'2'} onClick={handleRedirect}>
             <Text {...typoVariant.body3}>مشاهده نقطه</Text>
           </Button>
         </Flex>
@@ -131,16 +131,16 @@ const ImageSentCard: React.FC<CardProps> = (props: CardProps) => {
         </Flex>
 
         <Flex width={'100%'} align={'center'} gap={'2'} justify={'end'}>
-          <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} onClick={() => setModalState({ isOpen: true, key: 'isTop' })}>
+          <Button size={'2'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} onClick={() => setModalState({ isOpen: true, key: 'isTop' })}>
             <Text {...typoVariant.body1}>تصویر برتر</Text>
           </Button>
-          <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} variant='soft' onClick={() => setModalState({ isOpen: true, key: 'accept' })}>
+          <Button size={'2'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} variant='soft' onClick={() => setModalState({ isOpen: true, key: 'accept' })}>
             <Flex align={'center'} gap={'2'}>
               <Check />
               <Text {...typoVariant.body1}>تایید</Text>
             </Flex>
           </Button>
-          <IconButton size={'3'} colorVariant='PINK' style={{ borderRadius: 12 }} onClick={() => setModalState({ isOpen: true, key: 'delete' })} disabled>
+          <IconButton size={'2'} colorVariant='PINK' style={{ borderRadius: 12 }} onClick={() => setModalState({ isOpen: true, key: 'delete' })} disabled>
             <Trash />
           </IconButton>
         </Flex>

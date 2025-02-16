@@ -114,7 +114,7 @@ const CommentCard = (props: CommentCardProps) => {
                 : ''}
             </Text>
           </Flex>
-          <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} onClick={handleRedirect}>
+          <Button size={'2'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} onClick={handleRedirect}>
             <Text {...typoVariant.body3}>{type === 'PLACE' ? 'مشاهده نقطه' : type === 'ARTICLE' && 'مشاهده مقاله'}</Text>
           </Button>
         </Flex>
@@ -134,11 +134,11 @@ const CommentCard = (props: CommentCardProps) => {
           {content}
         </Text>
         <Flex gap={'4'} justify={'end'}>
-          <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} variant='soft' onClick={() => setModalState({ isOpen: true, key: 'update' })}>
+          <Button size={'2'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} variant='soft' onClick={() => setModalState({ isOpen: true, key: 'update' })}>
             <Check />
             <Text {...typoVariant.body3}>تایید و انتشار</Text>
           </Button>
-          <IconButton size={'3'} radius='full' colorVariant='PINK' disabled onClick={() => setModalState({ isOpen: true, key: 'remove' })}>
+          <IconButton size={'2'} radius='full' colorVariant='PINK' disabled onClick={() => setModalState({ isOpen: true, key: 'remove' })}>
             <Trash />
           </IconButton>
         </Flex>

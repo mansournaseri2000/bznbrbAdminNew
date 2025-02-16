@@ -80,7 +80,21 @@ const ReceiveCode = () => {
               برای ورود به حساب کاربری شماره موبایل خود را وارد کنید.
             </Text>
             <Flex width={'100%'} direction={'column'} gap={'12px'}>
-              <TextField type='number' errorText={errors.mobileNumber?.message} autoFocus id='mobileNumber' {...register('mobileNumber')} size={'3'} placeholder='شماره تماس' />
+              <TextField
+                type='number'
+                errorText={errors.mobileNumber?.message}
+                autoFocus
+                id='mobileNumber'
+                {...register('mobileNumber')}
+                size={'3'}
+                placeholder='شماره تماس'
+                onInput={e => {
+                  const target = e.target as HTMLInputElement;
+                  if (target.value.length > 11) {
+                    target.value = target.value.slice(0, 11); // Limit to 12 characters
+                  }
+                }}
+              />
               <Button variant='soft' disabled={errors.mobileNumber ? true : false} type='submit' size={'4'}>
                 {mobileRegisterIsPending ? (
                   <Spinner />

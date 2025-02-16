@@ -24,11 +24,17 @@ const Uploader = ({ type }: Props) => {
       <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
         {type === 'pic' ? 'آپلود تصویر' : type === 'icon' && 'آپلود آیکون'}
       </Text>
-      <Text {...typoVariant.description2} style={{ color: colorPalette.gray[11], textAlign: 'center' }}>
-        فایل {type === 'pic' ? 'تصویر' : type === 'icon' && 'آیکون'} را با فرمت png یا <br />
-        jpeg وارد کنید
-      </Text>
-      <Upload />
+      {type === 'pic' && (
+        <Text {...typoVariant.description2} style={{ color: colorPalette.gray[11], textAlign: 'center' }}>
+          فایل تصویر را با فرمت png یا <br /> jpeg وارد کنید
+        </Text>
+      )}
+      {type === 'icon' && (
+        <Text {...typoVariant.description2} style={{ color: colorPalette.gray[11], textAlign: 'center' }}>
+          فایل آیکون را با فرمت svg <br /> وارد کنید
+        </Text>
+      )}
+      <Upload width={16} height={16} />
     </Flex>
   );
 };

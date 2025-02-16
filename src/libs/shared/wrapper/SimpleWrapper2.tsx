@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { Flex, Grid, Text } from '@/libs/primitives';
+import { Flex, Grid, Heading } from '@/libs/primitives';
 import { colorPalette } from '@/theme';
-import { typoVariant } from '@/theme/typo-variants';
 
 type Props = {
   hero: string;
@@ -20,9 +19,9 @@ const SimpleWrapper2 = ({ hero, type, children }: Props) => {
         p={'8px 16px'}
         style={{ height: 'fit-content', backgroundColor: type === 'changeAble' ? colorPalette.blue[4] : colorPalette.gray[3], borderRadius: '8px 8px 0px 0px' }}
       >
-        <Text {...typoVariant.title2} style={{ color: colorPalette.gray[11] }}>
+        <Heading as='h6' style={{ color: colorPalette.gray[11], fontWeight: 700, fontSize: '16px', lineHeight: '27px' }}>
           {hero}
-        </Text>
+        </Heading>
       </Flex>
       <Grid gap={'16px'} p={'24px 16px 16px 16px'} style={{ backgroundColor: colorPalette.gray[2] }}>
         {children}

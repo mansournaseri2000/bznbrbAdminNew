@@ -19,7 +19,6 @@ type Props = {
 
 interface CategoryFormData {
   name: string;
-  // parent_id: number | null;
   imagePath: string;
   imageFile: File;
   iconPath: string;
@@ -64,7 +63,10 @@ const EditCategoryModal = ({ data, setIsOpen }: Props) => {
     mutationFn: async () => await editCategory(data.id, watch('name') as any),
     onSuccess: localData => {
       if (localData.status === true) {
-        if (watch('localImagePath')) {
+        const localImage = watch('localImagePath');
+        const localIcon = watch('localIconPath');
+
+        if (localImage) {
           uploadImageMutate({
             categoryId: String(data.id),
             file: watch('imagePath') as any,
@@ -72,7 +74,7 @@ const EditCategoryModal = ({ data, setIsOpen }: Props) => {
           });
         }
 
-        if (watch('localIconPath')) {
+        if (localIcon) {
           uploadIconMutate({
             categoryId: String(data.id),
             file: watch('iconPath') as any,

@@ -15,6 +15,7 @@ import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
 import EditSubCategoryModal from '../categories/category-modal/EditSubCategoryModal';
+import EditTownModal from '../cities/cities-modal/EditTownModal';
 import EditFeatureItemModal from '../features/feature-modal/EditFeatureItemModal';
 
 type Props = {
@@ -22,12 +23,12 @@ type Props = {
   hasMedia: boolean;
   id: number;
   data: any;
-  type: 'category' | 'feature';
+  type: 'category' | 'feature' | 'town';
 };
 
 type ModalStateType = {
   isOpen: boolean;
-  key: 'edit-subCategory' | 'delete-subCategory' | 'edit-feature' | 'delete-feature';
+  key: 'edit-subCategory' | 'delete-subCategory' | 'edit-feature' | 'delete-feature' | 'edit-town' | 'delete-town';
 };
 
 const ChipsItem = ({ label, hasMedia, type, id, data }: Props) => {
@@ -81,6 +82,8 @@ const ChipsItem = ({ label, hasMedia, type, id, data }: Props) => {
           setModalState({ isOpen: true, key: 'edit-subCategory' });
         } else if (type === 'feature') {
           setModalState({ isOpen: true, key: 'edit-feature' });
+        } else if (type === 'town') {
+          setModalState({ isOpen: true, key: 'edit-town' });
         }
         break;
       case 'delete':
@@ -88,6 +91,8 @@ const ChipsItem = ({ label, hasMedia, type, id, data }: Props) => {
           setModalState({ isOpen: true, key: 'delete-subCategory' });
         } else if (type === 'feature') {
           setModalState({ isOpen: true, key: 'delete-feature' });
+        } else if (type === 'town') {
+          setModalState({ isOpen: true, key: 'delete-town' });
         }
         break;
       default:
@@ -101,16 +106,16 @@ const ChipsItem = ({ label, hasMedia, type, id, data }: Props) => {
    */
   return (
     <>
-      <Flex align={'center'} gap={'4'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
-        {hasMedia && <HasMedia />}
+      <Flex align={'center'} gap={'3'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
+        {hasMedia && <HasMedia width={14.13} height={14.13} />}
         <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
           {label}
         </Text>
         <IconButton variant='surface' size={'1'} onClick={() => handleButtonClick('edit')}>
-          <Pencil />
+          <Pencil width={16} height={16} />
         </IconButton>
         <IconButton variant='surface' size={'1'} onClick={() => handleButtonClick('delete')}>
-          <ClosIcon />
+          <ClosIcon width={16} height={16} />
         </IconButton>
       </Flex>
       {/* 
@@ -174,6 +179,40 @@ const ChipsItem = ({ label, hasMedia, type, id, data }: Props) => {
             <Grid gap={'10px'} columns={'2'}>
               <Button variant='soft' size={'4'} onClick={() => deleteFeatureMutate()}>
                 <Text {...typoVariant.body3}>{deleteFeaturePending ? <Spinner /> : 'بله'}</Text>
+              </Button>
+              <Button type='button' onClick={() => setModalState({ ...modalState, isOpen: false })} variant='solid' size={'4'}>
+                <Text {...typoVariant.body3}>خیر</Text>
+              </Button>
+            </Grid>
+          </Grid>
+        )}
+
+        {/* 
+        ****
+        edit town modal
+        ****_____________________________________________________________________________
+      */}
+
+        {modalState.key === 'edit-town' && (
+          <>
+            <ModalHeader title='ویرایش شهر' handleClose={() => setModalState({ ...modalState, isOpen: false })} />
+            <EditTownModal setIsOpen={() => setModalState({ key: 'edit-town', isOpen: false })} data={data} />
+          </>
+        )}
+
+        {/* 
+        ****
+        delete feature modal
+        ****_____________________________________________________________________________
+      */}
+        {modalState.key === 'delete-town' && (
+          <Grid gapY={'24px'} p={'5'}>
+            <Text>
+              آیا از حذف ویژگی <span style={{ fontWeight: 'bold', color: 'red' }}> {label}</span> اطمینان دارید؟
+            </Text>
+            <Grid gap={'10px'} columns={'2'}>
+              <Button variant='soft' size={'4'}>
+                <Text {...typoVariant.body3}>بله</Text>
               </Button>
               <Button type='button' onClick={() => setModalState({ ...modalState, isOpen: false })} variant='solid' size={'4'}>
                 <Text {...typoVariant.body3}>خیر</Text>

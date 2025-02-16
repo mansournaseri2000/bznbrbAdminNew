@@ -57,6 +57,7 @@ export default function UserProfile({
    */
   const { push } = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isActive, setIsActive] = useState<boolean>(false);
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const userId = Number(params.slug);
   const queryClient = useQueryClient();
@@ -133,7 +134,7 @@ export default function UserProfile({
     onSuccess: async data => {
       if (data.status === true) {
         queryClient.invalidateQueries({ queryKey: ['user_info'] });
-        ToastSuccess('کاربر مورد نظر با موفقیت غیر فعال شد');
+        ToastSuccess(isActive === true ? 'کاربر مورد نظر با موفقیت فعال شد' : 'کاربر مورد نظر با موفقیت غیر فعال شد');
       } else {
         ToastError('لطفا دوباره امتحان نمایید');
       }
@@ -157,6 +158,7 @@ export default function UserProfile({
 
   const handleDeActiveUser = (userInfo: UserInfoDetail) => {
     const { name, last_name, email, birthday, gender } = userInfo;
+    setIsActive(false);
     return {
       name,
       last_name,
@@ -169,6 +171,7 @@ export default function UserProfile({
 
   const handleActiveUser = (userInfo: UserInfoDetail) => {
     const { name, last_name, email, birthday, gender } = userInfo;
+    setIsActive(true);
     return {
       name,
       last_name,

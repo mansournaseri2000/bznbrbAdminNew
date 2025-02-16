@@ -73,7 +73,7 @@ export const SelectItem2 = ({ children, ...props }: SelectItemProps) => (
 const Root = styled(Flex)`
   & .rt-SelectTrigger:where(.rt-variant-surface) {
     width: 100%;
-
+    height: 48px;
     &:disabled {
       background-color: ${colorPalette.gray[5]};
       &:where(:hover) {

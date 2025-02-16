@@ -25,6 +25,7 @@ export { default as EyeOpen } from './EyeOpen';
 export { default as Filter } from './Filter';
 export { default as HasMedia } from './HasMedia';
 export { default as Hike } from './Hike';
+export { default as ImageIcon } from './ImageIcon';
 export { default as Layers } from './Layers';
 export { default as Like } from './Like';
 export { default as ListBullet } from './ListBullet';

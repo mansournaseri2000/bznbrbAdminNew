@@ -39,32 +39,30 @@ const AccordionWrapper = (props: AccordionWrapperProps) => {
     <Wrapper isOpen={isOpen}>
       <Flex className='style' width={'100%'} justify={'between'} align={'center'} p={'8px 16px'} onClick={toggleAccordion}>
         <Flex gap={'2'} align={'center'}>
-          {hasMedia && <HasMedia />}
-          <Text {...typoVariant.title2} style={{ color: colorPalette.gray[11] }}>
-            {hero}
-          </Text>
+          {hasMedia && <HasMedia width={14.13} height={14.13} />}
+          <Text style={{ color: colorPalette.gray[11], fontWeight: 700, fontSize: '16px', lineHeight: '24px' }}>{hero}</Text>
           {withButton && (
-            <IconButton variant='surface' onClick={onEdit}>
-              <Pencil />
+            <IconButton variant='surface' size={'2'} onClick={onEdit}>
+              <Pencil width={16} height={16} />
             </IconButton>
           )}
         </Flex>
         <Flex align={'center'} gap={'4'}>
           {withButton && (
-            <Button size={'3'} variant='soft' onClick={onButtonSubmit}>
+            <Button size={'2'} variant='soft' onClick={onButtonSubmit}>
               <Text {...typoVariant.body1}>افزودن ویژگی</Text>
             </Button>
           )}
 
           {withEdit && (
-            <IconButton variant='surface' size={'3'} onClick={onEdit}>
-              <Pencil />
+            <IconButton variant='surface' size={'2'} onClick={onEdit}>
+              <Pencil width={16} height={16} />
             </IconButton>
           )}
 
           {withDelete && (
-            <IconButton variant='surface' size={'3'} onClick={onDelete} disabled={isDisableDelete}>
-              <TrashIcon />
+            <IconButton variant='surface' size={'2'} onClick={onDelete} disabled={isDisableDelete}>
+              <TrashIcon width={16} height={16} />
             </IconButton>
           )}
           <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }} style={{ width: 32, height: 32, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

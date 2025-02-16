@@ -32,12 +32,12 @@ const FilterContent = ({ province }: Props) => {
    * _______________________________________________________________________________
    */
 
-  const sample = (date: Date) => {
-    const currentDate = new Date(date);
-    currentDate.setDate(date.getDate() + 1); // Add one day
+  // const sample = (date: Date) => {
+  //   const currentDate = new Date(date);
+  //   currentDate.setDate(date.getDate() + 1); // Add one day
 
-    return new Date(currentDate);
-  };
+  //   return new Date(currentDate);
+  // };
 
   return (
     <Grid width={'100%'} p={'4'} gapY={'4'}>
@@ -153,7 +153,7 @@ const FilterContent = ({ province }: Props) => {
                 value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                 onChangeValue={(val: any) => {
                   setValue('departureDateStart', new Date(val));
-                  setValue('departureDateEnd', sample(new Date(val)));
+                  // setValue('departureDateEnd', sample(new Date(val)));
                 }}
               />
             )}
@@ -171,7 +171,7 @@ const FilterContent = ({ province }: Props) => {
                 onChangeValue={(val: any) => {
                   setValue('departureDateEnd', new Date(val));
                 }}
-                disabled={!watch('departureDateStart')}
+                // disabled={!watch('departureDateStart')}
               />
             )}
           />
@@ -193,7 +193,7 @@ const FilterContent = ({ province }: Props) => {
                 value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                 onChangeValue={(val: any) => {
                   setValue('returnDateStart', new Date(val));
-                  setValue('returnDateEnd', sample(new Date(val)));
+                  // setValue('returnDateEnd', sample(new Date(val)));
                 }}
               />
             )}
@@ -211,7 +211,7 @@ const FilterContent = ({ province }: Props) => {
                 onChangeValue={(val: any) => {
                   setValue('returnDateEnd', new Date(val));
                 }}
-                disabled={!watch('returnDateStart')}
+                // disabled={!watch('returnDateStart')}
               />
             )}
           />

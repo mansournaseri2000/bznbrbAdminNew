@@ -26,8 +26,8 @@ const CustomAddItem = forwardRef<HTMLInputElement, CustomAddItemProps>(({ placeh
       {isLoading ? (
         <Spinner style={{ marginLeft: 20 }} />
       ) : (
-        <IconButton size={'4'} type='button' className='icon-button' variant='surface' disabled={disabled} onClick={onClick}>
-          <PlusIcon style={{ color: colorPalette.pink[9] }} />
+        <IconButton size={'1'} type='button' className='icon-button' variant='surface' disabled={disabled} onClick={onClick}>
+          <PlusIcon width={16} height={16} style={{ color: colorPalette.pink[9] }} />
         </IconButton>
       )}
     </Wrapper>
@@ -40,6 +40,8 @@ export default CustomAddItem;
 
 const Wrapper = styled(Flex)<{ disabled: boolean }>`
   width: 100%;
+  max-width: 380px;
+  height: 48px;
   align-items: center;
   border: 1px solid ${colorPalette.gray[7]};
   background-color: ${({ disabled }) => (disabled ? colorPalette.gray[5] : 'transparent')};
@@ -51,6 +53,7 @@ const Wrapper = styled(Flex)<{ disabled: boolean }>`
     border: 1px solid ${colorPalette.gray[3]};
   }
   .icon-button {
+    margin-inline-end: 8px;
     background-color: ${({ disabled }) => (disabled ? colorPalette.gray[5] : 'transparent')};
     @media (hover: hover) {
       background-color: transparent !important;

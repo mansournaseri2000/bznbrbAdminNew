@@ -19,7 +19,6 @@ type CardProps = PlaceImproveContentDataDetail & {
   onDelete?: () => void;
   index: number;
   type: 'improve_data_management' | 'point_detail';
-  state: number;
 };
 
 type modalStateType = {
@@ -31,7 +30,7 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
   /*
    *** Variables and Constant _________________________________________________________________________________________________________________________________________________________________
    */
-  const { name, placeProvinceName, cityName, provinceName, phone, website, email, type, index, address, id, placeId, placeName, placeCityName, state } = props;
+  const { name, placeProvinceName, cityName, provinceName, phone, website, email, type, index, address, id, placeId, placeName, placeCityName } = props;
   const [modalState, setModalState] = useState<modalStateType>({
     isOpen: false,
     key: 'remove',
@@ -88,8 +87,8 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
         p={'4'}
         style={{
           borderRadius: 8,
-          backgroundColor: state % 2 === 0 ? colorPalette.blue[2] : colorPalette.pink[2],
-          border: state % 2 === 0 ? `1px solid ${colorPalette.blue[6]}` : `1px solid ${colorPalette.pink[6]}`,
+          backgroundColor: index % 2 === 0 ? colorPalette.blue[2] : colorPalette.pink[2],
+          border: index % 2 === 0 ? `1px solid ${colorPalette.blue[6]}` : `1px solid ${colorPalette.pink[6]}`,
         }}
       >
         {type === 'improve_data_management' && (
@@ -102,7 +101,7 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
                 {`${placeProvinceName} / ${placeCityName}`}
               </Text>
             </Flex>
-            <Button colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} size={'3'} onClick={handleRedirect}>
+            <Button colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} size={'2'} onClick={handleRedirect}>
               <Text {...typoVariant.body3}>مشاهده نقطه</Text>
             </Button>
           </Flex>
@@ -122,20 +121,22 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
             </Text>
           </Grid>
 
-          <IconButton size={'3'} type='button' colorVariant='PINK' style={{ borderRadius: 12 }} onClick={() => setModalState({ key: 'remove', isOpen: true })} disabled>
-            <Trash />
-          </IconButton>
+          {type === 'point_detail' && (
+            <IconButton size={'2'} type='button' colorVariant='PINK' style={{ borderRadius: 12 }} onClick={() => setModalState({ key: 'remove', isOpen: true })} disabled>
+              <Trash />
+            </IconButton>
+          )}
         </GridWrapper>
 
         {type === 'improve_data_management' && (
           <Flex width={'100%'} align={'center'} justify={'end'} gap={'2'}>
-            <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} variant='soft' style={{ padding: '7px 18px' }} onClick={() => setModalState({ isOpen: true, key: 'publish' })}>
+            <Button size={'2'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} variant='soft' style={{ padding: '7px 18px' }} onClick={() => setModalState({ isOpen: true, key: 'publish' })}>
               <Flex align={'center'} gap={'2'}>
                 <Check />
                 <Text {...typoVariant.body3}>تایید</Text>
               </Flex>
             </Button>
-            <IconButton size={'3'} colorVariant='PINK' style={{ borderRadius: 12 }} onClick={() => setModalState({ isOpen: true, key: 'remove' })} disabled>
+            <IconButton size={'2'} colorVariant='PINK' style={{ borderRadius: 12 }} onClick={() => setModalState({ isOpen: true, key: 'remove' })} disabled>
               <Trash />
             </IconButton>
           </Flex>

@@ -27,7 +27,6 @@ const UserProfileHero = ({ onSubmit, isOpen, setIsOpen, userId, isPending }: Pro
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const { control, reset, setValue } = useFormContext();
   const searchParams = useSearchParams();

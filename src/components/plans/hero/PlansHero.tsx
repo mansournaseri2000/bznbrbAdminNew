@@ -95,10 +95,10 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
           <Filter />
         </IconButton>
 
-        <Button colorVariant='BLUE' variant='ghost' type='button' size={'4'} onClick={() => router.push('/plans/create-plan')}>
+        <Button colorVariant='BLUE' variant='ghost' type='button' size={'4'} onClick={() => router.push('/plans/create-plan')} style={{ padding: '11.5px 16px' }}>
           <Flex gap={'2'} align={'center'}>
             <Text {...typoVariant.body1}>+</Text>
-            <Text {...typoVariant.body1}> افزودن نقطه</Text>
+            <Text {...typoVariant.body1}> افزودن برنامه</Text>
           </Flex>
         </Button>
 
