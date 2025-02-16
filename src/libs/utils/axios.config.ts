@@ -8,6 +8,17 @@ const password = process.env.NEXT_PUBLIC_PASSWORD;
 const credentials = `${username}:${password}`;
 const encodedCredentials = Buffer.from(credentials).toString('base64');
 
+// baseURL: 'https://uploader.darkube.app',
+
+export const AdminUploaderImage = axios.create({
+  baseURL: 'https://uploader.darkube.app',
+  // baseURL: 'http://37.32.8.14:3005/v1/',
+  headers: {
+    'Content-Type': 'application/json',
+    'up-auth': `Basic ${encodedCredentials}`,
+  },
+});
+
 // Create an instance of axios
 export const ApiManager = axios.create({
   baseURL: 'https://api-admin-dev.darkube.app/v1/',
@@ -43,7 +54,7 @@ ApiManager.interceptors.request.use(
   }
 );
 
-ApiManagerV2.interceptors.request.use(
+AdminUploaderImage.interceptors.request.use(
   config => {
     const cookie = new Cookies();
     const token = cookie.get('token');
@@ -59,6 +70,21 @@ ApiManagerV2.interceptors.request.use(
   }
 );
 
+ApiManagerV2.interceptors.request.use(
+  config => {
+    const cookie = new Cookies();
+    const token = cookie.get('token');
+
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
 
 // Response Interceptor
 ApiManager.interceptors.response.use(

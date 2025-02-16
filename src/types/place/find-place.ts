@@ -30,6 +30,10 @@ export interface PlaceResponse {
   subway: any;
   train: any;
   taxi: any;
+  gender: any;
+  Town: {
+    id: number;
+  };
 
   Cities: Cities;
   Place_Category: PlaceCategory[];

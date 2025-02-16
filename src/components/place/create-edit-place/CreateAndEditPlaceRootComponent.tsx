@@ -166,7 +166,7 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
             features: serializeFeatures(placeData?.features),
             TripTypes: serializeTripData(placeData?.Place_TripType, placeConstant.tripDatas),
             PlaceCategories: serializeCategoryData(placeData?.Place_Category, categoriesConstants),
-            PlaceTripSeasons: placeData?.Place_TripSeason.length > 0 ? serializeTripSeasons(placeData?.Place_TripSeason) : serializeTripSeasons(placeTripSeasons),
+            PlaceTripSeasons: placeData?.Place_TripSeason.length > 0 ? serializeTripSeasons(placeData?.Place_TripSeason as any) : serializeTripSeasons(placeTripSeasons),
             tripLimitations: serializeLimitaionData(placeData?.Place_TripLimitation, placeConstant.tripLimitations),
             PlaceDetails: placeData?.PlaceDetails,
             PlaceWorkTimes: placeData?.PlaceWorkTime,
@@ -299,13 +299,13 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
         >
           <PlaceInfo categoris={placeConstant ? placeConstant.categories : []} />
           {status === 'edit' && <ImageGallery placeID={Number(placeID)} status={status} />}
-          <GeographicalLocationRoot province={placeConstant ? placeConstant.provinces : []} />
+          <GeographicalLocationRoot province={placeConstant ? placeConstant.provinces : []} constant={undefined} />
           <Navigation />
           <FeaturesAndFacilities featureItems={placeConstant ? placeConstant.features : []} />
           <AnalysisRoot
             constants={placeConstant}
             tripLimitations={placeConstant ? placeConstant.tripLimitations : []}
-            seasons={placeConstant ? seasons : []}
+            seasons={placeConstant ? seasons : [] as any}
             tripDatas={placeConstant ? placeConstant.tripDatas : []}
             Categories={placeConstant?.categories ? placeConstant.categories : []}
           />

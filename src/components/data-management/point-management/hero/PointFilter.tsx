@@ -84,8 +84,6 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
     currentDate.setDate(date.getDate() + 1);
     return new Date(currentDate);
   };
-
-  console.log('watch', watch());
   /**
    * JSX
    * _______________________________________________________________________________
@@ -163,7 +161,9 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                   placeholder='از تاریخ'
                   value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                   onChangeValue={(val: any) => {
-                    setValue('startDate', new Date(val));
+                    const newDate = new Date(val);
+                    newDate.setHours(0, 0, 0, 0); // Set hour to 23, minutes to 59, seconds to 0, milliseconds to 0
+                    setValue('startDate', newDate);
                     setValue('endDate', sample(new Date(val)));
                   }}
                 />
@@ -180,7 +180,9 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                   value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                   minDate={watch('startDate')}
                   onChangeValue={(val: any) => {
-                    setValue('endDate', new Date(val));
+                    const newDate = new Date(val);
+                    newDate.setHours(23, 59, 0, 0);
+                    setValue('endDate', newDate);
                   }}
                   disabled={!watch('startDate')}
                 />

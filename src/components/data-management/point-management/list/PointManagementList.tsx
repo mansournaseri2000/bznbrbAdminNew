@@ -31,6 +31,10 @@ type Props = {
 const PointManagementList = (props: Props) => {
   const router = useRouter();
 
+  console.log(props.data);
+  
+  
+
   const columns: ColumnDef<PointListDetail>[] = [
     {
       accessorKey: 'index',
@@ -42,13 +46,29 @@ const PointManagementList = (props: Props) => {
       ),
     },
     {
+      accessorKey: 'id', // ✅ Added placeId column
+      header: 'شناسه مکان',
+      cell: info => {
+        const value = info.getValue() as string | null;
+        return (
+          <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
+            {value ? value : '-'}
+          </Text>
+        );
+      },
+    },
+    {
       accessorKey: 'name',
-      header: ' نام نقطه',
+      header: () => (
+        <Flex maxWidth={'170px'} m={'auto'}>
+          <Text {...typoVariant.body2}>نام نقطه</Text>
+        </Flex>
+      ),
       cell: info => {
         const value = info.getValue() as string | null;
         const status = info.row.original.status;
         return (
-          <Flex width={'100%'} align={'center'} justify={'center'} gap={'3'} mr={'20px'}>
+          <Flex width={'100%'} align={'center'} justify={'start'} maxWidth={'250px'} gap={'3'} mr={'20px'}>
             <Box width={'12px'} height={'12px'} style={{ borderRadius: 100, backgroundColor: status === true ? colorPalette.blue[6] : colorPalette.pink[6] }}>
               {' '}
             </Box>
@@ -108,7 +128,7 @@ const PointManagementList = (props: Props) => {
       },
     },
     {
-      accessorKey: 'isPlaceInfoComplete',
+      accessorKey: 'isPublished',
       header: 'وضعیت انتشار',
       cell: info => {
         const value = info.getValue() as boolean | null;

@@ -37,10 +37,10 @@ export const placeTripTypes = [
 ];
 
 export const placeTripSeasons = [
-  { id: 1, name: 'بهار', score: 0, timing: 0 },
-  { id: 2, name: 'تابستان', score: 0, timing: 0 },
-  { id: 4, name: 'زمستان', score: 0, timing: 0 },
-  { id: 3, name: 'پاییز', score: 0, timing: 0 },
+  { id: 1, name: 'بهار', score: 0, timing: 0, until: null },
+  { id: 2, name: 'تابستان', score: 0, timing: 0, until: null },
+  { id: 4, name: 'زمستان', score: 0, timing: 0, until: null },
+  { id: 3, name: 'پاییز', score: 0, timing: 0, until: null },
 ];
 
 export const featuresItems = [
@@ -91,6 +91,9 @@ export type fomrData = {
   basicInfoDescription: string;
   basicInfosummary: string;
   placeID: number | null;
+  vehicleOptions: any;
+  gender: any;
+  slug: string;
 
   isLoading: boolean;
   uploadImage: File | null;
@@ -104,6 +107,7 @@ export type fomrData = {
   lat: string;
   lng: string;
   area: string;
+  townId: number;
 
   airplane: string | null;
   bus: string | null;
@@ -124,7 +128,7 @@ export type fomrData = {
   suggested_time: number;
 
   PlaceCategories: { categoryId: number; score: number }[];
-  PlaceTripSeasons: { tripSeasonId: number; score: number; timing: number }[];
+  PlaceTripSeasons: { tripSeasonId: number; score: number; timing: number; until: string }[];
   tripLimitations: { tripLimitationId: number; score: number }[];
   keywords: string;
   keyword: string;

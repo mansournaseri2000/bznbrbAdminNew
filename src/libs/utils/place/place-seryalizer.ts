@@ -14,8 +14,6 @@ export const serializeCategories = (categories: Category[] | any) => {
 };
 
 export const serializeTripTypes = (categories: Category[] | any) => {
-  console.log(categories,"categoriescategoriescategories");
-  
   return categories?.map((category: any) => ({
     tripTypeId: category.id,
     score: 0,
@@ -26,17 +24,16 @@ type TripSeason = {
   id: number;
   name: string;
   score: number;
+  until: number | null;
   timing: number | undefined;
 };
 
 export const serializeTripSeasons = (tripSeasons: TripSeason[]) => {
-
-  console.log(tripSeasons,"tripSeasonstripSeasonstripSeasonstripSeasonstripSeasons");
-  
   return tripSeasons?.map(tripSeason => ({
     tripSeasonId: tripSeason.id,
     score: tripSeason.score ? tripSeason.score : 0,
     timing: tripSeason.timing ? tripSeason.timing : 0,
+    until: tripSeason.until ? tripSeason.until : null,
   }));
 };
 
@@ -75,13 +72,16 @@ export const serializePlaceWorkTimeSchedule = (schedule: typeof placeWorkTimeSch
 };
 
 type InputType = { id: number; name: string; description: string };
-type OutputType = { detailId: number; descriptions: string };
 
-export const detailsSerializerForEdit = (inputArray: InputType[]): OutputType[] => {
-  return inputArray.map(item => ({
-    detailId: item.id,
-    descriptions: item.description,
-  }));
+export const detailsSerializerForEdit = (inputArray: InputType[]): any[] => {
+  if (inputArray.length > 0) {
+    return inputArray.map(item => ({
+      detailId: item.id,
+      descriptions: item.description,
+    }));
+  } else {
+    return [];
+  }
 };
 
 type PlaceWorkTimeItem = {
@@ -167,9 +167,20 @@ type FlattenedPlaceWorkTime = {
   type: 'open' | 'timed' | 'closed';
 };
 
-export function flattenPlaceWorkTime(placeWorkTime: SerializedTiming[]): FlattenedPlaceWorkTime[] {
+export function flattenPlaceWorkTime(placeWorkTime: SerializedTiming[], status: 'edit' | 'create'): FlattenedPlaceWorkTime[] {
+  if (status === 'create') {
+    return placeWorkTime.map(item => ({
+      ...item,
+      firstOpenTime: '00:00',
+      secondOpenTime: '00:00',
+      firstCloseTime: '00:00',
+      secondCloseTime: '00:00',
+    }));
+  }
+  console.log('run');
+
   return placeWorkTime.map(item => {
-    const times: { [key: string]: string | null } = {
+    const times: Record<string, string | null> = {
       firstOpenTime: null,
       secondOpenTime: null,
       firstCloseTime: null,
@@ -177,7 +188,7 @@ export function flattenPlaceWorkTime(placeWorkTime: SerializedTiming[]): Flatten
     };
 
     // Process each timing key and assign it to the correct property
-    item.timing.forEach(timingItem => {
+    item.timing?.forEach(timingItem => {
       times[timingItem.key] = timingItem.time;
     });
 
@@ -189,7 +200,7 @@ export function flattenPlaceWorkTime(placeWorkTime: SerializedTiming[]): Flatten
       secondOpenTime: times.secondOpenTime,
       firstCloseTime: times.firstCloseTime,
       secondCloseTime: times.secondCloseTime,
-      type: item.type.toLowerCase() as 'open' | 'timed' | 'closed',
+      type: item.type ? (item.type.toLowerCase() as 'open' | 'timed' | 'closed') : 'timed',
     };
   });
 }

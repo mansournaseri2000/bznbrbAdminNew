@@ -56,6 +56,7 @@ export interface Season {
   id: number;
   name: string;
   timing: number | undefined;
+  until: string;
 }
 
 export interface Province {
