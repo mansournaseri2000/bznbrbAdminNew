@@ -267,7 +267,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             suggested_time: 0,
           },
   });
-  const { handleSubmit, control, watch } = methods;
+  const { handleSubmit, control } = methods;
 
   /**
    * hooks and methods
@@ -312,8 +312,6 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
       createPlaceMutate(data);
     }
   };
-
-  console.log(watch(), 'watchwatchwatch');
 
   return (
     <FormProvider {...methods}>

@@ -155,16 +155,30 @@ const ImageGalleryArticle = ({ articleId, constant }: Props) => {
         </Flex>
       )}
       <CustomPagination current={page} total={data?.totalPages as number} maxWidth={24} onPageChange={p => setPage(p)} />
-      <ImageGalleryArticleUploader
-        resetCurrentItem={() => setCurrentItem(null)}
-        articleId={articleId}
-        constant={constant}
-        currentItem={currentItem}
-        handleCloseModal={() => setIsOpen(false)}
-        isOpen={isOpen}
-        status={status}
-        key={''}
-      />
+      {Boolean(currentItem) && status === 'edit' && (
+        <ImageGalleryArticleUploader
+          resetCurrentItem={() => setCurrentItem(null)}
+          articleId={articleId}
+          constant={constant}
+          currentItem={currentItem}
+          handleCloseModal={() => setIsOpen(false)}
+          isOpen={isOpen}
+          status={status}
+          key={''}
+        />
+      )}
+      {status === 'create' && (
+        <ImageGalleryArticleUploader
+          resetCurrentItem={() => setCurrentItem(null)}
+          articleId={articleId}
+          constant={constant}
+          currentItem={currentItem}
+          handleCloseModal={() => setIsOpen(false)}
+          isOpen={isOpen}
+          status={status}
+          key={''}
+        />
+      )}
 
       <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)}>
         <Grid gapY={'24px'} p={'5'}>

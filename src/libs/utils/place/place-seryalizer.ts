@@ -167,18 +167,7 @@ type FlattenedPlaceWorkTime = {
   type: 'open' | 'timed' | 'closed';
 };
 
-export function flattenPlaceWorkTime(placeWorkTime: SerializedTiming[], status: 'edit' | 'create'): FlattenedPlaceWorkTime[] {
-  if (status === 'create') {
-    return placeWorkTime.map(item => ({
-      ...item,
-      firstOpenTime: '00:00',
-      secondOpenTime: '00:00',
-      firstCloseTime: '00:00',
-      secondCloseTime: '00:00',
-    }));
-  }
-  console.log('run');
-
+export function flattenPlaceWorkTime(placeWorkTime: SerializedTiming[]): FlattenedPlaceWorkTime[] {
   return placeWorkTime.map(item => {
     const times: Record<string, string | null> = {
       firstOpenTime: null,

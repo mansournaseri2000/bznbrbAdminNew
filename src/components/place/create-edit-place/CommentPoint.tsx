@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 
 import { Spinner } from '@radix-ui/themes';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { deleteCommentById } from '@/api/confirmations';
 import { getPlaceComments } from '@/api/data-management';
 import CommentCard from '@/components/develop/data-management/comment-card/CommentCard';
-import { Flex, Text } from '@/libs/primitives';
+import { Button, Flex, Grid, Modal, Text } from '@/libs/primitives';
 import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
 import ItemsPerPage from '@/libs/shared/ItemsPerPage';
+import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -21,11 +23,33 @@ const CommentPoint = ({ id }: Props) => {
    * _______________________________________________________________________________
    */
   const [page, setPage] = useState<number>(1);
+  const queryClient = useQueryClient();
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentItemId, setCurrentItemId] = useState<number | null>(null);
+
   /**
    * services
    * _______________________________________________________________________________
    */
-  const { data, isLoading, isFetching } = useQuery({ queryKey: ['place-user-uploads', id, page], queryFn: async () => getPlaceComments(id, page, 6) });
+  const { data, isLoading, isFetching } = useQuery({ queryKey: ['place-user-comments', id, page], queryFn: async () => getPlaceComments(id, page, 6) });
+
+  const { mutate: deleteMutate, isPending: deletePending } = useMutation({
+    mutationFn: async (id: number) => deleteCommentById(id),
+    onSuccess: async data => {
+      if (data.status === true) {
+        queryClient.invalidateQueries({ queryKey: ['place-user-comments'] });
+        ToastSuccess(' آیتم مورد نظر با موفقیت حذف شد');
+        setIsOpen(false);
+      } else {
+        ToastError('لطفا دوباره تلاش نمایید');
+        setIsOpen(false);
+      }
+    },
+    onError: () => {
+      ToastError('لطفا دوباره تلاش نمایید');
+      setIsOpen(false);
+    },
+  });
 
   if (isLoading || isFetching) return <Spinner style={{ margin: '50px auto' }} />;
 
@@ -38,7 +62,15 @@ const CommentPoint = ({ id }: Props) => {
       ) : (
         <Flex direction={'column'} gap={'5'}>
           {data?.PlaceComments?.map((item, index) => (
-            <CommentCard key={index} {...item} />
+            <CommentCard
+              key={index}
+              {...item}
+              isDisable={false}
+              onDelete={() => {
+                setIsOpen(true);
+                setCurrentItemId(item.id);
+              }}
+            />
           ))}
 
           {data?.PlaceComments && (
@@ -49,6 +81,20 @@ const CommentPoint = ({ id }: Props) => {
           )}
         </Flex>
       )}
+
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Grid gapY={'24px'} p={'5'}>
+          <Text>آیا از حذف این آیتم اطمینان دارید؟ </Text>
+          <Grid gap={'10px'} columns={'2'}>
+            <Button type='button' onClick={() => deleteMutate(Number(currentItemId))} variant='soft' size={'4'}>
+              <Text {...typoVariant.body3}>{deletePending ? <Spinner /> : 'بله'}</Text>
+            </Button>
+            <Button type='button' onClick={() => setIsOpen(false)} variant='solid' size={'4'}>
+              <Text {...typoVariant.body3}>خیر</Text>
+            </Button>
+          </Grid>
+        </Grid>
+      </Modal>
     </>
   );
 };

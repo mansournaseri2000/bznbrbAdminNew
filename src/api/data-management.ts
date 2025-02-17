@@ -76,7 +76,7 @@ export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
     startDate: Boolean(new Date(params.startDate).getTime()) ? new Date(params.startDate).getTime() : null,
     endDate: Boolean(new Date(params.endDate).getTime()) ? new Date(params.endDate).getTime() : null,
   };
-  const body = filterObject(obj);
+  const body = filterObject(obj, true);
   const res = await DevApiManager.post<ApiData<PlaceListResponse>>('places/allPlacesWithFilter', body);
   return res.data.data;
 };
@@ -123,7 +123,7 @@ export const getArticleList = async (page: number, params: ArticleListBody) => {
     parentCategoryId: Number(params.parentCategoryId),
     is_published: params.is_published === 'true' || params.is_published === true ? true : params.is_published === 'false' || params.is_published === false ? false : null,
     status: params.status === 'true' || params.status === true ? true : params.status === 'false' || params.status === false ? false : null,
-    base: params.base === 'true' ? true : params.base === 'false' ? false : String(params.base),
+    // base: params.base === 'true' ? true : params.base === 'false' ? false : String(params.base),
     text: params.text === 'true' ? true : params.text === 'false' ? false : String(params.text),
     seo: params.seo === 'true' ? true : params.seo === 'false' ? false : String(params.seo),
     mainPic: params.mainPic === 'true' ? true : params.mainPic === 'false' ? false : String(params.mainPic),
@@ -131,7 +131,9 @@ export const getArticleList = async (page: number, params: ArticleListBody) => {
     created_atStart: Boolean(new Date(params.created_atStart).getTime()) ? new Date(params.created_atStart).getTime() : null,
     created_atEnd: Boolean(new Date(params.created_atEnd).getTime()) ? new Date(params.created_atEnd).getTime() : null,
   };
-  const body = filterObject(obj);
+  const body = filterObject(obj, true);
+  delete body.page;
+
   const res = await DevApiManager.post<ApiData<ArticleListResponse>>(`/article/filter?limit=10&page=${page}`, body);
   return res.data.data;
 };
@@ -185,7 +187,7 @@ export const createArticle = async (params: CreateAndEditArticleBody) => {
 };
 
 export const editArticle = async (id: number, params: CreateAndEditArticleBody) => {
-  console.log('run',params.articleDetail);
+  console.log('run', params.articleDetail);
 
   const obj = {
     parentCategoryId: Number(params.parentCategoryId),

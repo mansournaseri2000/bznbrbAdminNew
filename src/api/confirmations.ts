@@ -86,3 +86,13 @@ export const createComment = async (params: CreateCommentBody) => {
   const res = await DevApiManager.post('/ads', params);
   return res.data;
 };
+
+export const deleteTravelMethid = async (id: number) => {
+  const res = await DevApiManager.delete(`places/tarvelMethod/${id}`);
+  return res.data;
+};
+
+export const removePlace = async (id: number) => {
+  const res = await DevApiManager.delete(`places/${id}`);
+  return res.data;
+};

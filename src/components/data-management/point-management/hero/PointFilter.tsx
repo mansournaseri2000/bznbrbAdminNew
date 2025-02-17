@@ -110,6 +110,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 onValueChange={val => {
                   field.onChange(val);
                   setValue('cityId', '');
+                  setValue('page', 1);
                 }}
               >
                 {province?.map(item => (
@@ -131,6 +132,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('page', 1);
                 }}
               >
                 {city?.map(item => (
@@ -165,6 +167,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                     newDate.setHours(0, 0, 0, 0); // Set hour to 23, minutes to 59, seconds to 0, milliseconds to 0
                     setValue('startDate', newDate);
                     setValue('endDate', sample(new Date(val)));
+                    setValue('page', 1);
                   }}
                 />
               )}
@@ -183,6 +186,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                     const newDate = new Date(val);
                     newDate.setHours(23, 59, 0, 0);
                     setValue('endDate', newDate);
+                    setValue('page', 1);
                   }}
                   disabled={!watch('startDate')}
                 />
@@ -216,6 +220,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 onValueChange={val => {
                   field.onChange(val);
                   setValue('arrayCatIds', '');
+                  setValue('page', 1);
                 }}
               >
                 {categories.map(item => (
@@ -249,6 +254,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('page', 1);
                 }}
               >
                 {isPublishedOptions.map(item => (
@@ -269,6 +275,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('page', 1);
                 }}
               >
                 {StatusFilterOption.map(item => (
@@ -289,6 +296,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('page', 1);
                 }}
               >
                 {booleanFilterOptions.map(item => (
@@ -309,6 +317,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('page', 1);
                 }}
               >
                 {booleanFilterOptions.map(item => (
@@ -329,6 +338,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('page', 1);
                 }}
               >
                 {booleanFilterOptions.map(item => (
@@ -349,6 +359,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('page', 1);
                 }}
               >
                 {booleanFilterOptions.map(item => (
@@ -369,6 +380,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('page', 1);
                 }}
               >
                 {booleanFilterOptions.map(item => (
@@ -389,6 +401,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('page', 1);
                 }}
               >
                 {booleanFilterOptions.map(item => (
@@ -409,6 +422,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('page', 1);
                 }}
               >
                 {booleanFilterOptions.map(item => (
@@ -429,6 +443,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
+                  setValue('page', 1);
                 }}
               >
                 {booleanFilterOptions.map(item => (

@@ -30,7 +30,7 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
   /*
    *** Variables and Constant _________________________________________________________________________________________________________________________________________________________________
    */
-  const { name, placeProvinceName, cityName, provinceName, phone, website, email, type, index, address, id, placeId, placeName, placeCityName } = props;
+  const { name, placeProvinceName, cityName, provinceName, phone, website, email, type, index, address, id, placeId, placeName, placeCityName, onDelete } = props;
   const [modalState, setModalState] = useState<modalStateType>({
     isOpen: false,
     key: 'remove',
@@ -122,7 +122,18 @@ const DataCard: React.FC<CardProps> = (props: CardProps) => {
           </Grid>
 
           {type === 'point_detail' && (
-            <IconButton size={'2'} type='button' colorVariant='PINK' style={{ borderRadius: 12 }} onClick={() => setModalState({ key: 'remove', isOpen: true })} disabled>
+            <IconButton
+              size={'2'}
+              type='button'
+              colorVariant='PINK'
+              style={{ borderRadius: 12, marginInline: 'auto' }}
+              onClick={() => {
+                if (onDelete) {
+                  onDelete();
+                }
+                setModalState({ key: 'remove', isOpen: true });
+              }}
+            >
               <Trash />
             </IconButton>
           )}
