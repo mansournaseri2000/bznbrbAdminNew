@@ -313,7 +313,6 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     }
   };
 
-  console.log(watch(), 'watchwatchwatch');
 
   return (
     <FormProvider {...methods}>

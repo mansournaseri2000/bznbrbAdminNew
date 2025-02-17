@@ -39,7 +39,8 @@ const ProvinceVector = ({ vector, id }: Props) => {
   const queryClient = useQueryClient();
   const methods = useForm({
     defaultValues: {
-      pic: vector ? vector : '',
+      imageFile: null,
+      pic: Boolean(vector) ? vector : '',
       localPic: '',
       provinceId: '',
       cityID: '',
@@ -119,7 +120,7 @@ const ProvinceVector = ({ vector, id }: Props) => {
           </Flex>
         </Grid>
       ) : (
-        <Flex direction={'column'} align={'center'} gap={'6'} p={'87.5px 12px'}>
+        <Flex direction={'column'} height={'100%'} align={'center'} gap={'6'} p={'87.5px 12px'}>
           <Heading as='h3' size={'3'} style={{ color: colorPalette.gray[11] }}>
             هنوز وکتوری اضافه نشده است.
           </Heading>
