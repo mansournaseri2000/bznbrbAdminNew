@@ -26,8 +26,8 @@ const ProvinceDetailCard = (props: Props) => {
         <Item label={firstLabel} value={firstValue} />
         <Item label={secondLabel} value={secondValue} />
       </Flex>
-      <Flex align={'center'} gap={'2'}>
-        <Button size={'3'} onClick={() => router.push(path)} style={{ padding: '7px 16px' }}>
+      <Flex height={'100%'} align={'end'} gap={'2'}>
+        <Button size={'2'} onClick={() => router.push(path)} style={{ padding: '7px 16px' }}>
           <Text {...typoVariant.body3}>{buttonText}</Text>
         </Button>
         {type === 'provinceAds' && (

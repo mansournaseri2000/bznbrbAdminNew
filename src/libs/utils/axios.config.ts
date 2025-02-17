@@ -8,13 +8,24 @@ const password = process.env.NEXT_PUBLIC_PASSWORD;
 const credentials = `${username}:${password}`;
 const encodedCredentials = Buffer.from(credentials).toString('base64');
 
+// baseURL: 'https://uploader.darkube.app',
+
+export const AdminUploaderImage = axios.create({
+  baseURL: 'https://uploader.darkube.app',
+  // baseURL: 'http://37.32.8.14:3005/v1/',
+  headers: {
+    'up-auth': `Basic ${encodedCredentials}`,
+    'Content-Type': 'application/json',
+  },
+});
+
 // Create an instance of axios
 export const ApiManager = axios.create({
   baseURL: 'https://api-admin-dev.darkube.app/v1/',
   // baseURL: 'http://37.32.8.14:3005/v1/',
   headers: {
-    'up-auth': `Basic ${encodedCredentials}`,
     'Content-Type': 'application/json',
+    'up-auth': `Basic ${encodedCredentials}`,
   },
 });
 
@@ -28,6 +39,22 @@ export const ApiManagerV2 = axios.create({
 });
 
 ApiManager.interceptors.request.use(
+  config => {
+    const cookie = new Cookies();
+    const token = cookie.get('token');
+
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
+
+AdminUploaderImage.interceptors.request.use(
   config => {
     const cookie = new Cookies();
     const token = cookie.get('token');
@@ -58,22 +85,6 @@ ApiManagerV2.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-// Request Interceptor
-// ApiManager.interceptors.request.use(
-//   config => {
-//     // You can add tokens or modify headers here if needed
-//     const token = localStorage.getItem('token'); // Example token fetching
-//     if (token) {
-//       config.headers['Authorization'] = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   error => {
-//     // Handle request errors (like network issues)
-//     console.error('Request error:', error);
-//     return Promise.reject(error);
-//   }
-// );
 
 // Response Interceptor
 ApiManager.interceptors.response.use(

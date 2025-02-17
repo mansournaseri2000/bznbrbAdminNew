@@ -6,10 +6,17 @@ type Category = {
   score: number;
 };
 
-export const serializeCategories = (categories: Category[]) => {
-  return categories?.map(category => ({
+export const serializeCategories = (categories: Category[] | any) => {
+  return categories?.map((category: any) => ({
     categoryId: category.id,
-    score: category.score,
+    score: 0,
+  }));
+};
+
+export const serializeTripTypes = (categories: Category[] | any) => {
+  return categories?.map((category: any) => ({
+    tripTypeId: category.id,
+    score: 0,
   }));
 };
 
@@ -17,14 +24,16 @@ type TripSeason = {
   id: number;
   name: string;
   score: number;
+  until: number | null;
   timing: number | undefined;
 };
 
 export const serializeTripSeasons = (tripSeasons: TripSeason[]) => {
   return tripSeasons?.map(tripSeason => ({
     tripSeasonId: tripSeason.id,
-    score: tripSeason.score,
-    timing: tripSeason.timing,
+    score: tripSeason.score ? tripSeason.score : 0,
+    timing: tripSeason.timing ? tripSeason.timing : 0,
+    until: tripSeason.until ? tripSeason.until : null,
   }));
 };
 
@@ -37,7 +46,7 @@ type TripLimitation = {
 export const serializeTripLimitations = (tripLimitations: TripLimitation[]) => {
   return tripLimitations?.map(tripLimitation => ({
     tripLimitationId: tripLimitation.id,
-    score: tripLimitation.score,
+    score: 0,
   }));
 };
 
@@ -63,13 +72,16 @@ export const serializePlaceWorkTimeSchedule = (schedule: typeof placeWorkTimeSch
 };
 
 type InputType = { id: number; name: string; description: string };
-type OutputType = { detailId: number; descriptions: string };
 
-export const detailsSerializerForEdit = (inputArray: InputType[]): OutputType[] => {
-  return inputArray.map(item => ({
-    detailId: item.id,
-    descriptions: item.description,
-  }));
+export const detailsSerializerForEdit = (inputArray: InputType[]): any[] => {
+  if (inputArray.length > 0) {
+    return inputArray.map(item => ({
+      detailId: item.id,
+      descriptions: item.description,
+    }));
+  } else {
+    return [];
+  }
 };
 
 type PlaceWorkTimeItem = {
@@ -157,7 +169,7 @@ type FlattenedPlaceWorkTime = {
 
 export function flattenPlaceWorkTime(placeWorkTime: SerializedTiming[]): FlattenedPlaceWorkTime[] {
   return placeWorkTime.map(item => {
-    const times: { [key: string]: string | null } = {
+    const times: Record<string, string | null> = {
       firstOpenTime: null,
       secondOpenTime: null,
       firstCloseTime: null,
@@ -165,7 +177,7 @@ export function flattenPlaceWorkTime(placeWorkTime: SerializedTiming[]): Flatten
     };
 
     // Process each timing key and assign it to the correct property
-    item.timing.forEach(timingItem => {
+    item.timing?.forEach(timingItem => {
       times[timingItem.key] = timingItem.time;
     });
 
@@ -177,7 +189,7 @@ export function flattenPlaceWorkTime(placeWorkTime: SerializedTiming[]): Flatten
       secondOpenTime: times.secondOpenTime,
       firstCloseTime: times.firstCloseTime,
       secondCloseTime: times.secondCloseTime,
-      type: item.type.toLowerCase() as 'open' | 'timed' | 'closed',
+      type: item.type ? (item.type.toLowerCase() as 'open' | 'timed' | 'closed') : 'timed',
     };
   });
 }

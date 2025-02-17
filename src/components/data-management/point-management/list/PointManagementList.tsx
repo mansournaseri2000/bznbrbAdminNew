@@ -1,14 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 // import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
+import { Spinner } from '@radix-ui/themes';
+import { useMutation } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { Button, Flex, Text } from '@/libs/primitives';
+import { removePlace } from '@/api/confirmations';
+import { Box, Button, Flex, Grid, IconButton, Modal, Text } from '@/libs/primitives';
 import { Table } from '@/libs/shared';
+import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
+import { Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { AllFilteredPlacesDetail } from '@/types/place/place-list';
@@ -21,14 +26,36 @@ interface PointListDetail {
   parentCategory: string;
   category: string;
   isPlaceInfoComplete: boolean;
+  status: boolean;
 }
 
 type Props = {
   data: AllFilteredPlacesDetail[];
+  onRevalidate: any;
 };
 
 const PointManagementList = (props: Props) => {
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentItemId, setCurrentItemId] = useState<number | null>(null);
+
+  const { mutate: deleteMutate, isPending: deletePending } = useMutation({
+    mutationFn: async (id: number) => removePlace(id),
+    onSuccess: async data => {
+      if (data.status === true) {
+        props.onRevalidate();
+        ToastSuccess(' آیتم مورد نظر با موفقیت حذف شد');
+        setIsOpen(false);
+      } else {
+        ToastError('لطفا دوباره تلاش نمایید');
+        setIsOpen(false);
+      }
+    },
+    onError: () => {
+      ToastError('لطفا دوباره تلاش نمایید');
+      setIsOpen(false);
+    },
+  });
 
   const columns: ColumnDef<PointListDetail>[] = [
     {
@@ -41,14 +68,36 @@ const PointManagementList = (props: Props) => {
       ),
     },
     {
-      accessorKey: 'name',
-      header: ' نام نقطه',
+      accessorKey: 'id', // ✅ Added placeId column
+      header: 'شناسه مکان',
       cell: info => {
         const value = info.getValue() as string | null;
         return (
           <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
             {value ? value : '-'}
           </Text>
+        );
+      },
+    },
+    {
+      accessorKey: 'name',
+      header: () => (
+        <Flex maxWidth={'170px'} m={'auto'}>
+          <Text {...typoVariant.body2}>نام نقطه</Text>
+        </Flex>
+      ),
+      cell: info => {
+        const value = info.getValue() as string | null;
+        const status = info.row.original.status;
+        return (
+          <Flex width={'100%'} align={'center'} justify={'start'} maxWidth={'250px'} gap={'3'} mr={'20px'}>
+            <Box width={'12px'} height={'12px'} style={{ borderRadius: 100, backgroundColor: status === true ? colorPalette.blue[6] : colorPalette.pink[6] }}>
+              {' '}
+            </Box>
+            <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
+              {value ? value : '-'}
+            </Text>
+          </Flex>
         );
       },
     },
@@ -101,7 +150,7 @@ const PointManagementList = (props: Props) => {
       },
     },
     {
-      accessorKey: 'isPlaceInfoComplete',
+      accessorKey: 'isPublished',
       header: 'وضعیت انتشار',
       cell: info => {
         const value = info.getValue() as boolean | null;
@@ -124,13 +173,28 @@ const PointManagementList = (props: Props) => {
       },
     },
     {
+      id: 'remove',
+      cell: ({ row }) => {
+        const item = row.original;
+        const handleClick = (e: React.MouseEvent) => {
+          e.preventDefault();
+          setIsOpen(true);
+          setCurrentItemId(item.id);
+        };
+        return (
+          <IconButton variant='solid' size={'3'} type='button' colorVariant='PINK' onClick={handleClick}>
+            <Trash />
+          </IconButton>
+        );
+      },
+    },
+    {
       id: 'details',
       cell: ({ row }) => {
         const item = row.original;
         const handleClick = (e: React.MouseEvent) => {
-          console.log('item', item);
           e.preventDefault();
-          router.push(`/data-management/point-management/point-detail/${item.id}`);
+          router.push(`/data-management/point-management/edit-point/${item.id}`);
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>
@@ -143,7 +207,24 @@ const PointManagementList = (props: Props) => {
     },
   ];
 
-  return <Table columns={columns as any} data={props.data as any} />;
+  return (
+    <>
+      <Table columns={columns as any} data={props.data as any} />
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Grid gapY={'24px'} p={'5'}>
+          <Text>آیا از حذف این آیتم اطمینان دارید؟ </Text>
+          <Grid gap={'10px'} columns={'2'}>
+            <Button type='button' onClick={() => deleteMutate(Number(currentItemId))} variant='soft' size={'4'}>
+              <Text {...typoVariant.body3}>{deletePending ? <Spinner /> : 'بله'}</Text>
+            </Button>
+            <Button type='button' onClick={() => setIsOpen(false)} variant='solid' size={'4'}>
+              <Text {...typoVariant.body3}>خیر</Text>
+            </Button>
+          </Grid>
+        </Grid>
+      </Modal>
+    </>
+  );
 };
 
 export default PointManagementList;

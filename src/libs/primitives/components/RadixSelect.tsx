@@ -54,7 +54,13 @@ export const SelectRoot = forwardRef<React.ElementRef<typeof Select.Root>, Selec
 type SelectItemProps = React.ComponentProps<typeof Select.Item>;
 
 export const SelectItem = ({ children, ...props }: SelectItemProps) => (
-  <Select.Item {...props}>
+  <Select.Item {...props} style={{ cursor: 'pointer' }}>
+    <Text {...typoVariant.body1}>{children}</Text>
+  </Select.Item>
+);
+
+export const SelectItem2 = ({ children, ...props }: SelectItemProps) => (
+  <Select.Item {...props} style={{ padding: '13.5px 12px', border: `1px solid ${colorPalette.gray[3]}`, borderRadius: 8, cursor: 'pointer' }}>
     <Text {...typoVariant.body1}>{children}</Text>
   </Select.Item>
 );
@@ -67,7 +73,7 @@ export const SelectItem = ({ children, ...props }: SelectItemProps) => (
 const Root = styled(Flex)`
   & .rt-SelectTrigger:where(.rt-variant-surface) {
     width: 100%;
-
+    height: 48px;
     &:disabled {
       background-color: ${colorPalette.gray[5]};
       &:where(:hover) {

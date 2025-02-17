@@ -2,18 +2,21 @@
 
 import React, { ReactNode } from 'react';
 import Dropzone from 'react-dropzone';
+import imageCompression from 'browser-image-compression';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import imageCompression from 'browser-image-compression';
 
 import { Flex } from '../primitives';
 import ErrorText from './ErrorText';
 
 type Props = {
   name: string;
+  localPath: string;
   children: ReactNode;
   defaultImage?: string;
   errorText?: string;
+  style?: React.CSSProperties;
+  resetStore:string
 };
 
 export const urlToObject = async (image: string) => {
@@ -23,11 +26,14 @@ export const urlToObject = async (image: string) => {
   return file;
 };
 
-const ImagePicker2 = ({ name, children, errorText }: Props) => {
+const ImagePicker2 = ({ name, children, errorText, style, localPath ,resetStore }: Props) => {
   const { control, setValue } = useFormContext();
 
   // Compress image before setting it to form state
   const compressImage = async (file: File) => {
+    if (file.type === 'image/svg+xml') {
+      return file; // Skip compression for SVGs
+    }
     const options = {
       maxSizeMB: 1, // Maximum file size in MB
       maxWidthOrHeight: 800, // Max width or height in pixels
@@ -45,9 +51,11 @@ const ImagePicker2 = ({ name, children, errorText }: Props) => {
   const onDrop = async (files: File[], onChange: (value: File) => void) => {
     if (files && files[0]) {
       const selectedImage = files[0];
-      const compressedImage = await compressImage(selectedImage); // Compress the image
+      const compressedImage = await compressImage(selectedImage);
       onChange(URL.createObjectURL(compressedImage) as any);
-      setValue('imageFile', compressedImage); // Set the compressed image in form state
+      setValue(name, compressedImage); 
+      setValue(localPath, URL.createObjectURL(compressedImage) as any);
+      setValue(resetStore, false);
     }
   };
 
@@ -56,11 +64,15 @@ const ImagePicker2 = ({ name, children, errorText }: Props) => {
       name={name}
       control={control}
       render={({ field }) => (
-        <Flex width={'max-content'} position={'relative'} direction={'column'}>
+        <Flex width={'max-content'} position={'relative'} direction={'column'} style={style}>
           <Dropzone
-            onDrop={files => onDrop(files, field.onChange)}
+            onDrop={files => {
+              onDrop(files, field.onChange);
+            }}
             accept={{
-              'image/*': ['.jpeg', '.png'],
+              'image/jpeg': ['.jpeg', '.jpg'],
+              'image/png': ['.png'],
+              'image/svg+xml': ['.svg'],
             }}
           >
             {({ getRootProps, getInputProps }) => (

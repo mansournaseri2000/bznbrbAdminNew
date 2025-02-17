@@ -9,21 +9,37 @@ export interface ArticleSDetail {
   id: number;
   title: string;
   categoryId: number;
-  categoryName: string;
+  parentCategoryId: number;
   is_published: boolean;
   created_at: number;
   updated_at: number;
+  categoryName: string;
+  parentCategoryName: string;
+  cityId: number;
+  citiesName: string;
+  provinceId: number;
+  provinceName: string;
+  status: boolean;
+  writer: string;
 }
 
 export interface ArticleListBody {
   title: string;
-  created_atStart: number;
-  created_atEnd: number;
-  updated_atStart: number;
-  updated_atEnd: number;
-  categoryId: number;
-  parentCategoryId: number;
+  provincesId: number | string;
+  citiesId: number | string;
+  status: boolean | string;
   is_published: boolean | string;
+  arrayCatIds: number[];
+  parentCategoryId: number | string;
+  created_atStart: number | string;
+  created_atEnd: number | string;
+  updated_atStart: number | string;
+  updated_atEnd: number | string;
+  base: boolean | string;
+  text: boolean | string;
+  seo: boolean | string;
+  mainPic: boolean | string;
+  related: boolean | string;
 }
 
 export interface CreateAndEditArticleBody {
@@ -44,13 +60,31 @@ export interface CreateAndEditArticleBody {
   keywords: string[];
   meta_title: string;
   meta_description: string;
-  view: number;
-  status: boolean;
-  is_published: boolean;
+  status: boolean | string;
+  is_published: boolean | string;
+  type: string;
   categoryId: number;
   parentCategoryId: number;
   source_link: string;
   pic: string;
   isSlider: boolean;
-  places: [];
+  places: PlacesOptions[];
+  view: number;
+  id: number;
+  mainPoint: number | string;
+  placeRelationType: number[];
+  metakeywords: any;
+  articleDetail: {
+    detailId: number;
+    descriptions: string;
+  }[];
 }
+
+export interface PlacesOptions {
+  placeId: number;
+  placeRelationType: 'MAIN' | 'RELATION';
+}
+
+export type CreateArticleButtonTypes = 'initial-data' | 'text-content' | 'related-points' | 'seo-setting';
+
+export type EditArticleButtonTypes = CreateArticleButtonTypes | 'images';

@@ -97,7 +97,21 @@ const VerificationCode = () => {
             </Text>
           </Flex>
           <Flex direction={'column'} gap={'10px'}>
-            <TextField type='number' errorText={errors.verificationCode?.message} autoFocus id='verificationCode' {...register('verificationCode')} size={'3'} placeholder='کد تایید' />
+            <TextField
+              type='number'
+              errorText={errors.verificationCode?.message}
+              autoFocus
+              id='verificationCode'
+              {...register('verificationCode')}
+              size={'3'}
+              placeholder='کد تایید'
+              onInput={e => {
+                const target = e.target as HTMLInputElement;
+                if (target.value.length > 4) {
+                  target.value = target.value.slice(0, 6); // Limit to 12 characters
+                }
+              }}
+            />
             <Grid gap={'16px'} columns={'2'}>
               <Button variant='soft' disabled={String(watch('verificationCode')).length < 6} size={'4'}>
                 {checkOtpIsPending ? (

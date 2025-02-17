@@ -9,7 +9,7 @@ import { CopyIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Grid, Heading, IconButton, Modal, Text } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import { Close, Pencil, Trash } from '@/public/icon';
+import { Pencil, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { AdsListResponce } from '@/types/ads/ads';
@@ -81,7 +81,7 @@ const AdCard = ({ id, pic, url, altText, description }: AdsListResponce) => {
       </Grid>
       {type === 'delete' ? (
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-          <ModalHeader title='حذف آگهی' handleClose={() => setIsOpen(false)} icon={<Close />} />
+          <ModalHeader title='حذف آگهی' handleClose={() => setIsOpen(false)} />
           <Grid width={'100%'} p={'4'}>
             <Heading as='h2' size={'5'}>
               آیا از حذف این آگهی اطمینان داید؟

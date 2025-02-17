@@ -10,31 +10,43 @@ import { useQuery } from '@tanstack/react-query';
 import { getCommentsByProvinceId } from '@/api/confirmations';
 import AddComment from '@/components/develop/confirmations/add-comment/AddComment';
 import TopCommentItem from '@/components/develop/confirmations/top-comment-item/TopCommentItem';
-import { Grid } from '@/libs/primitives';
+import { Flex, Grid } from '@/libs/primitives';
+import { ToastError } from '@/libs/shared/toast/Toast';
 
 const TopComments = () => {
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
-  const {
-    data: commentItemData,
-    isLoading: commentLoading,
-    isFetching: commentFetching,
-  } = useQuery({ queryKey: ['top-comments-item'], queryFn: async () => await getCommentsByProvinceId(Number(params.slug[2])) });
+  const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['top-comments-item'], queryFn: async () => await getCommentsByProvinceId(Number(params.slug[2])) });
 
-  console.log('COMMENT DATA', commentItemData);
+  console.log('COMMENT DATA', data);
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
   const params = useParams();
-  const numberOfComments = commentItemData?.comments.length || 0;
+  const numberOfComments = data?.comments.length || 0;
   const numberOfAddComments = 5 - numberOfComments;
 
-  if (commentLoading || commentFetching || !commentItemData) return <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} />;
+  /**
+   * Loading and Error
+   * _______________________________________________________________________________
+   */
+  if (isLoading || isFetching)
+    return (
+      <Flex width={'100%'} height={'90vh'} justify={'center'} align={'center'}>
+        <Spinner style={{ scale: 2.5 }} />
+      </Flex>
+    );
+
+  if (!data || isError) return ToastError('مشکلی پیش آمده . لطفا دوباره تلاش نمایید');
+  /**
+   * JSX
+   * _______________________________________________________________________________
+   */
   return (
     <Grid width={'100%'} gapY={'5'}>
-      {commentItemData?.comments.map((item, index) => (
-        <>{item.commentName && item.commentContent ? <TopCommentItem key={index} {...item} data={commentItemData.comments[index]} /> : <AddComment key={index}  />}</>
+      {data?.comments.map((item, index) => (
+        <>{item ? <TopCommentItem key={item.commentId} {...item} data={data.comments[index]} /> : <AddComment key={index} />}</>
       ))}{' '}
       {Array.from({ length: numberOfAddComments }).map((_, index) => (
         <AddComment key={`add-comment-${index}`} />

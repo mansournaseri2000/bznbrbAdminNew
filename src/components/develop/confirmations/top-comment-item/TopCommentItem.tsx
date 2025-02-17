@@ -11,7 +11,7 @@ import { Button, Flex, Grid, IconButton, Modal, Text, TextArea, TextField } from
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
-import { Close, Pencil, Trash } from '@/public/icon';
+import { Pencil, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { CommentsDetail } from '@/types/confirmations/top-comments';
@@ -44,7 +44,8 @@ const TopCommentItem = (props: Props) => {
   const { control, watch } = methods;
   const queryClient = useQueryClient();
 
-  console.log('watch', watch());
+  console.log('data', data);
+
   /* 
     ****
     Services
@@ -91,7 +92,7 @@ const TopCommentItem = (props: Props) => {
           <IconButton size={'3'} onClick={() => setModalState({ isOpen: true, key: 'edit' })}>
             <Pencil />
           </IconButton>
-          <IconButton size={'3'} colorVariant='PINK' onClick={() => setModalState({ isOpen: true, key: 'delete' })} disabled>
+          <IconButton size={'3'} colorVariant='PINK' onClick={() => setModalState({ isOpen: true, key: 'delete' })}>
             <Trash />
           </IconButton>
         </Flex>
@@ -99,10 +100,10 @@ const TopCommentItem = (props: Props) => {
       <Modal isOpen={modalState.isOpen} onClose={() => setModalState({ ...modalState, isOpen: false })}>
         {modalState.key === 'edit' && (
           <>
-            <ModalHeader handleClose={() => setModalState({ ...modalState, isOpen: false })} title='ویرایش نظر برتر' icon={<Close />} />
-            <Flex direction={'column'} gap={'5'} p={'5'}>
+            <ModalHeader handleClose={() => setModalState({ ...modalState, isOpen: false })} title='ویرایش نظر برتر' />
+            <Flex direction={'column'} gap={'14px'} p={'5'}>
               <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان نقطه' style={{ width: '50%' }} />} />
-              <Controller name='content' control={control} render={({ field }) => <TextArea {...field} placeholder='متن نظر' />} />
+              <Controller name='content' control={control} render={({ field }) => <TextArea {...field} placeholder='متن نظر' rows={5} />} />
             </Flex>
             <ModalAction
               submitButtonText='ویرایش تغییرات'
@@ -110,12 +111,13 @@ const TopCommentItem = (props: Props) => {
               onCloseButton={() => setModalState({ ...modalState, isOpen: false })}
               onSubmit={() => updateCommentMutate()}
               isLoading={updateCommentPending}
+              disabled={watch('name').length === 0 && watch('content').length === 0}
             />
           </>
         )}
         {modalState.key === 'delete' && (
           <Grid gapY={'24px'} p={'5'}>
-            <Text>آیا از حذف این راهنمای مسیر اطمینان دارید؟ </Text>
+            <Text {...typoVariant.title1}>آیا از حذف این نظر اطمینان دارید؟</Text>
             <Grid gap={'10px'} columns={'2'}>
               <Button variant='soft' size={'4'} onClick={() => deleteCommentMutate()}>
                 <Text {...typoVariant.body3}>{deleteCommentPending ? <Spinner /> : 'بله'}</Text>s

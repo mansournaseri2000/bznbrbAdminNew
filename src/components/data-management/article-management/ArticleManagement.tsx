@@ -14,6 +14,7 @@ import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
 import ItemsPerPage from '@/libs/shared/ItemsPerPage';
 import { updateUrlWithPageNumber } from '@/libs/utils';
 import { generateSearchParams } from '@/libs/utils/generateSearchParams';
+import { typoVariant } from '@/theme/typo-variants';
 import { ArticleListBody } from '@/types/data-management/article';
 
 import ArticleManagementHero from './hero/ArticleManagementHero';
@@ -23,7 +24,7 @@ const ArticleManagement = () => {
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
-  const { push } = useRouter();
+  const { replace } = useRouter();
   const searchParams = useSearchParams();
   const [page, setPage] = useState(searchParams.get('page') ? Number(searchParams.get('page')) : 1);
   const getParam = (key: string) => searchParams.get(key) || '';
@@ -31,10 +32,19 @@ const ArticleManagement = () => {
   const methods = useForm({
     defaultValues: {
       title: getParam('title') ? getParam('title') : '',
+      is_published: getParam('is_published') ? String(Boolean(getParam('is_published'))) : '',
+      status: getParam('status') ? String(Boolean(getParam('status'))) : '',
+      base: getParam('base') ? String(Boolean(getParam('base'))) : '',
+      text: getParam('text') ? String(Boolean(getParam('text'))) : '',
+      related: getParam('related') ? String(Boolean(getParam('related'))) : '',
+      seo: getParam('seo') ? String(Boolean(getParam('seo'))) : '',
+      mainPic: getParam('mainPic') ? String(Boolean(getParam('mainPic'))) : '',
+      provincesId: getParam('provincesId') ? Number(getParam('provincesId')) : '',
+      citiesId: getParam('citiesId') ? Number(getParam('citiesId')) : '',
       created_atStart: getParam('created_atStart') ? Number(getParam('created_atStart')) : '',
       created_atEnd: getParam('created_atEnd') ? Number(getParam('created_atEnd')) : '',
-      categoryId: getParam('categoryId') ? Number(getParam('categoryId')) : '',
-      is_published: getParam('is_published') ? getParam('is_published') : '',
+      parentCategoryId: getParam('parentCategoryId') ? Number(getParam('parentCategoryId')) : '',
+      arrayCatIds: getParam('arrayCatIds') ? getParam('arrayCatIds').split(',').map(Number) : [],
     },
   });
   const { watch, handleSubmit } = methods;
@@ -49,7 +59,7 @@ const ArticleManagement = () => {
     isPending: articlePending,
   } = useMutation({
     mutationFn: async (body: ArticleListBody) => getArticleList(page, body),
-    onSuccess: async data => {
+    onSuccess: async () => {
       const cleanedData = Object.fromEntries(
         Object.entries(watch()).filter(([key, value]) => {
           if (
@@ -58,11 +68,11 @@ const ArticleManagement = () => {
             value !== 'none' &&
             value !== null &&
             !(Array.isArray(value) && value.length === 0) &&
-            !(Array.isArray(value) && value.every(item => item === '')) &&
-            !(Array.isArray(value) && value.every(item => item === 'none'))
+            !(Array.isArray(value) && value.every(item => item === ('' as any))) &&
+            !(Array.isArray(value) && value.every(item => item === ('none' as any)))
           ) {
             if (['created_atStart', 'created_atEnd'].includes(key)) {
-              return new Date(value).getTime();
+              return new Date(value as any).getTime();
             }
             return true;
           }
@@ -72,13 +82,12 @@ const ArticleManagement = () => {
 
       Object.keys(cleanedData).forEach(key => {
         if (['created_atStart', 'created_atEnd'].includes(key)) {
-          cleanedData[key] = new Date(cleanedData[key]).getTime();
+          cleanedData[key] = new Date(cleanedData[key] as any).getTime();
         }
       });
 
       const searchParams = generateSearchParams(cleanedData);
-      push(`/data-management/article-management?${searchParams}`);
-      console.log('data', data);
+      replace(`/data-management/article-management?${searchParams}`);
     },
     onError: async data => {
       console.log('DATA Error', data);
@@ -103,7 +112,9 @@ const ArticleManagement = () => {
           ) : articlePending ? (
             <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
           ) : !articleData ? (
-            <Text>دیتایی وجود ندارد</Text>
+            <Flex width={'100%'} justify={'center'} mt={'6'}>
+              <Text {...typoVariant.title1}>دیتایی موجود نیست</Text>
+            </Flex>
           ) : (
             <ArticleManagementList data={articleData?.articles as any} />
           )}

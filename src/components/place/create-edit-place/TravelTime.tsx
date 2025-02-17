@@ -2,15 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import DatePicker from 'react-multi-date-picker';
-import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 
 import { RadioGroup } from '@radix-ui/themes';
 import { styled } from 'styled-components';
 
 import { placeWorkTimeSchedule } from '@/constants/place';
-import { Flex, Grid, Text } from '@/libs/primitives';
-import { timeStringToDate } from '@/libs/utils';
+import { Flex, Grid, Text, TextField } from '@/libs/primitives';
 import { Boxshadow, colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -111,7 +108,7 @@ const TravelTime = () => {
    */
   const PlaceWorkTimes = useWatch({ name: 'PlaceWorkTimes' });
   const [schedule, setSchedule] = useState(serializePlaceWorkTimes(placeWorkTimeSchedule, PlaceWorkTimes));
-  const { setValue } = useFormContext();
+  const { setValue, watch } = useFormContext();
 
   /**
    * useEffect
@@ -161,6 +158,8 @@ const TravelTime = () => {
     setValue('PlaceWorkTimes', schedule);
   }, [schedule]);
 
+  console.log(watch('PlaceWorkTimes'), 'PlaceWorkTimes');
+
   /**
    * template
    * _______________________________________________________________________________
@@ -197,21 +196,22 @@ const TravelTime = () => {
                   return (
                     <Grid gap={'8px'} key={v.key}>
                       <Text {...typoVariant.description1}>{v.faKey}</Text>
-                      <DatePicker
-                        key={v.key}
-                        inputMode='none'
-                        inputClass='input-class'
+
+                      <TextField
+                        maxLength={5}
                         placeholder='ساعت'
-                        disabled={(dayItem && dayItem.type === 'CLOSED') || dayItem.type === 'OPEN'}
-                        value={timeStringToDate(v.time)}
-                        onChange={dateObject => {
-                          if (dateObject) {
-                            handleTiming(item.dayOfWeek, dateObject.format('HH:mm'), v.key);
+                        value={v.time}
+                        onChange={e => {
+                          let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+                          if (value.length > 4) value = value.slice(0, 4); // Ensure a max of 4 digits (HHMM)
+
+                          if (value.length >= 3) {
+                            value = `${value.slice(0, 2)}:${value.slice(2, 4)}`; // Format to HH:MM
                           }
+
+                          handleTiming(item.dayOfWeek, value, v.key);
                         }}
-                        disableDayPicker
-                        format='HH:mm'
-                        plugins={[<TimePicker hideSeconds format='HH:mm' key={v.key} />]}
                       />
                     </Grid>
                   );

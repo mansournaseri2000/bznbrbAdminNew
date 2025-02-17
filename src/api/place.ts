@@ -4,10 +4,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { fomrData } from '@/components/place/create-edit-place/defaultValues';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
-import { serializeTripType } from '@/libs/utils';
-import { ApiManager, ApiManagerV2 } from '@/libs/utils/axios.config';
+import { AdminUploaderImage, ApiManager, ApiManagerV2 } from '@/libs/utils/axios.config';
 import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
-import { detailsSerializerForEdit, flattenPlaceWorkTime } from '@/libs/utils/place/place-seryalizer';
+import { flattenPlaceWorkTime } from '@/libs/utils/place/place-seryalizer';
 import { PlaceListResponse, PlaceResponse, RemovePlaceResponse, SearchPlaceResponse } from '@/types/place';
 import { addRoutingGuidBody } from '@/types/place/place';
 import { PlaceConstantResponse } from '@/types/place/place-constant';
@@ -194,21 +193,12 @@ export const getPlaceSSR = async (id: number, status: string) => {
  * create-place services
  * _______________________________________________________________________________
  */
-export const createPlace = async (params: fomrData) => {
+export const createPlace = async (params: fomrData | any) => {
   const {
     name,
     basicInfoDescription,
-    sub_category_id,
     cityID,
     lat,
-    airplane,
-    car,
-    bus,
-    subway,
-    ship,
-    taxi,
-    train,
-    pictures,
     lng,
     address,
     tell,
@@ -220,27 +210,34 @@ export const createPlace = async (params: fomrData) => {
     metakeywords,
     keywords,
     features,
-    hike,
     PlaceDetails,
     TripTypes,
     PlaceTripSeasons,
     PlaceCategories,
     tripLimitations,
-    category_id,
     cost,
+    sub_category_id,
     renown,
     PlaceWorkTimes,
     area,
     trip_value,
     rating,
     suggested_time,
+    status,
+    type,
+    isPublished,
+    vehicleOptions,
+    townId,
+    slug,
   } = params;
+
   const res = await ApiManager.post<ApiData<PlaceResponse>>('places/create', {
     name: name,
-    city_id: cityID == 0 ? undefined : Number(cityID),
     description: basicInfoDescription,
-    category_id: sub_category_id == 0 ? undefined : Number(sub_category_id),
-    parentCategory_id: category_id == 0 ? undefined : Number(category_id),
+    category_id: Number(sub_category_id) === 0 ? undefined : Number(sub_category_id),
+    city_id: Number(cityID) === 0 ? undefined : Number(cityID),
+    townId: Number(townId),
+    slug: slug,
     lat: lat,
     lng: lng,
     address: address,
@@ -252,28 +249,30 @@ export const createPlace = async (params: fomrData) => {
     keywords: keywords,
     meta_description: meta_description,
     meta_title: meta_title,
-    airplane: airplane,
-    bus: bus,
-    car: car,
-    hike: hike,
-    ship: ship,
-    subway: subway,
-    taxi: taxi,
-    train: train,
+    airplane: vehicleOptions.filter((item: any) => item.key === 'airplane')[0].content,
+    bus: vehicleOptions.filter((item: any) => item.key === 'bus')[0].content,
+    car: vehicleOptions.filter((item: any) => item.key === 'car')[0].content,
+    hike: vehicleOptions.filter((item: any) => item.key === 'hike')[0].content,
+    ship: vehicleOptions.filter((item: any) => item.key === 'ship')[0].content,
+    subway: vehicleOptions.filter((item: any) => item.key === 'subway')[0].content,
+    taxi: vehicleOptions.filter((item: any) => item.key === 'taxi')[0].content,
+    train: vehicleOptions.filter((item: any) => item.key === 'train')[0].content,
     PlaceFeatures: features,
     PlaceDetails: PlaceDetails,
-    TripTypes: serializeTripType(TripTypes as any),
+    TripTypes: TripTypes,
     PlaceWorkTimes: flattenPlaceWorkTime(PlaceWorkTimes as any),
     PlaceCategories: PlaceCategories,
     PlaceTripLimitations: tripLimitations,
     PlaceTripSeasons: PlaceTripSeasons,
-    pictures: pictures,
     cost: cost,
     renown: renown,
     area: area,
     rating: Number(rating),
     trip_value: Number(trip_value),
     suggested_time: String(suggested_time),
+    type: type,
+    isPublished: isPublished === 'true' || isPublished === true ? true : isPublished === 'false' || isPublished === false ? false : isPublished,
+    status: status === 'true' || status === true ? true : status === 'false' || status === false ? false : String(status),
   });
   return res.data;
 };
@@ -300,14 +299,6 @@ export const editPlace = async (params: fomrData, id: number) => {
     sub_category_id,
     cityID,
     lat,
-    airplane,
-    car,
-    bus,
-    subway,
-    ship,
-    taxi,
-    train,
-    pictures,
     lng,
     address,
     tell,
@@ -319,7 +310,6 @@ export const editPlace = async (params: fomrData, id: number) => {
     metakeywords,
     keywords,
     features,
-    hike,
     PlaceDetails,
     PlaceTripSeasons,
     PlaceCategories,
@@ -333,6 +323,13 @@ export const editPlace = async (params: fomrData, id: number) => {
     rating,
     trip_value,
     suggested_time,
+    status,
+    type,
+    isPublished,
+    vehicleOptions,
+    gender,
+    townId,
+    slug,
   } = params;
 
   const res = await ApiManager.put<ApiData<PlaceResponse>>(`places/update/${id}`, {
@@ -341,6 +338,8 @@ export const editPlace = async (params: fomrData, id: number) => {
     category_id: String(sub_category_id).length !== 0 ? Number(sub_category_id) : undefined,
     city_id: String(cityID).length !== 0 ? Number(cityID) : undefined,
     parentCategory_id: String(category_id).length !== 0 ? Number(category_id) : undefined,
+    townId: Number(townId),
+    slug: slug,
     lat: lat,
     lng: lng,
     address: address,
@@ -352,28 +351,31 @@ export const editPlace = async (params: fomrData, id: number) => {
     keywords: keywords,
     meta_description: meta_description,
     meta_title: meta_title,
-    airplane: airplane,
-    bus: bus,
-    car: car,
-    hike: hike,
-    ship: ship,
-    subway: subway,
-    taxi: taxi,
-    train: train,
+    airplane: vehicleOptions.filter((item: any) => item.key === 'airplane')[0].content,
+    bus: vehicleOptions.filter((item: any) => item.key === 'bus')[0].content,
+    car: vehicleOptions.filter((item: any) => item.key === 'car')[0].content,
+    hike: vehicleOptions.filter((item: any) => item.key === 'hike')[0].content,
+    ship: vehicleOptions.filter((item: any) => item.key === 'ship')[0].content,
+    subway: vehicleOptions.filter((item: any) => item.key === 'subway')[0].content,
+    taxi: vehicleOptions.filter((item: any) => item.key === 'taxi')[0].content,
+    train: vehicleOptions.filter((item: any) => item.key === 'train')[0].content,
     PlaceFeatures: features,
-    PlaceDetails: detailsSerializerForEdit(PlaceDetails as any),
+    PlaceDetails: PlaceDetails,
+    gender: gender,
     TripTypes: TripTypes,
     PlaceWorkTimes: flattenPlaceWorkTime(PlaceWorkTimes as any),
     PlaceCategories: PlaceCategories,
     PlaceTripLimitations: tripLimitations,
     PlaceTripSeasons: PlaceTripSeasons,
-    pictures: pictures,
     cost: cost,
     renown: renown,
     area: area,
     rating: Number(rating),
     trip_value: Number(trip_value),
     suggested_time: suggested_time,
+    type: type,
+    isPublished: isPublished === 'true' || isPublished === true ? true : isPublished === 'false' || isPublished === false ? false : isPublished,
+    status: status === 'true' ? true : status === 'false' ? false : status,
   });
 
   return res.data;
@@ -381,6 +383,128 @@ export const editPlace = async (params: fomrData, id: number) => {
 
 export const addRoutingGuid = async (params: addRoutingGuidBody) => {
   const res = await clientApiManagerV2.post<ApiData<{ data: string }>>('places/user-edit', params);
+
+  return res.data;
+};
+
+export type ImageItem = {
+  id: number;
+  path: string;
+  description: string;
+  alt: string;
+  status: boolean;
+};
+
+type ImageGalleryResponse = {
+  gallery: ImageItem[];
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+};
+
+export const getImageGallery = async (id: number, page: number) => {
+  const res = await ApiManager.get<ApiData<ImageGalleryResponse>>(`places/gallery/${id}?page=${page}`);
+
+  return res.data.data;
+};
+
+export type UploadMainImageParams = {
+  type: string;
+  placeId: number;
+  file: File;
+  summery: string;
+  slug: string;
+  alt: string;
+  description: string;
+  townId: number;
+};
+
+export const UploadMainImage = async (params: UploadMainImageParams) => {
+  const formData = new FormData();
+
+  formData.append('type', params.type);
+  formData.append('placeId', params.placeId.toString());
+  formData.append('file', params.file);
+  formData.append('summery', params.summery);
+  formData.append('slug', params.slug);
+  formData.append('alt', params.alt);
+  formData.append('description', params.description);
+  formData.append('townId', params.townId.toString());
+
+  const res = await AdminUploaderImage.post<ApiData<{ data: string }>>('admin/uploads/image', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return res.data;
+};
+
+export type updateMainImageInfoBody = {
+  id: number;
+  type: string;
+  alt: string;
+  description: string;
+  summery: string;
+  townId: number;
+};
+
+export const updateMainImageInfo = async (params: updateMainImageInfoBody) => {
+  const res = await ApiManager.patch<ApiData<{ data: string }>>('upload/edit', params);
+
+  return res.data;
+};
+
+export type TravelMethodsItem = {
+  id: number;
+  status: boolean;
+  travelMode: string;
+  description: string;
+};
+
+export type TravelMethodsResponse = {
+  filteredSuggestions: TravelMethodsItem[];
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+};
+
+export const getTravelMethods = async (id: number, page: number) => {
+  const res = await ApiManager.get<ApiData<TravelMethodsResponse>>(`places/methods/${id}?page=${page}`);
+
+  return res.data.data;
+};
+
+export const removeImageGallery = async (id: number) => {
+  const res = await ApiManager.delete<ApiData<any>>(`upload`, {
+    data: {
+      id: id,
+      type: 'PLACE',
+    },
+  });
+
+  return res.data;
+};
+
+export const removeMainImage = async (id: number) => {
+  const res = await ApiManager.delete<ApiData<any>>(`upload`, {
+    data: {
+      id: id,
+      type: 'PLACE',
+    },
+  });
+
+  return res.data;
+};
+
+export const toggleMakeIsTop = async (id: number) => {
+  const res = await ApiManager.patch<ApiData<any>>(`places/makeTopPlacePicUserUploads/${id}`);
+
+  return res.data;
+};
+
+export const removeImageSendUser = async (id: number) => {
+  const res = await ApiManager.delete<ApiData<any>>(`places/deletePlacePicUserUploads/${id}`);
 
   return res.data;
 };

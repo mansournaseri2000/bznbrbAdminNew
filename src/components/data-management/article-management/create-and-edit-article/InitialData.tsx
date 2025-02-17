@@ -57,7 +57,7 @@ const InitialData = ({ categories, province }: Props) => {
             <SelectRoot
               {...field}
               placeholder='زیر دسته بندی'
-              disabled={!Boolean(subCategory)}
+              disabled={!Boolean(watch("parentCategoryId"))}
               value={String(field.value)}
               onValueChange={val => {
                 field.onChange(val);

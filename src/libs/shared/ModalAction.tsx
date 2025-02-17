@@ -16,9 +16,12 @@ type Props = {
   isFull?: boolean;
   onCloseButton?: () => void;
   onSubmit?: () => void;
+  isDisableSubmitBtn?: boolean;
+  isSubmit?: boolean;
+  disabled?: boolean;
 };
 
-const ModalAction = ({ closeButtonText, submitButtonText, isLoading, onCloseButton, onSubmit, isFull }: Props) => {
+const ModalAction = ({ isSubmit = true, closeButtonText, submitButtonText, isLoading, onCloseButton, onSubmit, isFull, isDisableSubmitBtn = false, disabled = false }: Props) => {
   return (
     <Flex
       height={'max-content'}
@@ -38,10 +41,17 @@ const ModalAction = ({ closeButtonText, submitButtonText, isLoading, onCloseButt
       bottom={'0px'}
     >
       <Grid gap={'16px'} columns={'2'} width={isFull ? '100%' : 'max-content'}>
-        <Button onClick={onSubmit} type='submit' variant='soft' size={'3'} style={{ width: isFull ? '100%' : 'fit-content', padding: '9.5px 38px' }}>
+        <Button
+          disabled={isDisableSubmitBtn|| disabled}
+          onClick={onSubmit}
+          type={isSubmit ? 'submit' : 'button'}
+          variant='soft'
+          size={'3'}
+          style={{ width: isFull ? '100%' : 'fit-content', padding: '9.5px 38px' }}
+        >
           {isLoading ? <Spinner /> : <Text {...typoVariant.body1}>{submitButtonText}</Text>}
         </Button>
-        <Button type='button' variant='solid' size={'3'} onClick={onCloseButton} style={{ width: isFull ? '100%' : 'fit-content', padding: '9.5px 38px' }}>
+        <Button type='button' colorVariant='PINK' size={'3'} onClick={onCloseButton} style={{ width: isFull ? '100%' : 'fit-content', padding: '9.5px 46px' }}>
           <Text {...typoVariant.body1}>{closeButtonText}</Text>
         </Button>
       </Grid>

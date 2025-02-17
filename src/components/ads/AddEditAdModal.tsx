@@ -6,7 +6,6 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { Flex, Grid, Modal, TextArea, TextField } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import { Close } from '@/public/icon';
 import { colorPalette } from '@/theme';
 
 type Props = {
@@ -23,7 +22,7 @@ const AddEditAdModal = (props: Props) => {
 
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-      <ModalHeader title={type === 'edit' ? 'ویرایش آگهی' : 'افزودن آگهی'} handleClose={() => setIsOpen(false)} icon={<Close />} />
+      <ModalHeader title={type === 'edit' ? 'ویرایش آگهی' : 'افزودن آگهی'} handleClose={() => setIsOpen(false)} />
       <Grid width={'100%'} p={'4'} style={{ justifyItems: 'center' }}>
         <Flex width={'328px'} height={'200px'} align={'center'} justify={'center'} mb={'3'} style={{ borderRadius: 8, border: `1px solid ${colorPalette.gray[6]}` }}>
           image picker

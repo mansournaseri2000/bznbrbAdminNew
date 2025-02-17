@@ -7,22 +7,36 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getAllTopCommentsForProvince } from '@/api/confirmations';
 import ProvinceDetailCard from '@/components/develop/confirmations/province-detail-card/ProvinceDetailCard';
-import { Grid } from '@/libs/primitives';
+import { Flex, Grid } from '@/libs/primitives';
+import { ToastError } from '@/libs/shared/toast/Toast';
 import { convertTimestampToPersianDate } from '@/libs/utils/convertTimestampToPersianDate';
 
 const TopCommentsManagement = () => {
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
-  const { data: topCommentsData, isLoading, isFetching } = useQuery({ queryKey: ['top-comments'], queryFn: async () => await getAllTopCommentsForProvince() });
+  const { data: data, isLoading, isFetching, isError } = useQuery({ queryKey: ['top-comments'], queryFn: async () => await getAllTopCommentsForProvince() });
 
-  console.log('topComments', topCommentsData);
+  console.log('topComments', data);
+  /**
+   * Loading and Error
+   * _______________________________________________________________________________
+   */
+  if (isLoading || isFetching)
+    return (
+      <Flex width={'100%'} height={'90vh'} justify={'center'} align={'center'}>
+        <Spinner style={{ scale: 2.5 }} />
+      </Flex>
+    );
 
-  if (isLoading || isFetching || !topCommentsData) return <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '100px' }} />;
-
+  if (!data || isError) return ToastError('مشکلی پیش آمده . لطفا دوباره تلاش نمایید');
+  /**
+   * JSX
+   * _______________________________________________________________________________
+   */
   return (
     <Grid width={'100%'} columns={'2'} gap={'5'}>
-      {topCommentsData?.map(item => (
+      {data.map(item => (
         <ProvinceDetailCard
           key={item.id}
           type='comments'

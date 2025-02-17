@@ -6,6 +6,7 @@ import { Spinner } from '@radix-ui/themes';
 import { useQueries } from '@tanstack/react-query';
 
 import { getAllPlacesConstants, getPlace } from '@/api/place';
+import { Flex, Heading } from '@/libs/primitives';
 import { PlaceResponse } from '@/types/place';
 
 const CreateAndEditPlaceRootComponent = dynamic(() => import('@/components/place/create-edit-place/CreateAndEditPlaceRootComponent'), {
@@ -40,16 +41,26 @@ const CreateAndEditPlacePage = ({ params }: { params: { slug: string } }) => {
   const { data: constantData } = constantResult;
   const { data: placeData, isLoading: placeIsLoading } = editPlaceResult;
 
-  console.log('PlaceData', placeData);
+  if (!constantData || placeIsLoading)
+    return (
+      <Flex style={{border:"1px solid red"}} width={'100%'} height={'100vh'} justify={'center'} align={'center'}>
+        <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
+      </Flex>
+    );
 
-  if (!constantData || placeIsLoading) return <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />;
+ 
 
   /**
    * template
    * _______________________________________________________________________________
    */
 
-  return <CreateAndEditPlaceRootComponent placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />;
+  return (
+    <>
+      {status === 'edit' ? <Heading>ویرایش نقطه</Heading> : <Heading>ساخت نقطه</Heading>}
+      <CreateAndEditPlaceRootComponent placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />
+    </>
+  );
 };
 
 export default CreateAndEditPlacePage;

@@ -1,173 +1,131 @@
-'use client';
+import React from 'react';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 
-import React, { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { PlusIcon } from '@radix-ui/react-icons';
-import { Spinner } from '@radix-ui/themes';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import styled from 'styled-components';
-
-import { createSubCategory, deleteCategory, editCategory, editCategoryBySubCategories, getSingleCategory } from '@/api/additional-detail';
-import { Flex, IconButton, TextField } from '@/libs/primitives';
+import { editCategory, Param, UploadIcon, UploadImage } from '@/api/additional-detail';
+import { Flex, TextField } from '@/libs/primitives';
+import ImagePicker2 from '@/libs/shared/ImagePicker2';
+import ItemWithUploader from '@/libs/shared/item-with-uploader/ItemWithUploader';
 import ModalAction from '@/libs/shared/ModalAction';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
-import { Close, Pencil } from '@/public/icon';
-import { colorPalette } from '@/theme';
-import { CategoriesResponse, ChildrenDetail, SubCategoryBody } from '@/types/additional-detail/additional-detail';
+import Uploader from '@/libs/shared/uploader/Uploader';
+import { CategoriesResponse } from '@/types/additional-detail/additional-detail';
 
 type Props = {
-  setIsOpen: React.Dispatch<React.SetStateAction<{ isOpen: boolean; key: 'edit' }>>;
+  setIsOpen: React.Dispatch<React.SetStateAction<{ isOpen: boolean; key: 'edit-category' }>>;
   data: CategoriesResponse;
 };
 
 interface CategoryFormData {
-  categoryName: string;
-  parent_id: number | null;
-  subCategoryList: ChildrenDetail[];
-  subCategoryItem: string;
-  subCategoryField: string;
+  name: string;
+  imagePath: string;
+  imageFile: File;
+  iconPath: string;
+  iconFile: File;
+  localImagePath: File | null;
+  localIconPath: File | null;
+  isBanner: boolean;
+  isIcon: boolean;
 }
 
-const EditCategoryModal = ({ setIsOpen, data }: Props) => {
-  /*
-   *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
-   */
-
-  const { data: singleCategoryData } = useQuery({ queryKey: ['single-category'], queryFn: async () => await getSingleCategory(data.id), initialData: data });
-
+const EditCategoryModal = ({ data, setIsOpen }: Props) => {
+  //   /*
+  //    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
+  //    */
   const methods = useForm<CategoryFormData>({
     defaultValues: {
-      categoryName: singleCategoryData.name,
-      parent_id: singleCategoryData.parent_id,
-      subCategoryList: singleCategoryData.children,
-      subCategoryItem: '',
+      name: data?.name,
+      imagePath: data?.banner,
+      iconPath: data?.icon,
+      localImagePath: null,
+      localIconPath: null,
+      isBanner: Boolean(data?.banner) ? true : false,
+      isIcon: Boolean(data?.icon) ? true : false,
     },
   });
-  const { control, watch, setValue } = methods;
+  const { control, watch } = methods;
   const queryClient = useQueryClient();
+  //   /**
+  //    * Services
+  //    * _______________________________________________________________________________
+  //    */
 
-  useEffect(() => {
-    setValue('subCategoryList', singleCategoryData.children);
-  }, [singleCategoryData]);
-
-  /**
-   * Services
-   * _______________________________________________________________________________
-   */
-
-  // console.log('SINGLE CATEGORY DATA', singleCategoryData, data);
-  console.log('WATCH FOR NAME', watch('categoryName'));
-
-  const { mutate: editCategoryNameMutate, isPending: editCategoryNamePending } = useMutation({
-    mutationFn: async () => await editCategory(data.id, watch('categoryName') as any),
-    onSuccess: data => {
-      if (data.status === true) {
-        ToastSuccess('دسته بندی مورد نظر با موفقیت ویرایش شد');
-      } else {
-        ToastError('لطفا دوباره تلاش نمایید');
-      }
-    },
+  const { mutate: uploadImageMutate } = useMutation({
+    mutationFn: async (body: Param) => await UploadImage(body),
   });
 
-  const { mutate: createSubCategoryMutate, isPending: createSubCategoryPending } = useMutation({
-    mutationFn: async (body: SubCategoryBody) => await createSubCategory(body),
-    onSuccess: data => {
-      if (data.status === true) {
-        queryClient.invalidateQueries({ queryKey: ['single-category'] });
-        ToastSuccess('زیردسته بندی مورد نظر با موفقیت ایجاد شد');
-        setValue('subCategoryItem', '');
-      } else {
-        ToastError('لطفا دوباره تلاش نمایید');
-      }
-    },
-  });
-
-  const { mutate: deleteSubCategoryMutate } = useMutation({
-    mutationFn: async (id: number) => deleteCategory(id),
-    onSuccess: async data => {
-      if (data.status === true) {
-        ToastSuccess('زیردسته بندی مورد نظر با موفقیت حذف شد');
-        queryClient.invalidateQueries({ queryKey: ['single-category'] });
-      } else {
-        ToastError(data.message);
-      }
-    },
+  const { mutate: uploadIconMutate } = useMutation({
+    mutationFn: async (body: Param) => await UploadIcon(body),
   });
 
   const { mutate: editCategoryMutate, isPending: editCategoryPending } = useMutation({
-    mutationFn: async () => await editCategoryBySubCategories(watch('subCategoryList') as any),
-    onSuccess: data => {
-      if (data.status === true) {
+    mutationFn: async () => await editCategory(data.id, watch('name') as any),
+    onSuccess: localData => {
+      if (localData.status === true) {
+        const localImage = watch('localImagePath');
+        const localIcon = watch('localIconPath');
+
+        if (localImage) {
+          uploadImageMutate({
+            categoryId: String(data.id),
+            file: watch('imagePath') as any,
+            type: 'CATEGORY',
+          });
+        }
+
+        if (localIcon) {
+          uploadIconMutate({
+            categoryId: String(data.id),
+            file: watch('iconPath') as any,
+            type: 'CATEGORY',
+          });
+        }
+
         queryClient.invalidateQueries({ queryKey: ['categories'] });
         ToastSuccess('دسته بندی مورد نظر با موفقیت ویرایش شد');
-        setIsOpen({ key: 'edit', isOpen: false });
+        setIsOpen({ key: 'edit-category', isOpen: false });
       } else {
         ToastError('لطفا دوباره تلاش نمایید');
       }
     },
   });
 
-  /**
-   * Hooks and Methods
-   * _______________________________________________________________________________
-   */
-
-  const addSubCategory = () => {
-    createSubCategoryMutate({ parent_id: singleCategoryData.id, subCategoryNames: [watch('subCategoryItem')] });
-  };
-
-  const removeSubCategory = (id: number) => {
-    deleteSubCategoryMutate(id);
-  };
+  //   /**
+  //    * Hooks and Methods
+  //    * _______________________________________________________________________________
+  //    */
 
   return (
-    <Flex maxHeight={'700px'} direction={'column'} p={'12px 16px'} gap={'4'} style={{ overflow: 'auto' }}>
-      <Flex align={'center'} gap={'3'}>
-        <Controller name='categoryName' control={control} render={({ field }) => <TextField {...field} placeholder='نام دسته بندی' />} />
-        <IconButton size={'3'} variant='soft' onClick={() => editCategoryNameMutate()}>
-          {editCategoryNamePending ? <Spinner /> : <Pencil />}
-        </IconButton>
-      </Flex>
-      <Flex width={'50%'} align={'center'} gap={'3'}>
-        <Controller name='subCategoryItem' control={control} render={({ field }) => <TextField {...field} placeholder='افزودن زیر دسته بندی' />} />
-        <IconButton size={'3'} variant='soft' onClick={addSubCategory}>
-          {createSubCategoryPending ? <Spinner /> : <PlusIcon />}
-        </IconButton>
-      </Flex>
-
-      <Flex width={'100%'} gap={'5'} wrap={'wrap'} p={'30.5px 16px'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
-        {watch('subCategoryList')?.map((item, index) => (
-          <Flex key={index} width={'fit-content'} gap={'3'} p={'9.5px 16px'} align={'center'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
-            <Controller
-              name={`subCategoryList[${index}].name` as any}
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} placeholder='' variant='soft' style={{ marginBottom: '-10px', backgroundColor: colorPalette.gray[3], border: 'none', width: 'fit-content' }} />
-              )}
-            />
-
-            <IconButton size={'1'} variant='surface' onClick={() => removeSubCategory(item.id)}>
-              <CustomClose />
-            </IconButton>
-          </Flex>
-        ))}
+    <FormProvider {...methods}>
+      <Flex direction={'column'} align={'center'} p={'12px 16px'} gap={'4'}>
+        <Flex gap={'3'}>
+          {watch('imagePath') ? (
+            <ItemWithUploader resetStore='isBanner' type='image' localPath={`${watch('localImagePath')}`} filePath={data?.banner} isOrigin={watch('isBanner')} />
+          ) : (
+            <ImagePicker2 resetStore='isBanner' name='imagePath' localPath='localImagePath'>
+              <Uploader type='pic' />
+            </ImagePicker2>
+          )}
+          {watch('iconPath') ? (
+            <ItemWithUploader resetStore='isIcon' type='svg' localPath={`${watch('localIconPath')}`} filePath={data?.icon} isOrigin={watch('isIcon')} />
+          ) : (
+            <ImagePicker2 resetStore='isIcon' name='iconPath' localPath='localIconPath'>
+              <Uploader type='icon' />
+            </ImagePicker2>
+          )}
+        </Flex>
+        <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='' style={{ width: '50%', margin: '0 auto' }} />} />
       </Flex>
       <ModalAction
         submitButtonText='ثبت '
         closeButtonText='لغو'
-        onCloseButton={() => setIsOpen({ key: 'edit', isOpen: false })}
+        onCloseButton={() => setIsOpen({ key: 'edit-category', isOpen: false })}
         onSubmit={() => editCategoryMutate()}
         isLoading={editCategoryPending}
       />
-    </Flex>
+    </FormProvider>
   );
 };
 
 export default EditCategoryModal;
-
-const CustomClose = styled(Close)`
-  path {
-    fill: ${colorPalette.pink[11]};
-  }
-`;

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 import styled from 'styled-components';
 
@@ -15,9 +16,19 @@ type CustomSearchProps = {
 };
 
 const CustomSearch = forwardRef<HTMLDivElement, CustomSearchProps>(({ placeholder, defaultValue, onClick, ...rest }, ref) => {
+  const { setValue } = useFormContext();
   return (
     <Wrapper {...rest} ref={ref} height={'fit-content'}>
-      <CustomTextField placeholder={placeholder} variant='surface' defaultValue={defaultValue} />
+      <CustomTextField
+        {...rest}
+        ref={ref as any}
+        placeholder={placeholder}
+        variant='surface'
+        defaultValue={defaultValue}
+        onChange={() => {
+          setValue('page', 1);
+        }}
+      />
       <IconButton size={'4'} variant='soft' onClick={onClick}>
         <Search />
       </IconButton>
@@ -30,6 +41,7 @@ CustomSearch.displayName = 'CustomSearch';
 export default CustomSearch;
 
 const Wrapper = styled(Flex)`
+  max-height: 48px;
   align-items: center;
   border: 1px solid ${colorPalette.gray[7]};
   border-radius: 12px;

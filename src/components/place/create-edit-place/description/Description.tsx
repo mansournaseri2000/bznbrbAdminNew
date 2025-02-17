@@ -23,16 +23,17 @@ type Props = {
 };
 
 const Description = ({ details }: Props) => {
-  const { setValue } = useFormContext();
+  const { setValue, getValues } = useFormContext();
   const PlaceDetails = useWatch({ name: 'PlaceDetails' });
+
   const [key, setKey] = useState<{ id: number; name: string }>(details[0]);
 
   const [editorStates, setEditorStates] = useState(
     details.reduce((acc, field) => {
-      const detail = PlaceDetails?.find((detail: { id: number }) => detail.id === field.id);
+      const detail = PlaceDetails?.find((detail: { detailId: number }) => detail.detailId === field.id);
 
-      if (detail && detail.description) {
-        const blocksFromHTML = convertFromHTML(detail.description);
+      if (detail && detail.descriptions) {
+        const blocksFromHTML = convertFromHTML(detail.descriptions);
         const contentState = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
         acc[field.id] = EditorState.createWithContent(contentState);
       } else {
@@ -43,34 +44,31 @@ const Description = ({ details }: Props) => {
     }, {} as { [key: number]: EditorState })
   );
 
-  // Function to handle editor state change
+  // Function to handle editor state change and update descriptions dynamically
   const handleEditorStateChange = (id: number, newState: EditorState) => {
-    setEditorStates({
-      ...editorStates,
+    setEditorStates(prev => ({
+      ...prev,
       [id]: newState,
-    });
-  };
+    }));
 
-  // Function to handle form submission
-  const handleSubmit = () => {
-    const PlaceDetails = details
-      .map(field => {
-        const contentState = editorStates[field.id].getCurrentContent();
-        const descriptions = draftToHtml(convertToRaw(contentState)).trim(); // Convert to HTML and trim spaces
+    // Convert editor content to HTML
+    const contentState = newState.getCurrentContent();
+    const descriptions = draftToHtml(convertToRaw(contentState)).trim();
 
-        // Return only if descriptions is not an empty string
-        if (descriptions !== '<p></p>' && descriptions !== '') {
-          return {
-            detailId: field.id,
-            descriptions,
-          };
-        }
+    // Prevent updating if content is empty
+    if (descriptions === '<p></p>' || descriptions === '') return;
 
-        return null;
-      })
-      .filter(detail => detail !== null);
+    // Update PlaceDetails in react-hook-form
+    const updatedDetails = getValues('PlaceDetails') || [];
+    const updatedIndex = updatedDetails.findIndex((detail: { detailId: number }) => detail.detailId === id);
 
-    setValue('PlaceDetails', PlaceDetails);
+    if (updatedIndex !== -1) {
+      updatedDetails[updatedIndex].descriptions = descriptions;
+    } else {
+      updatedDetails.push({ detailId: id, descriptions });
+    }
+
+    setValue('PlaceDetails', updatedDetails, { shouldDirty: true });
   };
 
   return (
@@ -87,23 +85,17 @@ const Description = ({ details }: Props) => {
 
         {/* Render the selected editor */}
         <Grid gap={'16px'}>
-          <Flex justify={'between'} align={'center'}>
-            <Text>{key.name}</Text>
-            <Button style={{ width: 'max-content', minWidth: '150px' }} variant='soft' size={'4'} type='button' onClick={handleSubmit}>
-              <Text>ثبت</Text>
-            </Button>
-          </Flex>
           <Editor
             editorStyle={{
-              minHeight: '150px',
+              minHeight: '144px',
               overflow: 'auto',
-              border: '1px solid #00000046',
+              border: '1px solid #CDCED7',
               borderRadius: '8px',
               padding: '8px',
               position: 'static',
               height: 'fit-content',
             }}
-            editorState={editorStates[key.id]} // Set the correct editor state for the selected key
+            editorState={editorStates[key.id]}
             toolbarClassName='toolbarClassName'
             wrapperClassName='wrapperClassName'
             editorClassName='editorClassName'

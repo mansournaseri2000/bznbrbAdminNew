@@ -11,7 +11,6 @@ import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { getPlaceComments, getPlaceImproveContent, publishTravelMethod, removeCommentForPlace, removePlaceImproveContent, removeTravelMethod } from '@/api/data-management';
 import { getPlace } from '@/api/place';
 import CommentCard from '@/components/develop/data-management/comment-card/CommentCard';
-import ImageCard from '@/components/develop/data-management/image-card/ImageCard';
 import DataCard from '@/components/develop/shared/data-card/DataCard';
 import { Box, Button, Flex, Grid, IconButton, Modal, Text } from '@/libs/primitives';
 import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
@@ -69,11 +68,11 @@ const PointDetailRoot = () => {
       },
       {
         queryKey: ['point-comment'],
-        queryFn: async () => await getPlaceComments(Number(params.slug[2])),
+        queryFn: async () => await getPlaceComments(Number(params.slug[2]), 1, 6),
       },
       {
         queryKey: ['improve-content'],
-        queryFn: async () => await getPlaceImproveContent(Number(params.slug[2])),
+        queryFn: async () => await getPlaceImproveContent(Number(params.slug[2]), 1, 6),
       },
     ],
   });
@@ -302,7 +301,7 @@ const PointDetailRoot = () => {
          * images
          * _______________________________________________________________________________
          */}
-        <SimpleWrapper hero='تصاویر ارسال شده'>
+        {/* <SimpleWrapper hero='تصاویر ارسال شده'>
           <Grid columns={{ initial: '1', sm: '2', md: '3' }} gap={'5'}>
             {pointData.UserSentPicturesForPlace.length === 0 ? (
               <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
@@ -316,7 +315,7 @@ const PointDetailRoot = () => {
               </>
             )}
           </Grid>
-        </SimpleWrapper>
+        </SimpleWrapper> */}
       </Grid>
 
       {/**

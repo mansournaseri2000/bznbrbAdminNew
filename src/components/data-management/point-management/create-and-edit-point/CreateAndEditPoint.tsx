@@ -1,30 +1,37 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
+import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { createPlace, editPlace } from '@/api/place';
 import FilterCard from '@/components/develop/shared/filter-card/FilterCard';
 import { AnalysisRoot, FeaturesAndFacilities, GeographicalLocationRoot, PlaceInfo, SeoSettingsRoot } from '@/components/place';
-import { fomrData, placeCategories, placeTripLimitations, placeTripSeasons, placeTripTypes } from '@/components/place/create-edit-place/defaultValues';
+import CommentPoint from '@/components/place/create-edit-place/CommentPoint';
+import { fomrData, placeTripSeasons } from '@/components/place/create-edit-place/defaultValues';
 import ImageGallery from '@/components/place/create-edit-place/ImageGallery';
+import ImageSentPoint from '@/components/place/create-edit-place/ImageSentPoint';
+import ImproveContentPoint from '@/components/place/create-edit-place/ImproveContentPoint';
 import PrimaryImage from '@/components/place/create-edit-place/PrimaryImage';
 import RoutingGuid from '@/components/place/create-edit-place/routing-guid/RoutingGuid';
-import { createPointTabsOptions, editPointTabsOptions } from '@/constants/data-management';
-import { categoriesConstants, placeWorkTimeSchedule, seasons } from '@/constants/place';
-import { Button, Flex, Grid, SelectRoot, Text } from '@/libs/primitives';
+import { createPointTabsOptions, editPointTabsOptions, formPublishedOptions, formStatusOptions } from '@/constants/data-management';
+import { placeWorkTimeSchedule } from '@/constants/place';
+import { Button, Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import SimpleWrapper2 from '@/libs/shared/wrapper/SimpleWrapper2';
 import { serializeCategories, serializeFeatures, serializePlaceWorkTimeSchedule, serializeTripLimitations, serializeTripSeasons } from '@/libs/utils';
+import { serializeTripTypes } from '@/libs/utils/place/place-seryalizer';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { CreatePointButtonTypes, EditPointButtonTypes } from '@/types/data-management/point';
 import { PlaceConstantResponse, PlaceResponse } from '@/types/place';
+
+import RoutingGuideList from './RoutingGuideList';
 
 const Description = dynamic(() => import('@/components/place/create-edit-place/description/Description'), {
   ssr: false,
@@ -129,21 +136,27 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
    * _______________________________________________________________________________
    */
 
+  const placeDetailsSerializer = (data: { id: number; description: string }[]) => {
+    if (data?.length > 0) {
+      return data.map(item => ({
+        detailId: item.id,
+        descriptions: item.description,
+      }));
+    }
+    return [];
+  };
+
   const [buttonState, setButtonState] = useState<typeof status extends 'create-point' ? CreatePointButtonTypes : EditPointButtonTypes>(status === 'create-point' ? 'place-info' : 'place-info');
 
-  // const [buttonState, setButtonState] = useState<CreatePointButtonTypes>('place-info');
-  // const [editButtonState, setEditButtonState] = useState<EditPointButtonTypes>('place-info');
-
-  console.log('DATA', placeData);
   const model = {
-    taxi: placeData?.taxi,
-    bus: placeData?.bus,
-    subway: placeData?.subway,
-    car: placeData?.car,
-    train: placeData?.train,
-    airplane: placeData?.airplane,
-    hike: placeData?.hike,
-    ship: placeData?.ship,
+    taxi: Boolean(placeData?.taxi) ? placeData?.taxi : '',
+    bus: Boolean(placeData?.bus) ? placeData?.bus : '',
+    subway: Boolean(placeData?.subway) ? placeData?.subway : '',
+    car: Boolean(placeData?.car) ? placeData?.car : '',
+    train: Boolean(placeData?.train) ? placeData?.train : '',
+    airplane: Boolean(placeData?.airplane) ? placeData?.airplane : '',
+    hike: Boolean(placeData?.hike) ? placeData?.hike : '',
+    ship: Boolean(placeData?.ship) ? placeData?.ship : '',
   };
 
   const queryClient = useQueryClient();
@@ -152,36 +165,44 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     defaultValues:
       status == 'edit-point'
         ? {
-            placeCategory: '',
+            type: placeData?.type,
+            status: placeData?.status,
+            isPublished: placeData?.isPublished ? placeData?.isPublished : false,
             name: placeData?.name,
-            category_id: findByChildId(placeConstant?.categories, placeData?.category_id)?.parent_id,
-            sub_category_id: placeData?.category_id,
-            website: placeData?.website,
+            category_id: Boolean(placeData?.category_id) ? findByChildId(placeConstant.categories, placeData.category_id).parent_id : '',
+            sub_category_id: Boolean(placeData?.category_id) ? placeData?.category_id : '',
+            slug: placeData?.slug,
             basicInfoDescription: placeData?.description,
             basicInfosummary: placeData?.summary,
 
-            isLoading: false,
-            uploadImage: placeData?.UserSentPicturesForPlace,
-            pictures: placeData?.pictures,
-
-            provinceId: placeData?.Cities ? placeData?.Cities.Provinces.id : undefined,
-            cityID: placeData?.Cities ? placeData?.Cities.id : undefined,
+            provinceId: placeData?.Cities ? placeData?.Cities.Provinces.id : '',
+            cityID: placeData?.Cities ? placeData?.Cities.id : '',
+            area: placeData?.area,
+            townId: placeData?.Town?.id,
             tell: placeData?.tell,
+            website: placeData?.website,
             email: placeData?.email,
             address: placeData?.address,
             lat: placeData?.lat,
             lng: placeData?.lng,
-            area: placeData?.area,
+
             vehicleOptions: serializeModelObject(model),
 
-            airplane: placeData?.airplane,
-            bus: placeData?.bus,
-            car: placeData?.car,
-            hike: placeData?.hike,
-            ship: placeData?.ship,
-            subway: placeData?.subway,
-            taxi: placeData?.taxi,
-            train: placeData?.train,
+            PlaceDetails: placeDetailsSerializer(placeData?.PlaceDetails),
+
+            features: serializeFeatures(placeData?.features),
+
+            cost: placeData?.cost,
+            trip_value: placeData?.trip_value,
+            renown: placeData?.renown,
+            rating: placeData?.rating,
+            TripTypes: serializeTripData(placeData?.Place_TripType, placeConstant.tripDatas),
+            PlaceCategories: serializeCategoryData(placeData?.Place_Category, placeConstant.categories),
+            PlaceTripSeasons: placeData?.Place_TripSeason.length > 0 ? serializeTripSeasons(placeData.Place_TripSeason as any) : serializeTripSeasons(placeTripSeasons),
+            tripLimitations: serializeLimitaionData(placeData?.Place_TripLimitation, placeConstant.tripLimitations),
+            gender: placeData.gender,
+
+            PlaceWorkTimes: placeData?.PlaceWorkTime,
 
             keywords: placeData?.keywords,
             metakeywords: placeData?.tags,
@@ -190,59 +211,50 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             meta_title: placeData?.meta_title,
             metakeyword: '',
 
-            cost: placeData?.cost,
-            renown: placeData?.renown,
-            rating: placeData?.rating,
-            trip_value: placeData?.trip_value,
+            uploadImage: placeData?.UserSentPicturesForPlace,
+            pictures: placeData?.pictures,
             suggested_time: placeData?.suggested_time,
-
-            features: serializeFeatures(placeData?.features),
-            TripTypes: serializeTripData(placeData?.Place_TripType, placeConstant.tripDatas),
-            PlaceCategories: serializeCategoryData(placeData?.Place_Category, categoriesConstants),
-            PlaceTripSeasons: placeData?.Place_TripSeason.length > 0 ? serializeTripSeasons(placeData?.Place_TripSeason) : serializeTripSeasons(placeTripSeasons),
-            tripLimitations: serializeLimitaionData(placeData?.Place_TripLimitation, placeConstant.tripLimitations),
-            PlaceDetails: placeData?.PlaceDetails,
-            PlaceWorkTimes: placeData?.PlaceWorkTime,
           }
         : {
-            placeCategory: '',
+            type: 'PLACE',
+            isPublished: false,
+            status: false,
+
             name: '',
             category_id: '',
             sub_category_id: '',
-            website: '',
+            slug: '',
             basicInfoDescription: '',
             basicInfosummary: '',
 
-            placeID: null,
-
-            isLoading: false,
-            uploadImage: null,
-            pictures: [],
-
-            provinceId: '',
             cityID: '',
+            provinceId: '',
+            townId: '',
             tell: '',
+            website: '',
             email: '',
             address: '',
             lat: '',
             lng: '',
-            area: '',
+
             vehicleOptions: serializeModelObject(model),
+
+            PlaceDetails: [],
+
+            features: [],
 
             cost: 'LOW',
             renown: 'LOW',
             rating: 0,
             trip_value: 0,
-            suggested_time: 0,
 
-            airplane: null,
-            bus: null,
-            car: null,
-            hike: null,
-            ship: null,
-            subway: null,
-            taxi: null,
-            train: null,
+            TripTypes: serializeTripTypes(placeConstant?.tripDatas),
+            PlaceCategories: serializeCategories(placeConstant?.categories),
+            PlaceTripSeasons: serializeTripSeasons(placeConstant?.seasons as any),
+            tripLimitations: serializeTripLimitations(placeConstant?.tripLimitations as any),
+            gender: 'UNKNOWN',
+
+            PlaceWorkTimes: serializePlaceWorkTimeSchedule(placeWorkTimeSchedule),
 
             keywords: '',
             metakeywords: '',
@@ -251,29 +263,24 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             meta_title: '',
             metakeyword: '',
 
-            features: [],
-            TripTypes: placeTripTypes,
-            PlaceCategories: serializeCategories(placeCategories),
-            PlaceTripSeasons: serializeTripSeasons(placeTripSeasons),
-            tripLimitations: serializeTripLimitations(placeTripLimitations),
-            PlaceDetails: [],
-            PlaceWorkTimes: serializePlaceWorkTimeSchedule(placeWorkTimeSchedule),
+            pictures: [],
+            suggested_time: 0,
           },
   });
+  const { handleSubmit, control } = methods;
+
   /**
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const { handleSubmit } = methods;
-
-  const { mutate: editPlaceMutate } = useMutation({
+  const { mutate: editPlaceMutate, isPending: editPlaceLoading } = useMutation({
     mutationFn: async (params: fomrData) => editPlace(params, placeID),
     onSuccess: async data => {
       if (data.status === true) {
         ToastSuccess('اطلاعات شما با موفقیت ویرایش شد');
         queryClient.invalidateQueries({ queryKey: ['place'] });
         queryClient.invalidateQueries({ queryKey: ['all-places'] });
-        push('/');
+        push('/data-management/point-management');
       } else {
         ToastError('لطفا دوباره امتحان نمایید');
       }
@@ -283,30 +290,27 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     },
     gcTime: 0,
   });
-
-  const { mutate: createPlaceMutate } = useMutation({
+  const { mutate: createPlaceMutate, isPending: createPlaceIsLoading } = useMutation({
     mutationFn: async (params: fomrData) => createPlace(params),
     onSuccess: async data => {
-      if (data.status === true) {
+      if (data.statusCode === 201) {
         ToastSuccess('اطلاعات شما با موفقیت ثبت شد');
         queryClient.invalidateQueries({ queryKey: ['all-places'] });
-        push('/');
+        push('/data-management/point-management');
       } else {
-        ToastError('لطفا دوباره امتحان نمایید');
+        ToastError(String(data.message));
       }
     },
     onError: err => {
       console.log(err, 'createPlaceMutatecreatePlaceMutatecreatePlaceMutate');
     },
   });
-
   const onSubmit: SubmitHandler<fomrData> = data => {
-    if (status === 'edit') {
+    if (status === 'edit-point') {
       editPlaceMutate(data);
     } else {
       createPlaceMutate(data);
     }
-    // console.log(data, 'datadata');
   };
 
   return (
@@ -314,18 +318,87 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid width={'100%'} gapY={'5'}>
           <Grid width={'100%'} columns={'3'} gap={'5'}>
+            {/* first _______________________________________________________________________________ */}
             <FilterCard label='نوع نقطه'>
-              <SelectRoot placeholder='نقطه'></SelectRoot>
+              <Controller
+                name='type'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder='نقطه'
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {placeConstant.PlaceType.map((item, index) => (
+                      <SelectItem key={index} value={item.id}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
             </FilterCard>
+            {/* second _______________________________________________________________________________ */}
             <FilterCard label='انتشار'>
-              <SelectRoot placeholder='پیش نویس'></SelectRoot>
+              <Controller
+                name='isPublished'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder='انتشار'
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {formPublishedOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.value)}>
+                        {item.key}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
             </FilterCard>
+            {/* third _______________________________________________________________________________ */}
             <FilterCard label='وضعیت'>
-              <SelectRoot placeholder='فعال'></SelectRoot>
+              <Controller
+                name='status'
+                control={control}
+                render={({ field }) => (
+                  <SelectRoot
+                    {...field}
+                    placeholder='وضعیت'
+                    value={String(field.value)}
+                    onValueChange={val => {
+                      field.onChange(val);
+                    }}
+                  >
+                    {formStatusOptions.map(item => (
+                      <SelectItem key={item.id} value={String(item.value)}>
+                        {item.key}
+                      </SelectItem>
+                    ))}
+                  </SelectRoot>
+                )}
+              />
             </FilterCard>
           </Grid>
 
-          <Flex width={'100%'} gap={'11px'} pb={'4'} align={'center'} style={{ overflowX: 'auto', borderBottom: `1px solid ${colorPalette.gray[6]}` }}>
+          {/* tab-hero-button _______________________________________________________________________________ */}
+          <Flex
+            width={'100%'}
+            gap={'11px'}
+            p={'4'}
+            align={'center'}
+            style={{ overflowX: 'auto', backgroundColor: colorPalette.gray[1], border: `1px solid ${colorPalette.gray[6]}`, borderRadius: '8px', zIndex: '10' }}
+            position={'sticky'}
+            top={'70px'}
+          >
             {status === 'create-point' ? (
               <>
                 {createPointTabsOptions.map((item, index) => (
@@ -347,95 +420,104 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             )}
           </Flex>
 
+          {/* place-info _______________________________________________________________________________ */}
           {buttonState === 'place-info' && (
             <SimpleWrapper2 type='changeAble' hero='اطلاعات نقطه'>
               <PlaceInfo categoris={placeConstant ? placeConstant.categories : []} />
             </SimpleWrapper2>
           )}
 
+          {/* geographical-location _______________________________________________________________________________ */}
           {buttonState === 'geographical-location' && (
             <SimpleWrapper2 type='changeAble' hero='موقعیت جغرافیایی'>
-              <GeographicalLocationRoot province={placeConstant ? placeConstant.provinces : []} />
+              <GeographicalLocationRoot constant={placeConstant} province={placeConstant ? placeConstant.provinces : []} />
             </SimpleWrapper2>
           )}
 
+          {/* routing  _______________________________________________________________________________ */}
           {buttonState === 'routing' && (
             <SimpleWrapper2 type='changeAble' hero='چجوری برم'>
               <RoutingGuid />
             </SimpleWrapper2>
           )}
 
+          {buttonState === 'routing' && status === 'edit-point' && (
+            <SimpleWrapper2 type='readOnly' hero='چجوری برم'>
+              <RoutingGuideList id={placeData.id} />
+            </SimpleWrapper2>
+          )}
+
+          {/* Detail  _______________________________________________________________________________ */}
           {buttonState === 'description' && (
             <SimpleWrapper2 type='changeAble' hero='توضیحات'>
               <Description details={placeConstant ? placeConstant.details : []} key={'Description'} />
             </SimpleWrapper2>
           )}
 
+          {/* features-facilities  _______________________________________________________________________________ */}
           {buttonState === 'features-facilities' && (
             <SimpleWrapper2 type='changeAble' hero='ویژگی ها و امکانات'>
               <FeaturesAndFacilities featureItems={placeConstant ? placeConstant.features : []} />
             </SimpleWrapper2>
           )}
 
+          {/* AnalysisRoot  _______________________________________________________________________________ */}
           {buttonState === 'analysis' && (
             <SimpleWrapper2 type='changeAble' hero='تحلیل بزنیم بیرون'>
               <AnalysisRoot
+                constants={placeConstant}
                 tripLimitations={placeConstant ? placeConstant.tripLimitations : []}
-                seasons={placeConstant ? seasons : []}
+                seasons={placeConstant ? placeConstant.seasons : []}
                 tripDatas={placeConstant ? placeConstant.tripDatas : []}
                 Categories={placeConstant?.categories ? placeConstant.categories : []}
               />
             </SimpleWrapper2>
           )}
 
+          {/* travel-time  _______________________________________________________________________________ */}
           {buttonState === 'travel-time' && (
             <SimpleWrapper2 type='changeAble' hero='کی برم'>
               <TravelTime />
             </SimpleWrapper2>
           )}
 
+          {/* seo-setting  _______________________________________________________________________________ */}
           {buttonState === 'seo-setting' && (
             <SimpleWrapper2 type='changeAble' hero='تنظیمات سئو'>
               <SeoSettingsRoot />
             </SimpleWrapper2>
           )}
 
+          {/* images  _______________________________________________________________________________ */}
           {buttonState === 'images' && (
             <Flex direction={'column'} gap={'5'}>
               <SimpleWrapper2 type='changeAble' hero='تصویر شاخص'>
-                <PrimaryImage status={status} picture={placeData?.pictures[0]} />
+                <PrimaryImage constant={placeConstant} picture={placeData?.pictures.filter(item => item.type === 'MAIN')[0]} placeData={placeData} />
               </SimpleWrapper2>
               <SimpleWrapper2 type='changeAble' hero='گالری تصاویر'>
-                <ImageGallery status={status} userPicUpload={placeData?.UserSentPicturesForPlace} />
+                <ImageGallery constant={placeConstant} placeId={placeData.id} />
               </SimpleWrapper2>
               <SimpleWrapper2 type='readOnly' hero='تصاویر ارسال شده'>
-                تصاویر ارسال شده
+                <ImageSentPoint id={placeID} />
               </SimpleWrapper2>
             </Flex>
           )}
 
           {buttonState === 'improve-content' && (
             <SimpleWrapper2 type='readOnly' hero='اصلاح اطلاعات ارسال شده'>
-              اصلاح اطلاعات ارسال شده
+              <ImproveContentPoint id={placeID} />
             </SimpleWrapper2>
           )}
 
           {buttonState === 'comments' && (
             <SimpleWrapper2 type='readOnly' hero='نظرات'>
-              نظرات
+              <CommentPoint id={placeID} />
             </SimpleWrapper2>
           )}
-          {/* 
-          <AccordionWrapper hero='تصویر شاخص'>
-            <PrimaryImage status={status} picture={placeData?.pictures[0]} />
-          </AccordionWrapper>
-          <AccordionWrapper hero='گالری تصاویر'>
-            <ImageGallery status={status} userPicUpload={placeData?.UserSentPicturesForPlace} />
-          </AccordionWrapper> */}
 
           <Flex width={'100%'} align={'center'} gap={'5'} p={'4'} style={{ border: `1px solid ${colorPalette.gray[6]}`, borderRadius: 8, backgroundColor: colorPalette.gray[2] }}>
             <Button size={'3'} variant='soft' style={{ paddingInline: 48.5 }}>
-              <Text {...typoVariant.body1}>ثبت</Text>
+              {createPlaceIsLoading || editPlaceLoading ? <Spinner /> : <Text {...typoVariant.body1}>ثبت</Text>}
             </Button>
             <Button size={'3'} colorVariant='PINK' style={{ paddingInline: 51 }} onClick={() => back}>
               <Text {...typoVariant.body1}>لغو</Text>

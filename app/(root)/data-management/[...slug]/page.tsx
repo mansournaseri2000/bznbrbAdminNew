@@ -5,17 +5,15 @@ import React from 'react';
 import { Spinner } from '@radix-ui/themes';
 import { useQueries } from '@tanstack/react-query';
 
+import { getArticleById } from '@/api/data-management';
 import { getAllPlacesConstants, getPlace } from '@/api/place';
 import ArticleManagement from '@/components/data-management/article-management/ArticleManagement';
 import CreateAndEditArticle from '@/components/data-management/article-management/create-and-edit-article/CreateAndEditArticle';
 import CreateAndEditPoint from '@/components/data-management/point-management/create-and-edit-point/CreateAndEditPoint';
-import PointDetailRoot from '@/components/data-management/point-management/point-detail/PointDetailRoot';
 import PointManagement from '@/components/data-management/point-management/PointManagement';
 import Header from '@/layout/Header';
 import { Box, Flex, Grid } from '@/libs/primitives';
 import { PlaceResponse } from '@/types/place';
-
-// import { useForm } from 'react-hook-form';
 
 const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   /**
@@ -37,19 +35,34 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
         queryFn: async () => await getAllPlacesConstants(),
       },
       {
-        queryKey: ['place'],
+        queryKey: ['place', placeID],
         queryFn: async () => await getPlace(Number(placeID)),
+        enabled: status === 'create-point' || status === 'edit-point' || status === 'point-detail',
+      },
+      {
+        queryKey: ['article-data', placeID],
         staleTime: 0,
         gcTime: 0,
+        queryFn: async () => await getArticleById(Number(placeID)),
+        enabled: status === 'edit-article' || status === 'create-article',
       },
     ],
   });
 
-  const [constantResult, editPlaceResult] = results;
+  const [constantResult, editPlaceResult, articleByIdResult] = results;
   const { data: constantData } = constantResult;
   const { data: placeData, isLoading: placeIsLoading } = editPlaceResult;
+  const { data: articleByIdData, isLoading: articleByIdLoading } = articleByIdResult;
 
-  if (!constantData || placeIsLoading) return <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />;
+  if (!constantData || placeIsLoading || articleByIdLoading)
+    return (
+      <Flex width={'100%'} height={'100vh'} justify={'center'} align={'center'}>
+        <Spinner style={{ scale: 3 }} />
+      </Flex>
+    );
+
+    
+
   /**
    * Methods
    * _______________________________________________________________________________
@@ -60,9 +73,6 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
         switch (params.slug[1]) {
           case 'create-point':
             return <CreateAndEditPoint placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />;
-          case 'point-detail':
-            return <PointDetailRoot />;
-
           case 'edit-point':
             return <CreateAndEditPoint placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />;
           default:
@@ -71,9 +81,9 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
       case 'article-management':
         switch (params.slug[1]) {
           case 'create-article':
-            return <CreateAndEditArticle type='create' />;
+            return <CreateAndEditArticle placeConstant={constantData} articleData={articleByIdData?.data as any} type='create-article' />;
           case 'edit-article':
-            return <CreateAndEditArticle type='edit' />;
+            return <CreateAndEditArticle placeConstant={constantData} articleData={articleByIdData?.data as any} type='edit-article' />;
           default:
             return <ArticleManagement />;
         }

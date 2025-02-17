@@ -21,7 +21,6 @@ import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import UserDetailCard from '@/libs/shared/UserDetailCard';
 import { updateUrlWithPageNumber } from '@/libs/utils';
 import { generateSearchParams } from '@/libs/utils/generateSearchParams';
-import { Close } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { UserInfoDetail } from '@/types/user/user';
@@ -58,6 +57,7 @@ export default function UserProfile({
    */
   const { push } = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isActive, setIsActive] = useState<boolean>(false);
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const userId = Number(params.slug);
   const queryClient = useQueryClient();
@@ -134,7 +134,7 @@ export default function UserProfile({
     onSuccess: async data => {
       if (data.status === true) {
         queryClient.invalidateQueries({ queryKey: ['user_info'] });
-        ToastSuccess('کاربر مورد نظر با موفقیت غیر فعال شد');
+        ToastSuccess(isActive === true ? 'کاربر مورد نظر با موفقیت فعال شد' : 'کاربر مورد نظر با موفقیت غیر فعال شد');
       } else {
         ToastError('لطفا دوباره امتحان نمایید');
       }
@@ -158,6 +158,7 @@ export default function UserProfile({
 
   const handleDeActiveUser = (userInfo: UserInfoDetail) => {
     const { name, last_name, email, birthday, gender } = userInfo;
+    setIsActive(false);
     return {
       name,
       last_name,
@@ -170,6 +171,7 @@ export default function UserProfile({
 
   const handleActiveUser = (userInfo: UserInfoDetail) => {
     const { name, last_name, email, birthday, gender } = userInfo;
+    setIsActive(true);
     return {
       name,
       last_name,
@@ -234,7 +236,7 @@ export default function UserProfile({
                 )}
               </Grid>
               <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-                <ModalHeader title='ویرایش کاربر' icon={<Close />} handleClose={() => setIsOpen(false)} />
+                <ModalHeader title='ویرایش کاربر' handleClose={() => setIsOpen(false)} />
                 <EditUser onClose={() => setIsOpen(false)} userId={userId} data={userData as any} />
               </Modal>
             </form>
