@@ -267,7 +267,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             suggested_time: 0,
           },
   });
-  const { handleSubmit, control, watch } = methods;
+  const { handleSubmit, control } = methods;
 
   /**
    * hooks and methods
