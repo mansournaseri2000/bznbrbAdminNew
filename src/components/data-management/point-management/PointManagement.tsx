@@ -113,6 +113,10 @@ const PointManagement = () => {
     pointMutate(watch() as any);
   };
 
+  const onRevalidate = () => {
+    pointMutate(watch() as any);
+  };
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -133,7 +137,7 @@ const PointManagement = () => {
               <Text {...typoVariant.title1}>دیتایی موجود نیست</Text>
             </Flex>
           ) : (
-            <PointManagementList data={pointData?.allFilteredPlaces as any} />
+            <PointManagementList data={pointData?.allFilteredPlaces as any} onRevalidate={onRevalidate} />
           )}
           {pointData?.allFilteredPlaces && (
             <Flex width={'100%'} align={'center'} justify={'between'}>
@@ -147,7 +151,7 @@ const PointManagement = () => {
                   onSubmit();
                 }}
               />
-              <ItemsPerPage data={pointData?.allFilteredPlaces} currentPage={pointData?.currentPage} totalCount={pointData?.totalCount} />
+              <ItemsPerPage data={pointData?.allFilteredPlaces} currentPage={pointData?.currentPage} totalCount={pointData?.totalCount} keyText={'نقطه'} />
             </Flex>
           )}
         </Flex>

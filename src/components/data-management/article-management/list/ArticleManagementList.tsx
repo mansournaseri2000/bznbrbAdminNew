@@ -40,6 +40,18 @@ const ArticleManagementList = (props: Props) => {
       ),
     },
     {
+      accessorKey: 'id', // ✅ Added placeId column
+      header: 'شناسه مکان',
+      cell: info => {
+        const value = info.getValue() as string | null;
+        return (
+          <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
+            {value ? value : '-'}
+          </Text>
+        );
+      },
+    },
+    {
       accessorKey: 'title',
       header: () => (
         <Flex maxWidth={'55%'} m={'auto'}>
@@ -50,7 +62,7 @@ const ArticleManagementList = (props: Props) => {
         const value = info.getValue() as string | null;
         const status = info.row.original.status;
         return (
-          <Flex width={'100%'} maxWidth={"70%"} align={'center'} justify={'start'} gap={'3'} mr={'20px'}>
+          <Flex width={'100%'} maxWidth={'70%'} align={'center'} justify={'start'} gap={'3'} mr={'20px'}>
             <Box width={'12px'} height={'12px'} style={{ borderRadius: 100, backgroundColor: status === true ? colorPalette.blue[6] : colorPalette.pink[6] }}>
               {' '}
             </Box>

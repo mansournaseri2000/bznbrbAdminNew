@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -26,11 +26,8 @@ const PointManagementHero = ({ onSubmit }: Props) => {
    */
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
   const queryClient = useQueryClient();
-
-  const searchParams = useSearchParams();
-  const getParam = (key: string) => searchParams.get(key) || '';
 
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
@@ -60,7 +57,7 @@ const PointManagementHero = ({ onSubmit }: Props) => {
         <Controller
           name='searchQuery'
           control={control}
-          render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام نقطه' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} onClick={handleSubmit} />}
+          render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام نقطه' defaultValue={watch('searchQuery') ? watch('searchQuery') : ''} onClick={handleSubmit} />}
         />
       </Grid>
       {/*** 

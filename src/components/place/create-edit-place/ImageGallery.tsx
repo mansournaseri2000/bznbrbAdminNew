@@ -141,16 +141,31 @@ const ImageGallery = ({ placeId, constant }: Props) => {
           })}
         </Flex>
       )}
-      {data&& data?.gallery.length > 0 && <CustomPagination current={page} total={data?.totalPages as number} maxWidth={24} onPageChange={p => setPage(p)} />}
-      <ImageGalleryUploaderPlace
-        constant={constant}
-        currentItem={currentItem}
-        handleCloseModal={() => setIsOpen(false)}
-        isOpen={isOpen}
-        placeId={placeId}
-        resetCurrentItem={() => setCurrentItem(null)}
-        status={status}
-      />
+      {data && data?.gallery.length > 0 && <CustomPagination current={page} total={data?.totalPages as number} maxWidth={24} onPageChange={p => setPage(p)} />}
+
+      {Boolean(currentItem) && (
+        <ImageGalleryUploaderPlace
+          constant={constant}
+          currentItem={currentItem}
+          handleCloseModal={() => setIsOpen(false)}
+          isOpen={isOpen}
+          placeId={placeId}
+          resetCurrentItem={() => setCurrentItem(null)}
+          status={status}
+        />
+      )}
+
+      {status === 'create' && (
+        <ImageGalleryUploaderPlace
+          constant={constant}
+          currentItem={currentItem}
+          handleCloseModal={() => setIsOpen(false)}
+          isOpen={isOpen}
+          placeId={placeId}
+          resetCurrentItem={() => setCurrentItem(null)}
+          status={status}
+        />
+      )}
       <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)}>
         <Grid gapY={'24px'} p={'5'}>
           <Text>آیا از حذف این تصویر اطمینان دارید؟ </Text>

@@ -313,7 +313,6 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     }
   };
 
-
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
