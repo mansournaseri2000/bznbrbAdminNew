@@ -28,7 +28,7 @@ const ImageSent = () => {
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
 
-  const { data: data, isLoading, isFetching, isError } = useQuery({ queryKey: ['user-image-uploads'], queryFn: async () => await getAllPicUserUploads(page) });
+  const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['user-image-uploads'], queryFn: async () => await getAllPicUserUploads(page) });
   console.log('UserImageUploads', data);
   /**
    * Loading and Error

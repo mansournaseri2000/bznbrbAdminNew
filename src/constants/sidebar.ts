@@ -45,6 +45,6 @@ export const sidebarOptions = [
     text: 'پشتیبانی',
     Icon: Support,
     type: 'collapse',
-    path: '/support',
+    path: '/contact-us',
   },
 ];

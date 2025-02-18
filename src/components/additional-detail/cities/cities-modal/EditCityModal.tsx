@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
-// import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-// import { CityUploaderParams, UploadIconForCity, UploadImageForCity } from '@/api/additional-detail';
+import { CityUploader, CityUploaderParams, updateCity } from '@/api/additional-detail';
 import { Flex, TextField } from '@/libs/primitives';
 import ImagePicker2 from '@/libs/shared/ImagePicker2';
 import ItemWithUploader from '@/libs/shared/item-with-uploader/ItemWithUploader';
 import ModalAction from '@/libs/shared/ModalAction';
+import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import Uploader from '@/libs/shared/uploader/Uploader';
 import { citiesDetailForProvince } from '@/types/additional-detail/additional-detail';
 
@@ -31,29 +32,59 @@ const EditCityModal = ({ setIsOpen, data }: Props) => {
       isIcon: Boolean(data?.icon) ? true : false,
     },
   });
-  const { control, reset, watch } = methods;
+  const { control, watch } = methods;
+  const queryClient = useQueryClient();
+
+  console.log('data', data);
 
   /**
    * Services
    * _______________________________________________________________________________
    */
 
-  // const { mutate: uploadImageMutate } = useMutation({
-  //   mutationFn: async (body: CityUploaderParams) => await UploadImageForCity(body),
-  // });
+  const { mutate: uploadImageMutate } = useMutation({
+    mutationFn: async (body: CityUploaderParams) => await CityUploader(body),
+  });
 
-  // const { mutate: uploadIconMutate } = useMutation({
-  //   mutationFn: async (body: CityUploaderParams) => await UploadIconForCity(body),
-  // });
+  console.log('WATCH FOR IMAGE PATH', watch('imagePath'));
+  console.log('WATCH FOR ICON PATH', watch('iconPath'));
+
+  const { mutate: editCityMutate, isPending: editCityPending } = useMutation({
+    mutationFn: async () => await updateCity(data.id, watch('name') as any),
+    onSuccess: localData => {
+      if (localData.status === true) {
+        const localImage = watch('localImagePath');
+        const localIcon = watch('localIconPath');
+
+        if (localImage) {
+          uploadImageMutate({
+            cityId: String(data.id),
+            file: watch('imagePath') as any,
+            position: 'picture',
+            type: 'CITY',
+          });
+        }
+        if (localIcon) {
+          uploadImageMutate({
+            cityId: data.id,
+            file: watch('iconPath') as any,
+            position: 'vector',
+            type: 'CITY',
+          });
+        }
+        queryClient.invalidateQueries({ queryKey: ['cities'] });
+        ToastSuccess('شهر مورد نظر با موفقیت ویرایش شد');
+        setIsOpen({ key: 'edit', isOpen: false });
+      } else {
+        ToastError('لطفا دوباره تلاش نمایید');
+      }
+    },
+  });
 
   /**
-   * Hooks and Methods
+   * JSX
    * _______________________________________________________________________________
    */
-
-  useEffect(() => {
-    reset({ name: data.name });
-  }, [data, reset]);
 
   return (
     <FormProvider {...methods}>
@@ -76,7 +107,7 @@ const EditCityModal = ({ setIsOpen, data }: Props) => {
         </Flex>
       </Flex>
       <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='' style={{ width: '50%', margin: '0 auto' }} />} />
-      <ModalAction submitButtonText='ثبت ' closeButtonText='لغو' onCloseButton={() => setIsOpen({ key: 'edit', isOpen: false })} />
+      <ModalAction submitButtonText='ثبت ' closeButtonText='لغو' onCloseButton={() => setIsOpen({ key: 'edit', isOpen: false })} onSubmit={() => editCityMutate()} isLoading={editCityPending} />
     </FormProvider>
   );
 };
