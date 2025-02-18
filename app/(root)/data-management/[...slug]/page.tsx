@@ -61,8 +61,6 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
       </Flex>
     );
 
-    
-
   /**
    * Methods
    * _______________________________________________________________________________
@@ -76,7 +74,7 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
           case 'edit-point':
             return <CreateAndEditPoint placeConstant={constantData} status={status} placeID={Number(placeID)} placeData={placeData as PlaceResponse} />;
           default:
-            return <PointManagement />;
+            return <PointManagement constant={constantData} />;
         }
       case 'article-management':
         switch (params.slug[1]) {

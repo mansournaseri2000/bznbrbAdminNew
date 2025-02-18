@@ -17,7 +17,6 @@ export default function Ads() {
    * _______________________________________________________________________________
    */
   const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['ads-page'], queryFn: async () => await getAdsPages() });
-  console.log('DATA', data);
   /**
    * Loading & Error
    * _______________________________________________________________________________

@@ -5,6 +5,8 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import { useRouter } from 'next/navigation';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import { booleanFilterOptions, isPublishedOptions, StatusFilterOption } from '@/constants/data-management';
 import { Grid, PopoverRoot, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import CheckboxGroup from '@/libs/shared/CheckboxGroup';
@@ -19,7 +21,6 @@ type Props = {
   categories: Category[];
   PlaceType: PlaceType[];
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmit: VoidFunction;
 };
 
 export function serializeSubCategoriesData(category: any) {
@@ -32,11 +33,12 @@ export function serializeSubCategoriesData(category: any) {
   }
 }
 
-const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: Props) => {
+const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
   /**
    * Variables and Constant
    * _______________________________________________________________________________
    */
+  const queryClient = useQueryClient();
   const { replace } = useRouter();
   const { control, setValue, watch, reset } = useFormContext();
   const city = province.filter(item => item.id === Number(watch('provinceId')))[0]?.Cities;
@@ -75,15 +77,10 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
       workTime: '',
     });
     replace('/data-management/point-management');
-    onSubmit();
+    queryClient.invalidateQueries({ queryKey: ['place-list'] });
     setIsOpen(false);
   };
 
-  const sample = (date: Date) => {
-    const currentDate = new Date(date);
-    currentDate.setDate(date.getDate() + 1);
-    return new Date(currentDate);
-  };
   /**
    * JSX
    * _______________________________________________________________________________
@@ -165,8 +162,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                   onChangeValue={(val: any) => {
                     const newDate = new Date(val);
                     newDate.setHours(0, 0, 0, 0); // Set hour to 23, minutes to 59, seconds to 0, milliseconds to 0
-                    setValue('startDate', newDate);
-                    setValue('endDate', sample(new Date(val)));
+                    setValue('startDate', newDate.getTime());
                     setValue('page', 1);
                   }}
                 />
@@ -185,7 +181,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen, onSubmit }: P
                   onChangeValue={(val: any) => {
                     const newDate = new Date(val);
                     newDate.setHours(23, 59, 0, 0);
-                    setValue('endDate', newDate);
+                    setValue('endDate', newDate.getTime());
                     setValue('page', 1);
                   }}
                   disabled={!watch('startDate')}

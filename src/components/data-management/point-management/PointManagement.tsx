@@ -1,30 +1,32 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
-import { useMutation } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { AllPlacesBody, getAllPlacesFiltered } from '@/api/data-management';
+import { filterObject, getPlaceList } from '@/api/data-management';
 import { Flex, Text } from '@/libs/primitives';
 import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
 import ItemsPerPage from '@/libs/shared/ItemsPerPage';
-import { updateUrlWithPageNumber } from '@/libs/utils';
-import { generateSearchParams } from '@/libs/utils/generateSearchParams';
 import { typoVariant } from '@/theme/typo-variants';
 
 import PointManagementHero from './hero/PointManagementHero';
 import PointManagementList from './list/PointManagementList';
 
-const PointManagement = () => {
+type Props = {
+  constant: any;
+};
+
+const PointManagement = ({ constant }: Props) => {
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
-  const { push } = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
   const getParam = (key: string) => searchParams.get(key) || '';
 
   const page = Number(getParam('page')) || 1;
@@ -32,7 +34,6 @@ const PointManagement = () => {
   const methods = useForm({
     defaultValues: {
       page: page,
-      limit: Number(getParam('limit')) || 10,
       searchQuery: getParam('searchQuery') || '',
       provinceId: Number(getParam('provinceId')) || '',
       cityId: Number(getParam('cityId')) || '',
@@ -56,65 +57,34 @@ const PointManagement = () => {
 
   const { watch, setValue, handleSubmit } = methods;
 
+  const { data, isLoading, isError, isFetching } = useQuery({ queryKey: ['place-list'], queryFn: async () => await getPlaceList(watch() as any) });
+
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
 
-  const {
-    data: pointData,
-    mutate: pointMutate,
-    isError: pointError,
-    isPending: pointPending,
-  } = useMutation({
-    mutationKey: ['place-data'],
-    mutationFn: async (body: AllPlacesBody) => getAllPlacesFiltered(body),
-    onSuccess: async data => {
-      const cleanedData = Object.fromEntries(
-        Object.entries(methods.watch()).filter(([key, value]) => {
-          if (
-            value !== undefined &&
-            value !== '' &&
-            value !== 'none' &&
-            value !== null &&
-            value !== 'null' &&
-            !(Array.isArray(value) && value.length === 0) &&
-            !(Array.isArray(value) && value.every(item => item === ('' as any))) &&
-            !(Array.isArray(value) && value.every(item => item === ('none' as any)))
-          ) {
-            if (['startDate', 'endDate'].includes(key)) {
-              return new Date(value as any).getTime();
-            }
-            return true;
-          }
-          return false;
-        })
-      );
-
-      // Convert date fields to timestamps
-      Object.keys(cleanedData).forEach(key => {
-        if (['startDate', 'endDate'].includes(key)) {
-          cleanedData[key] = new Date(cleanedData[key] as any).getTime();
+  function generateSearchParams<T extends Record<string, any>>(obj: T): string {
+    return Object.entries(obj)
+      .map(([key, value]) => {
+        if (Array.isArray(value)) {
+          return `${encodeURIComponent(key)}=${value.map(encodeURIComponent).join(',')}`;
         }
-      });
-      const searchParams = generateSearchParams(cleanedData);
-      push(`/data-management/point-management?${searchParams}`);
-      console.log('data', data);
-    },
-    onError: async data => {
-      console.log('DATA Error', data);
-    },
-  });
+        return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+      })
+      .join('&');
+  }
 
-  useEffect(() => {
-    pointMutate(watch() as any);
-  }, []);
+  const onSubmit = (data: any) => {
+    const obj = filterObject(data, true);
+    const searchParams = generateSearchParams(obj);
 
-  const onSubmit = () => {
-    pointMutate(watch() as any);
+    queryClient.invalidateQueries({ queryKey: ['place-list'] });
+    const newUrl = `${window.location.pathname}?${searchParams}`;
+    window.history.pushState(null, '', newUrl);
   };
 
   const onRevalidate = () => {
-    pointMutate(watch() as any);
+    console.log('onRevalidate');
   };
 
   return (
@@ -124,34 +94,33 @@ const PointManagement = () => {
           {/*
            *** Hero for Filter button , add Point and search Point_________________________________________________________________________________________________________________________________________________________________
            */}
-          <PointManagementHero onSubmit={() => onSubmit()} />
+          <PointManagementHero />
           {/*
            *** table data_________________________________________________________________________________________________________________________________________________________________
            */}
-          {pointError ? (
+          {isError ? (
             <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
-          ) : pointPending ? (
+          ) : isLoading || isFetching ? (
             <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
-          ) : !pointData ? (
+          ) : !data ? (
             <Flex width={'100%'} justify={'center'} mt={'6'}>
               <Text {...typoVariant.title1}>دیتایی موجود نیست</Text>
             </Flex>
           ) : (
-            <PointManagementList data={pointData?.allFilteredPlaces as any} onRevalidate={onRevalidate} />
+            <PointManagementList data={data?.allFilteredPlaces as any} onRevalidate={onRevalidate} constant={constant} />
           )}
-          {pointData?.allFilteredPlaces && (
+          {data?.allFilteredPlaces && (
             <Flex width={'100%'} align={'center'} justify={'between'}>
               <CustomPagination
                 current={watch('page')}
-                total={pointData?.totalPages as number}
+                total={data?.totalPages as number}
                 maxWidth={24}
                 onPageChange={p => {
                   setValue('page', p);
-                  updateUrlWithPageNumber(p);
-                  onSubmit();
+                  onSubmit(watch());
                 }}
               />
-              <ItemsPerPage data={pointData?.allFilteredPlaces} currentPage={pointData?.currentPage} totalCount={pointData?.totalCount} keyText={'نقطه'} />
+              <ItemsPerPage data={data?.allFilteredPlaces} currentPage={data?.currentPage} totalCount={data?.totalCount} keyText={'نقطه'} />
             </Flex>
           )}
         </Flex>
