@@ -43,7 +43,7 @@ const Sidebar = () => {
         zIndex: 100,
       }}
     >
-      <Grid mx={'auto'} height={'100%'} style={{ overflowX: 'hidden', whiteSpace: 'nowrap', alignContent: 'space-between', overflowY: 'auto' }}>
+      <Grid mx={'auto'} height={'100%'} style={{ overflowX: 'hidden', whiteSpace: 'nowrap', alignContent: 'space-between', overflowY: 'auto',  }}>
         <Grid width={'100%'}>
           <Flex height={'100%'} direction='column' p={'4'} gap={'4'}>
             <Link href={''}>

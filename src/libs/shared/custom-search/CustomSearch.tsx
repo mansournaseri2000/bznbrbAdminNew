@@ -8,14 +8,15 @@ import styled from 'styled-components';
 import { Flex, IconButton, TextField } from '@/libs/primitives';
 import { Search } from '@/public/icon';
 import { Boxshadow, colorPalette } from '@/theme';
+import { useQueryClient } from '@tanstack/react-query';
 
 type CustomSearchProps = {
   placeholder: string;
-  onClick: () => void;
   defaultValue?: string;
 };
 
-const CustomSearch = forwardRef<HTMLDivElement, CustomSearchProps>(({ placeholder, defaultValue, onClick, ...rest }, ref) => {
+const CustomSearch = forwardRef<HTMLDivElement, CustomSearchProps>(({ placeholder, defaultValue, ...rest }, ref) => {
+  const queryClient = useQueryClient();
   const { setValue } = useFormContext();
   return (
     <Wrapper {...rest} ref={ref} height={'fit-content'}>
@@ -29,7 +30,13 @@ const CustomSearch = forwardRef<HTMLDivElement, CustomSearchProps>(({ placeholde
           setValue('page', 1);
         }}
       />
-      <IconButton size={'4'} variant='soft' onClick={onClick}>
+      <IconButton
+        size={'4'}
+        variant='soft'
+        onClick={() => {
+          queryClient.invalidateQueries({ queryKey: ['article-list'] });
+        }}
+      >
         <Search />
       </IconButton>
     </Wrapper>

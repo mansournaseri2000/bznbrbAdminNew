@@ -5,6 +5,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { Checkbox } from '@radix-ui/themes';
 
 import { Flex, Text } from '@/libs/primitives';
+import { colorPalette } from '@/theme';
 
 type Props = {
   store: string;
@@ -21,7 +22,7 @@ const CheckboxGroup = ({ items, store, isRow = true }: Props) => {
     <Controller
       name={store}
       control={control}
-      defaultValue={[]} 
+      defaultValue={[]}
       render={({ field }) => {
         const { value = [], onChange } = field;
 
@@ -37,9 +38,9 @@ const CheckboxGroup = ({ items, store, isRow = true }: Props) => {
         };
 
         return (
-          <Flex gap={'10px'} wrap={'wrap'} direction={isRow ? 'row' : 'column'}>
+          <Flex gap={'10px'} wrap={'wrap'} direction={isRow ? 'row' : 'column'} width={'97%'}>
             {items.map(item => (
-              <Text style={{ textWrap: 'nowrap' }} as='label' size='2' key={item.id}>
+              <Text style={{ textWrap: 'nowrap', borderRadius: '8px', border: `1px solid ${colorPalette.gray[6]}`, width: '100%' ,padding:"10px" ,cursor:"pointer" }} as='label' size='2' key={item.id}>
                 <Flex gap='2'>
                   <Checkbox checked={value?.some((v: { featureId: number }) => v.featureId === item.id)} onCheckedChange={isChecked => handleCheckboxChange(item.id, isChecked as boolean)} />
                   <Text>{item.name}</Text>

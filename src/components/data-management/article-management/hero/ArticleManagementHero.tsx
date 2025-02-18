@@ -16,11 +16,7 @@ import { typoVariant } from '@/theme/typo-variants';
 
 import ArticleFilter from './ArticleFilter';
 
-type Props = {
-  onSubmit: () => void;
-};
-
-const ArticleManagementHero = ({ onSubmit }: Props) => {
+const ArticleManagementHero = () => {
   /**
    * const and variables
    * _______________________________________________________________________________
@@ -52,11 +48,7 @@ const ArticleManagementHero = ({ onSubmit }: Props) => {
             <Text {...typoVariant.body1}> افزودن مقاله</Text>
           </Flex>
         </Button>
-        <Controller
-          name='title'
-          control={control}
-          render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام نقطه' defaultValue={getParam('title') ? getParam('title') : ''} onClick={onSubmit} />}
-        />
+        <Controller name='title' control={control} render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام نقطه' defaultValue={getParam('title') ? getParam('title') : ''} />} />
       </Grid>
       {/* 
       ***
@@ -65,12 +57,7 @@ const ArticleManagementHero = ({ onSubmit }: Props) => {
       */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
-        <ArticleFilter
-          province={constantData?.provinces ? constantData.provinces : []}
-          categories={constantData?.categories ? constantData.categories : []}
-          setIsOpen={setIsOpen}
-          onSubmit={onSubmit}
-        />
+        <ArticleFilter province={constantData?.provinces ? constantData.provinces : []} categories={constantData?.categories ? constantData.categories : []} setIsOpen={setIsOpen} />
       </Modal>
     </>
   );

@@ -46,3 +46,13 @@ a {
   background: #555;
 }
 
+.toolbarClassName {
+  direction: ltr !important;
+}
+
+.rdw-dropdown-selectedtext {
+  span {
+    width: 100%;
+    text-align: left;
+  }
+}
