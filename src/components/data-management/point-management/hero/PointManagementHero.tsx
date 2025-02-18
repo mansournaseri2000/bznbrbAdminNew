@@ -16,11 +16,7 @@ import { typoVariant } from '@/theme/typo-variants';
 
 import PointFilter from './PointFilter';
 
-type Props = {
-  onSubmit: () => void;
-};
-
-const PointManagementHero = ({ onSubmit }: Props) => {
+const PointManagementHero = () => {
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
@@ -39,6 +35,7 @@ const PointManagementHero = ({ onSubmit }: Props) => {
 
   const handleSubmit = () => {
     queryClient.invalidateQueries({ queryKey: ['point-data'] });
+    queryClient.invalidateQueries({ queryKey: ['place-list'] });
   };
 
   return (
@@ -70,7 +67,6 @@ const PointManagementHero = ({ onSubmit }: Props) => {
           categories={constantData?.categories ? constantData.categories : []}
           PlaceType={constantData?.PlaceType ? constantData.PlaceType : []}
           setIsOpen={setIsOpen}
-          onSubmit={onSubmit}
         />
       </Modal>
     </>

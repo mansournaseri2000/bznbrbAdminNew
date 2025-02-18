@@ -10,24 +10,22 @@ import { ApiData } from './types';
 interface InputObject {
   [key: string]: any;
 }
-const filterObject = (obj: InputObject, isEmtyString?: boolean): InputObject => {
+export const filterObject = (obj: InputObject | null | undefined, isEmptyString?: boolean): InputObject => {
   const result: InputObject = {};
 
-  if (isEmtyString !== false) {
-    Object.keys(obj).forEach(key => {
-      const value = obj[key];
-      if (value !== null && value !== 'null' && value !== '' && value !== 0 && value !== 'none' && !(Array.isArray(value) && value.length === 0)) {
-        result[key] = value;
-      }
-    });
-  } else {
-    Object.keys(obj).forEach(key => {
-      const value = obj[key];
-      if (value !== null && value !== 'null' && value !== 0 && value !== 'none' && !(Array.isArray(value) && value.length === 0)) {
-        result[key] = value;
-      }
-    });
+  if (!obj || typeof obj !== 'object') {
+    return result; // Return empty object if obj is null or undefined
   }
+
+  const filterCondition = (value: any) => value !== undefined && value !== null && value !== 'null' && value !== 0 && value !== 'none' && !(Array.isArray(value) && value.length === 0);
+
+  Object.keys(obj).forEach(key => {
+    const value = obj[key];
+    if (isEmptyString === false ? filterCondition(value) : filterCondition(value) && value !== '') {
+      result[key] = value;
+    }
+  });
+
   return result;
 };
 
@@ -78,6 +76,61 @@ export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
   };
   const body = filterObject(obj, true);
   const res = await DevApiManager.post<ApiData<PlaceListResponse>>('places/allPlacesWithFilter', body);
+  return res.data.data;
+};
+
+function generateSearchParams<T extends Record<string, any>>(obj: T): string {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(obj).forEach(([key, value]) => {
+    searchParams.append(key, String(value));
+  });
+
+  return searchParams.toString();
+}
+
+export type PlaceListParams = {
+  page: number;
+  cityId: number;
+  provinceId: number;
+  parentCategoryId: number;
+  arrayCatIds: string;
+  arrayTypes: string;
+  searchQuery: string;
+  isPublished: boolean;
+  status: boolean;
+  mainPic: boolean;
+  gallery: boolean;
+  description: boolean;
+  info: boolean;
+  coordinates: boolean;
+  features: boolean;
+  analyse: boolean;
+  seo: boolean;
+  workTime: boolean;
+  startDate: number;
+  endDate: number;
+};
+
+export function generateSearchParam<T extends Record<string, any>>(obj: T): string {
+  return Object.entries(obj)
+    .map(([key, value]) => {
+      if (Array.isArray(value)) {
+        return `${encodeURIComponent(key)}=${value.map(encodeURIComponent).join(',')}`;
+      }
+      return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+    })
+    .join('&');
+}
+
+/**
+ * place-lsit
+ * _______________________________________________________________________________
+ */
+export const getPlaceList = async (params: PlaceListParams) => {
+  const obj = filterObject(params, true);
+  const searchParams = generateSearchParam(obj);
+  const res = await DevApiManager.get<ApiData<PlaceListResponse>>(`places/allPlacesWithFilter?${searchParams}`);
   return res.data.data;
 };
 
