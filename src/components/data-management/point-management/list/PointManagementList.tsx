@@ -143,7 +143,7 @@ const PointManagementList = (props: Props) => {
       header: 'نوع نقطه',
       cell: info => {
         const data = props.constant.PlaceType?.find((item: any) => item.id == info.getValue());
-        const value = data.name as string | null;
+        const value = data?.name as string | null;
         return (
           <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
             {value ? value : '-'}

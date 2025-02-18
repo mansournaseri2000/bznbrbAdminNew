@@ -168,6 +168,36 @@ export const getPlaceUserUploads = async (id: number, page: number, limit: numbe
   return res.data.data;
 };
 
+/**
+ * article-lsit
+ * _______________________________________________________________________________
+ */
+
+export type ArticleListParams = {
+  title: string;
+  provincesId: number;
+  citiesId: number;
+  status: boolean;
+  is_published: boolean;
+  parentCategoryId: number;
+  created_atStart: number;
+  created_atEnd: number;
+  arrayCatIds: string;
+  base: boolean;
+  text: boolean;
+  seo: boolean;
+  mainPic: boolean;
+  related: boolean;
+  page: number;
+};
+
+export const getArticleListServices = async (params: ArticleListParams) => {
+  const obj = filterObject(params, true);
+  const searchParams = generateSearchParam(obj);
+  const res = await DevApiManager.get<ApiData<ArticleListResponse>>(`article/filter?${searchParams}`);
+  return res.data.data;
+};
+
 export const getArticleList = async (page: number, params: ArticleListBody) => {
   const obj = {
     ...params,

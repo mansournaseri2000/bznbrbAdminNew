@@ -5,7 +5,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import { useRouter } from 'next/navigation';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { getAllPlacesConstants } from '@/api/place';
 import { Button, Flex, Grid, IconButton, Modal, Text } from '@/libs/primitives';
@@ -23,7 +23,6 @@ const PointManagementHero = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const { control, watch } = useFormContext();
-  const queryClient = useQueryClient();
 
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
@@ -32,11 +31,6 @@ const PointManagementHero = () => {
     queryKey: ['constant'],
     queryFn: async () => getAllPlacesConstants(),
   });
-
-  const handleSubmit = () => {
-    queryClient.invalidateQueries({ queryKey: ['point-data'] });
-    queryClient.invalidateQueries({ queryKey: ['place-list'] });
-  };
 
   return (
     <>
@@ -54,7 +48,7 @@ const PointManagementHero = () => {
         <Controller
           name='searchQuery'
           control={control}
-          render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام نقطه' defaultValue={watch('searchQuery') ? watch('searchQuery') : ''} onClick={handleSubmit} />}
+          render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام نقطه' defaultValue={watch('searchQuery') ? watch('searchQuery') : ''} />}
         />
       </Grid>
       {/*** 

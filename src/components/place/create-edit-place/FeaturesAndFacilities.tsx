@@ -58,7 +58,7 @@ const FeaturesAndFacilities = ({ featureItems }: Props) => {
               </Flex>
             </Button>
           </Popover.Trigger>
-          <Popover.Content width='360px'>
+          <Popover.Content width='360px' style={{ overflow: 'scroll' }} maxHeight={'400px'}>
             <Flex gap='3'>
               <CheckboxGroup isRow={false} items={featureItem.features} store={'features'} />
             </Flex>

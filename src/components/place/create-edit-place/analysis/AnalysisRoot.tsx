@@ -4,8 +4,7 @@ import { useCallback } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
-import { RadioGroup, Slider } from '@radix-ui/themes';
-import styled from 'styled-components';
+import { RadioGroup } from '@radix-ui/themes';
 
 import { cost, renownLevel } from '@/constants/place';
 import { Flex, Grid, IconButton, Text, TextField } from '@/libs/primitives';
@@ -32,12 +31,8 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
    * _______________________________________________________________________________
    */
   const { setValue, watch } = useFormContext();
-  const TripTypesItems = useWatch({ name: 'TripTypes' });
-  const placeCategoryItems = useWatch({ name: 'PlaceCategories' });
   const placeTripSeasonsItems = useWatch({ name: 'PlaceTripSeasons' });
   const tripLimitationsItems = useWatch({ name: 'tripLimitations' });
-  const rating = useWatch({ name: 'rating' });
-  const trip_value = useWatch({ name: 'trip_value' });
   const costValue = useWatch({ name: 'cost' });
   const renownValue = useWatch({ name: 'renown' });
 
@@ -51,38 +46,6 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const handleSliderChange = useCallback(
-    (tripTypeId: number, value: number) => {
-      setValue(
-        'TripTypes',
-        TripTypesItems.map((item: { tripTypeId: number }) => (item.tripTypeId === tripTypeId ? { ...item, score: value } : item)),
-        { shouldDirty: true, shouldValidate: true }
-      );
-    },
-    [TripTypesItems, setValue]
-  );
-
-  const handleCategorySliderChange = useCallback(
-    (id: number, value: number) => {
-      setValue(
-        'PlaceCategories',
-        placeCategoryItems.map((item: { categoryId: number }) => (item.categoryId === id ? { ...item, score: value } : item)),
-        { shouldDirty: true, shouldValidate: true }
-      );
-    },
-    [placeCategoryItems, setValue]
-  );
-
-  const handlePlaceTripSeasonsSliderChange = useCallback(
-    (id: number, value: number) => {
-      setValue(
-        'PlaceTripSeasons',
-        placeTripSeasonsItems.map((item: { tripSeasonId: number }) => (item.tripSeasonId === id ? { ...item, score: value } : item)),
-        { shouldDirty: true, shouldValidate: true }
-      );
-    },
-    [placeTripSeasonsItems, setValue]
-  );
 
   const handlePlaceTripSeasonsTimingChange = useCallback(
     (id: number, value: number) => {
@@ -95,17 +58,6 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
       );
     },
     [placeTripSeasonsItems, setValue]
-  );
-
-  const handleTripLimitationsSliderChange = useCallback(
-    (id: number, value: number) => {
-      setValue(
-        'tripLimitations',
-        tripLimitationsItems.map((item: { tripLimitationId: number }) => (item.tripLimitationId === id ? { ...item, score: value } : item)),
-        { shouldDirty: true, shouldValidate: true }
-      );
-    },
-    [tripLimitationsItems, setValue]
   );
 
   const handleTripLimitationsUntillChange = useCallback(
@@ -185,15 +137,51 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
         <Flex direction={'column'} gap={'16px'}>
           <Text>میزان اهمیت نقطه</Text>
           <Flex width={'50%'} gap={'10px'} align={'center'}>
-            <CustomSlider defaultValue={[0]} value={[trip_value]} onValueChange={value => setValue('trip_value', value)} max={100} step={1} style={{ width: '50%' }} />
-            <Text>{trip_value ?? 0}%</Text>
+            <TextField
+              maxLength={4} // Limit input length
+              value={watch('trip_value')}
+              onChange={e => {
+                let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+                // Prevent first character from being '0'
+                if (value.startsWith('0')) {
+                  value = value.substring(1);
+                }
+
+                // Ensure the number doesn't exceed 100
+                if (parseInt(value, 10) > 100) value = '100';
+
+                // Append "%" only if there's a valid number
+                value = value ? `${value}%` : '';
+                const numericValue = value.replace(/%/g, ''); // Removes all percent symbols
+                setValue('trip_value', Number(numericValue));
+              }}
+              placeholder='میزان اهمیت نقطه' // Example placeholder
+            />
+            <Text>{watch('trip_value')}%</Text>
           </Flex>
         </Flex>
         <Flex direction={'column'} gap={'16px'}>
           <Text>رتبه بندی</Text>
           <Flex width={'50%'} gap={'10px'} align={'center'}>
-            <CustomSlider defaultValue={[0]} value={[rating]} onValueChange={value => setValue('rating', value)} max={100} step={1} style={{ width: '100%' }} />
-            <Text>{rating ?? 0}%</Text>
+            <TextField
+              maxLength={4} // Limit input to "100%" max
+              value={watch('rating')}
+              onChange={e => {
+                let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+                // Ensure the number doesn't exceed 100
+                if (parseInt(value, 10) > 100) value = '100';
+                if (value.length > 3) value = value.slice(0, 3); // Limit to three digits max (for safety)
+
+                // Append "%" if there's a valid number
+                value = value ? `${value}%` : '';
+                const numericValue = value.replace(/%/g, ''); // Removes all percent symbols
+
+                setValue('rating', Number(numericValue));
+              }}
+              placeholder='رتبه بندی' // Example placeholder
+            />
+            <Text>{watch('rating')}%</Text>
           </Flex>
         </Flex>
       </Grid>
@@ -202,22 +190,28 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
       <Grid gap={'16px'}>
         <Text>نوع سفر</Text>
         <Grid gap={'0px 30px'} columns={'2'}>
-          {tripDatas.map(trip => {
-            const tripType = TripTypesItems.find((item: { tripTypeId: number }) => item.tripTypeId === trip.id);
-
+          {tripDatas.map((trip, index) => {
             return (
               <Grid gap={'8px'} key={trip.id} mb='20px'>
                 <Text as='label'>{trip.name}</Text>
                 <Flex width={'50%'} gap={'10px'} align={'center'}>
-                  <CustomSlider
-                    defaultValue={[tripType?.score ?? 0]}
-                    value={[tripType?.score ?? 0]}
-                    onValueChange={value => handleSliderChange(trip.id, Number(value))}
-                    max={100}
-                    step={1}
-                    style={{ width: '100%' }}
+                  <TextField
+                    maxLength={4} // Limit input to "100%" max
+                    value={watch(`TripTypes[${index}].score`)}
+                    onChange={e => {
+                      let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+                      // Ensure the number doesn't exceed 100
+                      if (parseInt(value, 10) > 100) value = '100';
+                      if (value.length > 3) value = value.slice(0, 3); // Limit to three digits max (for safety)
+
+                      value = value ? `${value}%` : '';
+                      const numericValue = value.replace(/%/g, ''); // Removes all percent symbols
+                      setValue(`TripTypes[${index}].score`, Number(numericValue));
+                    }}
+                    placeholder='رتبه بندی' // Example placeholder
                   />
-                  <Text>{tripType?.score ?? 0}%</Text>
+
+                  <Text>{watch(`TripTypes[${index}].score`)}%</Text>
                 </Flex>
               </Grid>
             );
@@ -230,22 +224,28 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
       <Grid gap={'16px'}>
         <Text>دسته‌بندی‌ها</Text>
         <Grid gap={'0px 30px'} columns={'2'}>
-          {constants.categories.map((trip: any) => {
-            const category = placeCategoryItems?.find((item: { categoryId: number }) => item.categoryId === trip.id);
-
+          {constants.categories.map((trip: any, index: number) => {
             return (
               <Grid gap={'8px'} key={trip.id} mb='20px'>
                 <Text as='label'>{trip.name}</Text>
                 <Flex width={'50%'} gap={'10px'} align={'center'}>
-                  <CustomSlider
-                    defaultValue={Boolean(category) ? [category?.score ?? 0] : [0, 0]}
-                    value={[category?.score ?? 0]}
-                    onValueChange={value => handleCategorySliderChange(trip.id, Number(value))}
-                    max={100}
-                    step={1}
-                    style={{ width: '100%' }}
+                  <TextField
+                    maxLength={4} // Limit input to "100%" max
+                    value={watch(`PlaceCategories[${index}].score`)}
+                    onChange={e => {
+                      let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+                      // Ensure the number doesn't exceed 100
+                      if (parseInt(value, 10) > 100) value = '100';
+                      if (value.length > 3) value = value.slice(0, 3); // Limit to three digits max (for safety)
+
+                      value = value ? `${value}%` : '';
+                      const numericValue = value.replace(/%/g, ''); // Removes all percent symbols
+                      setValue(`PlaceCategories[${index}].score`, Number(numericValue));
+                    }}
+                    placeholder='رتبه بندی' // Example placeholder
                   />
-                  <Text>{category?.score ?? 0}%</Text>
+
+                  <Text>{watch(`PlaceCategories[${index}].score`)}%</Text>
                 </Flex>
               </Grid>
             );
@@ -263,23 +263,31 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
         <Text>بهترین فصل , زمان شروع و مدت اقامت در هر فصل</Text>
         <Grid columns={'1'}>
           <Grid gap={'0px 30px'} columns={'1'}>
-            {seasons.map(trip => {
+            {seasons.map((trip, index) => {
               const tripSeason = placeTripSeasonsItems?.find((item: { tripSeasonId: number }) => item.tripSeasonId === trip.id);
 
               return (
                 <Grid columns={'2'} gap={'24px'} key={trip.id} mb='20px'>
-                  <Grid>
+                  <Grid gap={'8px'}>
                     <Text as='label'>{trip.name}</Text>
                     <Flex width={'50%'} gap={'10px'} align={'center'}>
-                      <CustomSlider
-                        defaultValue={[tripSeason?.score ?? 0]}
-                        value={[tripSeason?.score ?? 0]}
-                        onValueChange={value => handlePlaceTripSeasonsSliderChange(trip.id, Number(value))}
-                        max={100}
-                        step={1}
-                        style={{ width: '100%' }}
+                      <TextField
+                        maxLength={4} // Limit input to "100%" max
+                        value={watch(`PlaceTripSeasons[${index}].score`)}
+                        onChange={e => {
+                          let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+                          // Ensure the number doesn't exceed 100
+                          if (parseInt(value, 10) > 100) value = '100';
+                          if (value.length > 3) value = value.slice(0, 3); // Limit to three digits max (for safety)
+
+                          value = value ? `${value}%` : '';
+                          const numericValue = value.replace(/%/g, ''); // Removes all percent symbols
+                          setValue(`PlaceTripSeasons[${index}].score`, Number(numericValue));
+                        }}
+                        placeholder='رتبه بندی' // Example placeholder
                       />
-                      <Text>{tripSeason?.score ?? 0}%</Text>
+
+                      <Text>{watch(`PlaceTripSeasons[${index}].score`)}%</Text>
                     </Flex>
                   </Grid>
                   <Grid gap={'40px'} columns={'2'}>
@@ -317,7 +325,6 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
                         maxLength={5}
                         value={tripSeason.until}
                         onChange={e => {
-                          console.log(tripSeason.tripSeasonId, 'tripSeason.tripSeasonId');
                           let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
 
                           if (value.length > 4) value = value.slice(0, 4); // Ensure a max of 4 digits (HHMM)
@@ -350,15 +357,23 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
               <Grid gap={'8px'} key={trip.id} mb='20px'>
                 <Text as='label'>{trip.name}</Text>
                 <Flex width={'50%'} gap={'10px'} align={'center'}>
-                  <CustomSlider
-                    defaultValue={[tripLimitationsItem?.score ?? 0]}
-                    value={[tripLimitationsItem?.score ?? 0]}
-                    onValueChange={value => handleTripLimitationsSliderChange(trip.id, Number(value))}
-                    max={100}
-                    step={1}
-                    style={{ width: '100%' }}
+                  <TextField
+                    maxLength={4} // Limit input to "100%" max
+                    value={watch(`tripLimitations[${tripLimitationsItem.tripLimitationId}].score`)}
+                    onChange={e => {
+                      let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+                      // Ensure the number doesn't exceed 100
+                      if (parseInt(value, 10) > 100) value = '100';
+                      if (value.length > 3) value = value.slice(0, 3); // Limit to three digits max (for safety)
+
+                      value = value ? `${value}%` : '';
+                      const numericValue = value.replace(/%/g, ''); // Removes all percent symbols
+                      setValue(`tripLimitations[${tripLimitationsItem.tripLimitationId}].score`, Number(numericValue));
+                    }}
+                    placeholder='رتبه بندی' // Example placeholder
                   />
-                  <Text>{tripLimitationsItem?.score ?? 0}%</Text>
+
+                  <Text>{watch(`tripLimitations[${tripLimitationsItem.tripLimitationId}].score`)}%</Text>
                 </Flex>
               </Grid>
             );
@@ -397,9 +412,3 @@ export default AnalysisRoot;
  * styled-component
  * _______________________________________________________________________________
  */
-
-const CustomSlider = styled(Slider)`
-  .rt-SliderThumb::after {
-    background-color: ${colorPalette.pink[6]};
-  }
-`;

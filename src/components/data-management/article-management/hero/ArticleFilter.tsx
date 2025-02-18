@@ -3,6 +3,8 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import { useRouter } from 'next/navigation';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import { booleanFilterOptions, isPublishedOptions, StatusFilterOption } from '@/constants/data-management';
 import { Flex, Grid, PopoverRoot, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import CheckboxGroup from '@/libs/shared/CheckboxGroup';
@@ -18,14 +20,14 @@ type Props = {
   province: Province[];
   categories: Category[];
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmit: VoidFunction;
 };
 
-const ArticleFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => {
+const ArticleFilter = ({ province, categories, setIsOpen }: Props) => {
   /**
    * Variables and Constant
    * _______________________________________________________________________________
    */
+  const queryClient = useQueryClient();
   const { replace } = useRouter();
   const { control, setValue, watch, reset } = useFormContext();
 
@@ -55,15 +57,8 @@ const ArticleFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => 
     });
 
     replace('/data-management/article-management');
-    onSubmit();
+    queryClient.invalidateQueries({ queryKey: ['article-list'] });
     setIsOpen(false);
-  };
-
-  const sample = (date: Date) => {
-    const currentDate = new Date(date);
-    currentDate.setDate(date.getDate() + 1);
-
-    return new Date(currentDate);
   };
 
   /**
@@ -92,8 +87,10 @@ const ArticleFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => 
                   placeholder='از تاریخ'
                   value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                   onChangeValue={(val: any) => {
-                    setValue('created_atStart', new Date(val));
-                    setValue('created_atEnd', sample(new Date(val)));
+                    const newDate = new Date(val);
+                    newDate.setHours(0, 0, 0, 0); // Set hour to 23, minutes to 59, seconds to 0, milliseconds to 0
+                    setValue('created_atStart', newDate.getTime());
+                    setValue('page', 1);
                   }}
                 />
               )}
@@ -109,7 +106,10 @@ const ArticleFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => 
                   value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                   minDate={watch('created_atStart')}
                   onChangeValue={(val: any) => {
-                    setValue('created_atEnd', new Date(val));
+                    const newDate = new Date(val);
+                    newDate.setHours(23, 59, 0, 0);
+                    setValue('created_atEnd', newDate.getTime());
+                    setValue('page', 1);
                   }}
                   disabled={!watch('created_atStart')}
                 />
