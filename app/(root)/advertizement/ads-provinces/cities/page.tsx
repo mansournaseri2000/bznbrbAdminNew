@@ -8,7 +8,7 @@ import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 
 import { getCityListById } from '@/api/ads';
-import AdPageCard from '@/components/advertizement/AdPageCard';
+// import AdPageCard from '@/components/advertizement/AdPageCard';
 import Header from '@/layout/Header';
 import { Box, Flex, Grid } from '@/libs/primitives';
 import { ToastError } from '@/libs/shared/toast/Toast';
@@ -46,7 +46,7 @@ export default function Cities() {
       <Header title='تبلیغات شهرستان' isNavigation />
       <Box p={'24px 110px 40px 40px '}>
         <Grid width={'100%'} columns={'2'} gap={'5'}>
-          <AdPageCard type='simple' />
+          {/* <AdPageCard  /> */}s
         </Grid>
       </Box>
     </Flex>

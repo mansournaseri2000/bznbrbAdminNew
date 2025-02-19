@@ -32,7 +32,7 @@ const ProvinceListContainer = () => {
   return (
     <Grid width={'100%'} columns={'2'} gap={'5'}>
       {data.provinces.map(Item => (
-        <AdPageCard type='province_list' key={Item.id} label={Item.name} holdersCount={Item.bannerCount} latestUpdatedAt={Item.lastUpdated} path={`/ads/province/province-ad/${Item.id}`} />
+        <AdPageCard key={Item.id} label={Item.name} holdersCount={Item.bannerCount} latestUpdatedAt={Item.lastUpdated} path={`/ads/province/province-ad/${Item.id}`} />
       ))}
     </Grid>
   );

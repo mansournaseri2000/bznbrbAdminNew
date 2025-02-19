@@ -339,7 +339,7 @@ const ArticleFilter = ({ province, categories, setIsOpen, onSubmit }: Props) => 
           )}
         />
       </Grid>
-      <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onSubmit={() => addFilter()} onCloseButton={() => removeFilter()} isFull={true} />
+      <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onSubmit={() => addFilter()} onCloseButton={() => removeFilter()} />
     </>
   );
 };
