@@ -22,7 +22,6 @@ const UserHero = (props: Props) => {
   const searchParams = useSearchParams();
   const getParam = (key: string) => searchParams.get(key) || '';
 
-  // console.log('Watch', watch());
   return (
     <Grid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '3fr 1fr' }}>
       <Controller

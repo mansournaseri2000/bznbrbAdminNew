@@ -421,6 +421,17 @@ export const removeMainImageArticle = async (id: number) => {
   return res.data;
 };
 
+export const removeImage = async (id: number) => {
+  const res = await ApiManager.delete<ApiData<any>>(`upload`, {
+    data: {
+      id: id,
+      type: 'ARTICLE',
+    },
+  });
+
+  return res.data;
+};
+
 export const removeImageGalleryArticle = async (id: number) => {
   const res = await ApiManager.delete<ApiData<any>>(`places/deletePlacePicUserUploads/${id}`);
 

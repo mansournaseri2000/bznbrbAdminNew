@@ -1,30 +1,27 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
-
 import { Spinner } from '@radix-ui/themes';
-import { useMutation } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { getAllUsersWithParams, UserBody } from '@/api/user';
+import { filterObject } from '@/api/data-management';
+import { getAllUsers } from '@/api/user';
 import UserHero from '@/components/user/hero/UserHero';
 import UserList from '@/components/user/list/UserList';
 import Header from '@/layout/Header';
 import { Box, Flex, Grid, Text } from '@/libs/primitives';
 import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
 import ItemsPerPage from '@/libs/shared/ItemsPerPage';
-import { updateUrlWithPageNumber } from '@/libs/utils';
-import { generateSearchParams } from '@/libs/utils/generateSearchParams';
 
 export default function User({ searchParams }: { params: { slug: string }; searchParams: { page: string; limit: string; searchQuery: string; status: string } }) {
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
-  const { replace } = useRouter();
-  const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
-  const methods = useForm({ defaultValues: { searchQuery: searchParams.searchQuery || '', status: searchParams.status ? searchParams.status : '', limit: 10, page: page } });
+  const queryClient = useQueryClient();
+
+  const methods = useForm({ defaultValues: { searchQuery: searchParams.searchQuery || '', status: searchParams.status ? searchParams.status : '', page: searchParams.page ? searchParams.page : 1 } });
   const { watch, handleSubmit, setValue } = methods;
 
   // console.log('WATCH', watch());
@@ -33,45 +30,24 @@ export default function User({ searchParams }: { params: { slug: string }; searc
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
 
-  const {
-    data: userData,
-    mutate: userMutate,
-    isError: userError,
-    isPending: userPending,
-  } = useMutation({
-    mutationFn: async (body: UserBody) => getAllUsersWithParams(body),
-    onSuccess: async data => {
-      const cleanedData = Object.fromEntries(
-        Object.entries(watch()).filter(
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          ([_, value]) =>
-            value !== undefined &&
-            value !== '' &&
-            value !== 'none' &&
-            value !== null &&
-            !(Array.isArray(value) && value.length === 0) &&
-            !(Array.isArray(value) && value.every(item => item === '')) &&
-            !(Array.isArray(value) && value.every(item => item === 'none')) &&
-            !(typeof value === 'object' && value !== null && Object.keys(value).length === 0)
-        )
-      );
-      const searchParams = generateSearchParams(cleanedData);
-      replace(`/user?${searchParams}`);
-      console.log('data', data);
-    },
-    onError: async data => {
-      console.log('DATA Error', data);
-    },
-  });
+  const { data, isLoading, isError, isFetching } = useQuery({ queryKey: ['user-list'], queryFn: async () => await getAllUsers(watch() as any) });
 
-  useEffect(() => {
-    userMutate(watch());
-  }, []);
-
-  // console.log(userData, 'sample test');
-
-  const onSubmit = () => {
-    userMutate(watch());
+  function generateSearchParams<T extends Record<string, any>>(obj: T): string {
+    return Object.entries(obj)
+      .map(([key, value]) => {
+        if (Array.isArray(value)) {
+          return `${encodeURIComponent(key)}=${value.map(encodeURIComponent).join(',')}`;
+        }
+        return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+      })
+      .join('&');
+  }
+  const onSubmit = (data: any) => {
+    const obj = filterObject(data, true);
+    const searchParams = generateSearchParams(obj);
+    queryClient.invalidateQueries({ queryKey: ['user-list'] });
+    const newUrl = `${window.location.pathname}?${searchParams}`;
+    window.history.pushState(null, '', newUrl);
   };
 
   return (
@@ -82,27 +58,25 @@ export default function User({ searchParams }: { params: { slug: string }; searc
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Flex width={'100%'} direction={'column'} gap={'5'} p={'5'}>
-                <UserHero onSubmit={() => onSubmit()} />
-                {userError ? (
+                <UserHero onSubmit={() => onSubmit(watch())} />
+                {isError ? (
                   <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
-                ) : userPending ? (
+                ) : isLoading || isFetching ? (
                   <Spinner style={{ marginInline: 'auto', scale: 3, marginBlock: '20px' }} />
                 ) : (
-                  <UserList data={userData?.latestUsers as any} />
+                  <UserList data={data?.latestUsers as any} />
                 )}
-                {userData?.latestUsers && (
+                {data?.latestUsers && (
                   <Flex width={'100%'} align={'center'} justify={'between'}>
                     <CustomPagination
-                      current={page}
-                      total={userData?.totalPages as number}
+                      current={Number(watch('page'))}
+                      total={data?.totalPages as number}
                       onPageChange={p => {
-                        setPage(p);
                         setValue('page', p);
-                        updateUrlWithPageNumber(p);
-                        onSubmit();
+                        onSubmit(watch());
                       }}
                     />
-                    <ItemsPerPage data={userData?.latestUsers} currentPage={userData?.currentPage} totalCount={userData?.totalCount} />
+                    <ItemsPerPage data={data?.latestUsers} currentPage={data?.currentPage} totalCount={data?.totalCount} />
                   </Flex>
                 )}
               </Flex>

@@ -1,6 +1,7 @@
 import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
 import { RecentTripsResponse, UserInfoResponse, UserListResponse } from '@/types/user/user';
 
+import { generateSearchParam } from './data-management';
 import { ApiData } from './types';
 
 interface InputObject {
@@ -17,8 +18,16 @@ export const filterObject = (obj: InputObject): InputObject => {
   return result;
 };
 
-export const getAllUsers = async (pageNumber: number) => {
-  const res = await DevApiManager.get<ApiData<UserListResponse>>(`user?page=${pageNumber}&limit=10`);
+export type UserListParams = {
+  page: number;
+  status: boolean;
+  searchQuery: string;
+};
+
+export const getAllUsers = async (params: UserListParams) => {
+  const obj = filterObject(params);
+  const searchParams = generateSearchParam(obj);
+  const res = await DevApiManager.get<ApiData<UserListResponse>>(`user?limit=10&${searchParams}`);
 
   return res.data.data;
 };

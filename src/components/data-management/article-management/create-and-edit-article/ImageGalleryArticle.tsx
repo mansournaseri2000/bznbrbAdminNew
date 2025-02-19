@@ -8,7 +8,7 @@ import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { getImageGalleryArticle } from '@/api/article';
-import { removeImageGalleryArticle } from '@/api/data-management';
+import { removeImage } from '@/api/data-management';
 import { Box, Button, Flex, Grid, Heading, IconButton, Modal, Text, TextField } from '@/libs/primitives';
 import CustomPagination from '@/libs/shared/custom-pagination/CustomPagination';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
@@ -46,10 +46,10 @@ const ImageGalleryArticle = ({ articleId, constant }: Props) => {
    */
 
   const { mutate: removeImageMutate, isPending: removeImageIsPending } = useMutation({
-    mutationFn: async (id: number) => removeImageGalleryArticle(id),
+    mutationFn: async (id: number) => removeImage(id),
     onSuccess: async data => {
       if (data.status === true) {
-        queryClient.invalidateQueries({ queryKey: ['place'] });
+        queryClient.invalidateQueries({ queryKey: ['article-image-gallery'] });
         setIsOpenModal(false);
         ToastSuccess('زیر دسته بندی مورد نظر با موفقیت حذف شد');
       } else {
@@ -144,6 +144,7 @@ const ImageGalleryArticle = ({ articleId, constant }: Props) => {
                     colorVariant='PINK'
                     onClick={() => {
                       setIsOpenModal(true);
+                      setCurrentItem(item);
                     }}
                   >
                     <Trash height={24} />
@@ -184,7 +185,7 @@ const ImageGalleryArticle = ({ articleId, constant }: Props) => {
         <Grid gapY={'24px'} p={'5'}>
           <Text>آیا از حذف این تصویر اطمینان دارید؟ </Text>
           <Grid gap={'10px'} columns={'2'}>
-            <Button type='button' onClick={() => removeImageMutate(Number(1))} variant='soft' size={'4'}>
+            <Button type='button' onClick={() => removeImageMutate(Number(currentItem.id))} variant='soft' size={'4'}>
               <Text {...typoVariant.body3}>{removeImageIsPending ? <Spinner /> : 'بله'}</Text>
             </Button>
             <Button type='button' onClick={() => setIsOpenModal(false)} variant='solid' size={'4'}>
