@@ -7,11 +7,11 @@ import { useParams } from 'next/navigation';
 import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 
-import { getBannerPageById } from '@/api/ads';
+import { getCityListById } from '@/api/ads';
 import { Grid } from '@/libs/primitives';
 import { ToastError } from '@/libs/shared/toast/Toast';
 
-import AdPageCard from './AdPageCard';
+import AdPageCard2 from './AdPageCard2';
 
 const CitiesListContainer = () => {
   /**
@@ -20,12 +20,11 @@ const CitiesListContainer = () => {
    */
   const params = useParams();
   const cityId = params.slug[2];
-  console.log('🚀 ~ CitiesListContainer ~ cityId:', cityId);
   /**
    * Services
    * _______________________________________________________________________________
    */
-  const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['banner-provinces'], queryFn: async () => await getBannerPageById(Number(cityId)) });
+  const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['banner-provinces'], queryFn: async () => await getCityListById(Number(cityId)) });
 
   console.log('CITY DATA', data);
   /**
@@ -40,15 +39,14 @@ const CitiesListContainer = () => {
    */
   return (
     <Grid width={'100%'} columns={'2'} gap={'5'}>
-      {data.provinces.map((item, index) => (
-        <AdPageCard
+      {data?.provinces?.map((item, index) => (
+        <AdPageCard2
           key={index}
-          type='banner'
-          label={item.cityName}
+          type='simple'
+          name={item.provinceName}
           latestUpdatedAt={item.lastUpdated}
-          holdersCount={item.bannerCount}
-          adKey='city'
-          path={`/ads/province/city/cities-ad/${item.cityId}`}
+          emptyBanners={item.bannerCount}
+          path={`/advertizement/ads-provinces/cities/ad-list-city/${item.cityId}`}
         />
       ))}
     </Grid>

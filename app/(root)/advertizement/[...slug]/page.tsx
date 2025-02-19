@@ -1,6 +1,6 @@
-import AdsContainer from '@/components/ads/AdsContainer';
-import CitiesListContainer from '@/components/ads/CitiesListContainer';
-import ProvinceListContainer from '@/components/ads/ProvinceListContainer';
+import AdsContainer from '@/components/advertizement/AdsContainer';
+import CitiesListContainer from '@/components/advertizement/CitiesListContainer';
+import ProvinceListContainer from '@/components/advertizement/ProvinceListContainer';
 import {
   articleAdOptions,
   articleListOptions,

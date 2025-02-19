@@ -6,25 +6,25 @@ import Image from 'next/image';
 
 import { CopyIcon } from '@radix-ui/react-icons';
 
-import { Box, Flex, Grid, Heading, IconButton, Modal, Text } from '@/libs/primitives';
-import ModalAction from '@/libs/shared/ModalAction';
+import { Box, Button, Flex, Grid, Heading, IconButton, Modal, Text } from '@/libs/primitives';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { Pencil, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { AdsListResponce } from '@/types/ads/ads';
+import { AdsListResponse } from '@/types/ads/ads';
 
-import AddEditAdModal from './AddEditAdModal';
+type ModalStateTypes = {
+  isOpen: boolean;
+  key: 'delete' | 'edit';
+};
 
-type Type = 'delete' | 'edit';
-
-const AdCard = ({ id, pic, url, altText, description }: AdsListResponce) => {
+const AdCard = ({ id, pic, url, altText, description }: AdsListResponse) => {
   /**
    * const and variables
    * _______________________________________________________________________________
    */
-  const [type, setType] = useState<Type>('edit');
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const [modalState, setModalState] = useState<ModalStateTypes>({ isOpen: false, key: 'edit' });
 
   return (
     <>
@@ -32,21 +32,14 @@ const AdCard = ({ id, pic, url, altText, description }: AdsListResponce) => {
         <Flex width={'100%'} align={'center'} justify={'between'}>
           <Heading style={{ color: colorPalette.gray[11], fontSize: '32px', fontWeight: 500, lineHeight: '37.5px' }}>{id}</Heading>
           <Flex align={'center'} gap={'4'}>
-            <IconButton
-              size={'3'}
-              onClick={() => {
-                setType('edit');
-                setIsOpen(true);
-              }}
-            >
+            <IconButton size={'3'} onClick={() => setModalState({ key: 'edit', isOpen: true })}>
               <Pencil />
             </IconButton>
             <IconButton
               size={'3'}
               variant='surface'
               onClick={() => {
-                setType('delete');
-                setIsOpen(true);
+                setModalState({ key: 'delete', isOpen: true });
               }}
             >
               <Trash />
@@ -79,19 +72,29 @@ const AdCard = ({ id, pic, url, altText, description }: AdsListResponce) => {
           </Flex>
         </Flex>
       </Grid>
-      {type === 'delete' ? (
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-          <ModalHeader title='حذف آگهی' handleClose={() => setIsOpen(false)} />
-          <Grid width={'100%'} p={'4'}>
-            <Heading as='h2' size={'5'}>
-              آیا از حذف این آگهی اطمینان داید؟
-            </Heading>
+      <Modal isOpen={modalState.isOpen} onClose={() => setModalState({ ...modalState, isOpen: false })}>
+        {modalState.key === 'edit' && (
+          <>
+            <ModalHeader title='ویرایش آگهی' handleClose={() => setModalState({ ...modalState, isOpen: false })} />
+          </>
+        )}
+        advertizement
+        {modalState.key === 'delete' && (
+          <Grid gapY={'24px'} p={'5'}>
+            <Text>
+              آیا از حذف آگهی <span style={{ fontWeight: 'bold', color: 'red' }}>{altText}</span> اطمینان دارید؟
+            </Text>
+            <Grid gap={'10px'} columns={'2'}>
+              <Button variant='soft' size={'4'}>
+                <Text {...typoVariant.body3}>بله</Text>
+              </Button>
+              <Button type='button' onClick={() => setModalState({ ...modalState, isOpen: false })} variant='solid' size={'4'}>
+                <Text {...typoVariant.body3}>خیر</Text>
+              </Button>
+            </Grid>
           </Grid>
-          <ModalAction submitButtonText='حذف آگهی' closeButtonText='لغو' onCloseButton={() => setIsOpen(false)} />
-        </Modal>
-      ) : (
-        type === 'edit' && <AddEditAdModal type='edit' isOpen={isOpen} setIsOpen={setIsOpen} />
-      )}
+        )}
+      </Modal>
     </>
   );
 };
