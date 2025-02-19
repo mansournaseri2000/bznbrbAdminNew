@@ -6,8 +6,10 @@ import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-for
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Yup from 'yup';
 
 import { createPlace, editPlace } from '@/api/place';
 import FilterCard from '@/components/develop/shared/filter-card/FilterCard';
@@ -39,6 +41,45 @@ const Description = dynamic(() => import('@/components/place/create-edit-place/d
 
 const TravelTime = dynamic(() => import('@/components/place/create-edit-place/TravelTime'), {
   ssr: false,
+});
+
+// Your schema definition
+const validationSchema = Yup.object().shape({
+  category_id: Yup.string().required('لطفاً دسته بندی را وارد کنید'),
+  sub_category_id: Yup.string().required('لطفاً زیر دسته بندی را وارد کنید'), // Sub-category is required in Persian
+  name: Yup.string().required('لطفاً نام را وارد کنید'), // Name is required in Persian
+  provinceId: Yup.string().required('لطفاً استان را وارد کنید'), // Province is required in Persian
+  cityID: Yup.string().required('لطفاً شهرستان را وارد کنید'), // City is required in Persian
+  townId: Yup.string().required('لطفاً شهر را وارد کنید'),
+  // Add other fields as necessary, using .nullable(), .optional() for non-required ones
+  type: Yup.string(),
+  status: Yup.string(),
+  isPublished: Yup.boolean(),
+  slug: Yup.string(),
+  basicInfoDescription: Yup.string(),
+  basicInfosummary: Yup.string(),
+  area: Yup.string(),
+  tell: Yup.string(),
+  website: Yup.string(),
+  email: Yup.string(),
+  address: Yup.string(),
+  vehicleOptions: Yup.array(),
+  PlaceDetails: Yup.array(),
+  features: Yup.array(),
+  trip_value: Yup.number(),
+  rating: Yup.number(),
+  TripTypes: Yup.array(),
+  PlaceCategories: Yup.array(),
+  PlaceTripSeasons: Yup.array(),
+  tripLimitations: Yup.array(),
+  gender: Yup.string(),
+  PlaceWorkTimes: Yup.array(),
+  meta_description: Yup.string(),
+  meta_title: Yup.string(),
+  metakeyword: Yup.string(),
+  uploadImage: Yup.array(),
+  pictures: Yup.array(),
+  suggested_time: Yup.string(),
 });
 
 /**
@@ -162,6 +203,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
   const queryClient = useQueryClient();
   const { push, back } = useRouter();
   const methods = useForm<fomrData | any>({
+    resolver: yupResolver(validationSchema),
     defaultValues:
       status == 'edit-point'
         ? {
@@ -267,7 +309,13 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             suggested_time: 0,
           },
   });
-  const { handleSubmit, control } = methods;
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = methods;
+
+  console.log(errors, 'errorserrorserrors');
 
   /**
    * hooks and methods
@@ -522,6 +570,16 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             <Button size={'3'} colorVariant='PINK' style={{ paddingInline: 51 }} onClick={() => back}>
               <Text {...typoVariant.body1}>لغو</Text>
             </Button>
+            <Flex gap={'8px'}>
+              {Object.entries(errors).map(([key, value], index, array) => (
+                <div key={key} style={{ color: colorPalette.pink[9] }}>
+                  <span>
+                    {value?.message as any}
+                    {array.length - 1 === index ? '.' : '-'}
+                  </span>
+                </div>
+              ))}
+            </Flex>
           </Flex>
         </Grid>
       </form>

@@ -10,24 +10,22 @@ import { ApiData } from './types';
 interface InputObject {
   [key: string]: any;
 }
-const filterObject = (obj: InputObject, isEmtyString?: boolean): InputObject => {
+export const filterObject = (obj: InputObject | null | undefined, isEmptyString?: boolean): InputObject => {
   const result: InputObject = {};
 
-  if (isEmtyString !== false) {
-    Object.keys(obj).forEach(key => {
-      const value = obj[key];
-      if (value !== null && value !== 'null' && value !== '' && value !== 0 && value !== 'none' && !(Array.isArray(value) && value.length === 0)) {
-        result[key] = value;
-      }
-    });
-  } else {
-    Object.keys(obj).forEach(key => {
-      const value = obj[key];
-      if (value !== null && value !== 'null' && value !== 0 && value !== 'none' && !(Array.isArray(value) && value.length === 0)) {
-        result[key] = value;
-      }
-    });
+  if (!obj || typeof obj !== 'object') {
+    return result; // Return empty object if obj is null or undefined
   }
+
+  const filterCondition = (value: any) => value !== undefined && value !== null && value !== 'null' && value !== 0 && value !== 'none' && !(Array.isArray(value) && value.length === 0);
+
+  Object.keys(obj).forEach(key => {
+    const value = obj[key];
+    if (isEmptyString === false ? filterCondition(value) : filterCondition(value) && value !== '') {
+      result[key] = value;
+    }
+  });
+
   return result;
 };
 
@@ -81,6 +79,61 @@ export const getAllPlacesFiltered = async (params: AllPlacesBody) => {
   return res.data.data;
 };
 
+function generateSearchParams<T extends Record<string, any>>(obj: T): string {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(obj).forEach(([key, value]) => {
+    searchParams.append(key, String(value));
+  });
+
+  return searchParams.toString();
+}
+
+export type PlaceListParams = {
+  page: number;
+  cityId: number;
+  provinceId: number;
+  parentCategoryId: number;
+  arrayCatIds: string;
+  arrayTypes: string;
+  searchQuery: string;
+  isPublished: boolean;
+  status: boolean;
+  mainPic: boolean;
+  gallery: boolean;
+  description: boolean;
+  info: boolean;
+  coordinates: boolean;
+  features: boolean;
+  analyse: boolean;
+  seo: boolean;
+  workTime: boolean;
+  startDate: number;
+  endDate: number;
+};
+
+export function generateSearchParam<T extends Record<string, any>>(obj: T): string {
+  return Object.entries(obj)
+    .map(([key, value]) => {
+      if (Array.isArray(value)) {
+        return `${encodeURIComponent(key)}=${value.map(encodeURIComponent).join(',')}`;
+      }
+      return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+    })
+    .join('&');
+}
+
+/**
+ * place-lsit
+ * _______________________________________________________________________________
+ */
+export const getPlaceList = async (params: PlaceListParams) => {
+  const obj = filterObject(params, true);
+  const searchParams = generateSearchParam(obj);
+  const res = await DevApiManager.get<ApiData<PlaceListResponse>>(`places/allPlacesWithFilter?${searchParams}`);
+  return res.data.data;
+};
+
 export const getPlaceImproveContent = async (placeId: number, page: number, limit: number) => {
   const res = await DevApiManager.get<ApiData<PlaceImproveContentResponse>>(`places/placeImproveContent/${placeId}?page=${page}&limit=4`, {});
   return res.data.data;
@@ -112,6 +165,36 @@ export const getPlaceUserUploads = async (id: number, page: number, limit: numbe
       limit: limit,
     },
   });
+  return res.data.data;
+};
+
+/**
+ * article-lsit
+ * _______________________________________________________________________________
+ */
+
+export type ArticleListParams = {
+  title: string;
+  provincesId: number;
+  citiesId: number;
+  status: boolean;
+  is_published: boolean;
+  parentCategoryId: number;
+  created_atStart: number;
+  created_atEnd: number;
+  arrayCatIds: string;
+  base: boolean;
+  text: boolean;
+  seo: boolean;
+  mainPic: boolean;
+  related: boolean;
+  page: number;
+};
+
+export const getArticleListServices = async (params: ArticleListParams) => {
+  const obj = filterObject(params, true);
+  const searchParams = generateSearchParam(obj);
+  const res = await DevApiManager.get<ApiData<ArticleListResponse>>(`article/filter?${searchParams}`);
   return res.data.data;
 };
 

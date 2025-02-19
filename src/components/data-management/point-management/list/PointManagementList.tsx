@@ -32,6 +32,7 @@ interface PointListDetail {
 type Props = {
   data: AllFilteredPlacesDetail[];
   onRevalidate: any;
+  constant: any;
 };
 
 const PointManagementList = (props: Props) => {
@@ -138,10 +139,11 @@ const PointManagementList = (props: Props) => {
       },
     },
     {
-      accessorKey: 'category',
+      accessorKey: 'type',
       header: 'نوع نقطه',
       cell: info => {
-        const value = info.getValue() as string | null;
+        const data = props.constant.PlaceType?.find((item: any) => item.id == info.getValue());
+        const value = data?.name as string | null;
         return (
           <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
             {value ? value : '-'}

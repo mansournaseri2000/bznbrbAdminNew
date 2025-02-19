@@ -94,6 +94,7 @@ const Description = ({ details }: Props) => {
               padding: '8px',
               position: 'static',
               height: 'fit-content',
+              direction: 'ltr',
             }}
             editorState={editorStates[key.id]}
             toolbarClassName='toolbarClassName'

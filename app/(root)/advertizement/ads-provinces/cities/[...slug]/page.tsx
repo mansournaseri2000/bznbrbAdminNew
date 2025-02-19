@@ -8,7 +8,7 @@ import { cityAdOptions } from '@/constants/ads';
 import Header from '@/layout/Header';
 import { Box, Flex, Grid } from '@/libs/primitives';
 
-export default function CitiesManagement({ params }: { params: { slug: string[] } }) {
+export default function CitiesManagementPage({ params }: { params: { slug: string[] } }) {
   /**
    * Const and Variables
    * _______________________________________________________________________________

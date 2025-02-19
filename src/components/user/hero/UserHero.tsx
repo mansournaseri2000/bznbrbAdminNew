@@ -25,7 +25,11 @@ const UserHero = (props: Props) => {
   // console.log('Watch', watch());
   return (
     <Grid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '3fr 1fr' }}>
-      <Controller name='searchQuery' control={control} render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام کاربر یا شماره تماس' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} onClick={props.onSubmit} />} />
+      <Controller
+        name='searchQuery'
+        control={control}
+        render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام کاربر یا شماره تماس' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} />}
+      />
 
       <Controller
         name='status'

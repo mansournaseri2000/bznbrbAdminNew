@@ -2,41 +2,26 @@
 
 import React from 'react';
 
-import { useParams } from 'next/navigation';
 
-import { Spinner } from '@radix-ui/themes';
-import { useQuery } from '@tanstack/react-query';
 
-import { getCityListById } from '@/api/ads';
 // import AdPageCard from '@/components/advertizement/AdPageCard';
 import Header from '@/layout/Header';
 import { Box, Flex, Grid } from '@/libs/primitives';
-import { ToastError } from '@/libs/shared/toast/Toast';
 
-export default function Cities() {
+export default function CitiesPage() {
   /**
    * Const and Variables
    * _______________________________________________________________________________
-   */
-  const params = useParams();
-  const cityId = params.slug[2];
-  console.log('🚀 ~ Cities ~ cityId:', cityId);
+
   /**
    * Services
    * _______________________________________________________________________________
    */
-  const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['banner-provinces'], queryFn: async () => await getCityListById(Number(cityId)) });
   /**
    * Loading & Error
    * _______________________________________________________________________________
    */
-  if (isLoading || isFetching)
-    return (
-      <Flex width={'100%'} height={'90vh'} justify={'center'} align={'center'}>
-        <Spinner style={{ scale: 2.5 }} />
-      </Flex>
-    );
-  if (!data || isError) return ToastError('مشکلی پیش آمده.لطفا مجددا تلاش نمایید');
+
   /**
    * JSX
    * _______________________________________________________________________________

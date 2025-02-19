@@ -105,7 +105,7 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
         <Controller
           name='searchQuery'
           control={control}
-          render={({ field }) => <CustomSearch {...field} placeholder='جستجو' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} onClick={onSubmit} />}
+          render={({ field }) => <CustomSearch {...field} placeholder='جستجو' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} />}
         />
         <Controller
           name='sort'

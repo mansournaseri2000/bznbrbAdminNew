@@ -180,8 +180,6 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
     },
   });
 
-  console.log(articleData, 'articleDataarticleDataarticleData');
-
   return (
     <FormProvider {...methods}>
       <Grid width={'100%'} gapY={'5'}>
