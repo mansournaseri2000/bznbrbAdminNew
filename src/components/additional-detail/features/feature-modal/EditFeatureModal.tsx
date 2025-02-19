@@ -1,17 +1,21 @@
 'use client';
 
 import React from 'react';
+import Dropzone from 'react-dropzone';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
+import Image from 'next/image';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import imageCompression from 'browser-image-compression';
 
 import { editFeatureGroup, FeatureUploaderParams, UploadIconForFeature, UploadImageForFeature } from '@/api/additional-detail';
-import { Flex, TextField } from '@/libs/primitives';
-import ImagePicker2 from '@/libs/shared/ImagePicker2';
-import ItemWithUploader from '@/libs/shared/item-with-uploader/ItemWithUploader';
+import { Box, Flex, IconButton, TextField } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import Uploader from '@/libs/shared/uploader/Uploader';
+import { Update } from '@/public/icon';
+import { colorPalette } from '@/theme';
 import { FeaturesResponse } from '@/types/additional-detail/additional-detail';
 
 type Props = {
@@ -20,15 +24,13 @@ type Props = {
 };
 
 interface FeatureFormData {
+  imageFile: File | null;
+  iconFile: File | null;
   name: string;
-  imagePath: string;
-  imageFile: File;
-  iconPath: string;
-  iconFile: File;
-  localImagePath: File | null;
-  localIconPath: File | null;
-  isBanner: boolean;
-  isIcon: boolean;
+  pic: string;
+  icon: string;
+  localPic: string;
+  localIcon: string;
 }
 
 const EditFeatureModal = ({ setIsOpen, data }: Props) => {
@@ -37,16 +39,16 @@ const EditFeatureModal = ({ setIsOpen, data }: Props) => {
    */
   const methods = useForm<FeatureFormData>({
     defaultValues: {
+      imageFile: null,
+      iconFile: null,
+      pic: Boolean(data?.banner) ? data.banner : '',
+      icon: Boolean(data?.icon) ? data?.icon : '',
+      localPic: Boolean(data?.banner) ? data?.banner : '',
+      localIcon: Boolean(data?.icon) ? data?.icon : '',
       name: data?.name,
-      imagePath: data?.banner,
-      iconPath: data?.icon,
-      localImagePath: null,
-      localIconPath: null,
-      isBanner: Boolean(data?.banner) ? true : false,
-      isIcon: Boolean(data?.icon) ? true : false,
     },
   });
-  const { control, watch } = methods;
+  const { control, watch, setValue } = methods;
   const queryClient = useQueryClient();
 
   /* 
@@ -67,13 +69,13 @@ const EditFeatureModal = ({ setIsOpen, data }: Props) => {
     mutationFn: async () => await editFeatureGroup(data.id, watch('name') as any),
     onSuccess: localData => {
       if (localData.status === true) {
-        const localImage = watch('localImagePath');
-        const localIcon = watch('localIconPath');
+        const localImage = watch('imageFile');
+        const localIcon = watch('iconFile');
 
         if (localImage) {
           uploadImageMutate({
             featureId: String(data.id),
-            file: watch('imagePath') as any,
+            file: localImage,
             type: 'FEATURE',
           });
         }
@@ -81,7 +83,7 @@ const EditFeatureModal = ({ setIsOpen, data }: Props) => {
         if (localIcon) {
           uploadIconMutate({
             featureId: String(data.id),
-            file: watch('iconPath') as any,
+            file: localIcon,
             type: 'FEATURE',
           });
         }
@@ -94,24 +96,169 @@ const EditFeatureModal = ({ setIsOpen, data }: Props) => {
       }
     },
   });
+  /**
+   * Hooks and Methods
+   * _______________________________________________________________________________
+   */
+  const compressImage = async (file: File) => {
+    if (file.type === 'image/svg+xml') {
+      return file;
+    }
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 800,
+      useWebWorker: true,
+    };
 
+    try {
+      return await imageCompression(file, options);
+    } catch (error) {
+      console.error('Image compression error:', error);
+      return file;
+    }
+  };
+
+  const imageOnDrop = async (files: File[], onChange: (value: File) => void) => {
+    if (files && files[0]) {
+      const selectedImage = files[0];
+      const compressedImage = await compressImage(selectedImage);
+      onChange(URL.createObjectURL(compressedImage) as any);
+      setValue('localPic', URL.createObjectURL(compressedImage) as any);
+      setValue('imageFile', compressedImage as any);
+    }
+  };
+
+  const iconOnDrop = async (files: File[], onChange: (value: File) => void) => {
+    if (files && files[0]) {
+      const selectedImage = files[0];
+      const compressedImage = await compressImage(selectedImage);
+      onChange(URL.createObjectURL(compressedImage) as any);
+      setValue('localIcon', URL.createObjectURL(compressedImage) as any);
+      setValue('iconFile', compressedImage as any);
+    }
+  };
+  /**
+   * JSX
+   * _______________________________________________________________________________
+   */
   return (
     <FormProvider {...methods}>
       <Flex direction={'column'} align={'center'} p={'12px 16px'} gap={'4'}>
         <Flex gap={'3'}>
-          {watch('imagePath') ? (
-            <ItemWithUploader resetStore='isBanner' type='image' localPath={`${watch('localImagePath')}`} filePath={data?.banner} isOrigin={watch('isBanner')} />
+          {/*
+            Modal for add image
+           *****  When we don't have image   *****
+           _______________________________________________________________________________
+           */}
+          {!watch('pic') ? (
+            <Controller
+              name='pic'
+              control={control}
+              render={({ field }) => (
+                <Dropzone
+                  onDrop={files => imageOnDrop(files, field.onChange)}
+                  accept={{
+                    'image/*': ['.jpeg', '.png'],
+                  }}
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <div {...getRootProps()}>
+                      <input type='file' {...getInputProps()} />
+                      <Uploader type='pic' />
+                    </div>
+                  )}
+                </Dropzone>
+              )}
+            />
           ) : (
-            <ImagePicker2 resetStore='isBanner' name='imagePath' localPath='localImagePath'>
-              <Uploader type='pic' />
-            </ImagePicker2>
+            /*
+             Modal for edit image
+             *****  When we have a image and want to update it  *****
+             _______________________________________________________________________________
+             */
+            <Box width={'160px'} height={'160px'} position={'relative'} style={{ border: `1px dashed ${colorPalette.blue[8]}`, borderRadius: 8 }}>
+              <Image src={watch('localPic')} alt='' fill style={{ objectFit: 'cover', borderRadius: 8 }} />
+              <Controller
+                name='pic'
+                control={control}
+                render={({ field }) => (
+                  <Dropzone
+                    onDrop={files => imageOnDrop(files, field.onChange)}
+                    accept={{
+                      'image/*': ['.jpeg', '.png'],
+                    }}
+                  >
+                    {({ getRootProps, getInputProps }) => (
+                      <div {...getRootProps()}>
+                        <input type='file' {...getInputProps()} />
+
+                        <IconButton style={{ position: 'absolute', bottom: 0, borderRadius: 8 }}>
+                          <Update />
+                        </IconButton>
+                      </div>
+                    )}
+                  </Dropzone>
+                )}
+              />
+            </Box>
           )}
-          {watch('iconPath') ? (
-            <ItemWithUploader resetStore='isIcon' type='svg' localPath={`${watch('localIconPath')}`} filePath={data?.icon} isOrigin={watch('isIcon')} />
+          {/*
+           Modal for add icon
+           *****  When we don't have icon   *****
+           * _______________________________________________________________________________
+           */}
+          {!watch('icon') ? (
+            <Controller
+              name='icon'
+              control={control}
+              render={({ field }) => (
+                <Dropzone
+                  onDrop={files => iconOnDrop(files, field.onChange)}
+                  accept={{
+                    'image/svg+xml': ['.svg'],
+                  }}
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <div {...getRootProps()}>
+                      <input type='file' {...getInputProps()} />
+
+                      <Uploader type='icon' />
+                    </div>
+                  )}
+                </Dropzone>
+              )}
+            />
           ) : (
-            <ImagePicker2 resetStore='isIcon' name='iconPath' localPath='localIconPath'>
-              <Uploader type='icon' />
-            </ImagePicker2>
+            /*
+             Modal for edit icon
+             *****  When we have a icon and want to update it  *****
+             _______________________________________________________________________________
+             */
+            <Flex width={'160px'} height={'160px'} justify={'center'} align={'center'} position={'relative'} style={{ border: `1px dashed ${colorPalette.blue[8]}`, borderRadius: 8 }}>
+              <Image width={64} height={64} src={watch('localIcon')} alt='' style={{ objectFit: 'cover', borderRadius: 8 }} />
+              <Controller
+                name='icon'
+                control={control}
+                render={({ field }) => (
+                  <Dropzone
+                    onDrop={files => iconOnDrop(files, field.onChange)}
+                    accept={{
+                      'image/svg+xml': ['.svg'],
+                    }}
+                  >
+                    {({ getRootProps, getInputProps }) => (
+                      <div {...getRootProps()}>
+                        <input type='file' {...getInputProps()} />
+
+                        <IconButton style={{ position: 'absolute', bottom: 0, right: 0, borderRadius: 8 }}>
+                          <Update />
+                        </IconButton>
+                      </div>
+                    )}
+                  </Dropzone>
+                )}
+              />
+            </Flex>
           )}
         </Flex>
         <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='' style={{ width: '50%', margin: '0 auto' }} />} />
