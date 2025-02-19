@@ -78,7 +78,7 @@ export const updateCommentById = async (id: number, params: UpdateCommentBody) =
 };
 
 export const deleteCommentById = async (id: number) => {
-  const res = await DevApiManager.delete(`/ads/comments/${id}`);
+  const res = await DevApiManager.delete(`/comment/${id}`);
   return res.data;
 };
 
