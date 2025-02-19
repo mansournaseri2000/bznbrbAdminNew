@@ -81,6 +81,9 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
     setIsOpen(false);
   };
 
+  console.log(watch());
+  
+
   /**
    * JSX
    * _______________________________________________________________________________
@@ -88,6 +91,55 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
   return (
     <>
       <Grid maxHeight={'776px'} width={'100%'} p={'4'} gapY={'4'} style={{ overflowY: 'auto' }}>
+        {/*****
+         * Time period
+         * _______________________________________________________________________________
+         *****/}
+        <Grid gapY={'2'}>
+          <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
+            بازه زمانی
+          </Text>
+          <Grid gap={'16px'} columns={'2'}>
+            <Controller
+              name='startDate'
+              control={control}
+              render={item => (
+                <CustomDatePicker
+                  {...item}
+                  inputMode='none'
+                  placeholder='از تاریخ'
+                  value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
+                  onChangeValue={(val: any) => {
+                    const newDate = new Date(val);
+                    newDate.setHours(0, 0, 0, 0); // Set hour to 23, minutes to 59, seconds to 0, milliseconds to 0
+                    setValue('startDate', newDate.getTime());
+                    setValue('page', 1);
+                  }}
+                />
+              )}
+            />
+            <Controller
+              name='endDate'
+              control={control}
+              render={item => (
+                <CustomDatePicker
+                  {...item}
+                  inputMode='none'
+                  placeholder='تا تاریخ'
+                  value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
+                  minDate={watch('startDate')}
+                  onChangeValue={(val: any) => {
+                    const newDate = new Date(val);
+                    newDate.setHours(23, 59, 0, 0);
+                    setValue('endDate', newDate.getTime());
+                    setValue('page', 1);
+                  }}
+                  disabled={!watch('startDate')}
+                />
+              )}
+            />
+          </Grid>
+        </Grid>
         {/*****
         Point position
        * _______________________________________________________________________________
@@ -141,55 +193,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             )}
           />
         </Grid>
-        {/*****
-         * Time period
-         * _______________________________________________________________________________
-         *****/}
-        <Grid gapY={'2'}>
-          <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
-            بازه زمانی
-          </Text>
-          <Grid gap={'16px'} columns={'2'}>
-            <Controller
-              name='startDate'
-              control={control}
-              render={item => (
-                <CustomDatePicker
-                  {...item}
-                  inputMode='none'
-                  placeholder='از تاریخ'
-                  value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
-                  onChangeValue={(val: any) => {
-                    const newDate = new Date(val);
-                    newDate.setHours(0, 0, 0, 0); // Set hour to 23, minutes to 59, seconds to 0, milliseconds to 0
-                    setValue('startDate', newDate.getTime());
-                    setValue('page', 1);
-                  }}
-                />
-              )}
-            />
-            <Controller
-              name='endDate'
-              control={control}
-              render={item => (
-                <CustomDatePicker
-                  {...item}
-                  inputMode='none'
-                  placeholder='تا تاریخ'
-                  value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
-                  minDate={watch('startDate')}
-                  onChangeValue={(val: any) => {
-                    const newDate = new Date(val);
-                    newDate.setHours(23, 59, 0, 0);
-                    setValue('endDate', newDate.getTime());
-                    setValue('page', 1);
-                  }}
-                  disabled={!watch('startDate')}
-                />
-              )}
-            />
-          </Grid>
-        </Grid>
+
         {/*****
          * Point Type
          * _______________________________________________________________________________

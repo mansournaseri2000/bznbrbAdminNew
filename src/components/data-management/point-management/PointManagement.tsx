@@ -29,29 +29,27 @@ const PointManagement = ({ constant }: Props) => {
   const queryClient = useQueryClient();
   const getParam = (key: string) => searchParams.get(key) || '';
 
-  const page = Number(getParam('page')) || 1;
-
   const methods = useForm({
     defaultValues: {
-      page: page,
-      searchQuery: getParam('searchQuery') || '',
-      provinceId: Number(getParam('provinceId')) || '',
-      cityId: Number(getParam('cityId')) || '',
-      parentCategoryId: Number(getParam('parentCategoryId')) || '',
-      arrayCatIds: getParam('arrayCatIds') ? getParam('arrayCatIds').split(',').map(Number) : [],
-      arrayTypes: getParam('arrayTypes') ? getParam('arrayTypes').split(',').map(String) : [],
-      startDate: Number(getParam('startDate')) || '',
-      endDate: Number(getParam('endDate')) || '',
-      isPublished: getParam('isPublished') ? Boolean(getParam('isPublished')) : '',
-      status: getParam('status') ? Boolean(getParam('status')) : '',
-      mainPic: getParam('mainPic') ? Boolean(getParam('mainPic')) : '',
-      gallery: getParam('gallery') ? Boolean(getParam('gallery')) : '',
-      info: getParam('info') ? Boolean(getParam('info')) : '',
-      coordinates: getParam('coordinates') ? Boolean(getParam('coordinates')) : '',
-      description: getParam('description') ? Boolean(getParam('description')) : '',
-      features: getParam('features') ? Boolean(getParam('features')) : '',
-      analyse: getParam('analyse') ? Boolean(getParam('analyse')) : '',
-      seo: getParam('seo') ? Boolean(getParam('seo')) : '',
+      page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
+      searchQuery: searchParams.get('searchQuery') ? searchParams.get('searchQuery') : '',
+      provinceId: searchParams.get('provinceId') ? Number(searchParams.get('provinceId')) : '',
+      cityId: searchParams.get('cityId') ? Number(searchParams.get('cityId')) : '',
+      parentCategoryId: searchParams.get('parentCategoryId') ? Number(searchParams.get('parentCategoryId')) : '',
+      arrayCatIds: searchParams.get('arrayCatIds') ? searchParams.get('arrayCatIds')?.split(',').map(Number) : [],
+      arrayTypes: searchParams.get('arrayTypes') ? getParam('arrayTypes').split(',').map(String) : [],
+      startDate: searchParams.get('startDate') ? Number(searchParams.get('startDate')) : '',
+      endDate: searchParams.get('endDate') ? Number(searchParams.get('endDate')) : '',
+      isPublished: searchParams.get('isPublished') ? searchParams.get('isPublished') : '',
+      status: searchParams.get('status') ? searchParams.get('status') : '',
+      mainPic: searchParams.get('mainPic') ? searchParams.get('mainPic') : '',
+      gallery: searchParams.get('gallery') ? searchParams.get('gallery') : '',
+      info: searchParams.get('info') ? searchParams.get('info') : '',
+      coordinates: searchParams.get('coordinates') ? searchParams.get('coordinates') : '',
+      description: searchParams.get('description') ? searchParams.get('description') : '',
+      features: searchParams.get('features') ? searchParams.get('features') : '',
+      analyse: searchParams.get('analyse') ? searchParams.get('analyse') : '',
+      seo: searchParams.get('seo') ? searchParams.get('seo') : '',
     },
   });
 
@@ -112,7 +110,7 @@ const PointManagement = ({ constant }: Props) => {
           {data?.allFilteredPlaces && (
             <Flex width={'100%'} align={'center'} justify={'between'}>
               <CustomPagination
-                current={watch('page')}
+                current={Number(watch('page'))}
                 total={data?.totalPages as number}
                 maxWidth={24}
                 onPageChange={p => {
