@@ -11,14 +11,14 @@ import ModalHeader from '@/libs/shared/ModalHeader';
 import { Pencil, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { AdsListResponse } from '@/types/ads/ads';
+import { AdsCardDetail } from '@/types/ads/ads';
 
 type ModalStateTypes = {
   isOpen: boolean;
   key: 'delete' | 'edit';
 };
 
-const AdCard = ({ id, pic, url, altText, description }: AdsListResponse) => {
+const AdCard = ({ id, pic, url, altText, description }: AdsCardDetail) => {
   /**
    * const and variables
    * _______________________________________________________________________________

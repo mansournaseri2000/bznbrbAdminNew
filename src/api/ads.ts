@@ -1,10 +1,15 @@
 import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
-import { AdsPageResponse, ProvinceListByIdResponse, ProvinceListResponse } from '@/types/ads/ads';
+import { AdsHoldersResponse, AdsPageResponse, ProvinceListByIdResponse, ProvinceListResponse } from '@/types/ads/ads';
 
 import { ApiData } from './types';
 
 export const getAdsPages = async () => {
   const res = await DevApiManager.get<ApiData<AdsPageResponse[]>>('/ads/page');
+  return res.data.data;
+};
+
+export const getAdsHolders = async (holder: string) => {
+  const res = await DevApiManager.get<ApiData<AdsHoldersResponse[]>>(`/ads/holder?holder=${holder}`);
   return res.data.data;
 };
 

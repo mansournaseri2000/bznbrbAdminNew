@@ -1,4 +1,4 @@
-export type AdsListResponse = {
+export type AdsCardDetail = {
   id: string;
   pic: string;
   url: string;
@@ -9,11 +9,32 @@ export type AdsListResponse = {
 export interface AdsPageResponse {
   key: AdsPageKeyOptions;
   label: string;
-  holdersCount: number;
+  holder: string;
+  space: number;
+  holders: string[];
+  freeSpace: number;
   latestUpdatedAt: number;
 }
 
-export type AdsPageKeyOptions = 'main_page' | 'planner' | 'planner_trips' | 'tourmaker' | 'tours' | 'article' | 'articlelist' | 'maps' | 'place' | 'province' | 'city';
+export type AdsPageKeyOptions = 'main_page' | 'planner' | 'planner_trips' | 'tourmaker' | 'tours' | 'article' | 'article_list' | 'maps' | 'place' | 'province' | 'province_places' | 'category';
+
+export interface AdsHoldersResponse {
+  id: number;
+  status: boolean;
+  path: string;
+  page: string;
+  position: string;
+  description: string;
+  alt: string;
+  slug: string;
+  summery: string;
+  website: string;
+  socialMedia: string;
+  sponsor: string;
+  deletedAt: number;
+  createdAt: number;
+  updatedAt: number;
+}
 
 export interface ProvinceListResponse {
   provinces: ProvincesDetail[];

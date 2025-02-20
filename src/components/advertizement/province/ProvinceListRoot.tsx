@@ -7,11 +7,10 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getProvinceListForAdvertizement } from '@/api/ads';
 import AdPageCard2 from '@/components/advertizement/AdPageCard2';
-import Header from '@/layout/Header';
-import { Box, Flex, Grid } from '@/libs/primitives';
+import { Flex, Grid } from '@/libs/primitives';
 import { ToastError } from '@/libs/shared/toast/Toast';
 
-export default function AdsProvinces() {
+export const ProvinceListRoot = () => {
   /**
    * Services
    * _______________________________________________________________________________
@@ -34,25 +33,19 @@ export default function AdsProvinces() {
    * _______________________________________________________________________________
    */
   return (
-    <Flex direction={'column'}>
-      <Header title='تبلیغات استان ها' isNavigation />
-      <Box p={'24px 110px 40px 40px '}>
-        <Grid width={'100%'} columns={'2'} gap={'5'}>
-          {data.provinces.map((item, index) => (
-            <AdPageCard2
-              key={index}
-              type='province_list'
-              name={item.name}
-              emptyBanners={item.bannerCount}
-              path='/advertizement/ads-provinces/provinces/province-ads'
-              cityPath={`/advertizement/ads-provinces/cities/cities-list/${item.id}`}
-              latestUpdatedAt={item.lastUpdated}
-              // path={`/advertizement/ads-provinces/provinces/`}
-              // cityPath={`/advertizement/ads-provinces/cities/${item.id}`}
-            />
-          ))}
-        </Grid>
-      </Box>
-    </Flex>
+    <Grid width={'100%'} columns={'2'} gap={'5'}>
+      {data.provinces.map((item, index) => (
+        <AdPageCard2
+          key={index}
+          type='province_list'
+          name={item.name}
+          emptyBanners={item.bannerCount}
+          path='/advertizement/ads-provinces/provinces/province-ads'
+          cityPath={`/advertizement/ads-provinces/cities/cities-list/${item.id}`}
+          latestUpdatedAt={item.lastUpdated}
+        />
+      ))}
+    </Grid>
   );
-}
+};
+export default ProvinceListRoot;

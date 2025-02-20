@@ -11,7 +11,7 @@ import Header from '@/layout/Header';
 import { Box, Flex, Grid } from '@/libs/primitives';
 import { ToastError } from '@/libs/shared/toast/Toast';
 
-export default function Ads() {
+export default function AdsPages() {
   /**
    * Services
    * _______________________________________________________________________________
@@ -39,13 +39,7 @@ export default function Ads() {
         <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
           <Grid width={'100%'} columns={{ initial: '1', sm: '2' }} gap={'5'}>
             {data.map((item, index) => (
-              <AdPageCard
-                key={index}
-                holdersCount={item.holdersCount}
-                label={item.label}
-                latestUpdatedAt={item.latestUpdatedAt}
-                path={item.key !== 'province' ? `/advertizement/ads-pages/${item.key}` : '/advertizement/ads-provinces/provinces'}
-              />
+              <AdPageCard key={index} adKey={item.key} holder={item.holder} label={item.label} latestUpdatedAt={item.latestUpdatedAt} space={item.space} />
             ))}
           </Grid>
         </Grid>
