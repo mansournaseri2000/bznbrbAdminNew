@@ -24,7 +24,6 @@ const AdPageCard = ({ adKey, holder, label, latestUpdatedAt, space }: Props) => 
    * _______________________________________________________________________________
    */
   const router = useRouter();
-  console.log('adKeyS', adKey);
   /**
    * Hooks and Methods
    * _______________________________________________________________________________

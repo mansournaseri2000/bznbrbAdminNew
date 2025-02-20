@@ -1,8 +1,9 @@
-export type AdsCardDetail = {
+export type AdsItemsDetail = {
   id: string;
-  pic: string;
-  url: string;
-  altText: string;
+  path: string;
+  alt: string;
+  position: string;
+  slug: string;
   description: string;
 };
 
