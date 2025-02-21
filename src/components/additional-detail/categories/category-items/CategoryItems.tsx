@@ -42,7 +42,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
-  const { name, id, isEditable, hasMedia, selected, onSelect } = props;
+  const { name, id, isEditable, selected, onSelect } = props;
   const [modalState, setModalState] = useState<ModalStateType>({ isOpen: false, key: 'edit-category' });
   const queryClient = useQueryClient();
 
@@ -60,6 +60,8 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
     isLoading: singleCategoryLoading,
     isFetching: singleCategoryFetching,
   } = useQuery({ queryKey: ['single-category', id], queryFn: async () => getSingleCategory(id), initialData: props, enabled: selected });
+
+  console.log('data', singleCategoryData);
 
   const { mutate: deleteCategoryMutate, isPending: deleteCategoryPending } = useMutation({
     mutationFn: async () => deleteCategory(id),
@@ -99,7 +101,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
       return;
     }
     if (singleCategoryData && singleCategoryData.children.some(item => item.name === subCategoryItem)) {
-      ToastError('این زیر دسته بندی از قبل وجود دارد');
+      ToastError('زیر دسته بندی تکراری است');
       return;
     }
     createSubCategoryMutate();
@@ -119,7 +121,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
           hero={name}
           withEdit
           withDelete
-          hasMedia={hasMedia === true}
+          hasMedia={singleCategoryData.hasMedia === true}
           isDisableDelete={isEditable === false}
           onEdit={e => {
             e.stopPropagation();

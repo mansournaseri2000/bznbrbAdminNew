@@ -1,5 +1,5 @@
 import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
-import { AdsPageResponse, BannerPageByIdResponse, BannerPageResponse } from '@/types/ads/ads';
+import { AdsPageResponse, ProvinceListByIdResponse, ProvinceListResponse } from '@/types/ads/ads';
 
 import { ApiData } from './types';
 
@@ -8,12 +8,12 @@ export const getAdsPages = async () => {
   return res.data.data;
 };
 
-export const getBannerPage = async () => {
-  const res = await DevApiManager.get<ApiData<BannerPageResponse>>('/ads/banners');
+export const getProvinceListForAdvertizement = async () => {
+  const res = await DevApiManager.get<ApiData<ProvinceListResponse>>('/ads/banners');
   return res.data.data;
 };
 
-export const getBannerPageById = async (id: number) => {
-  const res = await DevApiManager.get<ApiData<BannerPageByIdResponse>>(`/ads/banners?provinceId=${id}`);
+export const getCityListById = async (id: number) => {
+  const res = await DevApiManager.get<ApiData<ProvinceListByIdResponse>>(`/ads/banners?provinceId=${id}`);
   return res.data.data;
 };

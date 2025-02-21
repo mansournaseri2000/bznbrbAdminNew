@@ -17,7 +17,7 @@ const UserHero = (props: Props) => {
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
 
   const searchParams = useSearchParams();
   const getParam = (key: string) => searchParams.get(key) || '';
@@ -39,6 +39,7 @@ const UserHero = (props: Props) => {
             placeholder='وضعیت کاربر'
             value={String(field.value)}
             onValueChange={val => {
+              setValue('page', 1);
               field.onChange(val);
               props.onSubmit();
             }}

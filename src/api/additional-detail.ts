@@ -197,8 +197,20 @@ export const editAreaDetails = async (params: EditAreaBody) => {
   return res.data;
 };
 
-export const updateProvinceAbout = async (params:UpdateProvinceBody) => {
-  const res = await DevApiManager.post('/provinces/about',params);
+export const updateProvinceAbout = async (params: UpdateProvinceBody) => {
+  const res = await DevApiManager.post('/provinces/about', params);
+  return res.data;
+};
+
+export const updateCity = async (id: number, params: { name: string }) => {
+  const res = await DevApiManager.patch(`/cities/update/${id}`, {
+    name: params,
+  });
+  return res.data;
+};
+
+export const deleteCity = async (id: number) => {
+  const res = await DevApiManager.delete(`/cities/id/${id}`);
   return res.data;
 };
 
@@ -326,7 +338,7 @@ export const UploadSvgFroAreaDetail = async (params: UploadAreaSvgParams) => {
 
 // ******* City ********
 
-export const UploadImageForCity = async (params: CityUploaderParams) => {
+export const CityUploader = async (params: CityUploaderParams) => {
   const formData = new FormData();
 
   formData.append('type', params.type);
@@ -335,22 +347,6 @@ export const UploadImageForCity = async (params: CityUploaderParams) => {
   formData.append('position', params.position);
 
   const res = await UploaderApiManager.post<ApiData<{ data: string }>>('image', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return res.data;
-};
-
-export const UploadIconForCity = async (params: CityUploaderParams) => {
-  const formData = new FormData();
-
-  formData.append('type', params.type);
-  formData.append('cityId', params.cityId.toString());
-  formData.append('file', params.file);
-  formData.append('position', params.position);
-
-  const res = await UploaderApiManager.post<ApiData<{ data: string }>>('svg', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

@@ -46,6 +46,9 @@ const CitiesManagement = () => {
     );
 
   if (!citiesData || citiesError) return ToastError('مشکلی پیش آمده. لطفا مجددا تلاش نمایید');
+
+  console.log(citiesData,"citiesDatacitiesDatacitiesData2");
+  
   /*
    *** JSX_________________________________________________________________________________________________________________________________________________________________
    */

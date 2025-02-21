@@ -34,14 +34,13 @@ const FeatureItems = forwardRef<HTMLDivElement, FeatureItemsProps>((props, ref) 
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
-  const { id, hasMedia, name, selected, onSelect } = props;
+  const { id, name, selected, onSelect } = props;
 
   const [modalState, setModalState] = useState<modalStateType>({ isOpen: false, key: 'edit' });
   const methods = useForm({ defaultValues: { name: '' } });
   const { control, watch, setValue, getValues } = methods;
   const queryClient = useQueryClient();
 
-  console.log('NAME', watch());
   /**
    * Services
    * _______________________________________________________________________________
@@ -107,7 +106,7 @@ const FeatureItems = forwardRef<HTMLDivElement, FeatureItemsProps>((props, ref) 
           hero={name}
           withEdit
           withDelete
-          hasMedia={hasMedia === true}
+          hasMedia={singleFeatureData.hasMedia === true}
           onEdit={e => {
             e.stopPropagation();
             setValue('name', singleFeatureData.name);

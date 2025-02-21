@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { addTownToCity, getCitiesByProvinceId } from '@/api/additional-detail';
+import { addTownToCity, deleteCity, getCitiesByProvinceId } from '@/api/additional-detail';
 import { Box, Button, Flex, Grid, Modal, Text } from '@/libs/primitives';
 import CustomAddItem from '@/libs/shared/custom-add-item/CustomAddItem';
 import ModalHeader from '@/libs/shared/ModalHeader';
@@ -62,6 +62,19 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
       }
     },
   });
+  
+
+  const { mutate: deleteCityMutate, isPending: deleteCityPending } = useMutation({
+    mutationFn: async () => await deleteCity(id),
+    onSuccess: data => {
+      if (data.status === true) {
+        queryClient.invalidateQueries({ queryKey: ['cities'] });
+        ToastSuccess('شهر مورد نظر با موفقیت حذف شد');
+      } else {
+        ToastError('مشکلی پیش آمده . لطفا مجددا تلاش کنید');
+      }
+    },
+  });
 
   //   /**
   //    * Methods
@@ -80,6 +93,8 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
     }
     addTownMutate();
   };
+
+  
 
   /**
    * JSX
@@ -134,10 +149,10 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
         {/*
          *** for edit city _________________________________________________________________________________________________________________________________________________________________
          */}
-        {modalState.key === 'edit' && (
+        {modalState.key === 'edit' && Boolean(cityData)&& (
           <>
             <ModalHeader title={'ویرایش شهرستان'} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
-            <EditCityModal setIsOpen={() => setModalState({ key: 'edit', isOpen: false })} data={cityData} />
+            <EditCityModal setIsOpen={() => setModalState({ key: 'edit', isOpen: false })} data={cityData ?? { name: '', id: null }} />
           </>
         )}
         {/*
@@ -149,8 +164,8 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
               آیا از حذف شهرستان <span style={{ fontWeight: 'bold', color: 'red' }}>{name}</span> اطمینان دارید؟
             </Text>
             <Grid gap={'10px'} columns={'2'}>
-              <Button variant='soft' size={'4'}>
-                <Text {...typoVariant.body3}>بله</Text>
+              <Button variant='soft' size={'4'} onClick={() => deleteCityMutate()}>
+                <Text {...typoVariant.body3}>{deleteCityPending ? <Spinner /> : 'بله'}</Text>
               </Button>
               <Button type='button' onClick={() => setModalState({ ...modalState, isOpen: false })} variant='solid' size={'4'}>
                 <Text {...typoVariant.body3}>خیر</Text>

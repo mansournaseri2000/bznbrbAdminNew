@@ -14,9 +14,9 @@ import { typoVariant } from '@/theme/typo-variants';
 import { FilteredPicsDetail } from '@/types/confirmations/image-sent';
 
 type CardProps = FilteredPicsDetail & {
-  onShowPoint?: () => void;
-  onPublished?: () => void;
-  onDelete?: () => void;
+  onShowPoint?: VoidFunction;
+  onPublished?: VoidFunction;
+  onDelete?: VoidFunction;
   index: number;
 };
 

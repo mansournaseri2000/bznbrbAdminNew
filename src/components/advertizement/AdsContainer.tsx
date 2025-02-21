@@ -8,13 +8,13 @@ import { useRouter } from 'next/navigation';
 import { Button, Flex, Grid, Text } from '@/libs/primitives';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { AdsListResponce } from '@/types/ads/ads';
+import { AdsListResponse } from '@/types/ads/ads';
 
 import AdAdd from './AdAdd';
 import AdCard from './AdCard';
 
 type Props = {
-  data: AdsListResponce[];
+  data: AdsListResponse[];
 };
 
 const AdsContainer = ({ data }: Props) => {

@@ -55,7 +55,6 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
   const removeFilter = () => {
     reset({
       page: 1,
-      limit: 10,
       searchQuery: '',
       sortDate: '',
       targetDate: '',
@@ -121,6 +120,7 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
                 handleSortItems(currentItem?.id as any);
                 field.onChange(val);
                 onSubmit();
+                setValue('page', 1);
               }}
             >
               {userDetailSortConstant.map(item => (
@@ -135,7 +135,16 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
         <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
-        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} isLoading={isPending} />
+        <ModalAction
+          submitButtonText='اعمال فیلتر ها'
+          closeButtonText='حذف فیلتر ها'
+          onCloseButton={() => removeFilter()}
+          onSubmit={() => {
+            addFilter();
+            setIsOpen(false);
+          }}
+          isLoading={isPending}
+        />
       </Modal>
     </>
   );

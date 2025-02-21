@@ -2,7 +2,9 @@
 // import { clientApiManagerV2 } from '@/libs/utils/client-axios-config';
 import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
 import { TripResponse } from '@/types/plans/trip';
+import { RecentTripsResponse } from '@/types/user/user';
 
+import { filterObject, generateSearchParam } from './data-management';
 import { ApiData } from './types';
 
 export const getTrips = async (id: string): Promise<ApiData<TripResponse> | null> => {
@@ -26,4 +28,28 @@ export const getTrips = async (id: string): Promise<ApiData<TripResponse> | null
       throw new Error('Unexpected error: Please try again later');
     }
   }
+};
+
+export type UserRecentTripsParams = {
+  page: number;
+  searchQuery: string;
+  originCityId: number;
+  originProvinceId: number;
+  destinationCityId: number;
+  destinationProvinceId: number;
+  targetDate: string;
+  sortDate: string;
+  departureDateStart: number;
+  departureDateEnd: number;
+  returnDateStart: number;
+  returnDateEnd: number;
+};
+
+export const getRecentTrips = async (params: UserRecentTripsParams) => {
+  const obj = filterObject(params);
+  delete obj.sort;
+  const searchParams = generateSearchParam(obj);
+  const res = await DevApiManager.get<ApiData<RecentTripsResponse>>(`trips?limit=10&${searchParams}`);
+
+  return res.data.data;
 };

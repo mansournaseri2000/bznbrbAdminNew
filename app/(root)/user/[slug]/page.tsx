@@ -1,14 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-
-import { useRouter } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { editUser, EditUserDetailResponse, getRecentTrips, getUserInfo, RecentTripsBody } from '@/api/user';
+import { filterObject } from '@/api/data-management';
+import { editUser, EditUserDetailResponse, getRecentTripsUser, getUserInfo } from '@/api/user';
 import EditUser from '@/components/user/user-profile/edit-user/EditUser';
 import UserProfileHero from '@/components/user/user-profile/hero/UserProfileHero';
 import UserProfileList from '@/components/user/user-profile/list/UserProfileList';
@@ -19,7 +18,6 @@ import ItemsPerPage from '@/libs/shared/ItemsPerPage';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import UserDetailCard from '@/libs/shared/UserDetailCard';
-import { updateUrlWithPageNumber } from '@/libs/utils';
 import { generateSearchParams } from '@/libs/utils/generateSearchParams';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
@@ -55,7 +53,6 @@ export default function UserProfile({
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
-  const { push } = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(false);
   const [showFilter, setShowFilter] = useState<boolean>(false);
@@ -65,9 +62,7 @@ export default function UserProfile({
   const methods = useForm({
     defaultValues: {
       page: Number(searchParams.page) || 1,
-      limit: Number(searchParams.limit) || 10,
       sortDate: searchParams.sortDate ? searchParams.sortDate : '',
-      userId: userId,
       targetDate: searchParams.targetDate ? searchParams.targetDate : '',
       originCityId: searchParams.originCityId ? Number(searchParams.originCityId) : '',
       originProvinceId: searchParams.originProvinceId ? Number(searchParams.originProvinceId) : '',
@@ -82,52 +77,51 @@ export default function UserProfile({
   });
 
   const { watch, setValue, handleSubmit } = methods;
+  const { data, isLoading, isFetching } = useQuery({ queryKey: ['recent-trips-user', userId], queryFn: async () => await getRecentTripsUser(watch() as any, userId) });
 
-  console.log('USER Data', userData);
+  // const {
+  //   data: tripsData,
+  //   mutate: tripsMutate,
+  //   isPending: tripPending,
+  // } = useMutation({
+  //   mutationFn: async (body: RecentTripsBody) => getRecentTrips(body),
+  //   onSuccess: async data => {
+  //     const cleanedData = Object.fromEntries(
+  //       Object.entries(watch()).filter(([key, value]) => {
+  //         if (
+  //           key !== 'userId' &&
+  //           value !== undefined &&
+  //           value !== '' &&
+  //           value !== 'none' &&
+  //           value !== null &&
+  //           !(Array.isArray(value) && value.length === 0) &&
+  //           !(Array.isArray(value) && value.every(item => item === '')) &&
+  //           !(Array.isArray(value) && value.every(item => item === 'none'))
+  //         ) {
+  //           if (['departureDateStart', 'departureDateEnd', 'returnDateStart', 'returnDateEnd'].includes(key)) {
+  //             return new Date(value).getTime();
+  //           }
+  //           return true;
+  //         }
+  //         return false;
+  //       })
+  //     );
 
-  const {
-    data: tripsData,
-    mutate: tripsMutate,
-    isPending: tripPending,
-  } = useMutation({
-    mutationFn: async (body: RecentTripsBody) => getRecentTrips(body),
-    onSuccess: async data => {
-      const cleanedData = Object.fromEntries(
-        Object.entries(watch()).filter(([key, value]) => {
-          if (
-            key !== 'userId' &&
-            value !== undefined &&
-            value !== '' &&
-            value !== 'none' &&
-            value !== null &&
-            !(Array.isArray(value) && value.length === 0) &&
-            !(Array.isArray(value) && value.every(item => item === '')) &&
-            !(Array.isArray(value) && value.every(item => item === 'none'))
-          ) {
-            if (['departureDateStart', 'departureDateEnd', 'returnDateStart', 'returnDateEnd'].includes(key)) {
-              return new Date(value).getTime();
-            }
-            return true;
-          }
-          return false;
-        })
-      );
+  //     Object.keys(cleanedData).forEach(key => {
+  //       if (['departureDateStart', 'departureDateEnd', 'returnDateStart', 'returnDateEnd'].includes(key)) {
+  //         cleanedData[key] = new Date(cleanedData[key]).getTime();
+  //       }
+  //     });
 
-      Object.keys(cleanedData).forEach(key => {
-        if (['departureDateStart', 'departureDateEnd', 'returnDateStart', 'returnDateEnd'].includes(key)) {
-          cleanedData[key] = new Date(cleanedData[key]).getTime();
-        }
-      });
-
-      const searchParams = generateSearchParams(cleanedData);
-      push(`/user/${userId}?${searchParams}`);
-      setShowFilter(false);
-      console.log('data', data);
-    },
-    onError: async data => {
-      console.log('OnError', data);
-    },
-  });
+  //     const searchParams = generateSearchParams(cleanedData);
+  //     push(`/user/${userId}?${searchParams}`);
+  //     setShowFilter(false);
+  //     console.log('data', data);
+  //   },
+  //   onError: async data => {
+  //     console.log('OnError', data);
+  //   },
+  // });
 
   const { mutate: updateUserMutate, isPending: updateUserPending } = useMutation({
     mutationFn: async (body: EditUserDetailResponse) => editUser(userId, body),
@@ -143,17 +137,20 @@ export default function UserProfile({
       console.log(err);
     },
   });
+
+  console.log(watch());
+
   /*
    *** Hooks and Methods _________________________________________________________________________________________________________________________________________________________________
    */
 
-  useEffect(() => {
-    tripsMutate(watch() as any);
-  }, []);
-
-  const onSubmit = () => {
-    tripsMutate(watch() as any);
+  const onSubmit = (data: any) => {
     console.log('run');
+    const obj = filterObject(data, true);
+    const searchParams = generateSearchParams(obj);
+    queryClient.invalidateQueries({ queryKey: ['recent-trips-user'] });
+    const newUrl = `${window.location.pathname}?${searchParams}`;
+    window.history.pushState(null, '', newUrl);
   };
 
   const handleDeActiveUser = (userInfo: UserInfoDetail) => {
@@ -217,21 +214,20 @@ export default function UserProfile({
                   برنامه های کاربر
                 </Text>
 
-                <UserProfileHero onSubmit={() => tripsMutate(watch() as any)} userId={userId} isOpen={showFilter} setIsOpen={setShowFilter} isPending={tripPending} />
-                {tripPending ? <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} /> : <UserProfileList data={tripsData?.latestTrips ? tripsData.latestTrips : ([] as any)} />}
+                <UserProfileHero onSubmit={() => onSubmit(watch())} userId={userId} isOpen={showFilter} setIsOpen={setShowFilter} isPending={isLoading} />
+                {isFetching || isLoading ? <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '20px' }} /> : <UserProfileList data={data?.latestTrips ? data.latestTrips : ([] as any)} />}
 
-                {tripsData?.latestTrips && (
+                {data?.latestTrips && (
                   <Flex width={'100%'} align={'center'} justify={'between'}>
                     <CustomPagination
                       current={watch('page')}
-                      total={tripsData?.totalPages}
+                      total={data?.totalPages}
                       onPageChange={p => {
                         setValue('page', p);
-                        updateUrlWithPageNumber(p);
-                        onSubmit();
+                        onSubmit(watch());
                       }}
                     />
-                    <ItemsPerPage data={tripsData?.latestTrips} currentPage={tripsData?.currentPage} totalCount={tripsData?.totalCount} />
+                    <ItemsPerPage data={data?.latestTrips} currentPage={data?.currentPage} totalCount={data?.totalCount} />
                   </Flex>
                 )}
               </Grid>

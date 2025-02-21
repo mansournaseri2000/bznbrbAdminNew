@@ -8,19 +8,15 @@ import { Button, Flex, Text } from '@/libs/primitives';
 import { convertTimestampToPersianDate } from '@/libs/utils/convertTimestampToPersianDate';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { AdsPageKeyOptions } from '@/types/ads/ads';
 
 type Props = {
   label: string;
   holdersCount: number;
   latestUpdatedAt: number;
-  adKey: AdsPageKeyOptions;
-  type: 'banner' | 'province_list';
   path: string;
-  id?: number;
 };
 
-const AdPageCard = ({ label, holdersCount, latestUpdatedAt, adKey, type, id, path }: Props) => {
+const AdPageCard = ({ label, holdersCount, latestUpdatedAt, path }: Props) => {
   const router = useRouter();
 
   return (
@@ -32,15 +28,13 @@ const AdPageCard = ({ label, holdersCount, latestUpdatedAt, adKey, type, id, pat
         <Item label='تعداد تبلیغات' value={holdersCount} />
         <Item label='آخرین ویرایش' value={convertTimestampToPersianDate(latestUpdatedAt)} />
       </Flex>
-      <Flex align={'center'} gap={'2'}>
-        <Button size={'3'} onClick={() => router.push(path)} style={{ padding: '7px 16px' }}>
-          <Text {...typoVariant.body3}>مشاهده تبلیغات</Text>
+      <Flex direction={'column'} height={'100%'} align={'end'} gap={'34px'}>
+        <Text {...typoVariant.body1} style={{ color: colorPalette.pink[9] }}>
+          A
+        </Text>
+        <Button size={'2'} onClick={() => router.push(path)} style={{ padding: '7px 16px' }}>
+          <Text {...typoVariant.body3}>مدیریت تبلیغات</Text>
         </Button>
-        {type === 'province_list' && (
-          <Button size={'3'} variant='soft' onClick={() => router.push(`/ads/province/${adKey}/${id}`)}>
-            <Text {...typoVariant.body3}>لیست شهرستان ها</Text>
-          </Button>
-        )}
       </Flex>
     </Flex>
   );
@@ -54,10 +48,7 @@ const Item = ({ label, value }: { label: string; value: string | number }) => (
       {label}
     </Text>
     <Text {...typoVariant.description2} style={{ color: colorPalette.gray[12] }}>
-      {value}
+      {value ? value : '__'}
     </Text>
   </Flex>
 );
-
-
-// type === 'banner' ? `/ads/${adKey}` : `/ads/province/${adKey}/${id}`

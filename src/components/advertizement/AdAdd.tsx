@@ -6,7 +6,7 @@ import { Button, Flex, Heading, Text } from '@/libs/primitives';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
-import AddEditAdModal from './AddEditAdModal';
+import AddEditAdModal from './modal/AddEditAdModal';
 
 type Props = {
   id: string;

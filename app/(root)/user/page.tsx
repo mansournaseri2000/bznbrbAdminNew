@@ -20,7 +20,6 @@ export default function User({ searchParams }: { params: { slug: string }; searc
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
   const queryClient = useQueryClient();
-
   const methods = useForm({ defaultValues: { searchQuery: searchParams.searchQuery || '', status: searchParams.status ? searchParams.status : '', page: searchParams.page ? searchParams.page : 1 } });
   const { watch, handleSubmit, setValue } = methods;
 
