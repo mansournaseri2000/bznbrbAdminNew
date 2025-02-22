@@ -310,7 +310,6 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
           },
   });
   const {
-    watch,
     handleSubmit,
     control,
     formState: { errors },
