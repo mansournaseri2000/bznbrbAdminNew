@@ -437,3 +437,10 @@ export const removeImageGalleryArticle = async (id: number) => {
 
   return res.data;
 };
+
+
+
+export const removeArticle = async (id: number) => {
+  const res = await DevApiManager.delete(`article/id/${id}`);
+  return res.data;
+};

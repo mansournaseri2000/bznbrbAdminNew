@@ -315,8 +315,6 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
     formState: { errors },
   } = methods;
 
-  console.log(errors, 'errorserrorserrors');
-
   /**
    * hooks and methods
    * _______________________________________________________________________________

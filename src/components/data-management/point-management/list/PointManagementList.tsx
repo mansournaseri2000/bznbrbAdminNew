@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Spinner } from '@radix-ui/themes';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { removePlace } from '@/api/confirmations';
@@ -36,6 +36,7 @@ type Props = {
 };
 
 const PointManagementList = (props: Props) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [currentItemId, setCurrentItemId] = useState<number | null>(null);
@@ -46,6 +47,7 @@ const PointManagementList = (props: Props) => {
       if (data.status === true) {
         props.onRevalidate();
         ToastSuccess(' آیتم مورد نظر با موفقیت حذف شد');
+        queryClient.invalidateQueries({ queryKey: ['place-list'] });
         setIsOpen(false);
       } else {
         ToastError('لطفا دوباره تلاش نمایید');
