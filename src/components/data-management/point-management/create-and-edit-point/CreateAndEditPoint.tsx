@@ -50,7 +50,7 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required('لطفاً نام را وارد کنید'), // Name is required in Persian
   provinceId: Yup.string().required('لطفاً استان را وارد کنید'), // Province is required in Persian
   cityID: Yup.string().required('لطفاً شهرستان را وارد کنید'), // City is required in Persian
-  townId: Yup.string().required('لطفاً شهر را وارد کنید'),
+  townId: Yup.string(),
   // Add other fields as necessary, using .nullable(), .optional() for non-required ones
   type: Yup.string(),
   status: Yup.string(),
@@ -255,7 +255,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
 
             uploadImage: placeData?.UserSentPicturesForPlace,
             pictures: placeData?.pictures,
-            suggested_time: placeData?.suggested_time,
+            suggested_time: placeData?.suggested_time ? placeData?.suggested_time : 0,
           }
         : {
             type: 'PLACE',
@@ -310,6 +310,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
           },
   });
   const {
+    watch,
     handleSubmit,
     control,
     formState: { errors },
