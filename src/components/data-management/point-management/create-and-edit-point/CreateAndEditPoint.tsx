@@ -50,7 +50,7 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required('لطفاً نام را وارد کنید'), // Name is required in Persian
   provinceId: Yup.string().required('لطفاً استان را وارد کنید'), // Province is required in Persian
   cityID: Yup.string().required('لطفاً شهرستان را وارد کنید'), // City is required in Persian
-  townId: Yup.string().required('لطفاً شهر را وارد کنید'),
+  townId: Yup.string(),
   // Add other fields as necessary, using .nullable(), .optional() for non-required ones
   type: Yup.string(),
   status: Yup.string(),
@@ -213,20 +213,20 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             name: placeData?.name,
             category_id: Boolean(placeData?.category_id) ? findByChildId(placeConstant.categories, placeData.category_id).parent_id : '',
             sub_category_id: Boolean(placeData?.category_id) ? placeData?.category_id : '',
-            slug: placeData?.slug,
-            basicInfoDescription: placeData?.description,
-            basicInfosummary: placeData?.summary,
+            slug: placeData?.slug ? placeData?.slug : '',
+            basicInfoDescription: placeData?.description ? placeData?.description : '',
+            basicInfosummary: placeData?.summary ? placeData?.summary : '',
 
             provinceId: placeData?.Cities ? placeData?.Cities.Provinces.id : '',
             cityID: placeData?.Cities ? placeData?.Cities.id : '',
             area: placeData?.area,
             townId: placeData?.Town?.id,
-            tell: placeData?.tell,
-            website: placeData?.website,
-            email: placeData?.email,
-            address: placeData?.address,
-            lat: placeData?.lat,
-            lng: placeData?.lng,
+            tell: placeData?.tell ? placeData?.tell : '',
+            website: placeData?.website ? placeData?.website : '',
+            email: placeData?.email ? placeData?.email : '',
+            address: placeData?.address ? placeData?.address : '',
+            lat: placeData?.lat ? placeData?.lat : '',
+            lng: placeData?.lng ? placeData?.lng : '',
 
             vehicleOptions: serializeModelObject(model),
 
@@ -246,11 +246,11 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
 
             PlaceWorkTimes: placeData?.PlaceWorkTime,
 
-            keywords: placeData?.keywords,
-            metakeywords: placeData?.tags,
-            keyword: placeData?.keywords,
-            meta_description: placeData?.meta_description,
-            meta_title: placeData?.meta_title,
+            keywords: placeData?.keywords ? placeData?.keywords : '',
+            metakeywords: placeData?.tags ? placeData?.tags : '',
+            keyword: placeData?.keywords ? placeData?.keywords : '',
+            meta_description: placeData?.meta_description ? placeData?.meta_description : '',
+            meta_title: placeData?.meta_title ? placeData?.meta_title : '',
             metakeyword: '',
 
             uploadImage: placeData?.UserSentPicturesForPlace,
