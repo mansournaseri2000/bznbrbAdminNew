@@ -135,6 +135,36 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
 
       <Grid columns={'2'} gap={'24px'}>
         <Flex direction={'column'} gap={'16px'}>
+          <Text>مدت زمان بازدید از این جا‌ذبه</Text>
+          <Flex width={'50%'} gap={'10px'} align={'center'}>
+            <TextField
+              maxLength={4} // Limit input length
+              value={watch('suggested_time')}
+              onChange={e => {
+                let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+                // Prevent first character from being '0'
+                if (value.startsWith('0')) {
+                  value = value.substring(1);
+                }
+
+                // Ensure the number doesn't exceed 100
+                if (parseInt(value, 10) > 100) value = '100';
+
+                // Append "%" only if there's a valid number
+                value = value ? `${value}%` : '';
+                const numericValue = value.replace(/%/g, ''); // Removes all percent symbols
+                setValue('suggested_time', Number(numericValue));
+              }}
+              placeholder='میزان اهمیت نقطه' // Example placeholder
+            />
+            <Text>{watch('trip_value')}%</Text>
+          </Flex>
+        </Flex>
+      </Grid>
+
+      <Grid columns={'2'} gap={'24px'}>
+        <Flex direction={'column'} gap={'16px'}>
           <Text>میزان اهمیت نقطه</Text>
           <Flex width={'50%'} gap={'10px'} align={'center'}>
             <TextField

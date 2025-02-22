@@ -52,3 +52,18 @@ a {
     text-align: left;
   }
 }
+
+.DraftEditor-root {
+  font-family: var(--yekan-font) !important;
+}
+
+.rdw-editor-main {
+  font-family: var(--yekan-font) !important;
+}
+
+/* Optional: Ensure toolbar and dropdowns also use the font */
+
+.rdw-dropdown-optionwrapper .rdw-dropdownoption-active {
+  background-color: #e0e0e0 !important; /* Adjust as needed */
+  font-family: 'IRANSansX', sans-serif !important;
+}

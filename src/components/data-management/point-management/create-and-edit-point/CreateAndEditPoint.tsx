@@ -255,7 +255,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
 
             uploadImage: placeData?.UserSentPicturesForPlace,
             pictures: placeData?.pictures,
-            suggested_time: placeData?.suggested_time,
+            suggested_time: placeData?.suggested_time ? placeData?.suggested_time : 0,
           }
         : {
             type: 'PLACE',

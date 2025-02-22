@@ -96,6 +96,12 @@ const Description = ({ details }: Props) => {
               height: 'fit-content',
               direction: 'ltr',
             }}
+            toolbar={{
+              fontFamily: {
+                options: ['IRANSansX', 'Arial', 'Times New Roman'], // Must match exactly
+                defaultValue: 'IRANSansX', // Set as default if desired
+              },
+            }}
             editorState={editorStates[key.id]}
             toolbarClassName='toolbarClassName'
             wrapperClassName='wrapperClassName'
