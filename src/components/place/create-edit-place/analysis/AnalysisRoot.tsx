@@ -138,7 +138,6 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
           <Text>مدت زمان بازدید از این جا‌ذبه</Text>
           <Flex width={'50%'} gap={'10px'} align={'center'}>
             <TextField
-              maxLength={4} // Limit input length
               value={watch('suggested_time')}
               onChange={e => {
                 let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
@@ -149,16 +148,14 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
                 }
 
                 // Ensure the number doesn't exceed 100
-                if (parseInt(value, 10) > 100) value = '100';
 
                 // Append "%" only if there's a valid number
                 value = value ? `${value}%` : '';
                 const numericValue = value.replace(/%/g, ''); // Removes all percent symbols
                 setValue('suggested_time', Number(numericValue));
               }}
-              placeholder='میزان اهمیت نقطه' // Example placeholder
+              placeholder='>مدت زمان بازدید از این جا‌ذبه' // Example placeholder
             />
-            <Text>{watch('trip_value')}%</Text>
           </Flex>
         </Flex>
       </Grid>
