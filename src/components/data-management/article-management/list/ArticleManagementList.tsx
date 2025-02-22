@@ -1,16 +1,21 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { Box, Button, Flex, Text } from '@/libs/primitives';
+import { removeArticle } from '@/api/data-management';
+import { Box, Button, Flex, Grid, IconButton, Modal, Text } from '@/libs/primitives';
 import { Table } from '@/libs/shared';
+import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
+import { Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { ArticleSDetail } from '@/types/data-management/article';
+import { Spinner } from '@radix-ui/themes';
 
 interface ArticleDetail {
   title: string;
@@ -28,7 +33,29 @@ type Props = {
 };
 
 const ArticleManagementList = (props: Props) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentItemId, setCurrentItemId] = useState<number | null>(null);
+
+  const { mutate: deleteMutate, isPending: deletePending } = useMutation({
+    mutationFn: async (id: number) => removeArticle(id),
+    onSuccess: async data => {
+      if (data.status === true) {
+        ToastSuccess(' آیتم مورد نظر با موفقیت حذف شد');
+        queryClient.invalidateQueries({ queryKey: ['article-list'] });
+        setIsOpen(false);
+      } else {
+        ToastError('لطفا دوباره تلاش نمایید');
+        setIsOpen(false);
+      }
+    },
+    onError: () => {
+      ToastError('لطفا دوباره تلاش نمایید');
+      setIsOpen(false);
+    },
+  });
+
   const columns: ColumnDef<ArticleDetail>[] = [
     {
       accessorKey: 'index',
@@ -145,6 +172,22 @@ const ArticleManagementList = (props: Props) => {
       },
     },
     {
+      id: 'remove',
+      cell: ({ row }) => {
+        const item = row.original;
+        const handleClick = (e: React.MouseEvent) => {
+          e.preventDefault();
+          setIsOpen(true);
+          setCurrentItemId(item.id);
+        };
+        return (
+          <IconButton variant='solid' size={'3'} type='button' colorVariant='PINK' onClick={handleClick}>
+            <Trash />
+          </IconButton>
+        );
+      },
+    },
+    {
       id: 'details',
       cell: ({ row }) => {
         const item = row.original;
@@ -163,7 +206,24 @@ const ArticleManagementList = (props: Props) => {
       },
     },
   ];
-  return <Table columns={columns as any} data={props.data as any} />;
+  return (
+    <>
+      <Table columns={columns as any} data={props.data as any} />
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Grid gapY={'24px'} p={'5'}>
+          <Text>آیا از حذف این آیتم اطمینان دارید؟ </Text>
+          <Grid gap={'10px'} columns={'2'}>
+            <Button type='button' onClick={() => deleteMutate(Number(currentItemId))} variant='soft' size={'4'}>
+              <Text {...typoVariant.body3}>{deletePending ? <Spinner /> : 'بله'}</Text>
+            </Button>
+            <Button type='button' onClick={() => setIsOpen(false)} variant='solid' size={'4'}>
+              <Text {...typoVariant.body3}>خیر</Text>
+            </Button>
+          </Grid>
+        </Grid>
+      </Modal>
+    </>
+  );
 };
 
 export default ArticleManagementList;
