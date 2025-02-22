@@ -2,21 +2,24 @@
 
 import React from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 
 import { getAdsPages } from '@/api/ads';
-import AdPageCard from '@/components/advertizement/AdPageCard';
+import AdsManagmentListCard from '@/components/advertizement/AdsManagmentListCard';
 import Header from '@/layout/Header';
 import { Box, Flex, Grid } from '@/libs/primitives';
 import { ToastError } from '@/libs/shared/toast/Toast';
 
-export default function Ads() {
+export default function AdsPages() {
   /**
    * Services
    * _______________________________________________________________________________
    */
   const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['ads-page'], queryFn: async () => await getAdsPages() });
+  const { push } = useRouter();
   /**
    * Loading & Error
    * _______________________________________________________________________________
@@ -28,6 +31,16 @@ export default function Ads() {
       </Flex>
     );
   if (!data || isError) return ToastError('مشکلی پیش آمده.لطفا مجددا تلاش نمایید');
+
+  const handleRedirect = (adKey: any) => {
+    if (adKey === 'main_page' || adKey === 'planner' || adKey === 'tourmaker' || adKey === 'article_list' || adKey === 'article' || adKey === 'place' || adKey === 'maps') {
+      return push(`/advertizement/${adKey}`);
+    } else if (adKey === 'tours' || adKey === 'planner_trips') {
+      return push(`/advertizement/trip/${adKey}`);
+    } else {
+      return push(`/advertizement/other/${adKey}`);
+    }
+  };
   /**
    * JSX
    * _______________________________________________________________________________
@@ -39,12 +52,16 @@ export default function Ads() {
         <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
           <Grid width={'100%'} columns={{ initial: '1', sm: '2' }} gap={'5'}>
             {data.map((item, index) => (
-              <AdPageCard
+              <AdsManagmentListCard
                 key={index}
-                holdersCount={item.holdersCount}
-                label={item.label}
+                lable={item.label}
                 latestUpdatedAt={item.latestUpdatedAt}
-                path={item.key !== 'province' ? `/advertizement/ads-pages/${item.key}` : '/advertizement/ads-provinces/provinces'}
+                space={item.space}
+                type='main'
+                holder={item.holder}
+                handleRedirectAdsManagment={() => {
+                  handleRedirect(item.key);
+                }}
               />
             ))}
           </Grid>

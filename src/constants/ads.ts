@@ -1,14 +1,66 @@
 export const adsCardOptions = [
-  { id: 1, title: 'صفحه اصلی', firstValue: 3, secondValue: '۲۴ فروردین ۱۴۰۳', path: '/ads/main', buttonText: 'مدیریت تبلیغات', firstLabel: 'تعداد تبلیغات', secondLabel: 'آخرین ویرایش' },
-  { id: 2, title: 'برنامه ساز', firstValue: 3, secondValue: '۲۴ فروردین ۱۴۰۳', path: '/ads/trip-planner', buttonText: 'مدیریت تبلیغات', firstLabel: 'تعداد تبلیغات', secondLabel: 'آخرین ویرایش' },
-  { id: 3, title: 'برنامه سفر', firstValue: 3, secondValue: '۲۴ فروردین ۱۴۰۳', path: '/ads/tour-planner', buttonText: 'مدیریت تبلیغات', firstLabel: 'تعداد تبلیغات', secondLabel: 'آخرین ویرایش' },
-  { id: 4, title: 'تور ساز', firstValue: 3, secondValue: '۲۴ فروردین ۱۴۰۳', path: '/ads/trip-plan', buttonText: 'مدیریت تبلیغات', firstLabel: 'تعداد تبلیغات', secondLabel: 'آخرین ویرایش' },
-  { id: 5, title: 'تور ها', firstValue: 3, secondValue: '۲۴ فروردین ۱۴۰۳', path: '/ads/tour-list', buttonText: 'مدیریت تبلیغات', firstLabel: 'تعداد تبلیغات', secondLabel: 'آخرین ویرایش' },
-  { id: 6, title: 'مقاله', firstValue: 3, secondValue: '۲۴ فروردین ۱۴۰۳', path: '/ads/article-list', buttonText: 'مدیریت تبلیغات', firstLabel: 'تعداد تبلیغات', secondLabel: 'آخرین ویرایش' },
-  { id: 7, title: 'لیست مقالات', firstValue: 3, secondValue: '۲۴ فروردین ۱۴۰۳', path: '/ads/article-ad', buttonText: 'مدیریت تبلیغات', firstLabel: 'تعداد تبلیغات', secondLabel: 'آخرین ویرایش' },
-  { id: 8, title: 'نقشه گردی', firstValue: 3, secondValue: '۲۴ فروردین ۱۴۰۳', path: '/ads/map', buttonText: 'مدیریت تبلیغات', firstLabel: 'تعداد تبلیغات', secondLabel: 'آخرین ویرایش' },
-  { id: 9, title: 'نقطه', firstValue: 3, secondValue: '۲۴ فروردین ۱۴۰۳', path: '/ads/point-info', buttonText: 'مدیریت تبلیغات', firstLabel: 'تعداد تبلیغات', secondLabel: 'آخرین ویرایش' },
-  { id: 10, title: 'صفحه استان', firstValue: 3, secondValue: '۲۴ فروردین ۱۴۰۳', path: '/ads/province-list', buttonText: 'مدیریت تبلیغات', firstLabel: 'تعداد تبلیغات', secondLabel: 'آخرین ویرایش' },
+  { id: 1, label: 'صفحه اصلی', holdersCount: 3, latestUpdatedAt: 0, path: '/advertizement/ads-pages/main_page', banner: 'A' },
+  {
+    id: 2,
+    label: 'برنامه ریز',
+    holdersCount: 3,
+    latestUpdatedAt: 0,
+    path: '/advertizement/ads-pages/planner',
+    banner: 'B',
+  },
+  { id: 3, label: 'تور ساز', holdersCount: 3, latestUpdatedAt: 0, path: '/advertizement/ads-pages/planner_trips', banner: 'C' },
+  { id: 4, label: 'برنامه سفر', holdersCount: 3, latestUpdatedAt: 0, path: '/advertizement/ads-pages/tourmaker', banner: 'D' },
+  { id: 5, label: 'لیست تورها', holdersCount: 3, latestUpdatedAt: 0, path: '/advertizement/ads-pages/tours', banner: 'E' },
+  {
+    id: 6,
+    label: 'لیست مقالات',
+    holdersCount: 3,
+    latestUpdatedAt: 0,
+    path: '/advertizement/ads-pages/article',
+    banner: 'F',
+  },
+  { id: 7, label: 'مقاله', holdersCount: 3, latestUpdatedAt: 0, path: '/advertizement/ads-pages/article_list', banner: 'G' },
+  { id: 8, label: 'نقطه', holdersCount: 3, latestUpdatedAt: 0, path: '/advertizement/ads-pages/place', banner: 'H' },
+  { id: 9, label: 'صفحه استان', holdersCount: 3, latestUpdatedAt: 0, path: '/advertizement/ads-pages/provinces', banner: 'I' },
+  {
+    id: 10,
+    label: 'صفحه نقاط استان',
+    holdersCount: 3,
+    latestUpdatedAt: 0,
+    path: '/advertizement/ads-pages/province-point',
+    banner: 'J',
+  },
+  {
+    id: 11,
+    label: 'نقشه گردی',
+    holdersCount: 3,
+    latestUpdatedAt: 0,
+    path: '/advertizement/ads-pages/maps',
+    banner: 'K',
+  },
+  {
+    id: 12,
+    label: 'دسته بندی',
+    holdersCount: 3,
+    latestUpdatedAt: 0,
+    path: '/advertizement/ads-categories',
+    banner: 'L',
+  },
+];
+
+export const categoriesOptionForAdsPage = [
+  { id: 1, name: ' از کجا بخریم؟', latestUpdatedAt: 0, emptyBanners: 4, path: '/advertizement/ads-categories/id' },
+  { id: 2, name: 'اطلاعات توریستی', latestUpdatedAt: 0, emptyBanners: 4, path: '/advertizement/ads-categories/id' },
+  { id: 3, name: 'تاریخ گردی', latestUpdatedAt: 0, emptyBanners: 4, path: '/advertizement/ads-categories/id' },
+  { id: 4, name: 'رویداد', latestUpdatedAt: 0, emptyBanners: 4, path: '/advertizement/ads-categories/id' },
+  { id: 5, name: 'شهرگردی', latestUpdatedAt: 0, emptyBanners: 4, path: '/advertizement/ads-categories/id' },
+  { id: 6, name: 'طبیعت گردی', latestUpdatedAt: 0, emptyBanners: 4, path: '/advertizement/ads-categories/id' },
+  { id: 7, name: 'گردشگری تفریحی', latestUpdatedAt: 0, emptyBanners: 4, path: '/advertizement/ads-categories/id' },
+  { id: 8, name: 'گردشگری سلامت', latestUpdatedAt: 0, emptyBanners: 4, path: '/advertizement/ads-categories/id' },
+  { id: 9, name: 'گردشگری مذهبی', latestUpdatedAt: 0, emptyBanners: 4, path: '/advertizement/ads-categories/id' },
+  { id: 10, name: 'گردشگری ورزشی', latestUpdatedAt: 0, emptyBanners: 4, path: '/advertizement/ads-categories/id' },
+  { id: 11, name: 'نزنیم بیرون', latestUpdatedAt: 0, emptyBanners: 4, path: '/advertizement/ads-categories/id' },
+  { id: 12, name: 'هنرگردی', latestUpdatedAt: 0, emptyBanners: 4, path: '/advertizement/ads-categories/id' },
 ];
 
 export const mainAdsOptions = [
@@ -17,7 +69,6 @@ export const mainAdsOptions = [
   { id: 'A21', pic: '/image/image-sent.png', url: 'https://example.com/picture/25762831', altText: 'غار غلی صدر', description: 'مکان عمیقی بود!' },
   { id: 'A22', pic: '', url: '', altText: 'غار غلی صدر', description: 'مکان عمیقی بود!' },
 ];
-// { id: 'A22', pic: '/image/image-sent.png', url: 'https://example.com/picture/25762831',altText: 'غار غلی صدر', description: 'مکان عمیقی بود!' },
 
 export const tripPlannerOptions = [
   { id: 'B11', pic: '/image/image-sent.png', url: 'https://example.com/picture/25762831', altText: 'غار غلی صدر', description: 'مکان عمیقی بود!' },
@@ -85,4 +136,11 @@ export const provinceAdOptions = [
 export const cityAdOptions = [
   { id: 'L11', pic: '/image/image-sent.png', url: 'https://example.com/picture/25762831', altText: 'غار غلی صدر', description: 'مکان عمیقی بود!' },
   { id: 'L12', pic: '/image/image-sent.png', url: 'https://example.com/picture/25762831', altText: 'غار غلی صدر', description: 'مکان عمیقی بود!' },
+];
+
+export const provincePointOptions = [
+  { id: 'W11', pic: '/image/image-sent.png', url: 'https://example.com/picture/25762831', altText: 'غار غلی صدر', description: 'مکان عمیقی بود!' },
+  { id: 'W12', pic: '/image/image-sent.png', url: 'https://example.com/picture/25762831', altText: 'غار غلی صدر', description: 'مکان عمیقی بود!' },
+  { id: 'W13', pic: '/image/image-sent.png', url: 'https://example.com/picture/25762831', altText: 'غار غلی صدر', description: 'مکان عمیقی بود!' },
+  { id: 'W14', pic: '/image/image-sent.png', url: 'https://example.com/picture/25762831', altText: 'غار غلی صدر', description: 'مکان عمیقی بود!' },
 ];

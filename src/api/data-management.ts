@@ -236,6 +236,8 @@ function generatePlaceRelations(mainPoint?: number, placeRelationType?: number[]
 }
 
 export const createArticle = async (params: CreateAndEditArticleBody) => {
+  console.log(params, 'paramsparamsparamsparamsparams');
+
   const obj = {
     parentCategoryId: Number(params.parentCategoryId),
     categoryId: Number(params.categoryId),
@@ -245,8 +247,8 @@ export const createArticle = async (params: CreateAndEditArticleBody) => {
     status: params.status === 'true' || params.status === true ? true : params.status === 'false' || params.status === false ? false : String(params.status),
     title: params.title,
     writer: params.writer,
-    tableOfContent: params.articleDetail[0].descriptions,
-    content: params.articleDetail[1].descriptions,
+    tableOfContent: params.articleDetail.length > 0 ? params.articleDetail[0].descriptions : '',
+    content: params.articleDetail.length > 0 ? params.articleDetail[1].descriptions : '',
     on_titile: params.on_titile,
     source: params.source,
     summery: params.summery,
@@ -270,8 +272,6 @@ export const createArticle = async (params: CreateAndEditArticleBody) => {
 };
 
 export const editArticle = async (id: number, params: CreateAndEditArticleBody) => {
-  console.log('run', params.articleDetail);
-
   const obj = {
     parentCategoryId: Number(params.parentCategoryId),
     categoryId: Number(params.categoryId),

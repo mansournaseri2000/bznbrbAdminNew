@@ -39,7 +39,7 @@ export const sidebarOptions = [
     text: 'آگهی ها',
     Icon: Ads,
     type: 'collapse',
-    path: '/advertizement/ads-pages',
+    path: '/advertizement',
   },
   {
     text: 'پشتیبانی',

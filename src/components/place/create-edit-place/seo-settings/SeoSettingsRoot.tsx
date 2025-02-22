@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+
 import styled from 'styled-components';
 
 import { Box, Flex, Grid, IconButton, Text, TextArea, TextField } from '@/libs/primitives';
@@ -11,9 +12,7 @@ import { Close } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
-export const processStringToTags = (
-  input: string | string[] | undefined
-): { label: string; id: number }[] => {
+export const processStringToTags = (input: string | string[] | undefined): { label: string; id: number }[] => {
   if (!input || (typeof input !== 'string' && !Array.isArray(input))) {
     console.error('Invalid input: input is neither a string nor an array of strings');
     return [];
@@ -45,7 +44,7 @@ export const processStringToTags = (
 
 const SeoSettingsRoot = () => {
   const { control, watch, setValue } = useFormContext();
-  
+
   // Initialize states with appropriate types
   const [tagList, setTagList] = useState<{ id: number; label: string }[]>(processStringToTags(watch('keywords')));
   const [metaTagList, setMetaTagList] = useState<{ id: number; label: string }[]>(processStringToTags(watch('metakeywords')));
@@ -104,67 +103,6 @@ const SeoSettingsRoot = () => {
     <Grid pb={'16px'} gap={'24px'}>
       <Box width={'40%'}>
         <Controller
-          name='keyword'
-          control={control}
-          render={({ field }) => (
-            <CustomAddItem
-              {...field}
-              placeholder='افزودن تگ'
-              onClick={() => {
-                addTag({
-                  inputStore: 'keyword',
-                  hookformStore: 'keywords',
-                  localStore: tagList,
-                  updateLocalStore: setTagList,
-                });
-              }}
-            />
-          )}
-        />
-      </Box>
-
-      <Flex gap={'5'} p={'4'} wrap={'wrap'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
-        {tagList.length === 0 ? (
-          <Flex direction={'column'} gap={'5'} p={'30px 16px'}>
-            <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11], fontWeight: 500 }}>
-              هنوز تگی اضافه نشده است.
-            </Text>
-            <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
-              از فیلد بالا تگ مورد نظر خود را پیدا کنید و به لیست اضافه کنید.
-            </Text>
-          </Flex>
-        ) : (
-          tagList.map(item => (
-            <Flex key={item.id} align={'center'} gap={'10px'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
-              <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
-                {item.label}
-              </Text>
-              <IconButton
-                type='button'
-                variant='surface'
-                onClick={() =>
-                  removeTag({
-                    id: item.id,
-                    localStore: tagList,
-                    setLocalStore: setTagList,
-                    hookformStore: 'keywords',
-                  })
-                }
-              >
-                <CloseIcon />
-              </IconButton>
-            </Flex>
-          ))
-        )}
-      </Flex>
-
-      <Divider />
-      <Controller name='meta_title' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان صفحه ( متا تایتل )' aria-label='textFiled' />} />
-      <Controller name='meta_description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات متا' aria-label='TextArea' rows={5} />} />
-      <Divider />
-
-      <Box width={'40%'}>
-        <Controller
           name='metakeyword'
           control={control}
           render={({ field }) => (
@@ -209,6 +147,66 @@ const SeoSettingsRoot = () => {
                     localStore: metaTagList,
                     setLocalStore: setMetaTagList,
                     hookformStore: 'metakeywords',
+                  })
+                }
+              >
+                <CloseIcon />
+              </IconButton>
+            </Flex>
+          ))
+        )}
+      </Flex>
+      <Divider />
+      <Controller name='meta_title' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان صفحه ( متا تایتل )' aria-label='textFiled' />} />
+      <Controller name='meta_description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات متا' aria-label='TextArea' rows={5} />} />
+      <Divider />
+
+      <Box width={'40%'}>
+        <Controller
+          name='keyword'
+          control={control}
+          render={({ field }) => (
+            <CustomAddItem
+              {...field}
+              placeholder='افزودن تگ'
+              onClick={() => {
+                addTag({
+                  inputStore: 'keyword',
+                  hookformStore: 'keywords',
+                  localStore: tagList,
+                  updateLocalStore: setTagList,
+                });
+              }}
+            />
+          )}
+        />
+      </Box>
+
+      <Flex gap={'5'} p={'4'} wrap={'wrap'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
+        {tagList.length === 0 ? (
+          <Flex direction={'column'} gap={'5'} p={'30px 16px'}>
+            <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11], fontWeight: 500 }}>
+              هنوز تگی اضافه نشده است.
+            </Text>
+            <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
+              از فیلد بالا تگ مورد نظر خود را پیدا کنید و به لیست اضافه کنید.
+            </Text>
+          </Flex>
+        ) : (
+          tagList.map(item => (
+            <Flex key={item.id} align={'center'} gap={'10px'} p={'9.5px 16px'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
+              <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
+                {item.label}
+              </Text>
+              <IconButton
+                type='button'
+                variant='surface'
+                onClick={() =>
+                  removeTag({
+                    id: item.id,
+                    localStore: tagList,
+                    setLocalStore: setTagList,
+                    hookformStore: 'keywords',
                   })
                 }
               >

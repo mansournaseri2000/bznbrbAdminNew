@@ -11,9 +11,9 @@ import { getCityListById } from '@/api/ads';
 import { Grid } from '@/libs/primitives';
 import { ToastError } from '@/libs/shared/toast/Toast';
 
-import AdPageCard2 from './AdPageCard2';
+import AdPageCard2 from '../AdPageCard2';
 
-const CitiesListContainer = () => {
+const CitiesListRoot = () => {
   /**
    * Const and Variables
    * _______________________________________________________________________________
@@ -53,4 +53,4 @@ const CitiesListContainer = () => {
   );
 };
 
-export default CitiesListContainer;
+export default CitiesListRoot;
