@@ -43,7 +43,6 @@ const Categories = () => {
       </Flex>
     );
   if (!categoriesData || categoriesError) return ToastError('مشکلی پیش آمده. لطفا مجددا تلاش نمایید');
-  console.log('category data', categoriesData);
 
   /*
    *** JSX_________________________________________________________________________________________________________________________________________________________________

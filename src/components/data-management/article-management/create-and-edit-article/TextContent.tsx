@@ -20,11 +20,11 @@ const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Edito
 const TextContent = () => {
   const items = [
     {
-      name: 'فهرست مطالب',
+      name: 'سرفصل های مقاله',
       id: 1,
     },
     {
-      name: 'محتوای اصلی مقاله',
+      name: 'متن مقاله',
       id: 2,
     },
   ];
@@ -79,8 +79,8 @@ const TextContent = () => {
 
   return (
     <Grid width={'100%'} gapY={'5'}>
-      <Controller name='brief' control={control} render={({ field }) => <TextArea {...field} placeholder='خلاصه مقاله' rows={4} />} />
-      <Controller name='summery' control={control} render={({ field }) => <TextArea {...field} placeholder='summery' rows={4} />} />
+      <Controller name='brief' control={control} render={({ field }) => <TextArea {...field} placeholder='متن روی کارت' rows={4} />} />
+      <Controller name='summery' control={control} render={({ field }) => <TextArea {...field} placeholder='چکیده مقاله' rows={4} />} />
 
       <Grid>
         {items.map(item => {

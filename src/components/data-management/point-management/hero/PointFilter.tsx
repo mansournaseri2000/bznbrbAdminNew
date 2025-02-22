@@ -81,9 +81,6 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
     setIsOpen(false);
   };
 
-  console.log(watch());
-  
-
   /**
    * JSX
    * _______________________________________________________________________________

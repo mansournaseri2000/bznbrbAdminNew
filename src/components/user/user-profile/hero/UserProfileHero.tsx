@@ -110,11 +110,11 @@ const UserProfileHero = ({ onSubmit, isOpen, setIsOpen, userId, isPending }: Pro
                   const currentItem = userDetailSortConstant.find(item => item.id === Number(val));
                   handleSortItems(currentItem?.id as any);
                   field.onChange(val);
+                  setValue('page', 1);
                   onSubmit();
                 }}
               >
                 {userDetailSortConstant.map(item => (
-                  // TODO: fix item style
                   <SelectItem key={item.id} value={String(item.id)}>
                     {item.name}
                   </SelectItem>
@@ -127,7 +127,16 @@ const UserProfileHero = ({ onSubmit, isOpen, setIsOpen, userId, isPending }: Pro
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
         <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
-        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} isLoading={isPending} />
+        <ModalAction
+          submitButtonText='اعمال فیلتر ها'
+          closeButtonText='حذف فیلتر ها'
+          onCloseButton={() => removeFilter()}
+          onSubmit={() => {
+            addFilter();
+            setIsOpen(false);
+          }}
+          isLoading={isPending}
+        />
       </Modal>
     </>
   );

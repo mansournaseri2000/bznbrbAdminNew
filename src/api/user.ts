@@ -1,6 +1,7 @@
 import { DevApiManager } from '@/libs/utils/dev.client.axios.config';
 import { RecentTripsResponse, UserInfoResponse, UserListResponse } from '@/types/user/user';
 
+import { generateSearchParam } from './data-management';
 import { ApiData } from './types';
 
 interface InputObject {
@@ -17,8 +18,40 @@ export const filterObject = (obj: InputObject): InputObject => {
   return result;
 };
 
-export const getAllUsers = async (pageNumber: number) => {
-  const res = await DevApiManager.get<ApiData<UserListResponse>>(`user?page=${pageNumber}&limit=10`);
+export type UserListParams = {
+  page: number;
+  status: boolean;
+  searchQuery: string;
+};
+
+export const getAllUsers = async (params: UserListParams) => {
+  const obj = filterObject(params);
+  const searchParams = generateSearchParam(obj);
+  const res = await DevApiManager.get<ApiData<UserListResponse>>(`user?limit=10&${searchParams}`);
+
+  return res.data.data;
+};
+
+export type UserRecentTripsParams = {
+  page: number;
+  searchQuery: string;
+  originCityId: number;
+  originProvinceId: number;
+  destinationCityId: number;
+  destinationProvinceId: number;
+  targetDate: string;
+  sortDate: string;
+  departureDateStart: number;
+  departureDateEnd: number;
+  returnDateStart: number;
+  returnDateEnd: number;
+};
+
+export const getRecentTripsUser = async (params: UserRecentTripsParams, userId: number) => {
+  const obj = filterObject(params);
+  delete obj.sort;
+  const searchParams = generateSearchParam(obj);
+  const res = await DevApiManager.get<ApiData<RecentTripsResponse>>(`user/trips?userId=${userId}&limit=10&${searchParams}`);
 
   return res.data.data;
 };
@@ -29,31 +62,6 @@ export const getAllUsersWithParams = async (params: UserBody) => {
   };
   const body = filterObject(obj);
   const res = await DevApiManager.post<ApiData<UserListResponse>>('user', body);
-  return res.data.data;
-};
-
-export const getRecentTrips = async (params: RecentTripsBody) => {
-  const obj = {
-    ...params,
-    originCityId: Number(params.originCityId),
-    originProvinceId: Number([params.originProvinceId]),
-    destinationCityId: Number(params.destinationCityId),
-    destinationProvinceId: Number(params.destinationProvinceId),
-    departureDateStart: Boolean(new Date(params.departureDateStart).getTime()) ? new Date(params.departureDateStart).getTime() : null,
-    departureDateEnd: Boolean(new Date(params.departureDateEnd).getTime()) ? new Date(params.departureDateEnd).getTime() : null,
-    returnDateStart: Boolean(new Date(params.returnDateStart).getTime()) ? new Date(params.returnDateStart).getTime() : null,
-    returnDateEnd: Boolean(new Date(params.returnDateEnd).getTime()) ? new Date(params.returnDateEnd).getTime() : null,
-    createdAt: Boolean(new Date(params.createdAt).getTime()) ? new Date(params.returnDateEnd).getTime() : null,
-    sort: null,
-    userId: null,
-  };
-  const body = filterObject(obj);
-
-  const res = await DevApiManager.post<ApiData<RecentTripsResponse>>('trips/recentTrips', body, {
-    headers: {
-      userId: params.userId,
-    },
-  });
   return res.data.data;
 };
 

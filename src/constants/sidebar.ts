@@ -39,12 +39,12 @@ export const sidebarOptions = [
     text: 'آگهی ها',
     Icon: Ads,
     type: 'collapse',
-    path: '/ads',
+    path: '/advertizement',
   },
   {
     text: 'پشتیبانی',
     Icon: Support,
     type: 'collapse',
-    path: '/support',
+    path: '/contact-us',
   },
 ];

@@ -3,12 +3,12 @@
 import React, { forwardRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import { Flex, IconButton, TextField } from '@/libs/primitives';
 import { Search } from '@/public/icon';
 import { Boxshadow, colorPalette } from '@/theme';
-import { useQueryClient } from '@tanstack/react-query';
 
 type CustomSearchProps = {
   placeholder: string;
@@ -20,21 +20,14 @@ const CustomSearch = forwardRef<HTMLDivElement, CustomSearchProps>(({ placeholde
   const { setValue } = useFormContext();
   return (
     <Wrapper {...rest} ref={ref} height={'fit-content'}>
-      <CustomTextField
-        {...rest}
-        ref={ref as any}
-        placeholder={placeholder}
-        variant='surface'
-        defaultValue={defaultValue}
-        onChange={() => {
-          setValue('page', 1);
-        }}
-      />
+      <CustomTextField {...rest} ref={ref as any} placeholder={placeholder} variant='surface' defaultValue={defaultValue} />
       <IconButton
         size={'4'}
         variant='soft'
         onClick={() => {
+          setValue('page', 1);
           queryClient.invalidateQueries({ queryKey: ['article-list'] });
+          queryClient.invalidateQueries({ queryKey: ['user-list'] });
         }}
       >
         <Search />

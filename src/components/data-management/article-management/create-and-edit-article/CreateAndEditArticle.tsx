@@ -156,7 +156,7 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
         queryClient.invalidateQueries({ queryKey: ['article-data'] });
         ToastSuccess(successMessage);
       } else {
-        ToastError(data.message);
+        ToastError(String(data.message));
       }
     },
     onError: data => {
@@ -172,13 +172,15 @@ const CreateAndEditArticle = ({ type, placeConstant, articleData }: Props) => {
         router.push('/data-management/article-management');
         queryClient.invalidateQueries({ queryKey: ['article-data'] });
       } else {
-        ToastError(data.message);
+        ToastError(String(data.message));
       }
     },
     onError: data => {
       console.log('onError', data);
     },
   });
+
+  console.log(watch(), 'watchwatchwatch');
 
   return (
     <FormProvider {...methods}>

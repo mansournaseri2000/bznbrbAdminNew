@@ -10,7 +10,7 @@ import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import imageCompression from 'browser-image-compression';
 
-import { removeMainImageArticle, updateMainImageInfo, updateMainImageInfoBody, UploadImageArticle, UploadImageArticleBody } from '@/api/data-management';
+import { removeImage, updateMainImageInfo, updateMainImageInfoBody, UploadImageArticle, UploadImageArticleBody } from '@/api/data-management';
 import { Box, Button, Flex, Grid, Heading, IconButton, Modal, SelectItem, SelectRoot, Text, TextArea, TextField } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
@@ -135,10 +135,10 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
   };
 
   const { mutate: removeImageMutate, isPending: removeImageIsPending } = useMutation({
-    mutationFn: async (id: number) => removeMainImageArticle(id),
+    mutationFn: async (id: number) => removeImage(id),
     onSuccess: async data => {
       if (data.status === true) {
-        queryClient.invalidateQueries({ queryKey: ['place'] });
+        queryClient.invalidateQueries({ queryKey: ['article-data'] });
         setIsOpenModal(false);
         ToastSuccess('زیر دسته بندی مورد نظر با موفقیت حذف شد');
       } else {
@@ -417,7 +417,7 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
         <Grid gapY={'24px'} p={'5'}>
           <Text>آیا از حذف این تصویر اطمینان دارید؟ </Text>
           <Grid gap={'10px'} columns={'2'}>
-            <Button type='button' onClick={() => removeImageMutate(Number(1))} variant='soft' size={'4'}>
+            <Button type='button' onClick={() => removeImageMutate(Number(articleData.picInfo.id))} variant='soft' size={'4'}>
               <Text {...typoVariant.body3}>{removeImageIsPending ? <Spinner /> : 'بله'}</Text>
             </Button>
             <Button type='button' onClick={() => setIsOpenModal(false)} variant='solid' size={'4'}>

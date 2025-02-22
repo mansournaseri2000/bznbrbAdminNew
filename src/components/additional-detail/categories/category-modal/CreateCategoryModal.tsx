@@ -65,6 +65,8 @@ const CreateCategoryModal = ({ data, setIsOpen }: Props) => {
     if (categoryItem && !categoryList?.includes(categoryItem)) {
       setValue('categoryList', [...categoryList, categoryItem]);
       setValue('name', '');
+    } else if (!categoryItem) {
+      ToastError('نام دسته بندی نمی‌تواند خالی باشد');
     } else if (categoryItem) {
       ToastError('دسته بندی تکراری است');
     }

@@ -12,9 +12,9 @@
       "static/chunks/6648-2ae15bcb8e9db446.js",
       "static/chunks/7138-fb549812a7102d66.js",
       "static/chunks/1705-9e7d0608d8cc58b6.js",
-      "static/chunks/7533-89e4016d824bc164.js",
-      "static/chunks/341-ca4a9db72888fecf.js",
-      "static/chunks/6351.76ce2c4d810f2653.js"
+      "static/chunks/7533-4016e73f6e240bd4.js",
+      "static/chunks/341-a16c1d10b6fbfbc0.js",
+      "static/chunks/3767.a77f1bf3ca0a87b2.js"
     ]
   },
   "src/components/data-management/article-management/create-and-edit-article/TextContent.tsx -> react-draft-wysiwyg": {
@@ -70,7 +70,7 @@
     "files": [
       "static/css/d3e383b9ef67ddcb.css",
       "static/chunks/d0deef33.a258e96be4bdf431.js",
-      "static/chunks/6766.5025053e030b5e47.js"
+      "static/chunks/6766.3c02fcce2b795603.js"
     ]
   },
   "src/components/user/list/UserList.tsx -> @/libs/shared/Table": {
