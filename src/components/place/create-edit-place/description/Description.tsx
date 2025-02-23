@@ -95,11 +95,11 @@ const Description = ({ details }: Props) => {
               position: 'static',
               height: 'fit-content',
               direction: 'ltr',
+              fontFamily: ("inherit") , 
             }}
             toolbar={{
               fontFamily: {
-                options: ['IRANSansX', 'Arial', 'Times New Roman'], // Must match exactly
-                defaultValue: 'IRANSansX', // Set as default if desired
+                options: [""],
               },
             }}
             editorState={editorStates[key.id]}

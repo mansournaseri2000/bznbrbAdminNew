@@ -140,21 +140,17 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
             <TextField
               value={watch('suggested_time')}
               onChange={e => {
-                let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+                let value = e.target.value.replace(/\D/g, '');
 
-                // Prevent first character from being '0'
                 if (value.startsWith('0')) {
                   value = value.substring(1);
                 }
 
-                // Ensure the number doesn't exceed 100
-
-                // Append "%" only if there's a valid number
                 value = value ? `${value}%` : '';
-                const numericValue = value.replace(/%/g, ''); // Removes all percent symbols
+                const numericValue = value.replace(/%/g, '');
                 setValue('suggested_time', Number(numericValue));
               }}
-              placeholder='>مدت زمان بازدید از این جا‌ذبه' // Example placeholder
+              placeholder='>مدت زمان بازدید از این جا‌ذبه'
             />
           </Flex>
         </Flex>
