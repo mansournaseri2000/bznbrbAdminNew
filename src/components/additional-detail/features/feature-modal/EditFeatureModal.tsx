@@ -31,6 +31,8 @@ interface FeatureFormData {
   icon: string;
   localPic: string;
   localIcon: string;
+  isResetPic: boolean;
+  isResetIcon: boolean;
 }
 
 const EditFeatureModal = ({ setIsOpen, data }: Props) => {
@@ -46,10 +48,14 @@ const EditFeatureModal = ({ setIsOpen, data }: Props) => {
       localPic: Boolean(data?.banner) ? data?.banner : '',
       localIcon: Boolean(data?.icon) ? data?.icon : '',
       name: data?.name,
+      isResetPic: Boolean(data?.banner) ? false : true,
+      isResetIcon: Boolean(data?.icon) ? false : true,
     },
   });
   const { control, watch, setValue } = methods;
   const queryClient = useQueryClient();
+
+  console.log(watch(), 'watch', data);
 
   /* 
     ****
@@ -177,7 +183,7 @@ const EditFeatureModal = ({ setIsOpen, data }: Props) => {
              _______________________________________________________________________________
              */
             <Box width={'160px'} height={'160px'} position={'relative'} style={{ border: `1px dashed ${colorPalette.blue[8]}`, borderRadius: 8 }}>
-              <Image src={watch('localPic')} alt='' fill style={{ objectFit: 'cover', borderRadius: 8 }} />
+              <Image src={watch('isResetPic') === false ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${watch('pic')}` : watch('localPic')} alt='' fill style={{ objectFit: 'cover', borderRadius: 8 }} />
               <Controller
                 name='pic'
                 control={control}
@@ -192,7 +198,12 @@ const EditFeatureModal = ({ setIsOpen, data }: Props) => {
                       <div {...getRootProps()}>
                         <input type='file' {...getInputProps()} />
 
-                        <IconButton style={{ position: 'absolute', bottom: 0, borderRadius: 8 }}>
+                        <IconButton
+                          onClick={() => {
+                            setValue('isResetPic', true);
+                          }}
+                          style={{ position: 'absolute', bottom: 0, borderRadius: 8 }}
+                        >
                           <Update />
                         </IconButton>
                       </div>
@@ -235,7 +246,13 @@ const EditFeatureModal = ({ setIsOpen, data }: Props) => {
              _______________________________________________________________________________
              */
             <Flex width={'160px'} height={'160px'} justify={'center'} align={'center'} position={'relative'} style={{ border: `1px dashed ${colorPalette.blue[8]}`, borderRadius: 8 }}>
-              <Image width={64} height={64} src={watch('localIcon')} alt='' style={{ objectFit: 'cover', borderRadius: 8 }} />
+              <Image
+                width={64}
+                height={64}
+                src={watch('isResetIcon') === false ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${watch('icon')}` : watch('localIcon')}
+                alt=''
+                style={{ objectFit: 'cover', borderRadius: 8 }}
+              />
               <Controller
                 name='icon'
                 control={control}
@@ -250,7 +267,12 @@ const EditFeatureModal = ({ setIsOpen, data }: Props) => {
                       <div {...getRootProps()}>
                         <input type='file' {...getInputProps()} />
 
-                        <IconButton style={{ position: 'absolute', bottom: 0, right: 0, borderRadius: 8 }}>
+                        <IconButton
+                          onClick={() => {
+                            setValue('isResetIcon', true);
+                          }}
+                          style={{ position: 'absolute', bottom: 0, right: 0, borderRadius: 8 }}
+                        >
                           <Update />
                         </IconButton>
                       </div>

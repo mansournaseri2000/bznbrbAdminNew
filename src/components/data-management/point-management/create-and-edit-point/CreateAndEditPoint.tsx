@@ -43,6 +43,91 @@ const TravelTime = dynamic(() => import('@/components/place/create-edit-place/Tr
   ssr: false,
 });
 
+export type PlaceWorkTimes = {
+  dayOfWeek: string;
+  type: string;
+  isTimed: boolean;
+  timing: { time: string; key: string; faKey: string }[];
+};
+
+export type Timing = { time: string; key: string; faKey: string };
+
+export type PlaceWorkTimeSchedule = {
+  dayOfWeek: string;
+  faDay: string;
+  isTimed: boolean;
+  timing: Timing[];
+  type: { key: string; value: string }[];
+};
+export type NewPlaceWorkTimeData = {
+  dayOfWeek: string;
+  firstOpenTime: string;
+  firstCloseTime: string;
+  secondOpenTime: string;
+  secondCloseTime: string;
+  type: string | null;
+};
+
+export const serializePlaceWorkTimes = (schedule: PlaceWorkTimeSchedule[], newData: NewPlaceWorkTimeData[]): PlaceWorkTimes[] => {
+  return schedule.map(day => {
+    // Find matching data by dayOfWeek
+    const matchingData = newData?.find(item => item.dayOfWeek === day.dayOfWeek);
+
+    // Determine the type based on matchingData or original day.type
+    const type =
+      matchingData?.type || // Use the type from matchingData if available
+      day.type.find(t => t.key === 'TIMED')?.key || // Otherwise, check if the type is 'TIMED'
+      day.type.find(t => t.key === 'CLOSED')?.key || // Or check for 'CLOSED'
+      day.type.find(t => t.key === 'OPEN')?.key || // Or check for 'OPEN'
+      'TIMED'; // Default to 'TIMED' if no type is found
+
+    // If type is OPEN or CLOSED, set all timing values to "00:00"
+    const timing =
+      type === 'OPEN' || type === 'CLOSED'
+        ? [
+            { time: '00:00', key: 'firstOpenTime', faKey: 'ساعت شروع اول' },
+            { time: '00:00', key: 'secondOpenTime', faKey: 'ساعت شروع دوم' },
+            { time: '00:00', key: 'firstCloseTime', faKey: 'ساعت پایان اول' },
+            { time: '00:00', key: 'secondCloseTime', faKey: 'ساعت پایان دوم' },
+          ]
+        : matchingData
+        ? [
+            {
+              time: matchingData.firstOpenTime || '00:00', // Default to '00:00' if null
+              key: 'firstOpenTime',
+              faKey: 'ساعت شروع اول',
+            },
+            {
+              time: matchingData.secondOpenTime || '00:00', // Default to '00:00' if null
+              key: 'secondOpenTime',
+              faKey: 'ساعت شروع دوم',
+            },
+            {
+              time: matchingData.firstCloseTime || '00:00', // Default to '00:00' if null
+              key: 'firstCloseTime',
+              faKey: 'ساعت پایان اول',
+            },
+            {
+              time: matchingData.secondCloseTime || '00:00', // Default to '00:00' if null
+              key: 'secondCloseTime',
+              faKey: 'ساعت پایان دوم',
+            },
+          ]
+        : day.timing.map(timeSlot => ({
+            time: timeSlot.time || '00:00', // Default to '00:00' if null in original timing data
+            key: timeSlot.key,
+            faKey: timeSlot.faKey,
+          }));
+
+    return {
+      dayOfWeek: day.dayOfWeek,
+      type, // The type is now properly determined
+      isTimed: day.isTimed,
+      timing, // Timing is set based on the type
+    };
+  });
+};
+
 // Your schema definition
 const validationSchema = Yup.object().shape({
   category_id: Yup.string().required('لطفاً دسته بندی را وارد کنید'),
@@ -244,7 +329,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             tripLimitations: serializeLimitaionData(placeData?.Place_TripLimitation, placeConstant.tripLimitations),
             gender: placeData.gender,
 
-            PlaceWorkTimes: placeData?.PlaceWorkTime,
+            PlaceWorkTimes: serializePlaceWorkTimes(placeWorkTimeSchedule, placeData?.PlaceWorkTime as any),
 
             keywords: placeData?.keywords ? placeData?.keywords : '',
             metakeywords: placeData?.tags ? placeData?.tags : '',
@@ -565,7 +650,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
             <Button size={'3'} variant='soft' style={{ paddingInline: 48.5 }}>
               {createPlaceIsLoading || editPlaceLoading ? <Spinner /> : <Text {...typoVariant.body1}>ثبت</Text>}
             </Button>
-            <Button size={'3'} colorVariant='PINK' style={{ paddingInline: 51 }} onClick={() => back}>
+            <Button type='button' size={'3'} colorVariant='PINK' style={{ paddingInline: 51 }} onClick={() => back()}>
               <Text {...typoVariant.body1}>لغو</Text>
             </Button>
             <Flex gap={'8px'}>

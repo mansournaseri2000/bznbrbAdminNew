@@ -61,8 +61,6 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
     isFetching: singleCategoryFetching,
   } = useQuery({ queryKey: ['single-category', id], queryFn: async () => getSingleCategory(id), initialData: props, enabled: selected });
 
-  console.log('data', singleCategoryData);
-
   const { mutate: deleteCategoryMutate, isPending: deleteCategoryPending } = useMutation({
     mutationFn: async () => deleteCategory(id),
     onSuccess: async data => {

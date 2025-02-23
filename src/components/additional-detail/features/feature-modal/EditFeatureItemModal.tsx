@@ -84,6 +84,7 @@ const EditFeatureItemModal = ({ setIsOpen, data }: Props) => {
         }
 
         queryClient.invalidateQueries({ queryKey: ['feature-group'] });
+        queryClient.invalidateQueries({ queryKey: ['features'] });
         ToastSuccess(' ویژگی مورد نظر با موفقیت ویرایش شد');
         setIsOpen({ key: 'edit-feature', isOpen: false });
       } else {
