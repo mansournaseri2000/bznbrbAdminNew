@@ -47,4 +47,10 @@ export const sidebarOptions = [
     type: 'collapse',
     path: '/contact-us',
   },
+  {
+    text: 'تور ها',
+    Icon: Support,
+    type: 'collapse',
+    path: '/tours',
+  },
 ];

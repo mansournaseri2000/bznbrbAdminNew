@@ -1,39 +1,29 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
 
 import { getAllPlacesConstants } from '@/api/place';
 import { userDetailSortConstant } from '@/constants/users';
-import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+import { Grid, IconButton, Modal, SelectItem, SelectRoot } from '@/libs/primitives';
 import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
-import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { Filter } from '@/public/icon';
-import { typoVariant } from '@/theme/typo-variants';
 
-import FilterContent from '../../../libs/shared/FilterContent';
+import ToursFilter from './ToursFilter';
 
-type Props = {
-  onSubmit: () => void;
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  isPending: boolean;
-};
-
-const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
+const ToursHero = () => {
   /*
-   *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
+   *** Variables and constant_________________________________________________________________________________________________________
    */
-  const router = useRouter();
-  const { control, reset, setValue } = useFormContext();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { control, setValue } = useFormContext();
   const searchParams = useSearchParams();
   const getParam = (key: string) => searchParams.get(key) || '';
-
   /*
    *** Services _________________________________________________________________________________________________________________________________________________________________
    */
@@ -41,38 +31,10 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
     queryKey: ['constant'],
     queryFn: async () => getAllPlacesConstants(),
   });
-
   /**
-   * functions
+   * Hooks and Methods
    * _______________________________________________________________________________
    */
-  const addFilter = () => {
-    onSubmit();
-  };
-
-  // TODO: fix update url for remove filters
-  const removeFilter = () => {
-    reset({
-      page: 1,
-      searchQuery: '',
-      sortDate: '',
-      targetDate: '',
-      userId: '',
-      originCityId: '',
-      originProvinceId: '',
-      destinationCityId: '',
-      destinationProvinceId: '',
-      departureDateStart: '',
-      departureDateEnd: '',
-      returnDateStart: '',
-      returnDateEnd: '',
-      sort: '',
-    });
-    router.replace('/plans');
-    onSubmit();
-    setIsOpen(false);
-  };
-
   const handleSortItems = (id: number) => {
     switch (id) {
       case 1:
@@ -85,32 +47,25 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
         return setValue('targetDate', 'ret'), setValue('sortDate', 'asc');
     }
   };
-
+  /*
+   *** JSX_________________________________________________________________________________________________________
+   */
   return (
     <>
-      <Grid width={'100%'} columns={'5'} align={'center'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 2fr  1fr' }}>
+      <Grid width={'100%'} columns={'3'} align={'center'} gapX={'5'} style={{ gridTemplateColumns: 'auto 3fr 1fr' }}>
         <IconButton type='button' colorVariant='BLUE' variant='soft' size={'4'} onClick={() => setIsOpen(true)}>
           <Filter width={16} height={16} />
         </IconButton>
-
-        <Button colorVariant='BLUE' variant='ghost' type='button' size={'4'} onClick={() => router.push('/plans/create-plan')} style={{ padding: '11.5px 16px' }}>
-          <Flex gap={'2'} align={'center'}>
-            <Text {...typoVariant.body1}>+</Text>
-            <Text {...typoVariant.body1}> افزودن برنامه</Text>
-          </Flex>
-        </Button>
-
         <Controller
           name='searchQuery'
           control={control}
           render={({ field }) => <CustomSearch {...field} placeholder='جستجو' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} />}
         />
         <Controller
-          name='sort'
+          name=''
           control={control}
           render={({ field }) => (
             <SelectRoot
-              {...field}
               placeholder='مرتب سازی بر اساس'
               size={'3'}
               value={String(field.value || getParam('sort'))}
@@ -118,7 +73,7 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
                 const currentItem = userDetailSortConstant.find(item => item.id === Number(val));
                 handleSortItems(currentItem?.id as any);
                 field.onChange(val);
-                onSubmit();
+                // onSubmit();
                 setValue('page', 1);
               }}
             >
@@ -133,20 +88,10 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
       </Grid>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
-        <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
-        <ModalAction
-          submitButtonText='اعمال فیلتر ها'
-          closeButtonText='حذف فیلتر ها'
-          onCloseButton={() => removeFilter()}
-          onSubmit={() => {
-            addFilter();
-            setIsOpen(false);
-          }}
-          isLoading={isPending}
-        />
+        <ToursFilter setIsOpen={setIsOpen} province={constantData?.provinces ?? []} />
       </Modal>
     </>
   );
 };
 
-export default PlansHero;
+export default ToursHero;
