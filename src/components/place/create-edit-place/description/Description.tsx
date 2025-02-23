@@ -95,11 +95,14 @@ const Description = ({ details }: Props) => {
               position: 'static',
               height: 'fit-content',
               direction: 'ltr',
-              fontFamily: ("inherit") , 
             }}
             toolbar={{
               fontFamily: {
-                options: [""],
+                options: ['IRANSansXFaNum-Regular'],
+                defaultFontFamily: 'IRANSansXFaNum-Regular',
+              },
+              remove: {
+                show: false, // Explicitly enable the remove formatting button
               },
             }}
             editorState={editorStates[key.id]}
