@@ -39,7 +39,6 @@ const ImageManagement = () => {
     queryFn: async () => getAllPlacesConstants(),
   });
 
-  console.log("DATA",provinceImagesData);
 
   /**
    * Loading
@@ -59,13 +58,13 @@ const ImageManagement = () => {
    * _______________________________________________________________________________
    */
   return (
-    <Grid width={'100%'} gapY={'5'}>
+    <Grid width={'100%'} gapY={'5'} style={{border:"1px solid red"}}>
       <Grid width={'100%'} columns={'2'} gapX={'5'}>
         <SimpleWrapper2 hero='وکتور استان' type='changeAble'>
           <ProvinceVector vector={provinceImagesData?.icon} id={provinceImagesData.id} />
         </SimpleWrapper2>
         <SimpleWrapper2 hero='تصویر استان' type='changeAble'>
-          <ProvinceImage image={provinceImagesData?.pic} />
+          <ProvinceImage image={provinceImagesData?.pic}  id={provinceImagesData.id}/>
         </SimpleWrapper2>
       </Grid>
       <SimpleWrapper2 hero='گالری تصاویر ' type='changeAble'>

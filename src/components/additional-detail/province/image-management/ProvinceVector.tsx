@@ -11,8 +11,8 @@ import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import imageCompression from 'browser-image-compression';
 
-import { deleteProvinceItems } from '@/api/additional-detail';
-import { Box, Button, Flex, Grid, Heading, IconButton, Modal, SelectRoot, Text, TextArea, TextField } from '@/libs/primitives';
+import { deleteProvinceItems, provinceUploder, provinceUploderBody } from '@/api/additional-detail';
+import { Box, Button, Flex, Grid, Heading, IconButton, Modal, Text } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
@@ -61,10 +61,23 @@ const ProvinceVector = ({ vector, id }: Props) => {
     mutationFn: async () => await deleteProvinceItems({ id: id, type: 'ICON' }),
     onSuccess: data => {
       if (data.status === true) {
-        queryClient.invalidateQueries({ queryKey: [''] });
+        queryClient.invalidateQueries({ queryKey: ['province-images'] });
         ToastSuccess('وکتور مورد نظر با موفقیت حذف شد');
       } else {
         ToastError('مشکلی پیش آمده است . مجددا تلاش کنید');
+      }
+    },
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (body: provinceUploderBody) => provinceUploder(body),
+    onSuccess: async data => {
+      if (data.statusCode === 201) {
+        queryClient.invalidateQueries({ queryKey: ['province-images'] });
+        ToastSuccess('تصویر ارسالی با موفقیت اپلود شد');
+        setModalState({ ...modalState, isOpen: false });
+      } else {
+        ToastError('خطایی رخ داده دوباره تلاش نمایید');
       }
     },
   });
@@ -98,7 +111,16 @@ const ProvinceVector = ({ vector, id }: Props) => {
       onChange(URL.createObjectURL(compressedImage) as any);
       setValue('localPic', URL.createObjectURL(compressedImage) as any);
       setValue('isReset', false);
+      setValue('imageFile', compressedImage as any);
     }
+  };
+
+  const onSubmit = () => {
+    mutate({
+      file: watch('imageFile') as any,
+      position: 'vector',
+      provinceId: id,
+    });
   };
 
   return (
@@ -107,7 +129,7 @@ const ProvinceVector = ({ vector, id }: Props) => {
         <Grid p={'10px'} gapY={'10px'}>
           <Flex width={'100%'} align={'center'} justify={'center'}>
             <Box width={'179px'} height={'288px'} position={'relative'}>
-              <Image src={vector ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${vector}` : ''} alt='' fill objectFit='cover' />
+              <Image src={vector ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${vector}` : ''} alt='' fill />
             </Box>
           </Flex>
           <Flex align={'center'} justify={'end'} gap={'4'}>
@@ -214,49 +236,18 @@ const ProvinceVector = ({ vector, id }: Props) => {
                           )}
                         />
                       </Flex>
-                      <Image src={watch('isReset') ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${vector}` : watch('localPic')} alt='' fill style={{ borderRadius: 8, objectFit: 'fill' }} />
+                      <Image src={watch('isReset') ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${vector}` : watch('localPic')} alt='' fill style={{ borderRadius: 8 }} />
                     </Box>
-                    <Grid width={'100%'} gap={'5'} columns={'3'}>
-                      <Controller
-                        name='provinceId'
-                        control={control}
-                        render={({ field }) => (
-                          <SelectRoot
-                            {...field}
-                            value={watch('provinceId')}
-                            onValueChange={val => {
-                              field.onChange(val);
-                              setValue('cityID', '');
-                            }}
-                            placeholder={'استان'}
-                            disabled
-                          ></SelectRoot>
-                        )}
-                      />
-                      <Controller
-                        name='cityID'
-                        control={control}
-                        render={({ field }) => (
-                          <SelectRoot
-                            {...field}
-                            disabled={!Boolean(watch('provinceId'))}
-                            value={watch('cityID')}
-                            onValueChange={val => {
-                              field.onChange(val);
-                            }}
-                            placeholder={'شهرستان'}
-                          ></SelectRoot>
-                        )}
-                      />
-                      <Controller name='town' control={control} render={({ field }) => <TextField {...field} placeholder='شهر' disabled style={{ marginTop: '5px' }} />} />
-                    </Grid>
-                    <Controller name='alt' control={control} render={({ field }) => <TextField {...field} placeholder='متن جایگزین' disabled />} />
-                    <Controller name='description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات تصویر' rows={6} disabled />} />
-                    <Controller name='brief' control={control} render={({ field }) => <TextArea {...field} placeholder='شزح مختصر' rows={6} disabled />} />
                   </>
                 )}
               </Grid>
-              <ModalAction submitButtonText='ثبت و ارسال' closeButtonText='لفو و بازگشت' onCloseButton={() => setModalState({ ...modalState, isOpen: false })} />
+              <ModalAction
+                onSubmit={onSubmit}
+                isLoading={isPending}
+                submitButtonText='ثبت و ارسال'
+                closeButtonText='لفو و بازگشت'
+                onCloseButton={() => setModalState({ ...modalState, isOpen: false })}
+              />
             </>
           </>
         )}
