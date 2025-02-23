@@ -75,7 +75,7 @@ const Description = ({ details }: Props) => {
     <>
       <Grid height={'max-content'} gap={'16px'} pb={'20px'}>
         {/* Render the tabs for editor fields */}
-        <Flex py={'24px'} gap={'16px'} overflowX={'auto'}>
+        <Flex py={'24px'} gap={'8px'} overflowX={'scroll'}>
           {details.map(item => (
             <Button type='button' key={item.id} onClick={() => setKey(item)} variant={key.name === item.name ? 'soft' : 'solid'} size={'4'}>
               <Text>{item.name}</Text>
@@ -95,6 +95,15 @@ const Description = ({ details }: Props) => {
               position: 'static',
               height: 'fit-content',
               direction: 'ltr',
+            }}
+            toolbar={{
+              fontFamily: {
+                options: ['IRANSansXFaNum-Regular'],
+                defaultFontFamily: 'IRANSansXFaNum-Regular',
+              },
+              remove: {
+                show: false, // Explicitly enable the remove formatting button
+              },
             }}
             editorState={editorStates[key.id]}
             toolbarClassName='toolbarClassName'

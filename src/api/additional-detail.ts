@@ -145,6 +145,29 @@ export const deleteFeatureGroup = async (id: number) => {
 //    * _______________________________________________________________________________
 //    */
 
+export type provinceUploderBody = {
+  provinceId: number;
+  file: File;
+  position: 'vector' | 'picture' | 'gallery';
+};
+
+export const provinceUploder = async (params: provinceUploderBody) => {
+  const formData = new FormData();
+
+  formData.append('type', 'PROVINCE');
+  formData.append('position', params.position.toString());
+  formData.append('file', params.file);
+  formData.append('provinceId', params.provinceId.toString());
+
+  const res = await UploaderApiManager.post<ApiData<{ data: string }>>('image', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return res.data;
+};
+
 export const getAllProvinces = async () => {
   const res = await DevApiManager.get<ApiData<AllProvincesResponse[]>>('/provinces/sorted/');
   return res.data.data;

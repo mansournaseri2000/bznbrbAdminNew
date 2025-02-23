@@ -26,20 +26,16 @@ a {
 }
 ::-webkit-scrollbar {
   width: 1px;
-  height: 1px;
-  opacity: 0;
-  display: none;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
   border-radius: 10px;
-  opacity: 0;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 10px;
-  opacity: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -55,4 +51,38 @@ a {
     width: 100%;
     text-align: left;
   }
+}
+
+.DraftEditor-root {
+  font-family: var(--yekan-font) !important;
+  font-weight: 600;
+}
+
+.rdw-editor-main {
+  font-family: var(--yekan-font) !important;
+  font-weight: 600;
+}
+
+/* Optional: Ensure toolbar and dropdowns also use the font */
+
+.rdw-dropdown-optionwrapper .rdw-dropdownoption-active {
+  font-family: var(--yekan-font) !important;
+  font-weight: 600;
+}
+
+.DraftEditor-root {
+  font-family: var(--yekan-font) !important;
+  font-weight: 600;
+}
+
+.rdw-editor-main {
+  font-family: var(--yekan-font) !important;
+  font-weight: 600;
+}
+
+/* Optional: Ensure toolbar and dropdowns also use the font */
+
+.rdw-dropdown-optionwrapper .rdw-dropdownoption-active {
+  font-family: var(--yekan-font) !important;
+  font-weight: 600;
 }
