@@ -82,6 +82,9 @@ const ProvinceGallery = ({ gallery, constantData }: Props) => {
       setValue('isReset', currentItem?.path ? true : false);
     }
   }, [currentItem]);
+
+  console.log(gallery,"gallerygallery");
+  
   /**
    * JSX
    * _______________________________________________________________________________
@@ -135,12 +138,8 @@ const ProvinceGallery = ({ gallery, constantData }: Props) => {
                     {item.path}
                   </Text>
                   <Flex direction={'column'} mt={'12px'}>
-                    <Controller name='alt' control={control} render={({ field }) => <TextField {...field} readOnly value={item.alt} placeholder='Alt Text' style={{ borderRadius: 12 }} />} />
-                    <Controller
-                      name='description'
-                      control={control}
-                      render={({ field }) => <TextField {...field} value={item.description} placeholder='توضیحات تصویر' readOnly style={{ borderRadius: 12 }} />}
-                    />
+                    <TextField readOnly value={item.alt} placeholder='Alt Text' style={{ borderRadius: 12 }} />
+                    <TextField value={item.description} placeholder='توضیحات تصویر' readOnly style={{ borderRadius: 12 }} />
                   </Flex>
                 </Flex>
                 <Flex direction={'column'} gap={'4'}>
