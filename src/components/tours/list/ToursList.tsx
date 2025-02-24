@@ -8,8 +8,6 @@ import { convertTimestampToPersianDate } from '@/libs/utils/convertTimestampToPe
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
-import data from './data.json';
-
 interface TourListDetail {
   tourId: string;
   userMobile: string;
@@ -19,7 +17,11 @@ interface TourListDetail {
   returnDate: string;
 }
 
-const ToursList = () => {
+type TourListProps = {
+  data: TourListDetail;
+};
+
+const ToursList = ({ data }: TourListProps) => {
   /*
    *** methods_________________________________________________________________________________________________________________________________________________________________
    */
