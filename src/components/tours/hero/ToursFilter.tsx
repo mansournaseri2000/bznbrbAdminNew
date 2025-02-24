@@ -3,6 +3,8 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
+import { useRouter } from 'next/navigation';
+
 import { Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
 import CustomDatePicker from '@/libs/shared/CustomDatePicker';
@@ -14,15 +16,48 @@ import { Province } from '@/types/place/place-constant';
 type Props = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   province: Province[];
+  onSubmit: VoidFunction;
+  isPending: boolean;
 };
 
-const ToursFilter = ({ setIsOpen, province }: Props) => {
+const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
   /**
    * Variables and Constant
    * _______________________________________________________________________________
    */
-  const { control, setValue, watch } = useFormContext();
+  const router = useRouter();
+
+  const { control, setValue, watch, reset } = useFormContext();
   const city = province.filter(item => item.id === Number(watch('provinceId')))[0]?.Cities;
+  /**
+   * Methods
+   * _______________________________________________________________________________
+   */
+  const addFilter = () => {
+    onSubmit();
+    setIsOpen(false);
+  };
+
+  const removeFilter = () => {
+    reset({
+      page: 1,
+      limit: 10,
+      searchQuery: '',
+      sortDate: '',
+      sort: '',
+      provinceId: '',
+      cityId: '',
+      startBudget: '',
+      endBudget: '',
+      departureDateStart: '',
+      departureDateEnd: '',
+      returnDateStart: '',
+      returnDateEnd: '',
+    });
+    router.replace('/tours');
+    onSubmit();
+    setIsOpen(false);
+  };
   /**
    * JSX
    * _______________________________________________________________________________
@@ -80,8 +115,8 @@ const ToursFilter = ({ setIsOpen, province }: Props) => {
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             بودجه
           </Text>
-          <Controller name='startBudget' control={control} render={({ field }) => <CustomSearch {...field} placeholder='از' type='input' />} />
-          <Controller name='endBudget' control={control} render={({ field }) => <CustomSearch {...field} placeholder='تا' type='input' />} />
+          <Controller name='startBudget' control={control} render={({ field }) => <CustomSearch {...field} placeholder='از' type='input' inputType='number' />} />
+          <Controller name='endBudget' control={control} render={({ field }) => <CustomSearch {...field} placeholder='تا' type='input' inputType='number' />} />
           <Flex direction={'column'} gap={'2'}>
             <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
               تاریخ رفت
@@ -172,7 +207,7 @@ const ToursFilter = ({ setIsOpen, province }: Props) => {
           </Flex>
         </Grid>
       </Grid>
-      <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => setIsOpen(false)} />
+      <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} isLoading={isPending} />
     </>
   );
 };

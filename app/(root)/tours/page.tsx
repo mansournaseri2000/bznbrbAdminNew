@@ -47,6 +47,12 @@ export default function ToursPage({
     },
   });
   /*
+   *** Hooks and Methods _________________________________________________________________________________________________________________________________________________________________
+   */
+  const onSubmit = () => {
+    console.log('yes');
+  };
+  /*
    *** JSX_________________________________________________________________________________________________________
    */
   return (
@@ -59,7 +65,7 @@ export default function ToursPage({
             */}
           <FormProvider {...methods}>
             <Grid width={'100%'} gap={'4'} p={'5'}>
-              <ToursHero />
+              <ToursHero onSubmit={onSubmit} isPending={false} />
               <ToursList />
 
               {/* <Flex width={'100%'} align={'center'} justify={'between'}>

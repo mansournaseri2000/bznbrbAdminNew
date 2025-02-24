@@ -16,7 +16,12 @@ import { Filter } from '@/public/icon';
 
 import ToursFilter from './ToursFilter';
 
-const ToursHero = () => {
+type Props = {
+  onSubmit: VoidFunction;
+  isPending: boolean;
+};
+
+const ToursHero = ({ onSubmit, isPending }: Props) => {
   /*
    *** Variables and constant_________________________________________________________________________________________________________
    */
@@ -88,7 +93,7 @@ const ToursHero = () => {
       </Grid>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
-        <ToursFilter setIsOpen={setIsOpen} province={constantData?.provinces ?? []} />
+        <ToursFilter setIsOpen={setIsOpen} province={constantData?.provinces ?? []} onSubmit={onSubmit} isPending={isPending} />
       </Modal>
     </>
   );

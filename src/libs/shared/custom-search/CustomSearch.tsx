@@ -15,14 +15,15 @@ type CustomSearchProps = {
   placeholder: string;
   defaultValue?: string;
   type?: 'search' | 'input';
+  inputType?: 'text' | 'number';
 };
 
-const CustomSearch = forwardRef<HTMLDivElement, CustomSearchProps>(({ placeholder, defaultValue, type = 'search', ...rest }, ref) => {
+const CustomSearch = forwardRef<HTMLDivElement, CustomSearchProps>(({ placeholder, defaultValue, type = 'search', inputType, ...rest }, ref) => {
   const queryClient = useQueryClient();
   const { setValue } = useFormContext();
   return (
     <Wrapper {...rest} ref={ref} height={'fit-content'}>
-      <CustomTextField {...rest} ref={ref as any} placeholder={placeholder} variant='surface' defaultValue={defaultValue} />
+      <CustomTextField {...rest} ref={ref as any} placeholder={placeholder} variant='surface' defaultValue={defaultValue} type={inputType} />
       {type === 'search' && (
         <IconButton
           size={'4'}
@@ -54,7 +55,7 @@ const Wrapper = styled(Flex)`
   align-items: center;
   border: 1px solid ${colorPalette.gray[7]};
   border-radius: 12px;
-  padding-inline-start: 1rem;
+  padding-inline-start: 8px;
   &:focus-within {
     background-color: ${colorPalette.blue[2]};
     box-shadow: ${Boxshadow.shadow1};
