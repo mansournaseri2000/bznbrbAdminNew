@@ -5,7 +5,7 @@ import React from 'react';
 import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 
-import { getAdsHolders } from '@/api/ads';
+import { getAdsHolders } from '@/api/advertizement';
 import AdsDetailCard from '@/components/advertizement/AdsDetailCard';
 import Header from '@/layout/Header';
 import { Box, Flex, Grid, Heading } from '@/libs/primitives';
@@ -63,7 +63,7 @@ export default function AdvertizementPageTypes({ params }: { params: { slug: str
     );
 
   if (!data || isError) return ToastError('مشکلی پیش آمده . لطفا دوباره تلاش نمایید');
-
+  console.log('AdsDetailCard', data);
   /**
    * JSX
    * _______________________________________________________________________________

@@ -59,3 +59,36 @@ export interface ProvinceDetailById {
   lastUpdated: number;
   bannerCount: number;
 }
+
+export interface CreateAdBody {
+  type: 'ADS';
+  description: string;
+  page: string;
+  holder: string;
+  alt: string;
+  slug: string;
+  file: File;
+  website: string;
+  socialMedia: string;
+  sponsor: string;
+  townId: number | null;
+  provinceId: number | null;
+  cityId: number | null;
+}
+
+export interface EditADsBody {
+  id: number;
+  type: 'ADS';
+  alt: string;
+  description: string;
+  summery: string;
+  townId: number | null;
+  website: string;
+  socialMedia: string;
+  sponsor: string;
+}
+
+export interface DeleteAdBody {
+  id: number;
+  type: 'ADS';
+}

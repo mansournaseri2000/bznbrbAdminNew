@@ -28,7 +28,7 @@ const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
   const router = useRouter();
 
   const { control, setValue, watch, reset } = useFormContext();
-  const city = province.filter(item => item.id === Number(watch('provinceId')))[0]?.Cities;
+  const city = province.filter(item => item.id === Number(watch('provincesId')))[0]?.Cities;
   /**
    * Methods
    * _______________________________________________________________________________
@@ -45,10 +45,10 @@ const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
       searchQuery: '',
       sortDate: '',
       sort: '',
-      provinceId: '',
-      cityId: '',
-      startBudget: '',
-      endBudget: '',
+      provincesId: '',
+      citiesId: '',
+      budgetStart: '',
+      budgetEnd: '',
       departureDateStart: '',
       departureDateEnd: '',
       returnDateStart: '',
@@ -67,7 +67,7 @@ const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
       <Grid width={'100%'} p={'4'} gapY={'4'}>
         <Grid gapY={'4'}>
           <Controller
-            name='provinceId'
+            name='provincesId'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -91,7 +91,7 @@ const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
           />
 
           <Controller
-            name='cityId'
+            name='citiesId'
             control={control}
             render={({ field }) => (
               <SelectRoot
@@ -115,8 +115,8 @@ const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             بودجه
           </Text>
-          <Controller name='startBudget' control={control} render={({ field }) => <CustomSearch {...field} placeholder='از' type='input' inputType='number' />} />
-          <Controller name='endBudget' control={control} render={({ field }) => <CustomSearch {...field} placeholder='تا' type='input' inputType='number' />} />
+          <Controller name='budgetStart' control={control} render={({ field }) => <CustomSearch {...field} placeholder='از' type='input' inputType='number' />} />
+          <Controller name='budgetEnd' control={control} render={({ field }) => <CustomSearch {...field} placeholder='تا' type='input' inputType='number' />} />
           <Flex direction={'column'} gap={'2'}>
             <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
               تاریخ رفت

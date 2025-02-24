@@ -8,6 +8,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { filterObject } from '@/api/data-management';
 import { getRecentTrips } from '@/api/plans';
+import { getRecentTours } from '@/api/tours';
 import ToursHero from '@/components/tours/hero/ToursHero';
 import ToursList from '@/components/tours/list/ToursList';
 import Header from '@/layout/Header';
@@ -27,10 +28,11 @@ export default function ToursPage({
     searchQuery: string;
     sortDate: string;
     sort: string;
-    provinceId: string;
-    cityId: string;
-    startBudget: string;
-    endBudget: string;
+    provincesId: string;
+    citiesId: string;
+    targetDate: string;
+    budgetStart: string;
+    budgetEnd: string;
     departureDateStart: string;
     departureDateEnd: string;
     returnDateStart: string;
@@ -47,10 +49,11 @@ export default function ToursPage({
       page: searchParams.page ? Number(searchParams.page) : 1,
       searchQuery: searchParams.searchQuery || '',
       sortDate: searchParams.sortDate ? searchParams.sortDate : '',
-      provinceId: searchParams.provinceId ? Number(searchParams.provinceId) : '',
-      cityId: searchParams.cityId ? Number(searchParams.cityId) : '',
-      startBudget: searchParams.startBudget ? searchParams.startBudget : '',
-      endBudget: searchParams.endBudget ? searchParams.endBudget : '',
+      provincesId: searchParams.provincesId ? Number(searchParams.provincesId) : '',
+      citiesId: searchParams.citiesId ? Number(searchParams.citiesId) : '',
+      targetDate: searchParams.targetDate ? Number(searchParams.targetDate) : '',
+      budgetStart: searchParams.budgetStart ? searchParams.budgetStart : '',
+      budgetEnd: searchParams.budgetEnd ? searchParams.budgetEnd : '',
       departureDateStart: searchParams.departureDateStart ? Number(searchParams.departureDateStart) : '',
       departureDateEnd: searchParams.departureDateEnd ? Number(searchParams.departureDateEnd) : '',
       returnDateStart: searchParams.returnDateStart ? Number(searchParams.returnDateStart) : '',
@@ -63,7 +66,7 @@ export default function ToursPage({
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
-  const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['tours'], queryFn: async () => await getRecentTrips(watch() as any) });
+  const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['tours'], queryFn: async () => await getRecentTours(watch() as any) });
   /*
    *** Hooks and Methods _________________________________________________________________________________________________________________________________________________________________
    */
@@ -74,6 +77,8 @@ export default function ToursPage({
     const newUrl = `${window.location.pathname}?${searchParams}`;
     window.history.pushState(null, '', newUrl);
   };
+
+  console.log('data', data?.tours);
 
   /*
    *** JSX_________________________________________________________________________________________________________
@@ -98,10 +103,10 @@ export default function ToursPage({
                     <Text {...typoVariant.title1}>دیتایی موجود نیست</Text>
                   </Flex>
                 ) : (
-                  <ToursList data={data.latestTrips as any} />
+                  <ToursList data={data.tours as any} />
                 )}
 
-                {data?.latestTrips && (
+                {data?.tours && (
                   <Flex width={'100%'} align={'center'} justify={'between'}>
                     <CustomPagination
                       current={watch('page')}
@@ -112,7 +117,7 @@ export default function ToursPage({
                         onSubmit(watch());
                       }}
                     />
-                    <ItemsPerPage data={data?.latestTrips} currentPage={data?.currentPage as number} totalCount={data?.totalCount} />
+                    <ItemsPerPage data={data?.tours} currentPage={data?.currentPage as number} totalCount={data?.totalCount} />
                   </Flex>
                 )}
               </Grid>

@@ -11,8 +11,8 @@ import { typoVariant } from '@/theme/typo-variants';
 interface TourListDetail {
   tourId: string;
   userMobile: string;
-  destinationCity: string;
-  budget: number;
+  provinceName: string;
+  budget: string;
   departureDate: string;
   returnDate: string;
 }
@@ -54,7 +54,7 @@ const ToursList = ({ data }: TourListProps) => {
       },
     },
     {
-      accessorKey: 'destinationCity',
+      accessorKey: 'provinceName',
       header: 'مبدا',
       cell: info => {
         const value = info.getValue() as string | null;
@@ -69,10 +69,10 @@ const ToursList = ({ data }: TourListProps) => {
       accessorKey: 'budget',
       header: 'بودجه',
       cell: info => {
-        const value = info.getValue() as number | null;
+        const value = info.getValue() as string | null;
         return (
           <Text {...typoVariant.body2} style={{ display: 'flex', height: '100%', alignItems: 'center', color: colorPalette.gray[11] }}>
-            {value ? `${formatPrice(value)} ریال` : '-'}
+            {value ? `${formatPrice(Number(value))} ریال` : '-'}
           </Text>
         );
       },

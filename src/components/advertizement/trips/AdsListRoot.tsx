@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 
-import { getAdsHolders } from '@/api/ads';
+import { getAdsHolders } from '@/api/advertizement';
 import { Flex, Grid } from '@/libs/primitives';
 import { ToastError } from '@/libs/shared/toast/Toast';
 
