@@ -11,7 +11,7 @@ import { Box, Flex, Grid, Heading, IconButton, Modal, Text, TextArea, TextField 
 import { Pencil, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { AdsHoldersResponse, AdsItemsDetail } from '@/types/ads/ads';
+import { AdsHoldersResponse, AdsItemsDetail } from '@/types/advertizement/advertizement';
 
 type Props = AdsItemsDetail & {
   data: AdsHoldersResponse;

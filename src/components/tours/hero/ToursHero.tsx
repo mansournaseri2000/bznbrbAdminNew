@@ -67,7 +67,7 @@ const ToursHero = ({ onSubmit, isPending }: Props) => {
           render={({ field }) => <CustomSearch {...field} placeholder='جستجو' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} />}
         />
         <Controller
-          name=''
+          name='sort'
           control={control}
           render={({ field }) => (
             <SelectRoot
@@ -78,8 +78,7 @@ const ToursHero = ({ onSubmit, isPending }: Props) => {
                 const currentItem = userDetailSortConstant.find(item => item.id === Number(val));
                 handleSortItems(currentItem?.id as any);
                 field.onChange(val);
-                // onSubmit();
-                setValue('page', 1);
+                onSubmit();
               }}
             >
               {userDetailSortConstant.map(item => (

@@ -20,21 +20,28 @@ export interface AdsPageResponse {
 export type AdsPageKeyOptions = 'main_page' | 'planner' | 'planner_trips' | 'tourmaker' | 'tours' | 'article' | 'article_list' | 'maps' | 'place' | 'province' | 'province_places' | 'category';
 
 export interface AdsHoldersResponse {
-  id: number;
-  status: boolean;
-  path: string;
   page: string;
   position: string;
+  deletedAt: number;
+  createdAt: number;
+  updatedAt: number;
+  id: number;
+  adminId: number;
+  placeId: number;
+  status: boolean;
+  path: string;
+  type: string;
   description: string;
-  alt: string;
+  cityId: number;
   slug: string;
+  articlesId: number;
+  alt: string;
+  provincesId: number;
+  townId: number;
   summery: string;
   website: string;
   socialMedia: string;
   sponsor: string;
-  deletedAt: number;
-  createdAt: number;
-  updatedAt: number;
 }
 
 export interface ProvinceListResponse {
@@ -58,4 +65,49 @@ export interface ProvinceDetailById {
   cityName: string;
   lastUpdated: number;
   bannerCount: number;
+}
+
+export interface CreateAdBody {
+  type: 'ADS';
+  description: string;
+  page: string;
+  holder: string;
+  alt: string;
+  slug: string;
+  summery: string;
+  file: File;
+  website: string;
+  socialMedia: string;
+  sponsor: string;
+  townId: number | null;
+  provinceId: number | null;
+  cityId: number | null;
+  categoryId: number | null;
+}
+
+export interface EditADsBody {
+  id: number;
+  type: 'ADS';
+  alt: string;
+  description: string;
+  summery: string;
+  townId: number | null;
+  website: string;
+  socialMedia: string;
+  sponsor: string;
+}
+
+export interface DeleteAdBody {
+  id: number;
+  type: 'ADS';
+}
+
+export interface AdsListResponse {
+  key: string;
+  label: string;
+  holders: string[];
+  holder: string;
+  space: number;
+  freeSpace: number;
+  latestUpdatedAt: number;
 }

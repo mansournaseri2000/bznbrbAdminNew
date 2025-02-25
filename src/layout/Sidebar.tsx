@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 
 import Link from 'next/link';
+import { useSelectedLayoutSegment } from 'next/navigation';
 
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
@@ -17,13 +18,25 @@ import { typoVariant } from '@/theme/typo-variants';
 import SidebarItems from './SidebarItems';
 
 const Sidebar = () => {
+  /**
+   * const and variables
+   * _______________________________________________________________________________
+   */
   const [isExpanded, setIsExpanded] = useState(false);
   const { dispatch } = useUser();
+  const activeSegment = useSelectedLayoutSegment();
 
+  /**
+   * Hooks and Methods
+   * _______________________________________________________________________________
+   */
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
   };
-
+  /**
+   * JSX
+   * _______________________________________________________________________________
+   */
   return (
     <motion.div
       onHoverStart={() => setIsExpanded(true)}
@@ -43,7 +56,7 @@ const Sidebar = () => {
         zIndex: 100,
       }}
     >
-      <Grid mx={'auto'} height={'100%'} style={{ overflowX: 'hidden', whiteSpace: 'nowrap', alignContent: 'space-between', overflowY: 'auto',  }}>
+      <Grid mx={'auto'} height={'100%'} style={{ overflowX: 'hidden', whiteSpace: 'nowrap', alignContent: 'space-between', overflowY: 'auto' }}>
         <Grid width={'100%'}>
           <Flex height={'100%'} direction='column' p={'4'} gap={'4'}>
             <Link href={''}>
@@ -63,13 +76,12 @@ const Sidebar = () => {
               </CollapseWrapper>
             </Link>
             {sidebarOptions.map((item, index) => (
-              <SidebarItems key={index} {...(item as any)} isExpanded={isExpanded} />
+              <SidebarItems key={index} {...(item as any)} isExpanded={isExpanded} activeSegment={activeSegment} />
             ))}
           </Flex>
         </Grid>
         <Grid width={'fit-content'}>
           <Flex height={'fit-content'} gap={'2'} p={'4'}>
-            {/* <Link href={'/auth/login/receiveCode'}> */}
             <Flex px={'4'} gap={'2'} align={'center'} onClick={handleLogout} style={{ cursor: 'pointer' }}>
               <Exit width={'16px'} height={'16px'} />
               <CollapseWrapper
@@ -88,7 +100,6 @@ const Sidebar = () => {
                 </Text>
               </CollapseWrapper>
             </Flex>
-            {/* </Link> */}
           </Flex>
         </Grid>
       </Grid>

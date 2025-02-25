@@ -8,7 +8,7 @@ import { Button, Flex, Text } from '@/libs/primitives';
 import { convertTimestampToPersianDate } from '@/libs/utils/convertTimestampToPersianDate';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
-import { AdsPageKeyOptions } from '@/types/ads/ads';
+import { AdsPageKeyOptions } from '@/types/advertizement/advertizement';
 
 type Props = {
   label: string;

@@ -2,10 +2,14 @@ import React from 'react';
 
 import { useParams, useRouter } from 'next/navigation';
 
-import { citiesOptions } from '@/constants/ads';
-import { Grid } from '@/libs/primitives';
+import { useQuery } from '@tanstack/react-query';
+
+import { getCitiesList } from '@/api/advertizement';
+import { Flex, Grid } from '@/libs/primitives';
 
 import AdsManagmentListCard from '../AdsManagmentListCard';
+import { Spinner } from '@radix-ui/themes';
+import { ToastError } from '@/libs/shared/toast/Toast';
 
 const CitiesListRoot = () => {
   /**
@@ -16,7 +20,12 @@ const CitiesListRoot = () => {
   const params = useParams();
   const pageType = params.slug[0];
   const provinceId = params.slug[3];
-  console.log('🚀 ~ CitiesListRoot ~ provinceId:', provinceId);
+  /**
+   * services
+   * _______________________________________________________________________________
+   */
+  const { data,isLoading,isFetching,isError } = useQuery({ queryKey: ['cities-list'], queryFn: async () => await getCitiesList(Number(provinceId)) });
+
   /**
    * Hooks and Methods
    * _______________________________________________________________________________
@@ -27,25 +36,36 @@ const CitiesListRoot = () => {
     return '';
   };
 
+    /**
+   * Loading and Error
+   * _______________________________________________________________________________
+   */
+    if (isLoading || isFetching) {
+      return (
+        <Flex width={'100%'} height={'90vh'} justify={'center'} align={'center'}>
+          <Spinner style={{ scale: 2 }} />
+        </Flex>
+      );
+    }
+  
+    if (!data || isError) return ToastError('مشکلی پیش آمده است . لطفا مجددا تلاش کنید');
+
   /**
    * JSX
    * _______________________________________________________________________________
    */
   return (
     <Grid width={'100%'} columns={{ initial: '1', sm: '2' }} gap={'5'}>
-      {citiesOptions.map((item, index) => {
-        console.log('ITEM', item);
-        return (
-          <AdsManagmentListCard
-            key={index}
-            type='other'
-            lable={item.name}
-            latestUpdatedAt={item.lastEdit}
-            space={item.emptyBanners}
-            handleRedirectAdsManagment={() => router.push(handleRedirectAds(item.id))}
-          />
-        );
-      })}
+      {data?.map((item, index) => (
+        <AdsManagmentListCard
+          key={index}
+          type='other'
+          lable={item.label}
+          latestUpdatedAt={item.latestUpdatedAt}
+          space={item.space}
+          handleRedirectAdsManagment={() => router.push(handleRedirectAds(Number(item.key)))}
+        />
+      ))}
     </Grid>
   );
 };
