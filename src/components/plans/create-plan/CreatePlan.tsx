@@ -96,6 +96,10 @@ const CreatePlan = ({ provinces }: Props) => {
 
     return new Date(currentDate);
   };
+
+
+  console.log(watch(),"watchwatch");
+  
   return (
     <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
       <FormProvider {...methods}>

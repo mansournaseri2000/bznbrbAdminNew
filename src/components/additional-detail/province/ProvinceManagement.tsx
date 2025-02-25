@@ -27,7 +27,7 @@ const ProvinceManagement = () => {
 
   console.log('DATA', provinceData);
   return (
-    <Grid width={'100%'} columns={'2'} gap={'5'} style={{ border: '1px solid red' }}>
+    <Grid width={'100%'} columns={'2'} gap={'5'}>
       {provinceData?.map(item => (
         <ProvinceCard key={item.id} {...item} />
       ))}

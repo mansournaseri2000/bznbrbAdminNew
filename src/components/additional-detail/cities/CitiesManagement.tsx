@@ -47,14 +47,14 @@ const CitiesManagement = () => {
 
   if (!citiesData || citiesError) return ToastError('مشکلی پیش آمده. لطفا مجددا تلاش نمایید');
 
-  console.log(citiesData,"citiesDatacitiesDatacitiesData2");
-  
+  console.log(citiesData, 'citiesDatacitiesDatacitiesData2');
+
   /*
    *** JSX_________________________________________________________________________________________________________________________________________________________________
    */
   return (
     <>
-      <Flex width={'100%'} direction={'column'} gap={'5'} style={{border:"10px solid red"}}>
+      <Flex width={'100%'} direction={'column'} gap={'5'}>
         <Flex width={'100%'} align={'center'} justify={'between'}>
           <Button size={'3'} variant='ghost' onClick={() => setIsOpen(true)} style={{ paddingBlock: '11.5px' }}>
             <Flex align={'center'} gap={'2'}>

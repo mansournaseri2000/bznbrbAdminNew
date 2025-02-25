@@ -62,7 +62,6 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
       }
     },
   });
-  
 
   const { mutate: deleteCityMutate, isPending: deleteCityPending } = useMutation({
     mutationFn: async () => await deleteCity(id),
@@ -93,8 +92,6 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
     }
     addTownMutate();
   };
-
-  
 
   /**
    * JSX
@@ -149,7 +146,7 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
         {/*
          *** for edit city _________________________________________________________________________________________________________________________________________________________________
          */}
-        {modalState.key === 'edit' && Boolean(cityData)&& (
+        {modalState.key === 'edit' && Boolean(cityData) && (
           <>
             <ModalHeader title={'ویرایش شهرستان'} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
             <EditCityModal setIsOpen={() => setModalState({ key: 'edit', isOpen: false })} data={cityData ?? { name: '', id: null }} />

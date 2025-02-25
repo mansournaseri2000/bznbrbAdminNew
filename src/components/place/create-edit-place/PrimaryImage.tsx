@@ -173,6 +173,8 @@ const PrimaryImage = ({ picture, constant, placeData }: Props) => {
     }
   }, [watch('cityID'), watch('provinceId')]);
 
+  
+
   return (
     <>
       {!picture ? (

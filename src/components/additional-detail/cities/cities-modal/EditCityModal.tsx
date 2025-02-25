@@ -35,8 +35,6 @@ const EditCityModal = ({ setIsOpen, data }: Props) => {
   const { control, watch } = methods;
   const queryClient = useQueryClient();
 
-  console.log('data', data);
-
   /**
    * Services
    * _______________________________________________________________________________
@@ -45,9 +43,6 @@ const EditCityModal = ({ setIsOpen, data }: Props) => {
   const { mutate: uploadImageMutate } = useMutation({
     mutationFn: async (body: CityUploaderParams) => await CityUploader(body),
   });
-
-  console.log('WATCH FOR IMAGE PATH', watch('imagePath'));
-  console.log('WATCH FOR ICON PATH', watch('iconPath'));
 
   const { mutate: editCityMutate, isPending: editCityPending } = useMutation({
     mutationFn: async () => await updateCity(data.id, watch('name') as any),
