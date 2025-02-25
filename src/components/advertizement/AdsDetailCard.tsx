@@ -43,6 +43,7 @@ type Props = {
     townId: number | null;
     cityId: number | null;
     provincesId: number | null;
+    categoryId: number | null;
   };
 };
 
@@ -75,7 +76,7 @@ const AdsDetailCard = ({ data }: Props) => {
     },
   });
   const { control, watch, setValue } = methods;
-  console.log('AdsDetailCard', data);
+  console.log('AdsDetailCardAdsDetailCardAdsDetailCardAdsDetailCard', data);
 
   /**
    * useEffect
@@ -192,7 +193,8 @@ const AdsDetailCard = ({ data }: Props) => {
         page: data.page,
         holder: data.position,
         alt: watch('alt'),
-        slug: watch('summery'),
+        slug: watch('slug'),
+        summery: watch('summery'),
         file: watch('imageFile'),
         socialMedia: watch('socialMedia'),
         sponsor: watch('sponsor'),
@@ -200,6 +202,8 @@ const AdsDetailCard = ({ data }: Props) => {
         townId: data.townId,
         provinceId: data.provincesId,
         cityId: data.cityId,
+        categoryId: data.categoryId,
+
       });
     }
   };
@@ -212,7 +216,7 @@ const AdsDetailCard = ({ data }: Props) => {
     <>
       {!Boolean(data?.path) && (
         <Flex align={'center'} position={'relative'} minHeight={'200px'} p={'16px'} justify={'center'} style={{ borderRadius: '8px', border: `1px dashed ${colorPalette.blue[9]}` }}>
-          <Text style={{ position: 'absolute', color: colorPalette.gray[8], right: '20px', fontSize: '90px' }}>{'A22'}</Text>
+          <Text style={{ position: 'absolute', color: colorPalette.gray[8], right: '20px', fontSize: '90px' }}>{data?.position}</Text>
           <Flex gap={'4px'} align={'center'} onClick={() => setModalState({ isOpen: true, key: 'create' })} style={{ cursor: 'pointer' }}>
             <PlusIcon stroke={colorPalette.blue[7]} />
             <Text {...typoVariant.body1} style={{ color: colorPalette.blue[11] }}>
@@ -243,13 +247,13 @@ const AdsDetailCard = ({ data }: Props) => {
                 <TextField placeholder='متن چایگزین' readOnly value={data.alt ?? ''} style={{ borderRadius: 12 }} />
                 <TextArea placeholder='توضیحات تصویر' readOnly value={data.description ?? ''} style={{ borderRadius: 12 }} />
               </Flex>
-              {data.slug && (
+              {data.path && (
                 <Flex p={'12px 16px'} gap={'2'} align={'center'}>
                   <IconButton variant='surface' size={'1'}>
                     <CopyIcon style={{ color: colorPalette.blue[10] }} />
                   </IconButton>
                   <Text {...typoVariant.body3} style={{ color: colorPalette.blue[11] }}>
-                    {data.slug}
+                    {data.path}
                   </Text>
                 </Flex>
               )}

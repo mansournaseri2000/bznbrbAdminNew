@@ -18,7 +18,6 @@ export default function AdvertizementPageTypes({ params }: { params: { slug: str
    * _______________________________________________________________________________
    */
   const pageType = params.slug;
-
   /**
    * Services
    * _______________________________________________________________________________
@@ -63,7 +62,7 @@ export default function AdvertizementPageTypes({ params }: { params: { slug: str
     );
 
   if (!data || isError) return ToastError('مشکلی پیش آمده . لطفا دوباره تلاش نمایید');
-  console.log('AdsDetailCard', data);
+  console.log('AdsDetailCardAdsDetailCardAdsDetailCard', data);
   /**
    * JSX
    * _______________________________________________________________________________
@@ -81,7 +80,7 @@ export default function AdvertizementPageTypes({ params }: { params: { slug: str
                 </Heading>
               </Flex>
             ) : (
-              data.map((item, index, array) => item && <AdsDetailCard key={index} data={array.length - 1 === index ? null : (item as any)} />)
+              data.map((item, index) => item && <AdsDetailCard key={index} data={item as any} />)
             )}
           </Grid>
         </Grid>

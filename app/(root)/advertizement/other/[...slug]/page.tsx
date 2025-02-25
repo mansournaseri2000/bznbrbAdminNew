@@ -37,7 +37,7 @@ export default function AdvertizementOtherPages({ params }: { params: { slug: st
 
   const renderHeader = () => {
     if (params.slug[0] === 'province') {
-      if (isShowAdsList) return `تبلیغات تبلیغات استان ها - استان ${resolveProvinceName}`;
+      if (isShowAdsList) return ` تبلیغات استان ها - استان ${resolveProvinceName}`;
       return 'تبلیغات صحفه استان ها - لیست استان ها';
     }
     if (params.slug[0] === 'province_places') {

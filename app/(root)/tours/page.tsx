@@ -7,7 +7,6 @@ import { Spinner } from '@radix-ui/themes';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { filterObject } from '@/api/data-management';
-import { getRecentTrips } from '@/api/plans';
 import { getRecentTours } from '@/api/tours';
 import ToursHero from '@/components/tours/hero/ToursHero';
 import ToursList from '@/components/tours/list/ToursList';

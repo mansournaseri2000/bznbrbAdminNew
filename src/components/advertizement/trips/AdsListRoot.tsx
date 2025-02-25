@@ -18,12 +18,15 @@ const AdsListRoot = () => {
    */
   const params = useParams();
   const pageType = params.slug[0];
+  const handleId = Boolean(params.slug[3]) === true ? Number(params.slug[7]) : Number(params.slug[2]);
+  const handleType = Boolean(params.slug[3]) === true ? 'children' : 'parent';
+  console.log('🚀 handleId:', handleId, '🚀 handleType:', handleType);
+
   /**
-   * Services
+   * services
    * _______________________________________________________________________________
    */
-
-  const { data, isLoading, isError, isFetching } = useQuery({ queryKey: ['ads-page-type'], queryFn: async () => await getAdsHolders(pageType) });
+  const { data, isLoading, isError, isFetching } = useQuery({ queryKey: ['ads-page-type'], queryFn: async () => await getAdsHolders(pageType, handleId, handleType) });
   /**
    * Loading and Error
    * _______________________________________________________________________________
@@ -40,7 +43,7 @@ const AdsListRoot = () => {
    * JSX
    * _______________________________________________________________________________
    */
-  return <Grid gapY={'5'}>{data.map((item, index, array) => item && <AdsDetailCard key={index} data={array.length - 1 === index ? null : (item as any)} />)}</Grid>;
+  return <Grid gapY={'5'}>{data.map((item, index) => item && <AdsDetailCard key={index} data={item as any} />)}</Grid>;
 };
 
 export default AdsListRoot;

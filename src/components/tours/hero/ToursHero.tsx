@@ -79,7 +79,6 @@ const ToursHero = ({ onSubmit, isPending }: Props) => {
                 handleSortItems(currentItem?.id as any);
                 field.onChange(val);
                 onSubmit();
-                setValue('page', 1);
               }}
             >
               {userDetailSortConstant.map(item => (

@@ -32,8 +32,9 @@ export default function AdvertizementTrips({ params }: { params: { slug: string[
    * _______________________________________________________________________________
    */
   const { data } = useQuery({ queryKey: ['constant'], queryFn: async () => await getAllPlacesConstants() });
-  const resolveCityName = useResolveIdsToNames(Number(params.slug[7]), data?.towns ?? []);
+  const resolveCityName = useResolveIdsToNames(Number(params.slug[7]), data?.cities ?? []);
   const resolveProvinceName = useResolveIdsToNames(Number(params.slug[2]), data?.provinces ?? []);
+  const resolveProvinceNameForCitiesList = useResolveIdsToNames(Number(params.slug[3]), data?.provinces ?? []);
   /**
    * Hooks and Methods
    * _______________________________________________________________________________
@@ -48,7 +49,7 @@ export default function AdvertizementTrips({ params }: { params: { slug: string[
     if (params.slug[0] === 'planner_trips') {
       if (Boolean(params.slug[3]) === true && params.slug[2] === 'cities') {
         if (Boolean(params.slug[4]) === true) return ` تبلیغات برنامه سفر - شهرستان ${resolveCityName}`;
-        return 'تبلیغات برنامه سفر - لیست شهرستان ها';
+        return `تبلیغات برنامه سفر - لیست شهرستان های استان ${resolveProvinceNameForCitiesList}`;
       }
       if (Boolean(params.slug[2]) === true && params.slug[1] === 'provinces') return `تبلیغات برنامه سفر - استان ${resolveProvinceName}`;
       return 'تبلیغات برنامه سفر - لیست استان ها';
@@ -57,7 +58,7 @@ export default function AdvertizementTrips({ params }: { params: { slug: string[
     if (params.slug[0] === 'tours') {
       if (Boolean(params.slug[3]) === true && params.slug[2] === 'cities') {
         if (Boolean(params.slug[4]) === true) return `تبلیغات لیست تورها - شهرستان ${resolveCityName}`;
-        return 'تبلیغات لیست تورها - لیست شهرستان ها';
+        return `تبلیغات لیست تورها - لیست شهرستان های استان ${resolveProvinceNameForCitiesList}`;
       }
       if (Boolean(params.slug[2]) === true && params.slug[1] === 'provinces') return `تبلیغات لیست تورها - استان ${resolveProvinceName}`;
       return 'تبلیغات لیست تورها - لیست استان ها';
