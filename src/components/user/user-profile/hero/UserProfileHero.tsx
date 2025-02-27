@@ -93,7 +93,7 @@ const UserProfileHero = ({ onSubmit, isOpen, setIsOpen, userId, isPending }: Pro
     <>
       <Flex width={'100%'} align={'center'} justify={'between'}>
         <IconButton colorVariant='BLUE' variant='soft' type='button' size={'4'} onClick={() => setIsOpen(true)}>
-          <Filter />
+          <Filter width={16} height={16} />
         </IconButton>
 
         <Flex width={'240px'}>

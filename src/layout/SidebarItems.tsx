@@ -30,9 +30,7 @@ const SidebarItems = (props: Props) => {
    */
   const { isExpanded, text, Icon, type, items, path, activeSegment } = props;
   const [isOpen, setIsOpen] = useState(false);
-  const firstSegment = items?.map(item => item.path.split('/')[1]);
-  console.log('🚀 ~ SidebarItems ~ firstSegment:', firstSegment);
-  const currentRoute = type === 'collapse' ? activeSegment === path?.substring(1) : items?.some(item => activeSegment === item.path.substring(1));
+  const currentRoute = type === 'collapse' ? activeSegment === path?.substring(1) : items?.some(item => activeSegment === item.path.split('/')[1]);
 
   const toggleSidebarItems = () => {
     setIsOpen(!isOpen);
@@ -65,16 +63,27 @@ const SidebarItems = (props: Props) => {
                 {text}
               </Text>
               {type === 'expand' && (
-                <IconButton variant='surface' size={'1'} type='button' onClick={() => toggleSidebarItems()}>
-                  {isOpen ? <MinusIcon style={{ color: colorPalette.gray[11] }} /> : <PlusIcon style={{ color: colorPalette.gray[11] }} />}
-                </IconButton>
+                <CustomIconButton variant='surface' size={'1'} type='button' onClick={() => toggleSidebarItems()}>
+                  {isOpen ? (
+                    <MinusIcon style={{ color: currentRoute ? colorPalette.gray[1] : colorPalette.gray[11] }} />
+                  ) : (
+                    <PlusIcon style={{ color: currentRoute ? colorPalette.gray[1] : colorPalette.gray[11] }} />
+                  )}
+                </CustomIconButton>
               )}
             </Flex>
           </CollapseWrapper>
         </Flex>
       </Link>
       {type === 'expand' && (
-        <motion.div variants={containerVariants} initial='closed' animate={isOpen ? 'open' : 'closed'} transition={{ duration: 0.3 }} style={{ overflow: 'hidden', paddingRight: 24 }} layout>
+        <motion.div
+          variants={containerVariants}
+          initial='closed'
+          animate={isOpen ? 'open' : 'closed'}
+          transition={{ duration: 0.3 }}
+          style={{ overflow: 'hidden', paddingRight: 24, paddingBlockStart: currentRoute ? 8 : 0 }}
+          layout
+        >
           {items?.map((item, index) => (
             <Link key={index} href={item.path} style={{ padding: '12px 24px 12px 16px', borderRight: `1px solid ${colorPalette.gray[6]}` }}>
               <Text {...typoVariant.body3} style={{ color: colorPalette.gray[11] }}>
@@ -104,6 +113,16 @@ const StyledIcon = styled(Box)<{ isActive: boolean }>`
     height: 16px;
     path {
       fill: ${({ isActive }) => (isActive ? colorPalette.gray[1] : colorPalette.gray[11])};
+    }
+  }
+`;
+
+const CustomIconButton = styled(IconButton)`
+  &:where(:hover) {
+    svg {
+      path {
+        fill: ${colorPalette.gray[11]};
+      }
     }
   }
 `;

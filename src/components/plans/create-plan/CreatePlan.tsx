@@ -7,15 +7,18 @@ import { useRouter } from 'next/navigation';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CaretDownIcon } from '@radix-ui/react-icons';
-import { Popover } from '@radix-ui/themes';
+import { Popover, Spinner } from '@radix-ui/themes';
 import { Checkbox as RadixCheckbox } from '@radix-ui/themes';
+import { useMutation } from '@tanstack/react-query';
 import styled from 'styled-components';
 
+import { createTrip } from '@/api/plans';
 import { means_of_travelItems, Number_Of_Passengers, place_of_residence, Type_Of_Passengers, Type_of_tourist_place } from '@/constants/plans';
 import { Button, Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 import { useProvince } from '@/libs/providers/PlansProvider';
 import CustomDatePicker from '@/libs/shared/CustomDatePicker';
 import CustomTimePicker from '@/libs/shared/CustomTimePicker';
+import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import BoxWrapper from '@/libs/shared/wrapper/BoxWrapper';
 import { areDatesSameOrCurrent } from '@/libs/utils/areDatesSame';
 import { colorPalette } from '@/theme';
@@ -57,6 +60,22 @@ const CreatePlan = ({ provinces }: Props) => {
 
   const provinceCity = provinces?.filter(item => item.id === Number(watch('origin.province')))[0]?.Cities;
   const destinationCity = provinces?.filter(item => item.id === Number(watch('destination.province')))[0]?.Cities;
+
+  /**
+   * services
+   * _______________________________________________________________________________
+   */
+  const { mutate: createPlanMutate, isPending: createPlanPending } = useMutation({
+    mutationFn: async () => await createTrip(watch() as any),
+    onSuccess: data => {
+      if (data) {
+        ToastSuccess('برنامه مورد نظر با موفقیت ایجاد شد');
+        router.back();
+      } else {
+        ToastError('خطایی رخ داده است . لطفا مجددا تلاش کنید');
+      }
+    },
+  });
   /**
    * functions
    * _______________________________________________________________________________
@@ -84,22 +103,21 @@ const CreatePlan = ({ provinces }: Props) => {
 
   function reduceOneHour(): Date {
     const now = new Date();
-
     now.setHours(now.getHours() - 1);
-
     return now;
   }
 
   const sample = (date: Date) => {
     const currentDate = new Date(date);
-    currentDate.setDate(date.getDate() + 1); // Add one day
-
+    currentDate.setDate(date.getDate() + 1);
     return new Date(currentDate);
   };
 
-
-  console.log(watch(),"watchwatch");
-  
+  console.log(watch(), 'watchwatch');
+  /**
+   * JSX
+   * _______________________________________________________________________________
+   */
   return (
     <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
       <FormProvider {...methods}>
@@ -585,8 +603,8 @@ const CreatePlan = ({ provinces }: Props) => {
               </Grid>
             </BoxWrapper>
             <Flex width={'100%'} align={'center'} justify={'between'} p={'4'} style={{ backgroundColor: colorPalette.gray[2], border: `1px solid ${colorPalette.gray[6]}`, borderRadius: 8 }}>
-              <Button size={'3'} variant='soft'>
-                <Text {...typoVariant.body1}>ساخت برنامه</Text>
+              <Button size={'3'} variant='soft' onClick={() => createPlanMutate()}>
+                <Text {...typoVariant.body1}>{createPlanPending ? <Spinner /> : 'ساخت برنامه'}</Text>
               </Button>
               <Button size={'3'} type='button' colorVariant='PINK' onClick={() => router.back()}>
                 <Text {...typoVariant.body1}>لغو و بازگشت</Text>

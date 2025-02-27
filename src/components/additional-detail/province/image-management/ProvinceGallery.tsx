@@ -7,10 +7,11 @@ import { Controller, useForm } from 'react-hook-form';
 import Image from 'next/image';
 
 import { PlusIcon } from '@radix-ui/react-icons';
+import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import imageCompression from 'browser-image-compression';
 
-import { provinceUploder, provinceUploderBody } from '@/api/additional-detail';
+import { deleteImageGalleryForProvince, provinceUploder, provinceUploderBody } from '@/api/additional-detail';
 import { updateMainImageInfo, updateMainImageInfoBody } from '@/api/data-management';
 import { Box, Button, Flex, Grid, Heading, IconButton, Modal, SelectItem, SelectRoot, Text, TextArea, TextField } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
@@ -34,7 +35,7 @@ const ProvinceGallery = ({ gallery, constantData, ProvinceId }: Props) => {
    * _______________________________________________________________________________
    */
   const [town, setTown] = useState<any>([]);
-  const [status, setStatus] = useState<'create' | 'edit'>('create');
+  const [status, setStatus] = useState<'create' | 'edit' | 'delete'>('create');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentItem, setCurrentItem] = useState<any>(null);
   const methods = useForm({
@@ -42,7 +43,7 @@ const ProvinceGallery = ({ gallery, constantData, ProvinceId }: Props) => {
       pic: currentItem?.path ? currentItem?.path : '',
       localPic: currentItem?.path ? currentItem?.path : '',
       provinceId: Boolean(currentItem?.provinceId) ? currentItem.provinceId : '',
-      cityID: Boolean(currentItem?.cityId) ? currentItem.cityId : '',
+      cityId: Boolean(currentItem?.cityId) ? currentItem.cityId : '',
       townId: Boolean(currentItem?.townId) ? currentItem.townId : '',
       alt: currentItem?.alt ? currentItem?.alt : '',
       description: currentItem?.description ? currentItem?.description : '',
@@ -84,6 +85,19 @@ const ProvinceGallery = ({ gallery, constantData, ProvinceId }: Props) => {
         setIsOpen(false);
       } else {
         ToastError('خطایی رخ داده دوباره تلاش نمایید');
+      }
+    },
+  });
+
+  const { mutate: deleteImageGalleryMutate, isPending: deleteImageGalleryPending } = useMutation({
+    mutationFn: async () => await deleteImageGalleryForProvince({ type: 'PROVINCE', id: currentItem.id }),
+    onSuccess: data => {
+      if (data.status === true) {
+        ToastSuccess('تصویر مورد نظر با موفقیت حذف شد');
+        queryClient.invalidateQueries({ queryKey: ['province-images'] });
+        setIsOpen(false);
+      } else {
+        ToastError('مشکلی پیش آمده است. لطفا مجددا تلاش کنید');
       }
     },
   });
@@ -143,26 +157,26 @@ const ProvinceGallery = ({ gallery, constantData, ProvinceId }: Props) => {
   };
 
   useEffect(() => {
-    const cityID = watch('cityID');
+    const cityId = watch('cityId');
     const provinceID = watch('provinceId');
 
-    if (cityID && provinceID) {
+    if (cityId && provinceID) {
       const province = constantData.find((item: any) => item.id === Number(provinceID));
 
       if (province) {
-        const city = province.Cities?.find((item: any) => item.id === Number(cityID)) as any;
+        const city = province.Cities?.find((item: any) => item.id === Number(cityId)) as any;
 
         if (city) {
           setTown(city.Town ?? []);
         }
       }
     }
-  }, [watch('cityID'), watch('provinceId')]);
+  }, [watch('cityId'), watch('provinceId')]);
 
   useEffect(() => {
     setValue('summery', currentItem?.summery);
     setValue('provinceId', currentItem?.provincesId);
-    setValue('cityID', currentItem?.cityId);
+    setValue('cityId', currentItem?.cityId);
     setValue('townId', currentItem?.townId);
     setValue('description', currentItem?.description);
     setValue('alt', currentItem?.alt);
@@ -245,7 +259,16 @@ const ProvinceGallery = ({ gallery, constantData, ProvinceId }: Props) => {
                     <Pencil />
                   </IconButton>
 
-                  <IconButton size={'3'} variant='surface' colorVariant='PINK'>
+                  <IconButton
+                    size={'3'}
+                    variant='surface'
+                    colorVariant='PINK'
+                    onClick={() => {
+                      setStatus('delete');
+                      setCurrentItem(item);
+                      setIsOpen(true);
+                    }}
+                  >
                     <Trash />
                   </IconButton>
                 </Flex>
@@ -260,171 +283,189 @@ const ProvinceGallery = ({ gallery, constantData, ProvinceId }: Props) => {
        * _______________________________________________________________________________
        */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader title='تصویر گالری استان' handleClose={() => setIsOpen(false)} />
-        <>
-          <Grid minHeight={'286px'} p={'4'} gapY={'5'}>
-            {Boolean(currentItem?.path) === false && Boolean(watch('localPic')) === false ? (
-              <Controller
-                name={'pic'}
-                control={control}
-                render={({ field }) => (
-                  <Flex width={'max-content'} position={'relative'} direction={'column'}>
-                    <Dropzone
-                      onDrop={files => {
-                        onDrop(files, field.onChange);
-                      }}
-                      accept={{
-                        'image/jpeg': ['.jpeg', '.jpg'],
-                        'image/png': ['.png'],
-                        'image/svg+xml': ['.svg'],
-                      }}
-                    >
-                      {({ getRootProps, getInputProps }) => (
-                        <div {...getRootProps()}>
-                          <input type='file' {...getInputProps()} />
-                          <Flex gap={'2'} justify={'center'} direction={'column'} align={'center'}>
-                            <Button size={'3'} style={{ width: 'fit-content' }}>
-                              <Flex align={'center'} gap={'2'}>
-                                <Camera />
-                                <Text {...typoVariant.body1}>ارسال تصویر</Text>
-                              </Flex>
-                            </Button>
-                          </Flex>
-                        </div>
-                      )}
-                    </Dropzone>
-                  </Flex>
-                )}
-              />
-            ) : (
-              <>
-                <Box width={'538px'} height={'350px'} position={'relative'} style={{ borderRadius: 8, border: `1px solid ${colorPalette.gray[3]}` }}>
-                  {status === 'create' && (
-                    <Flex
-                      width={'30px'}
-                      height={'30px'}
-                      justify={'center'}
-                      align={'center'}
-                      style={{ cursor: 'pointer', position: 'absolute', backgroundColor: colorPalette.gray[3], borderRadius: '4px', border: `1px solid ${colorPalette.pink[9]}`, zIndex: '10' }}
-                      left={'0'}
-                      top={'0'}
-                    >
-                      <Controller
-                        name={'pic'}
-                        control={control}
-                        render={({ field }) => (
-                          <Flex width={'max-content'} position={'relative'} direction={'column'}>
-                            <Dropzone
-                              onDrop={files => {
-                                onDrop(files, field.onChange);
-                              }}
-                              accept={{
-                                'image/jpeg': ['.jpeg', '.jpg'],
-                                'image/png': ['.png'],
-                                'image/svg+xml': ['.svg'],
-                              }}
-                            >
-                              {({ getRootProps, getInputProps }) => (
-                                <div {...getRootProps()}>
-                                  <input type='file' {...getInputProps()} />
-                                  <Flex gap={'2'} justify={'center'} direction={'column'} align={'center'}>
-                                    <Trash />
+        {status !== 'delete' && (
+          <>
+            <ModalHeader title='تصویر گالری استان' handleClose={() => setIsOpen(false)} />
+            <>
+              <Grid minHeight={'286px'} p={'4'} gapY={'5'}>
+                {Boolean(currentItem?.path) === false && Boolean(watch('localPic')) === false ? (
+                  <Controller
+                    name={'pic'}
+                    control={control}
+                    render={({ field }) => (
+                      <Flex width={'max-content'} position={'relative'} direction={'column'}>
+                        <Dropzone
+                          onDrop={files => {
+                            onDrop(files, field.onChange);
+                          }}
+                          accept={{
+                            'image/jpeg': ['.jpeg', '.jpg'],
+                            'image/png': ['.png'],
+                            'image/svg+xml': ['.svg'],
+                          }}
+                        >
+                          {({ getRootProps, getInputProps }) => (
+                            <div {...getRootProps()}>
+                              <input type='file' {...getInputProps()} />
+                              <Flex gap={'2'} justify={'center'} direction={'column'} align={'center'}>
+                                <Button size={'3'} style={{ width: 'fit-content' }}>
+                                  <Flex align={'center'} gap={'2'}>
+                                    <Camera />
+                                    <Text {...typoVariant.body1}>ارسال تصویر</Text>
                                   </Flex>
-                                </div>
-                              )}
-                            </Dropzone>
-                          </Flex>
-                        )}
-                      />
-                    </Flex>
-                  )}
-                  <Image src={watch('isReset') ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${currentItem?.path}` : watch('localPic')} alt='' fill style={{ borderRadius: 8, objectFit: 'fill' }} />
-                </Box>
-                {status === 'edit' && (
+                                </Button>
+                              </Flex>
+                            </div>
+                          )}
+                        </Dropzone>
+                      </Flex>
+                    )}
+                  />
+                ) : (
                   <>
-                    <Grid width={'100%'} gap={'5'} columns={'3'}>
-                      <Controller
-                        name='provinceId'
-                        control={control}
-                        render={({ field }) => (
-                          <SelectRoot
-                            {...field}
-                            value={String(watch('provinceId'))}
-                            onValueChange={val => {
-                              field.onChange(val);
-                              setValue('cityID', '');
-                              setValue('townId', '');
-                            }}
-                            placeholder={'استان'}
-                          >
-                            {constantData.map((item: any) => {
-                              return (
-                                <SelectItem key={item.id} value={String(item.id)}>
-                                  {item.name}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectRoot>
-                        )}
-                      />
-                      <Controller
-                        name='cityID'
-                        control={control}
-                        render={({ field }) => (
-                          <SelectRoot
-                            {...field}
-                            disabled={!Boolean(watch('provinceId'))}
-                            value={String(watch('cityID'))}
-                            onValueChange={val => {
-                              field.onChange(val);
-                              setValue('townId', '');
-                            }}
-                            placeholder={'شهرستان'}
-                          >
-                            {city?.map((item: any) => {
-                              return (
-                                <SelectItem key={item.id} value={String(item.id)}>
-                                  {item.name}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectRoot>
-                        )}
-                      />
-                      <Controller
-                        name='townId'
-                        control={control}
-                        render={({ field }) => (
-                          <SelectRoot
-                            {...field}
-                            disabled={!Boolean(watch('provinceId')) || !Boolean(watch('cityID'))}
-                            value={String(watch('townId'))}
-                            onValueChange={val => {
-                              field.onChange(val);
-                            }}
-                            placeholder={'شهر'}
-                          >
-                            {town?.map((item: any) => {
-                              return (
-                                <SelectItem key={item.id} value={String(item.id)}>
-                                  {item.name}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectRoot>
-                        )}
-                      />
-                    </Grid>
-                    <Controller name='alt' control={control} render={({ field }) => <TextField {...field} placeholder='متن جایگزین' />} />
-                    <Controller name='description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات تصویر' rows={6} />} />
-                    <Controller name='summery' control={control} render={({ field }) => <TextArea {...field} placeholder='شزح مختصر' rows={6} />} />
+                    <Box width={'538px'} height={'350px'} position={'relative'} style={{ borderRadius: 8, border: `1px solid ${colorPalette.gray[3]}` }}>
+                      {status === 'create' && (
+                        <Flex
+                          width={'30px'}
+                          height={'30px'}
+                          justify={'center'}
+                          align={'center'}
+                          style={{ cursor: 'pointer', position: 'absolute', backgroundColor: colorPalette.gray[3], borderRadius: '4px', border: `1px solid ${colorPalette.pink[9]}`, zIndex: '10' }}
+                          left={'0'}
+                          top={'0'}
+                        >
+                          <Controller
+                            name={'pic'}
+                            control={control}
+                            render={({ field }) => (
+                              <Flex width={'max-content'} position={'relative'} direction={'column'}>
+                                <Dropzone
+                                  onDrop={files => {
+                                    onDrop(files, field.onChange);
+                                  }}
+                                  accept={{
+                                    'image/jpeg': ['.jpeg', '.jpg'],
+                                    'image/png': ['.png'],
+                                    'image/svg+xml': ['.svg'],
+                                  }}
+                                >
+                                  {({ getRootProps, getInputProps }) => (
+                                    <div {...getRootProps()}>
+                                      <input type='file' {...getInputProps()} />
+                                      <Flex gap={'2'} justify={'center'} direction={'column'} align={'center'}>
+                                        <Trash />
+                                      </Flex>
+                                    </div>
+                                  )}
+                                </Dropzone>
+                              </Flex>
+                            )}
+                          />
+                        </Flex>
+                      )}
+                      <Image src={watch('isReset') ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${currentItem?.path}` : watch('localPic')} alt='' fill style={{ borderRadius: 8, objectFit: 'fill' }} />
+                    </Box>
+                    {status === 'edit' && (
+                      <>
+                        <Grid width={'100%'} gap={'5'} columns={'3'}>
+                          <Controller
+                            name='provinceId'
+                            control={control}
+                            render={({ field }) => (
+                              <SelectRoot
+                                {...field}
+                                value={String(watch('provinceId'))}
+                                onValueChange={val => {
+                                  field.onChange(val);
+                                  setValue('cityId', '');
+                                  setValue('townId', '');
+                                }}
+                                placeholder={'استان'}
+                              >
+                                {constantData.map((item: any) => {
+                                  return (
+                                    <SelectItem key={item.id} value={String(item.id)}>
+                                      {item.name}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectRoot>
+                            )}
+                          />
+                          <Controller
+                            name='cityId'
+                            control={control}
+                            render={({ field }) => (
+                              <SelectRoot
+                                {...field}
+                                disabled={!Boolean(watch('provinceId'))}
+                                value={String(watch('cityId'))}
+                                onValueChange={val => {
+                                  field.onChange(val);
+                                  setValue('townId', '');
+                                }}
+                                placeholder={'شهرستان'}
+                              >
+                                {city?.map((item: any) => {
+                                  return (
+                                    <SelectItem key={item.id} value={String(item.id)}>
+                                      {item.name}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectRoot>
+                            )}
+                          />
+                          <Controller
+                            name='townId'
+                            control={control}
+                            render={({ field }) => (
+                              <SelectRoot
+                                {...field}
+                                disabled={!Boolean(watch('provinceId')) || !Boolean(watch('cityId'))}
+                                value={String(watch('townId'))}
+                                onValueChange={val => {
+                                  field.onChange(val);
+                                }}
+                                placeholder={'شهر'}
+                              >
+                                {town?.map((item: any) => {
+                                  return (
+                                    <SelectItem key={item.id} value={String(item.id)}>
+                                      {item.name}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectRoot>
+                            )}
+                          />
+                        </Grid>
+                        <Controller name='alt' control={control} render={({ field }) => <TextField {...field} placeholder='متن جایگزین' />} />
+                        <Controller name='description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات تصویر' rows={6} />} />
+                        <Controller name='summery' control={control} render={({ field }) => <TextArea {...field} placeholder='شزح مختصر' rows={6} />} />
+                      </>
+                    )}
                   </>
                 )}
-              </>
-            )}
+              </Grid>
+              <ModalAction submitButtonText='ثبت و ارسال' closeButtonText='لفو و بازگشت' onCloseButton={() => setIsOpen(false)} onSubmit={onSubmit} isLoading={isPending || updateInfoIsPending} />
+            </>
+          </>
+        )}
+
+        {status === 'delete' && (
+          <Grid gapY={'24px'} p={'5'}>
+            <Text>آیا از حذف این تصویر اطمینان دارید؟</Text>
+            <Grid gap={'10px'} columns={'2'}>
+              <Button variant='soft' size={'4'} onClick={() => deleteImageGalleryMutate()}>
+                <Text {...typoVariant.body3}>{deleteImageGalleryPending ? <Spinner /> : 'بله'}</Text>
+              </Button>
+              <Button type='button' onClick={() => setIsOpen(false)} variant='solid' size={'4'}>
+                <Text {...typoVariant.body3}>خیر</Text>
+              </Button>
+            </Grid>
           </Grid>
-          <ModalAction submitButtonText='ثبت و ارسال' closeButtonText='لفو و بازگشت' onCloseButton={() => setIsOpen(false)} onSubmit={onSubmit} isLoading={isPending || updateInfoIsPending} />
-        </>
+        )}
       </Modal>
     </>
   );

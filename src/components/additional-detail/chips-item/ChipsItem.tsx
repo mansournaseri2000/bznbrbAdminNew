@@ -6,7 +6,7 @@ import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
 
-import { deleteCategory, deleteFeatureItem } from '@/api/additional-detail';
+import { deleteCategory, deleteFeatureItem, deleteTown } from '@/api/additional-detail';
 import { Button, Flex, Grid, IconButton, Modal, Text } from '@/libs/primitives';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
@@ -62,6 +62,19 @@ const ChipsItem = ({ label, hasMedia, type, id, data }: Props) => {
       if (data.status === true) {
         queryClient.invalidateQueries({ queryKey: ['feature-group'] });
         ToastSuccess('آیتم مورد نظر با موفقیت حذف شد');
+        setModalState({ ...modalState, isOpen: false });
+      } else {
+        ToastError('لطفا دوباره تلاش نمایید');
+      }
+    },
+  });
+
+  const { mutate: deleteTownMutate, isPending: deleteTownPending } = useMutation({
+    mutationFn: async () => await deleteTown(id),
+    onSuccess: data => {
+      if (data.status === true) {
+        queryClient.invalidateQueries({ queryKey: ['single-city'] });
+        ToastSuccess('شهر مورد نظر با موفقیت حذف شد');
         setModalState({ ...modalState, isOpen: false });
       } else {
         ToastError('لطفا دوباره تلاش نمایید');
@@ -211,8 +224,8 @@ const ChipsItem = ({ label, hasMedia, type, id, data }: Props) => {
               آیا از حذف ویژگی <span style={{ fontWeight: 'bold', color: 'red' }}> {label}</span> اطمینان دارید؟
             </Text>
             <Grid gap={'10px'} columns={'2'}>
-              <Button variant='soft' size={'4'}>
-                <Text {...typoVariant.body3}>بله</Text>
+              <Button variant='soft' size={'4'} onClick={() => deleteTownMutate()}>
+                <Text {...typoVariant.body3}>{deleteTownPending ? <Spinner /> : 'بله'}</Text>
               </Button>
               <Button type='button' onClick={() => setModalState({ ...modalState, isOpen: false })} variant='solid' size={'4'}>
                 <Text {...typoVariant.body3}>خیر</Text>

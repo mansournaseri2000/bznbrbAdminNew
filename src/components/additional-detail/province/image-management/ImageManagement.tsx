@@ -52,6 +52,8 @@ const ImageManagement = () => {
 
   if (!provinceImagesData || provinceImagesError) return ToastError('مشکلی پیش آمده است');
 
+  console.log('provinceImagesData', provinceImagesData);
+
   /**
    * JSX
    * _______________________________________________________________________________

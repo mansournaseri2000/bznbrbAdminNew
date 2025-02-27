@@ -253,7 +253,7 @@ const ProvinceVector = ({ vector, id }: Props) => {
         )}
         {modalState.key === 'delete' && (
           <Grid gapY={'24px'} p={'5'}>
-            <Text>آیا از حذف این نظر اظمینان دارید؟ </Text>
+            <Text>آیا از حذف این وکتور اطمینان دارید؟ </Text>
             <Grid gap={'10px'} columns={'2'}>
               <Button onClick={() => deleteVectorMutate()} variant='soft' size={'4'}>
                 <Text {...typoVariant.body3}>{deleteVectorPending ? <Spinner /> : 'بله'}</Text>

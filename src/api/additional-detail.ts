@@ -232,8 +232,25 @@ export const updateCity = async (id: number, params: { name: string }) => {
   return res.data;
 };
 
+export const updateTown = async (id: number, params: { name: string }) => {
+  const res = await DevApiManager.patch(`/town/update/${id}`, {
+    name: params,
+  });
+  return res.data;
+};
+
 export const deleteCity = async (id: number) => {
   const res = await DevApiManager.delete(`/cities/id/${id}`);
+  return res.data;
+};
+
+export const deleteTown = async (id: number) => {
+  const res = await DevApiManager.delete(`/town/${id}`);
+  return res.data;
+};
+
+export const deleteImageGalleryForProvince = async (params: DeleteImageGalleryForProvinceParams) => {
+  const res = await DevApiManager.delete('/upload/', { data: params });
   return res.data;
 };
 
@@ -265,6 +282,40 @@ export const UploadIcon = async (params: Param) => {
 
   formData.append('type', params.type);
   formData.append('categoryId', params.categoryId.toString());
+  formData.append('file', params.file);
+
+  const res = await UploaderApiManager.post<ApiData<{ data: string }>>('svg', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return res.data;
+};
+
+// ******* Feature Group ********
+
+export const UploadImageForFeatureGroup = async (params: FeatureGroupUploaderParams) => {
+  const formData = new FormData();
+
+  formData.append('type', params.type);
+  formData.append('feature_groupId', params.feature_groupId.toString());
+  formData.append('file', params.file);
+
+  const res = await UploaderApiManager.post<ApiData<{ data: string }>>('image', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return res.data;
+};
+
+export const UploaderSvgForFeatureGroup = async (params: FeatureGroupUploaderParams) => {
+  const formData = new FormData();
+
+  formData.append('type', params.type);
+  formData.append('feature_groupId', params.feature_groupId.toString());
   formData.append('file', params.file);
 
   const res = await UploaderApiManager.post<ApiData<{ data: string }>>('svg', formData, {
@@ -441,6 +492,12 @@ export type FeatureUploaderParams = {
   file: File;
 };
 
+export type FeatureGroupUploaderParams = {
+  type: 'FEATURE_GROUP';
+  feature_groupId: number | string;
+  file: File;
+};
+
 export type ProvinceUploaderParams = {
   type: 'PROVINCE';
   provinceId: number | string;
@@ -471,4 +528,9 @@ export type UploadAreaSvgParams = {
   file: File;
   aboutId: number;
   type: 'AREA_DETAIL';
+};
+
+export type DeleteImageGalleryForProvinceParams = {
+  id: number;
+  type: 'PROVINCE';
 };

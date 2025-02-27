@@ -44,11 +44,14 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
    * _______________________________________________________________________________
    */
 
+  // *****  GET Service  *****
   const {
     data: cityData,
     isLoading: cityLoading,
     isFetching: cityFetching,
-  } = useQuery({ queryKey: ['single-city', selected], queryFn: async () => await getCitiesByProvinceId(id), initialData: props as any, enabled: selected === true });
+  } = useQuery({ queryKey: ['single-city', id], queryFn: async () => getCitiesByProvinceId(id), initialData: props as any, enabled: selected });
+
+  // *****  POST And DELETE Service  *****
 
   const { mutate: addTownMutate, isPending: addTownPending } = useMutation({
     mutationFn: async () => await addTownToCity({ name: watch('name'), citiesId: id }),
@@ -105,7 +108,7 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
           withEdit
           withDelete
           hasMedia={hasMedia === true}
-          isDisableDelete
+          // isDisableDelete
           onEdit={e => {
             e.stopPropagation();
             setModalState({ key: 'edit', isOpen: true });

@@ -56,7 +56,7 @@ const Sidebar = () => {
         zIndex: 100,
       }}
     >
-      <Grid mx={'auto'} height={'100%'} style={{ overflowX: 'hidden', whiteSpace: 'nowrap', alignContent: 'space-between', overflowY: 'auto' }}>
+      <Container mx={'auto'} height={'100%'}>
         <Grid width={'100%'}>
           <Flex height={'100%'} direction='column' p={'4'} gap={'4'}>
             <Link href={''}>
@@ -102,12 +102,24 @@ const Sidebar = () => {
             </Flex>
           </Flex>
         </Grid>
-      </Grid>
+      </Container>
     </motion.div>
   );
 };
 
 export default Sidebar;
+
+const Container = styled(Grid)`
+  overflow-x: hidden;
+  overflow-y: auto;
+  white-space: nowrap;
+  align-content: space-between;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 const CollapseWrapper = styled(motion.div)`
   overflow: hidden;

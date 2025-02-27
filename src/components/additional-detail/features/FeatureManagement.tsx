@@ -52,7 +52,7 @@ const FeatureManagement = () => {
           </Flex>
         </Button>
         {featuresData?.map((item, index) => (
-          <FeatureItems key={item.id} selected={selectedItem === index} onSelect={() => setSelectedItem(index)} currentIndex={index} {...item} />
+          <FeatureItems key={item.id} selected={selectedItem === item.id} onSelect={() => setSelectedItem(item.id)} currentIndex={index} {...item} />
         ))}
       </Flex>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>

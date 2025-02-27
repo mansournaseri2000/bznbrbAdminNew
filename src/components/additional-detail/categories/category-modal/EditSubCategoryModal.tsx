@@ -9,13 +9,11 @@ import imageCompression from 'browser-image-compression';
 
 import { editCategory, Param, UploadIcon, UploadImage } from '@/api/additional-detail';
 import { Box, Flex, IconButton, TextField } from '@/libs/primitives';
-// import ImagePicker2 from '@/libs/shared/ImagePicker2';
 import ModalAction from '@/libs/shared/ModalAction';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
 import Uploader from '@/libs/shared/uploader/Uploader';
 import { Update } from '@/public/icon';
 import { colorPalette } from '@/theme';
-// import Uploader from '@/libs/shared/uploader/Uploader';
 import { ChildrenDetail } from '@/types/additional-detail/additional-detail';
 
 type Props = {
@@ -76,11 +74,12 @@ const EditSubCategoryModal = ({ data, setIsOpen }: Props) => {
       if (localData.status === true) {
         const localImage = watch('imageFile');
         const localIcon = watch('iconFile');
+        queryClient.invalidateQueries({ queryKey: ['single-category'] });
+        queryClient.invalidateQueries({ queryKey: ['categories'] });
 
         if (localImage) {
           uploadImageMutate({
             categoryId: String(data.id),
-            // file: watch('pic') as any,
             file: localImage,
             type: 'CATEGORY',
           });
@@ -89,7 +88,6 @@ const EditSubCategoryModal = ({ data, setIsOpen }: Props) => {
         if (localIcon) {
           uploadIconMutate({
             categoryId: String(data.id),
-            // file: watch('icon') as any,
             file: localIcon,
             type: 'CATEGORY',
           });
@@ -144,7 +142,7 @@ const EditSubCategoryModal = ({ data, setIsOpen }: Props) => {
 
   return (
     <FormProvider {...methods}>
-      <Flex direction={'column'} align={'center'} p={'12px 16px'} gap={'4'} style={{ border: '1px solid red' }}>
+      <Flex direction={'column'} align={'center'} p={'12px 16px'} gap={'4'}>
         <Flex direction={'column'} align={'center'} p={'12px 16px'} gap={'4'}>
           <Flex gap={'3'}>
             {/*

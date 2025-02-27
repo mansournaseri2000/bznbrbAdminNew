@@ -15,19 +15,16 @@ export const DevApiManager = axios.create({
   headers: {
     'Content-Type': 'application/json',
     'up-auth': `Basic ${encodedCredentials}`,
-
   },
 });
 
-
 export const UploaderApiManager = axios.create({
-  baseURL:'https://uploader.darkube.app/admin/uploads/',
+  baseURL: 'https://uploader.bezanimbiroon.ir/admin/uploads/',
   headers: {
     'Content-Type': 'application/json',
     'up-auth': `Basic ${encodedCredentials}`,
-
   },
-})
+});
 
 UploaderApiManager.interceptors.request.use(
   config => {

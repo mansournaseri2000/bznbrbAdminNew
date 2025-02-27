@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import imageCompression from 'browser-image-compression';
 
-import { editFeatureGroup, FeatureUploaderParams, UploadIconForFeature, UploadImageForFeature } from '@/api/additional-detail';
+import { editFeatureGroup, FeatureGroupUploaderParams, UploaderSvgForFeatureGroup, UploadImageForFeatureGroup } from '@/api/additional-detail';
 import { Box, Flex, IconButton, TextField } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
@@ -48,14 +48,12 @@ const EditFeatureModal = ({ setIsOpen, data }: Props) => {
       localPic: Boolean(data?.banner) ? data?.banner : '',
       localIcon: Boolean(data?.icon) ? data?.icon : '',
       name: data?.name,
-      isResetPic: Boolean(data?.banner) ? false : true,
-      isResetIcon: Boolean(data?.icon) ? false : true,
+      isResetPic: data.banner ? false : true,
+      isResetIcon: data.icon ? false : true,
     },
   });
   const { control, watch, setValue } = methods;
   const queryClient = useQueryClient();
-
-  console.log(watch(), 'watch', data);
 
   /* 
     ****
@@ -63,34 +61,37 @@ const EditFeatureModal = ({ setIsOpen, data }: Props) => {
     ****_____________________________________________________________________________
    */
 
+  // ******  image and svg uploader services  ******
   const { mutate: uploadImageMutate } = useMutation({
-    mutationFn: async (body: FeatureUploaderParams) => await UploadImageForFeature(body),
+    mutationFn: async (body: FeatureGroupUploaderParams) => await UploadImageForFeatureGroup(body),
   });
 
   const { mutate: uploadIconMutate } = useMutation({
-    mutationFn: async (body: FeatureUploaderParams) => await UploadIconForFeature(body),
+    mutationFn: async (body: FeatureGroupUploaderParams) => await UploaderSvgForFeatureGroup(body),
   });
 
+  // ******  modal action service  ******
   const { mutate: editFeatureMutate, isPending: editFeaturePending } = useMutation({
     mutationFn: async () => await editFeatureGroup(data.id, watch('name') as any),
     onSuccess: localData => {
       if (localData.status === true) {
         const localImage = watch('imageFile');
         const localIcon = watch('iconFile');
+        queryClient.invalidateQueries({ queryKey: ['features'] });
 
         if (localImage) {
           uploadImageMutate({
-            featureId: String(data.id),
+            feature_groupId: String(data.id),
             file: localImage,
-            type: 'FEATURE',
+            type: 'FEATURE_GROUP',
           });
         }
 
         if (localIcon) {
           uploadIconMutate({
-            featureId: String(data.id),
+            feature_groupId: String(data.id),
             file: localIcon,
-            type: 'FEATURE',
+            type: 'FEATURE_GROUP',
           });
         }
 

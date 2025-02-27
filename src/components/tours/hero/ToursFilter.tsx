@@ -6,12 +6,14 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 
 import { Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
-import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
+// import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
 import CustomDatePicker from '@/libs/shared/CustomDatePicker';
 import ModalAction from '@/libs/shared/ModalAction';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { Province } from '@/types/place/place-constant';
+
+import PriceField from '../PriceField';
 
 type Props = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -115,8 +117,10 @@ const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             بودجه
           </Text>
-          <Controller name='budgetStart' control={control} render={({ field }) => <CustomSearch {...field} placeholder='از' type='input' inputType='number' />} />
-          <Controller name='budgetEnd' control={control} render={({ field }) => <CustomSearch {...field} placeholder='تا' type='input' inputType='number' />} />
+          {/* <Controller name='budgetStart' control={control} render={({ field }) => <CustomSearch {...field} placeholder='از' type='input' inputType='number' />} />
+          <Controller name='budgetEnd' control={control} render={({ field }) => <CustomSearch {...field} placeholder='تا' type='input' inputType='number' />} /> */}
+          <PriceField control={control} placeholder='از' name='budgetStart' />
+          <PriceField control={control} placeholder='تا' name='budgetEnd' />
           <Flex direction={'column'} gap={'2'}>
             <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
               تاریخ رفت
