@@ -32,7 +32,6 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
    */
   const { setValue, watch } = useFormContext();
   const placeTripSeasonsItems = useWatch({ name: 'PlaceTripSeasons' });
-  const tripLimitationsItems = useWatch({ name: 'tripLimitations' });
   const costValue = useWatch({ name: 'cost' });
   const renownValue = useWatch({ name: 'renown' });
 
@@ -374,15 +373,14 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
       <Grid gap={'16px'}>
         <Text>محدودیت ها</Text>
         <Grid gap={'0px 30px'} columns={'2'}>
-          {constants.tripLimitations.map((trip: any) => {
-            const tripLimitationsItem = tripLimitationsItems?.find((item: { tripLimitationId: number }) => item.tripLimitationId === trip.id);
+          {constants.tripLimitations.map((trip: any, index: number) => {
             return (
               <Grid gap={'8px'} key={trip.id} mb='20px'>
                 <Text as='label'>{trip.name}</Text>
                 <Flex width={'50%'} gap={'10px'} align={'center'}>
                   <TextField
                     maxLength={4} // Limit input to "100%" max
-                    value={watch(`tripLimitations[${tripLimitationsItem.tripLimitationId}].score`)}
+                    value={watch(`tripLimitations[${index}].score`)}
                     onChange={e => {
                       let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
                       // Ensure the number doesn't exceed 100
@@ -391,12 +389,12 @@ const AnalysisRoot = ({ tripDatas, seasons, constants }: Props) => {
 
                       value = value ? `${value}%` : '';
                       const numericValue = value.replace(/%/g, ''); // Removes all percent symbols
-                      setValue(`tripLimitations[${tripLimitationsItem.tripLimitationId}].score`, Number(numericValue));
+                      setValue(`tripLimitations[${index}].score`, Number(numericValue));
                     }}
                     placeholder='رتبه بندی' // Example placeholder
                   />
 
-                  <Text>{watch(`tripLimitations[${tripLimitationsItem.tripLimitationId}].score`)}%</Text>
+                  <Text>{watch(`tripLimitations[${index}].score`)}%</Text>
                 </Flex>
               </Grid>
             );
