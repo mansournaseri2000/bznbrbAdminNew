@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Dropzone from 'react-dropzone';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
@@ -47,11 +47,11 @@ const EditTownModal = ({ setIsOpen, data }: Props) => {
 
   // ******  image and svg uploader services  ******
 
-  const { mutate: uploadImageMutate } = useMutation({
+  const { mutate: uploadImageMutate, isSuccess: uploadImageSuccess } = useMutation({
     mutationFn: async (body: TownUploaderParams) => await UploadImageForTown(body),
   });
 
-  const { mutate: uploadIconMutate } = useMutation({
+  const { mutate: uploadIconMutate, isSuccess: uploadIconSuccess } = useMutation({
     mutationFn: async (body: TownUploaderParams) => await UploadIconForTown(body),
   });
 
@@ -62,8 +62,6 @@ const EditTownModal = ({ setIsOpen, data }: Props) => {
       if (localData.status === true) {
         const localImage = watch('imageFile');
         const localIcon = watch('iconFile');
-        queryClient.invalidateQueries({ queryKey: ['cities'] });
-        queryClient.invalidateQueries({ queryKey: ['single-city'] });
 
         if (localImage) {
           uploadImageMutate({
@@ -82,8 +80,7 @@ const EditTownModal = ({ setIsOpen, data }: Props) => {
             type: 'TOWN',
           });
         }
-        queryClient.invalidateQueries({ queryKey: ['cities'] });
-        queryClient.invalidateQueries({ queryKey: ['single-city'] });
+
         ToastSuccess('شهرستان مورد نظر با موفقیت ویرایش شد');
         setIsOpen({ key: 'edit-town', isOpen: false });
       } else {
@@ -133,6 +130,13 @@ const EditTownModal = ({ setIsOpen, data }: Props) => {
       setValue('iconFile', compressedImage as any);
     }
   };
+
+  useEffect(() => {
+    if (uploadImageSuccess || uploadIconSuccess) {
+      queryClient.invalidateQueries({ queryKey: ['cities'] });
+      queryClient.invalidateQueries({ queryKey: ['single-city'] });
+    }
+  }, [uploadImageSuccess, uploadIconSuccess]);
   /**
    * JSX
    * _______________________________________________________________________________

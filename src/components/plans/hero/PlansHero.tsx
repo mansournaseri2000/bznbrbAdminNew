@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllPlacesConstants } from '@/api/place';
 import { userDetailSortConstant } from '@/constants/users';
 import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+// import CustomFilter from '@/libs/shared/custom-filter/CustomFilter';
 import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
@@ -134,16 +135,12 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
         <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
-        <ModalAction
-          submitButtonText='اعمال فیلتر ها'
-          closeButtonText='حذف فیلتر ها'
-          onCloseButton={() => removeFilter()}
-          onSubmit={() => {
-            addFilter();
-            setIsOpen(false);
-          }}
-          isLoading={isPending}
-        />
+        {/* <CustomFilter
+          province={constantData?.provinces ?? []}
+          categories={constantData?.categories ?? []}
+          type={['origin_point_position', 'destination_point_position', 'departure_date', 'return_date']}
+        /> */}
+        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={addFilter} isLoading={isPending} />
       </Modal>
     </>
   );

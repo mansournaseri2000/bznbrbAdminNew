@@ -17,6 +17,9 @@ import { citiesDetailForProvince } from '@/types/additional-detail/additional-de
 import ChipsItem from '../../chips-item/ChipsItem';
 import EditCityModal from '../cities-modal/EditCityModal';
 
+/*
+ *** Type and Props_________________________________________________________________________________________________________________________________________________________________
+ */
 type CitiesItemsResponse = citiesDetailForProvince & {
   selected: boolean;
   onSelect: VoidFunction;

@@ -32,6 +32,10 @@ const SidebarItems = (props: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const currentRoute = type === 'collapse' ? activeSegment === path?.substring(1) : items?.some(item => activeSegment === item.path.split('/')[1]);
 
+  /**
+   * Hooks and Methods
+   * _______________________________________________________________________________
+   */
   const toggleSidebarItems = () => {
     setIsOpen(!isOpen);
   };

@@ -26,7 +26,6 @@ export const InputWrapper = styled(Flex)`
   align-items: center;
   border: 1px solid ${colorPalette.gray[7]};
   border-radius: 12px;
-  padding-inline-start: 8px;
   &:focus-within {
     background-color: ${colorPalette.blue[2]};
     box-shadow: ${Boxshadow.shadow1};
@@ -40,6 +39,7 @@ export const CustomTextField = styled(TextField)`
     outline: none;
     box-shadow: none;
     margin-block-end: -10px;
+    background-color: transparent !important;
   }
   &:focus-within {
     outline: none !important;
