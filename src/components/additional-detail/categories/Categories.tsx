@@ -62,6 +62,11 @@ const Categories = () => {
           <CategoryItems key={item.id} selected={selectedItem === item.id} onSelect={() => setSelectedItem(item.id)} currentIndex={index} {...item} />
         ))}
       </Flex>
+      {/* 
+      ****
+        Modal______________________________________________________________________________________________________________________
+      ****
+      */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader title={'افزودن دسته بندی'} handleClose={() => setIsOpen(false)} />
         <CreateCategoryModal data={categoriesData} setIsOpen={setIsOpen} />

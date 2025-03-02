@@ -50,7 +50,7 @@ const FeatureItems = forwardRef<HTMLDivElement, FeatureItemsProps>((props, ref) 
     data: singleFeatureData,
     isLoading: singleFeatureLoading,
     isFetching: singleFeatureFetching,
-  } = useQuery({ queryKey: ['feature-group', selected], queryFn: async () => await getFeatureGroupById(id), initialData: props as FeaturesResponse, enabled: selected === true });
+  } = useQuery({ queryKey: ['feature-group', selected], queryFn: async () => await getFeatureGroupById(id), initialData: props as FeaturesResponse, enabled: selected });
 
   const { mutate: addFeatureMutate, isPending: addFeaturePending } = useMutation({
     mutationFn: async () => await addFeatureItem({ name: watch('name'), featureGroupid: id }),
@@ -107,9 +107,10 @@ const FeatureItems = forwardRef<HTMLDivElement, FeatureItemsProps>((props, ref) 
           withEdit
           withDelete
           hasMedia={singleFeatureData.hasMedia === true}
+          isDisableDelete
           onEdit={e => {
             e.stopPropagation();
-            setValue('name', singleFeatureData.name);
+            onSelect();
             setModalState({ key: 'edit', isOpen: true });
           }}
           onDelete={e => {

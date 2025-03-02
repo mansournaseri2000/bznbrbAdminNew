@@ -39,8 +39,6 @@ const ImageManagement = () => {
     queryFn: async () => getAllPlacesConstants(),
   });
 
-  console.log("DATA",provinceImagesData);
-
   /**
    * Loading
    * _______________________________________________________________________________
@@ -54,6 +52,8 @@ const ImageManagement = () => {
 
   if (!provinceImagesData || provinceImagesError) return ToastError('مشکلی پیش آمده است');
 
+  console.log('provinceImagesData', provinceImagesData);
+
   /**
    * JSX
    * _______________________________________________________________________________
@@ -65,11 +65,11 @@ const ImageManagement = () => {
           <ProvinceVector vector={provinceImagesData?.icon} id={provinceImagesData.id} />
         </SimpleWrapper2>
         <SimpleWrapper2 hero='تصویر استان' type='changeAble'>
-          <ProvinceImage image={provinceImagesData?.pic} />
+          <ProvinceImage image={provinceImagesData?.pic} id={provinceImagesData.id} />
         </SimpleWrapper2>
       </Grid>
       <SimpleWrapper2 hero='گالری تصاویر ' type='changeAble'>
-        <ProvinceGallery gallery={provinceImagesData?.gallery} constantData={constantData?.provinces ? constantData.provinces : []} />
+        <ProvinceGallery gallery={provinceImagesData?.gallery} ProvinceId={ProvinceId} constantData={constantData?.provinces ? constantData.provinces : []} />
       </SimpleWrapper2>
     </Grid>
   );

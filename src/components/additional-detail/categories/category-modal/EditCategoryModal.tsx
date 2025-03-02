@@ -46,8 +46,8 @@ const EditCategoryModal = ({ data, setIsOpen }: Props) => {
       localPic: Boolean(data?.banner) ? data?.banner : '',
       localIcon: Boolean(data?.icon) ? data?.icon : '',
       name: data?.name,
-      isResetPic: false,
-      isResetIcon: false,
+      isResetPic: data.banner ? false : true,
+      isResetIcon: data.icon ? false : true,
     },
   });
   const { control, watch, setValue } = methods;
@@ -58,6 +58,7 @@ const EditCategoryModal = ({ data, setIsOpen }: Props) => {
    * _______________________________________________________________________________
    */
 
+  // ******  image and svg uploader services  ******
   const { mutate: uploadImageMutate } = useMutation({
     mutationFn: async (body: Param) => await UploadImage(body),
   });
@@ -66,6 +67,7 @@ const EditCategoryModal = ({ data, setIsOpen }: Props) => {
     mutationFn: async (body: Param) => await UploadIcon(body),
   });
 
+  // ******  modal action service  ******
   const { mutate: editCategoryMutate, isPending: editCategoryPending } = useMutation({
     mutationFn: async () => await editCategory(data.id, watch('name') as any),
     onSuccess: localData => {
@@ -76,7 +78,6 @@ const EditCategoryModal = ({ data, setIsOpen }: Props) => {
         if (localImage) {
           uploadImageMutate({
             categoryId: String(data.id),
-            // file: watch('pic') as any,
             file: localImage,
             type: 'CATEGORY',
           });
@@ -85,7 +86,6 @@ const EditCategoryModal = ({ data, setIsOpen }: Props) => {
         if (localIcon) {
           uploadIconMutate({
             categoryId: String(data.id),
-            // file: watch('icon') as any,
             file: localIcon,
             type: 'CATEGORY',
           });

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 
-import { getAdsPages } from '@/api/ads';
+import { getAdsPages } from '@/api/advertizement';
 import AdsManagmentListCard from '@/components/advertizement/AdsManagmentListCard';
 import Header from '@/layout/Header';
 import { Box, Flex, Grid } from '@/libs/primitives';

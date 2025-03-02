@@ -41,7 +41,7 @@ const AdsManagmentListCard = ({ lable, latestUpdatedAt, space, type, holder, han
    * _______________________________________________________________________________
    */
   return (
-    <Flex p={'16px'} style={{ border: `1px solid ${colorPalette.gray[6]}`, borderRadius: '8px' }} justify={'between'}>
+    <Flex p={'16px'} justify={'between'} style={{ border: `1px solid ${colorPalette.gray[6]}`, borderRadius: '8px', backgroundColor: colorPalette.gray[2] }}>
       {/* right-section _______________________________________________________________________________*/}
       <Grid gap={'12px'}>
         <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
@@ -51,15 +51,15 @@ const AdsManagmentListCard = ({ lable, latestUpdatedAt, space, type, holder, han
           <Text {...typoVariant.description2} style={{ color: colorPalette.gray[10] }}>
             {type === 'main' ? 'تعداد تبلیغات' : 'بنر های خالی'}
           </Text>
-          <Text {...typoVariant.description2} style={{ color: colorPalette.gray[10] }}>
-            {space}
+          <Text {...typoVariant.description2} style={{ color: colorPalette.gray[12] }}>
+            {space} عدد
           </Text>
         </Flex>
         <Flex align={'center'} gap={'8px'}>
           <Text {...typoVariant.description2} style={{ color: colorPalette.gray[10] }}>
             آخرین ویرایش
           </Text>
-          <Text {...typoVariant.description2} style={{ color: colorPalette.gray[10] }}>
+          <Text {...typoVariant.description2} style={{ color: colorPalette.gray[12] }}>
             {!Boolean(latestUpdatedAt) ? '_' : convertTimestampToPersianDate(latestUpdatedAt)}
           </Text>
         </Flex>
@@ -75,21 +75,21 @@ const AdsManagmentListCard = ({ lable, latestUpdatedAt, space, type, holder, han
         {type === 'provinces' && (
           <Button
             variant='soft'
-            size={'4'}
+            size={'2'}
             onClick={() => {
               if (handleRedirectCities) {
                 handleRedirectCities();
               }
             }}
           >
-            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[1] }}>
+            <Text {...typoVariant.body3} style={{ color: colorPalette.gray[1] }}>
               شهرستان ها
             </Text>
           </Button>
         )}
         <Button
           variant='solid'
-          size={'3'}
+          size={'2'}
           style={{ marginBlockStart: 'auto' }}
           onClick={() => {
             if (handleRedirectAdsManagment) {
@@ -97,7 +97,7 @@ const AdsManagmentListCard = ({ lable, latestUpdatedAt, space, type, holder, han
             }
           }}
         >
-          <Text {...typoVariant.body1} style={{ color: colorPalette.blue[12] }}>
+          <Text {...typoVariant.body3} style={{ color: colorPalette.blue[12] }}>
             مدیریت تبلیغات
           </Text>
         </Button>

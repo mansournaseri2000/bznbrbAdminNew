@@ -66,6 +66,8 @@ const CreateCityModal = ({ setIsOpen, data }: Props) => {
       setValue('name', '');
     } else if (cityItem) {
       ToastError('شهرستان تکراری است');
+    } else if (!cityItem) {
+      ToastError('نام شهرستان نمی‌تواند خالی باشد');
     }
   };
 

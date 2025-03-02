@@ -1,7 +1,13 @@
-import { Ads, Archive, CheckCircled, Layers, ListBullet, Person, Support } from '@/public/icon';
+import { Ads, Archive, CheckCircled, Layers, ListBullet, Person, Support, Tour } from '@/public/icon';
 
 export const sidebarOptions = [
   { text: 'مدیریت برنامه ها', Icon: ListBullet, path: '/plans', type: 'collapse' },
+  {
+    text: 'تور ها',
+    Icon: Tour,
+    type: 'collapse',
+    path: '/tours',
+  },
   { text: 'کاربران', Icon: Person, path: '/user', type: 'collapse' },
   {
     text: 'مدیریت اطلاعات',

@@ -51,15 +51,21 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
 
   const [constantResult, editPlaceResult, articleByIdResult] = results;
   const { data: constantData } = constantResult;
-  const { data: placeData, isLoading: placeIsLoading } = editPlaceResult;
-  const { data: articleByIdData, isLoading: articleByIdLoading } = articleByIdResult;
+  const { data: placeData, isLoading: placeIsLoading, isFetching: placeFetching } = editPlaceResult;
+  const { data: articleByIdData, isLoading: articleByIdLoading, isFetching: articleByIdFetching } = articleByIdResult;
 
-  if (!constantData || placeIsLoading || articleByIdLoading)
+  /**
+   * Loading And Error
+   * _______________________________________________________________________________
+   */
+  if (!constantData || placeIsLoading || articleByIdLoading || placeFetching || articleByIdFetching)
     return (
       <Flex width={'100%'} height={'100vh'} justify={'center'} align={'center'}>
         <Spinner style={{ scale: 3 }} />
       </Flex>
     );
+
+  // if (!constantData || !placeData || placeError || !articleByIdData || articleByIdError) return ToastError('مشکلی پیش آمده است . لطفا مجددا تلاش کنید');
 
   /**
    * Methods
@@ -94,8 +100,7 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   const getTitle = () => {
     if (params.slug[0] === 'point-management') {
       if (status === 'create-point') return 'ساخت نقطه';
-      if (status === 'point-detail') return 'اطلاعات نقطه';
-      if (status === 'edit-point') return 'ویرایش نقطه';
+      if (status === 'edit-point') return `ویرایش نقطه ${placeData?.name}`;
       return 'لیست نقاط';
     }
 
@@ -111,7 +116,7 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   return (
     <Flex direction={'column'}>
       <Header title={getTitle()} isNavigation />
-      <Box p={'24px 110px 40px 40px '}>
+      <Box p={'24px 280px 40px 40px '}>
         <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
           {renderElement()}
         </Grid>

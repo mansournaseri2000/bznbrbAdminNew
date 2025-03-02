@@ -25,7 +25,7 @@ const CitiesManagement = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<number | null>(null);
   const params = useParams();
-  const provinceId = params.slug[2];
+  const provinceId = Number(params.slug[2]);
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
@@ -34,7 +34,7 @@ const CitiesManagement = () => {
     isLoading: citiesLoading,
     isFetching: citiesFetching,
     isError: citiesError,
-  } = useQuery({ queryKey: ['cities'], queryFn: async () => await getAllProvincesById(Number(provinceId)) });
+  } = useQuery({ queryKey: ['cities'], queryFn: async () => await getAllProvincesById(provinceId) });
   /*
    *** Loading_________________________________________________________________________________________________________________________________________________________________
    */
@@ -47,14 +47,12 @@ const CitiesManagement = () => {
 
   if (!citiesData || citiesError) return ToastError('مشکلی پیش آمده. لطفا مجددا تلاش نمایید');
 
-  console.log(citiesData,"citiesDatacitiesDatacitiesData2");
-  
   /*
    *** JSX_________________________________________________________________________________________________________________________________________________________________
    */
   return (
     <>
-      <Flex width={'100%'} direction={'column'} gap={'5'} style={{border:"1px solid red"}}>
+      <Flex width={'100%'} direction={'column'} gap={'5'}>
         <Flex width={'100%'} align={'center'} justify={'between'}>
           <Button size={'3'} variant='ghost' onClick={() => setIsOpen(true)} style={{ paddingBlock: '11.5px' }}>
             <Flex align={'center'} gap={'2'}>
@@ -64,7 +62,7 @@ const CitiesManagement = () => {
           </Button>
         </Flex>
         {citiesData?.children.map((item, index) => (
-          <CityItems key={item.id} onSelect={() => setSelectedItem(index)} currentIndex={index} selected={selectedItem === index} {...item} />
+          <CityItems key={item.id} selected={selectedItem === item.id} onSelect={() => setSelectedItem(item.id)} currentIndex={index} {...item} />
         ))}
       </Flex>
       {/* 

@@ -48,7 +48,9 @@ export default function UserProfile({
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
-  const { data: userData, isLoading: userLoading, isFetching: userFetching } = useQuery({ queryKey: ['user_info'], queryFn: async () => getUserInfo(userId) });
+  const userId = Number(params.slug);
+  const { data: userData, isLoading: userLoading, isFetching: userFetching } = useQuery({ queryKey: ['user_info', userId], queryFn: async () => getUserInfo(userId) });
+  console.log('🚀 ~ userData:', userData);
 
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
@@ -56,7 +58,7 @@ export default function UserProfile({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(false);
   const [showFilter, setShowFilter] = useState<boolean>(false);
-  const userId = Number(params.slug);
+
   const queryClient = useQueryClient();
 
   const methods = useForm({

@@ -61,6 +61,8 @@ const CreateFeatureModal = ({ setIsOpen, data }: Props) => {
       setValue('name', '');
     } else if (featureItem) {
       ToastError('دسته ویژگی تکراری است');
+    } else if (!featureItem) {
+      ToastError('نام دسته ویژگی نمی‌تواند خالی باشد');
     }
   };
 

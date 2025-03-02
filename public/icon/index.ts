@@ -42,6 +42,7 @@ export { default as Star } from './Star';
 export { default as Subway } from './Subway';
 export { default as Support } from './Support';
 export { default as Taxi } from './Taxi';
+export { default as Tour } from './Tour';
 export { default as Trash } from './Trash';
 export { default as TriangleLeft } from './TriangleLeft';
 export { default as TriangleUp } from './TriangleUp';

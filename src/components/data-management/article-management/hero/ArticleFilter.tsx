@@ -203,8 +203,8 @@ const ArticleFilter = ({ province, categories, setIsOpen }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
-              placeholder='وضعیت انتشار'
-              lable='وضعیت'
+              placeholder='انتشار'
+              lable='انتشار'
               value={String(field.value)}
               onValueChange={val => {
                 field.onChange(val);
