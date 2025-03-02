@@ -23,6 +23,6 @@
       "@/public/*": ["./public/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/error/page.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/error/page.tsx", "src/components/advertizement/province/ProvinceListRoot.tsx"],
   "exclude": ["node_modules"]
 }

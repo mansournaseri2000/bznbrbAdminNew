@@ -26,7 +26,7 @@ const CitiesManagementModal = (props: Props) => {
   const { control } = methods;
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-      <ModalHeader icon={<Close />} title={type === 'create' ? 'افزودن شهرستان' : 'ویرایش شهرستان'} handleClose={() => setIsOpen(false)} />
+      <ModalHeader title={type === 'create' ? 'افزودن شهرستان' : 'ویرایش شهرستان'} handleClose={() => setIsOpen(false)} />
       <Grid gapY={'4'} p={'12px 16px'}>
         <Controller name='province' control={control} render={({ field }) => <TextField {...field} placeholder='نام شهرستان' />} />
         <Flex p={'13.5px 16px'} width={'50%'} style={{ border: '2px solid red' }}>

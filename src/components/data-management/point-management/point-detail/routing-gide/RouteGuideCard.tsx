@@ -95,10 +95,12 @@ const RouteGuideCard = ({ description, type, id, cardType, onDelete, onPublish }
         </Text>
         {cardType === 'route_sent' && (
           <Flex gap={'2'}>
-            <IconButton size={'3'} variant='soft' onClick={onPublish}>
-              <Check />
-            </IconButton>
-            <IconButton size={'3'} colorVariant='PINK' onClick={onDelete}>
+            {onPublish && (
+              <IconButton type='button' size={'3'} variant='soft' onClick={onPublish}>
+                <Check />
+              </IconButton>
+            )}
+            <IconButton type='button' size={'3'} colorVariant='PINK' onClick={onDelete}>
               <Trash />
             </IconButton>
           </Flex>

@@ -1,16 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import DatePicker from 'react-multi-date-picker';
-import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 
 import { RadioGroup } from '@radix-ui/themes';
 import { styled } from 'styled-components';
 
-import { placeWorkTimeSchedule } from '@/constants/place';
-import { Flex, Grid, Text } from '@/libs/primitives';
-import { timeStringToDate } from '@/libs/utils';
+import { Flex, Grid, Text, TextField } from '@/libs/primitives';
 import { Boxshadow, colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -110,8 +105,7 @@ const TravelTime = () => {
    * _______________________________________________________________________________
    */
   const PlaceWorkTimes = useWatch({ name: 'PlaceWorkTimes' });
-  const [schedule, setSchedule] = useState(serializePlaceWorkTimes(placeWorkTimeSchedule, PlaceWorkTimes));
-  const { setValue } = useFormContext();
+  const { setValue, watch } = useFormContext();
 
   /**
    * useEffect
@@ -122,44 +116,31 @@ const TravelTime = () => {
    * hooks and methods
    * _______________________________________________________________________________
    */
-  const handleStatusChange = (dayOfWeek: string, selectedStatus: any) => {
-    const isTimed = selectedStatus === 'TIMED' ? true : false;
 
-    setSchedule(prevSchedule =>
-      prevSchedule.map(day => {
-        if (day.dayOfWeek === dayOfWeek) {
-          return {
-            ...day,
-            type: selectedStatus,
-            isTimed: isTimed,
-            timing: !isTimed ? day.timing.map(timingItem => ({ ...timingItem, time: '00:00' as any })) : day.timing, // Otherwise, keep timing as is
-          };
-        }
-        return day;
-      })
-    );
+  const items = [
+    {
+      faLable: '24 ساعت باز',
+      enLable: 'OPEN',
+    },
+    {
+      faLable: '24 ساعت بسته',
+      enLable: 'CLOSED',
+    },
+    {
+      faLable: 'زمان بندی',
+      enLable: 'TIMED',
+    },
+  ];
+
+  const dayNames = {
+    SATURDAY: 'شنبه',
+    SUNDAY: 'یک‌شنبه',
+    MONDAY: 'دوشنبه',
+    TUESDAY: 'سه‌شنبه',
+    WEDNESDAY: 'چهارشنبه',
+    THURSDAY: 'پنج‌شنبه',
+    FRIDAY: 'جمعه',
   };
-
-  const handleTiming = (dayOfWeek: string, time: string, key: string) => {
-    setSchedule(prevSchedule =>
-      prevSchedule.map(day =>
-        day.dayOfWeek === dayOfWeek
-          ? {
-              ...day,
-              timing: day.timing.map(timingItem =>
-                timingItem.key === key
-                  ? { ...timingItem, time } // Update the specific timing
-                  : timingItem
-              ),
-            }
-          : day
-      )
-    );
-  };
-
-  useEffect(() => {
-    setValue('PlaceWorkTimes', schedule);
-  }, [schedule]);
 
   /**
    * template
@@ -167,9 +148,7 @@ const TravelTime = () => {
    */
   return (
     <Root gap={'16px'}>
-      {placeWorkTimeSchedule.map(item => {
-        const dayItem = schedule.filter((v: { dayOfWeek: string }) => v.dayOfWeek === item.dayOfWeek)[0];
-
+      {PlaceWorkTimes.map((item: PlaceWorkTimes, firstIndex: number) => {
         return (
           <Grid
             p={'24px'}
@@ -180,38 +159,56 @@ const TravelTime = () => {
             }}
           >
             <Flex justify={'between'} align={'center'}>
-              <Text>{item.faDay}</Text>
+              <Text>{dayNames[item.dayOfWeek as keyof typeof dayNames]}</Text>
             </Flex>
             <Grid gap={'34px'} columns={'2'}>
-              <RadioGroup.Root defaultValue={dayItem ? dayItem.type : 'TIMED'} name={`schedule-${item.dayOfWeek}`} onValueChange={value => handleStatusChange(item.dayOfWeek, value)}>
-                <Flex gap={'6'}>
-                  {item.type.map(statusItem => (
-                    <RadioGroup.Item key={statusItem.key} value={statusItem.key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      {statusItem.value}
-                    </RadioGroup.Item>
+              <RadioGroup.Root
+                defaultValue={item.type} // Set initial value from data
+                name={item.dayOfWeek} // Unique name for each day's RadioGroup
+                onValueChange={value => {
+                  setValue(`PlaceWorkTimes[${firstIndex}].type`, value);
+                  if (value === 'CLOSED' || value === 'OPEN') {
+                    setValue(`PlaceWorkTimes[${firstIndex}].timing[${0}].time`, '00:00');
+                    setValue(`PlaceWorkTimes[${firstIndex}].timing[${1}].time`, '00:00');
+                    setValue(`PlaceWorkTimes[${firstIndex}].timing[${2}].time`, '00:00');
+                    setValue(`PlaceWorkTimes[${firstIndex}].timing[${3}].time`, '00:00');
+                  }
+                }}
+              >
+                <Flex gap='6'>
+                  {items.map(statusItem => (
+                    <label key={statusItem.enLable} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <RadioGroup.Item
+                        value={statusItem.enLable} // Use English label as value
+                        id={`${item.dayOfWeek}-${statusItem.enLable}`}
+                      />
+                      {statusItem.faLable}
+                    </label>
                   ))}
                 </Flex>
               </RadioGroup.Root>
               <Grid columns={'2'} gap={'16px'}>
-                {dayItem.timing.map((v: any) => {
+                {item.timing.map((v: any, index: number) => {
                   return (
                     <Grid gap={'8px'} key={v.key}>
                       <Text {...typoVariant.description1}>{v.faKey}</Text>
-                      <DatePicker
-                        key={v.key}
-                        inputMode='none'
-                        inputClass='input-class'
+
+                      <TextField
+                        maxLength={5}
                         placeholder='ساعت'
-                        disabled={(dayItem && dayItem.type === 'CLOSED') || dayItem.type === 'OPEN'}
-                        value={timeStringToDate(v.time)}
-                        onChange={dateObject => {
-                          if (dateObject) {
-                            handleTiming(item.dayOfWeek, dateObject.format('HH:mm'), v.key);
+                        value={v.time}
+                        disabled={watch(`PlaceWorkTimes[${firstIndex}].type`) === 'CLOSED' || watch(`PlaceWorkTimes[${firstIndex}].type`) === 'OPEN'}
+                        onChange={e => {
+                          let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+                          if (value.length > 4) value = value.slice(0, 4); // Ensure a max of 4 digits (HHMM)
+
+                          if (value.length >= 3) {
+                            value = `${value.slice(0, 2)}:${value.slice(2, 4)}`; // Format to HH:MM
                           }
+
+                          setValue(`PlaceWorkTimes[${firstIndex}].timing[${index}].time`, value);
                         }}
-                        disableDayPicker
-                        format='HH:mm'
-                        plugins={[<TimePicker hideSeconds format='HH:mm' key={v.key} />]}
                       />
                     </Grid>
                   );

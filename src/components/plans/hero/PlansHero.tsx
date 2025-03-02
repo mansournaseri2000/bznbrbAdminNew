@@ -10,10 +10,11 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllPlacesConstants } from '@/api/place';
 import { userDetailSortConstant } from '@/constants/users';
 import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text } from '@/libs/primitives';
+// import CustomFilter from '@/libs/shared/custom-filter/CustomFilter';
 import CustomSearch from '@/libs/shared/custom-search/CustomSearch';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import { ArrowRight, Filter } from '@/public/icon';
+import { Filter } from '@/public/icon';
 import { typoVariant } from '@/theme/typo-variants';
 
 import FilterContent from '../../../libs/shared/FilterContent';
@@ -29,7 +30,6 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const { control, reset, setValue } = useFormContext();
   const searchParams = useSearchParams();
@@ -55,7 +55,6 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
   const removeFilter = () => {
     reset({
       page: 1,
-      limit: 10,
       searchQuery: '',
       sortDate: '',
       targetDate: '',
@@ -92,20 +91,20 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
     <>
       <Grid width={'100%'} columns={'5'} align={'center'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 2fr  1fr' }}>
         <IconButton type='button' colorVariant='BLUE' variant='soft' size={'4'} onClick={() => setIsOpen(true)}>
-          <Filter />
+          <Filter width={16} height={16} />
         </IconButton>
 
-        <Button colorVariant='BLUE' variant='ghost' type='button' size={'4'} onClick={() => router.push('/plans/create-plan')}>
+        <Button colorVariant='BLUE' variant='ghost' type='button' size={'4'} onClick={() => router.push('/plans/create-plan')} style={{ padding: '11.5px 16px' }}>
           <Flex gap={'2'} align={'center'}>
             <Text {...typoVariant.body1}>+</Text>
-            <Text {...typoVariant.body1}> افزودن نقطه</Text>
+            <Text {...typoVariant.body1}> افزودن برنامه</Text>
           </Flex>
         </Button>
 
         <Controller
           name='searchQuery'
           control={control}
-          render={({ field }) => <CustomSearch {...field} placeholder='جستجو' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} onClick={onSubmit} />}
+          render={({ field }) => <CustomSearch {...field} placeholder='جستجو' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} />}
         />
         <Controller
           name='sort'
@@ -121,6 +120,7 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
                 handleSortItems(currentItem?.id as any);
                 field.onChange(val);
                 onSubmit();
+                setValue('page', 1);
               }}
             >
               {userDetailSortConstant.map(item => (
@@ -133,9 +133,14 @@ const PlansHero = ({ onSubmit, isOpen, setIsOpen, isPending }: Props) => {
         />
       </Grid>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
+        <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
         <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
-        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} isLoading={isPending} />
+        {/* <CustomFilter
+          province={constantData?.provinces ?? []}
+          categories={constantData?.categories ?? []}
+          type={['origin_point_position', 'destination_point_position', 'departure_date', 'return_date']}
+        /> */}
+        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={addFilter} isLoading={isPending} />
       </Modal>
     </>
   );

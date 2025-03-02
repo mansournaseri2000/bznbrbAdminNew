@@ -30,7 +30,11 @@ export interface PlaceResponse {
   subway: any;
   train: any;
   taxi: any;
-  status: boolean;
+  gender: any;
+  Town: {
+    id: number;
+  };
+
   Cities: Cities;
   Place_Category: PlaceCategory[];
   Place_TripLimitation: PlaceTripLimitation[];
@@ -45,6 +49,9 @@ export interface PlaceResponse {
   cost: string;
   renown: string;
   UserSentPicturesForPlace: UserSentPicturesForPlaceDetail[];
+  status: boolean | string;
+  type: string;
+  isPublished: boolean | string;
 }
 
 export interface Cities {

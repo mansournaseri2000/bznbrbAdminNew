@@ -17,15 +17,18 @@ const UserHero = (props: Props) => {
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
 
   const searchParams = useSearchParams();
   const getParam = (key: string) => searchParams.get(key) || '';
 
-  // console.log('Watch', watch());
   return (
     <Grid width={'100%'} columns={'3'} gapX={'4'} style={{ gridTemplateColumns: '3fr 1fr' }}>
-      <Controller name='searchQuery' control={control} render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام کاربر یا شماره تماس' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} onClick={props.onSubmit} />} />
+      <Controller
+        name='searchQuery'
+        control={control}
+        render={({ field }) => <CustomSearch {...field} placeholder='جستجو نام کاربر یا شماره تماس' defaultValue={getParam('searchQuery') ? getParam('searchQuery') : ''} />}
+      />
 
       <Controller
         name='status'
@@ -36,6 +39,7 @@ const UserHero = (props: Props) => {
             placeholder='وضعیت کاربر'
             value={String(field.value)}
             onValueChange={val => {
+              setValue('page', 1);
               field.onChange(val);
               props.onSubmit();
             }}

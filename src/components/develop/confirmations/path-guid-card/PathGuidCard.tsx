@@ -113,13 +113,13 @@ const PathGuidCard: React.FC<CardProps> = (props: CardProps) => {
         </Text>
         <Flex width={'100%'} align={'center'} justify={'end'}>
           <Flex align={'center'} gap={'2'}>
-            <Button size={'3'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} variant='soft' onClick={() => setModalState({ isOpen: true, key: 'publish' })}>
+            <Button size={'2'} colorVariant={index % 2 === 0 ? 'BLUE' : 'PINK'} variant='soft' onClick={() => setModalState({ isOpen: true, key: 'publish' })} style={{ borderRadius: '12px' }}>
               <Flex align={'center'} gap={'2'}>
                 <Check />
                 <Text {...typoVariant.body1}>تایید</Text>
               </Flex>
             </Button>
-            <IconButton size={'3'} colorVariant='PINK' style={{ borderRadius: 12 }} onClick={() => setModalState({ isOpen: true, key: 'remove' })} disabled>
+            <IconButton size={'2'} colorVariant='PINK' style={{ borderRadius: 12 }} onClick={() => setModalState({ isOpen: true, key: 'remove' })} disabled>
               <Trash />
             </IconButton>
           </Flex>

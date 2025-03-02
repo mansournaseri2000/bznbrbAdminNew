@@ -1,109 +1,68 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import React, { useState } from 'react';
 
 import { useParams } from 'next/navigation';
 
+import { PlusIcon } from '@radix-ui/react-icons';
 import { Spinner } from '@radix-ui/themes';
-import { useMutation } from '@tanstack/react-query';
-import styled from 'styled-components';
+import { useQuery } from '@tanstack/react-query';
 
 import { getAllProvincesById } from '@/api/additional-detail';
-import { sortCategoryOptions } from '@/constants/additional-detail';
-import { Button, Flex, Grid, IconButton, Modal, SelectItem, SelectRoot, Text, TextField } from '@/libs/primitives';
-import ModalAction from '@/libs/shared/ModalAction';
+import { Button, Flex, Modal, Text } from '@/libs/primitives';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import AccordionWrapper from '@/libs/shared/wrapper/AccordionWrapper';
-import { Close, Pencil } from '@/public/icon';
+import { ToastError } from '@/libs/shared/toast/Toast';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
-type TypeOptions = 'edit' | 'create';
+import CreateCityModal from './cities-modal/CreateCityModal';
+import CityItems from './city-items/CityItems';
 
 const CitiesManagement = () => {
-  const params = useParams();
-
+  /*
+   *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
+   */
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [type, setType] = useState<TypeOptions>('create');
-  const methods = useForm({ defaultValues: { provinceId: Number(params.slug[2]), sortProvincesBy: '' } });
-  const { control, watch } = methods;
-
+  const [selectedItem, setSelectedItem] = useState<number | null>(null);
+  const params = useParams();
+  const provinceId = Number(params.slug[2]);
+  /*
+   *** Services_________________________________________________________________________________________________________________________________________________________________
+   */
   const {
     data: citiesData,
-    mutate: citiesMutate,
-    isPending: citiesPending,
-  } = useMutation({
-    mutationFn: async () => await getAllProvincesById(watch() as any),
-    onSuccess: async data => {
-      console.log('data', data);
-    },
-    onError: async data => {
-      console.log('DATA Error', data);
-    },
-  });
+    isLoading: citiesLoading,
+    isFetching: citiesFetching,
+    isError: citiesError,
+  } = useQuery({ queryKey: ['cities'], queryFn: async () => await getAllProvincesById(provinceId) });
+  /*
+   *** Loading_________________________________________________________________________________________________________________________________________________________________
+   */
+  if (citiesLoading || citiesFetching)
+    return (
+      <Flex width={'100%'} height={'90vh'} justify={'center'} align={'center'}>
+        <Spinner style={{ scale: 3 }} />
+      </Flex>
+    );
 
-  useEffect(() => {
-    citiesMutate();
-  }, []);
+  if (!citiesData || citiesError) return ToastError('مشکلی پیش آمده. لطفا مجددا تلاش نمایید');
 
-  console.log('CitiesData', citiesData);
-
-  if (citiesPending || !citiesData) return <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '100px' }} />;
-
+  /*
+   *** JSX_________________________________________________________________________________________________________________________________________________________________
+   */
   return (
-    <FormProvider {...methods}>
-      <Flex width={'100%'} direction={'column'} gap={'5'} p={'4'}>
+    <>
+      <Flex width={'100%'} direction={'column'} gap={'5'}>
         <Flex width={'100%'} align={'center'} justify={'between'}>
-          <Button
-            size={'4'}
-            variant='ghost'
-            onClick={() => {
-              setIsOpen(true);
-              setType('create');
-            }}
-          >
+          <Button size={'3'} variant='ghost' onClick={() => setIsOpen(true)} style={{ paddingBlock: '11.5px' }}>
             <Flex align={'center'} gap={'2'}>
-              <Text {...typoVariant.body1}>+</Text>
+              <PlusIcon width={16} height={16} style={{ color: colorPalette.blue[10] }} />
               <Text {...typoVariant.body1}>افزودن شهرستان</Text>
             </Flex>
           </Button>
-          <Flex width={'240px'}>
-            <Controller
-              name='sortProvincesBy'
-              control={control}
-              render={({ field }) => (
-                <SelectRoot
-                  {...field}
-                  placeholder='مرتب سازی'
-                  value={String(field.value)}
-                  onValueChange={val => {
-                    field.onChange(val);
-                  }}
-                >
-                  {sortCategoryOptions.map(item => (
-                    <SelectItem key={item.id} value={String(item.id)}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectRoot>
-              )}
-            />
-          </Flex>
         </Flex>
-        {citiesData?.Cities.map(item => (
-          <AccordionWrapper
-            key={item.id}
-            hero={item.name}
-            withEdit
-            onEdit={e => {
-              e.stopPropagation();
-              setIsOpen(true);
-              setType('edit');
-            }}
-          >
-            دیتای این قسمت نیست
-          </AccordionWrapper>
+        {citiesData?.children.map((item, index) => (
+          <CityItems key={item.id} selected={selectedItem === item.id} onSelect={() => setSelectedItem(item.id)} currentIndex={index} {...item} />
         ))}
       </Flex>
       {/* 
@@ -112,49 +71,11 @@ const CitiesManagement = () => {
       ***
       */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader icon={<Close />} title={type === 'create' ? 'افزودن شهرستان' : 'ویرایش شهرستان'} handleClose={() => setIsOpen(false)} />
-        <Grid gapY={'4'} p={'12px 16px'}>
-          <Controller name='provinceId' control={control} render={({ field }) => <TextField {...field} placeholder='نام شهرستان' />} />
-          <Flex p={'13.5px 16px'} width={'50%'} style={{ border: '2px solid red' }}>
-            افزودن شهر
-          </Flex>
-          {citiesData?.Cities?.length === 0 ? (
-            <Flex direction={'column'} p={'30.5px 16px'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
-              <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11] }}>
-                هنوز شهری اضافه نشده است.
-              </Text>
-              <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
-                از فیلد بالا استفاده کنید و شهر را به لیست اضافه کنید.
-              </Text>
-            </Flex>
-          ) : (
-            citiesData?.Cities?.length !== 0 && (
-              <Flex align={'center'} gap={'5'} p={'4'} wrap={'wrap'} style={{ border: `1px solid ${colorPalette.gray[7]}`, borderRadius: 8 }}>
-                <Flex width={'fit-content'} p={'9.5px 16px'} align={'center'} gap={'4'} style={{ backgroundColor: colorPalette.gray[3], borderRadius: 16 }}>
-                  <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
-                    تبریز
-                  </Text>
-                  <IconButton variant='surface' size={'1'}>
-                    <Pencil />
-                  </IconButton>
-                  <IconButton variant='surface' size={'1'}>
-                    <CloseIcon />
-                  </IconButton>
-                </Flex>
-              </Flex>
-            )
-          )}
-        </Grid>
-        <ModalAction submitButtonText='ثبت' closeButtonText='لغو' onCloseButton={() => setIsOpen(false)} />
+        <ModalHeader title='افزودن شهرستان' handleClose={() => setIsOpen(false)} />
+        <CreateCityModal setIsOpen={setIsOpen} data={citiesData.children} />
       </Modal>
-    </FormProvider>
+    </>
   );
 };
 
 export default CitiesManagement;
-
-const CloseIcon = styled(Close)`
-  path {
-    fill: ${colorPalette.pink[11]};
-  }
-`;

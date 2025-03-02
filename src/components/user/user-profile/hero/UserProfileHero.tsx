@@ -13,7 +13,7 @@ import { Flex, IconButton, Modal, SelectItem, SelectRoot } from '@/libs/primitiv
 import FilterContent from '@/libs/shared/FilterContent';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import { ArrowRight, Filter } from '@/public/icon';
+import { Filter } from '@/public/icon';
 
 type Props = {
   onSubmit: () => void;
@@ -27,7 +27,6 @@ const UserProfileHero = ({ onSubmit, isOpen, setIsOpen, userId, isPending }: Pro
   /*
    *** Variables and Constants _________________________________________________________________________________________________________________________________________________________________
    */
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const { control, reset, setValue } = useFormContext();
   const searchParams = useSearchParams();
@@ -94,7 +93,7 @@ const UserProfileHero = ({ onSubmit, isOpen, setIsOpen, userId, isPending }: Pro
     <>
       <Flex width={'100%'} align={'center'} justify={'between'}>
         <IconButton colorVariant='BLUE' variant='soft' type='button' size={'4'} onClick={() => setIsOpen(true)}>
-          <Filter />
+          <Filter width={16} height={16} />
         </IconButton>
 
         <Flex width={'240px'}>
@@ -111,11 +110,11 @@ const UserProfileHero = ({ onSubmit, isOpen, setIsOpen, userId, isPending }: Pro
                   const currentItem = userDetailSortConstant.find(item => item.id === Number(val));
                   handleSortItems(currentItem?.id as any);
                   field.onChange(val);
+                  setValue('page', 1);
                   onSubmit();
                 }}
               >
                 {userDetailSortConstant.map(item => (
-                  // TODO: fix item style
                   <SelectItem key={item.id} value={String(item.id)}>
                     {item.name}
                   </SelectItem>
@@ -126,9 +125,18 @@ const UserProfileHero = ({ onSubmit, isOpen, setIsOpen, userId, isPending }: Pro
         </Flex>
       </Flex>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader title='فیلتر' icon={<ArrowRight />} handleClose={() => setIsOpen(false)} />
+        <ModalHeader title='فیلتر' handleClose={() => setIsOpen(false)} />
         <FilterContent province={constantData?.provinces ? constantData.provinces : []} />
-        <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onCloseButton={() => removeFilter()} onSubmit={() => addFilter()} isLoading={isPending} />
+        <ModalAction
+          submitButtonText='اعمال فیلتر ها'
+          closeButtonText='حذف فیلتر ها'
+          onCloseButton={() => removeFilter()}
+          onSubmit={() => {
+            addFilter();
+            setIsOpen(false);
+          }}
+          isLoading={isPending}
+        />
       </Modal>
     </>
   );

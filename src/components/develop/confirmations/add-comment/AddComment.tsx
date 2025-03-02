@@ -5,6 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { useParams } from 'next/navigation';
 
+import { PlusIcon } from '@radix-ui/react-icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { createComment } from '@/api/confirmations';
@@ -12,7 +13,6 @@ import { Button, Flex, Modal, Text, TextArea, TextField } from '@/libs/primitive
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
-import { Close } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
@@ -45,7 +45,7 @@ const AddComment = () => {
     onSuccess: async data => {
       if (data.status === true) {
         queryClient.invalidateQueries({ queryKey: ['top-comments-item'] });
-        ToastSuccess('نظر مورد نظر با موفقیت ایچاد شد');
+        ToastSuccess('نظر مورد نظر با موفقیت ایجاد شد');
         setIsOpen(false);
       } else {
         ToastError('لطفا دوباره تلاش نمایید');
@@ -57,18 +57,25 @@ const AddComment = () => {
       <Flex width={'100%'} justify={'center'} py={'79px'} align={'center'} style={{ backgroundColor: colorPalette.gray[2], border: `2px dashed ${colorPalette.blue[8]}`, borderRadius: 8 }}>
         <Button variant='surface' onClick={() => setIsOpen(true)}>
           <Flex p={'13.5px 15px 13.5px 19px'} align={'center'} gap={'2'}>
-            <Text {...typoVariant.body1}>+</Text>
+            <PlusIcon width={16} height={16} style={{ color: colorPalette.blue[10] }} />
             <Text {...typoVariant.body1}>افزودن نظر</Text>
           </Flex>
         </Button>
       </Flex>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader handleClose={() => setIsOpen(false)} title='ثبت نظر برتر' icon={<Close />} />
-        <Flex direction={'column'} gap={'5'} p={'5'}>
+        <ModalHeader handleClose={() => setIsOpen(false)} title='ثبت نظر برتر' />
+        <Flex direction={'column'} gap={'14px'} p={'5'}>
           <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان نقطه' style={{ width: '50%' }} />} />
-          <Controller name='content' control={control} render={({ field }) => <TextArea {...field} placeholder='متن نظر' />} />
+          <Controller name='content' control={control} render={({ field }) => <TextArea {...field} placeholder='متن نظر' rows={5} />} />
         </Flex>
-        <ModalAction submitButtonText='ثبت نظر' closeButtonText='لغو و بازگشت' onCloseButton={() => setIsOpen(false)} onSubmit={() => createCommentMutate()} isLoading={createCommentPending} />
+        <ModalAction
+          submitButtonText='ثبت نظر'
+          closeButtonText='لغو و بازگشت'
+          onCloseButton={() => setIsOpen(false)}
+          onSubmit={() => createCommentMutate()}
+          isLoading={createCommentPending}
+          disabled={watch('name').length === 0 && watch('content').length === 0}
+        />
       </Modal>
     </>
   );

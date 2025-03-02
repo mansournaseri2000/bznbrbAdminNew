@@ -2,7 +2,7 @@ import * as React from 'react';
 import { SVGProps } from 'react';
 
 const SvgComment = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' fill='none' viewBox='0 0 32 32' {...props}>
+  <svg xmlns='http://www.w3.org/2000/svg' width='1rem' height='1rem' fill='none' viewBox='0 0 32 32' {...props}>
     <path fill='#fff' fillOpacity={0.01} d='M8 8h16v16H8z' />
     <path
       fill='#00509D'

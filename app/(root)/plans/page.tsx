@@ -1,14 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
-
 import { Spinner } from '@radix-ui/themes';
-import { useMutation } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { getRecentTrips, RecentTripsBody } from '@/api/user';
+import { filterObject } from '@/api/data-management';
+import { getRecentTrips } from '@/api/plans';
 import PlansHero from '@/components/plans/hero/PlansHero';
 import PlansList from '@/components/plans/list/PlansList';
 import Header from '@/layout/Header';
@@ -44,14 +43,13 @@ export default function Plans({
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
-  const { replace } = useRouter();
-  const [page, setPage] = useState(searchParams.page ? Number(searchParams.page) : 1);
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const queryClient = useQueryClient();
 
   const methods = useForm({
     defaultValues: {
-      page: page,
-      limit: Number(searchParams.limit) || 10,
+      page: searchParams.page ? Number(searchParams.page) : 1,
       searchQuery: searchParams.searchQuery || '',
       sortDate: searchParams.sortDate ? searchParams.sortDate : '',
       targetDate: searchParams.targetDate ? searchParams.targetDate : '',
@@ -71,61 +69,18 @@ export default function Plans({
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
-  const {
-    data: tripsData,
-    mutate: tripsMutate,
-    isError: tripsError,
-    isPending: tripsPending,
-  } = useMutation({
-    mutationKey: ['trips-data'],
-    mutationFn: async (body: RecentTripsBody) => getRecentTrips(body),
-    onSuccess: async data => {
-      const cleanedData = Object.fromEntries(
-        Object.entries(watch()).filter(([key, value]) => {
-          if (
-            value !== undefined &&
-            value !== '' &&
-            value !== 'none' &&
-            value !== null &&
-            !(Array.isArray(value) && value.length === 0) &&
-            !(Array.isArray(value) && value.every(item => item === '')) &&
-            !(Array.isArray(value) && value.every(item => item === 'none'))
-          ) {
-            if (['departureDateStart', 'departureDateEnd', 'returnDateStart', 'returnDateEnd'].includes(key)) {
-              return new Date(value).getTime();
-            }
-            return true;
-          }
-          return false;
-        })
-      );
+  const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['recent-trips'], queryFn: async () => await getRecentTrips(watch() as any) });
 
-      Object.keys(cleanedData).forEach(key => {
-        if (['departureDateStart', 'departureDateEnd', 'returnDateStart', 'returnDateEnd'].includes(key)) {
-          cleanedData[key] = new Date(cleanedData[key]).getTime();
-        }
-      });
-
-      const searchParams = generateSearchParams(cleanedData);
-      replace(`/plans?${searchParams}`);
-
-      setIsOpen(false);
-      console.log('data', data);
-    },
-
-    onError: async data => {
-      console.log('DATA Error', data);
-    },
-  });
   /*
    *** Hooks and Methods _________________________________________________________________________________________________________________________________________________________________
    */
-  useEffect(() => {
-    tripsMutate(watch() as any);
-  }, []);
 
-  const onSubmit = () => {
-    tripsMutate(watch() as any);
+  const onSubmit = (data: any) => {
+    const obj = filterObject(data, true);
+    const searchParams = generateSearchParams(obj);
+    queryClient.invalidateQueries({ queryKey: ['recent-trips'] });
+    const newUrl = `${window.location.pathname}?${searchParams}`;
+    window.history.pushState(null, '', newUrl);
   };
 
   return (
@@ -136,31 +91,30 @@ export default function Plans({
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Grid width={'100%'} gap={'4'} p={'5'}>
-                <PlansHero onSubmit={() => tripsMutate(watch() as any)} isOpen={isOpen} setIsOpen={setIsOpen} isPending={tripsPending} />
-                {tripsError ? (
+                <PlansHero onSubmit={() => onSubmit(watch())} isOpen={isOpen} setIsOpen={setIsOpen} isPending={isLoading || isFetching} />
+                {isError ? (
                   <Text>مشکلی پیش آمده لطفا مجدد تلاش نمایید</Text>
-                ) : tripsPending ? (
+                ) : isFetching || isLoading ? (
                   <Spinner style={{ marginInline: 'auto', scale: 2, marginBlock: '40px' }} />
-                ) : !tripsData ? (
+                ) : !data ? (
                   <Flex width={'100%'} justify={'center'} mt={'6'}>
                     <Text {...typoVariant.title1}>دیتایی موجود نیست</Text>
                   </Flex>
                 ) : (
-                  <PlansList data={tripsData?.latestTrips as any} />
+                  <PlansList data={data?.latestTrips as any} />
                 )}
-                {tripsData?.latestTrips && (
+                {data?.latestTrips && (
                   <Flex width={'100%'} align={'center'} justify={'between'}>
                     <CustomPagination
-                      current={page}
-                      total={tripsData.totalPages as number}
+                      current={watch('page')}
+                      total={data.totalPages as number}
                       onPageChange={p => {
-                        setPage(p);
                         setValue('page', p);
                         updateUrlWithPageNumber(p);
-                        onSubmit();
+                        onSubmit(watch());
                       }}
                     />
-                    <ItemsPerPage data={tripsData?.latestTrips} currentPage={tripsData?.currentPage as number} totalCount={tripsData?.totalCount} />
+                    <ItemsPerPage data={data?.latestTrips} currentPage={data?.currentPage as number} totalCount={data?.totalCount} />
                   </Flex>
                 )}
               </Grid>

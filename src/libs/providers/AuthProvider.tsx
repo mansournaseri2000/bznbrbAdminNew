@@ -64,9 +64,23 @@ export const AuthProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (user?.token) {
-      cookies.set('token', user.token, { path: '/' });
+      cookies.set('token', user.token, {
+        path: '/',
+        maxAge: 365 * 50,
+        secure: true,
+        partitioned: true,
+        expires: new Date(new Date().getTime() + 60 * 60 * 24 * 1000),
+        sameSite: 'strict',
+      });
     } else {
-      cookies.remove('token', { path: '/' });
+      cookies.remove('token', {
+        path: '/',
+        maxAge: 365 * 50,
+        secure: true,
+        partitioned: true,
+        expires: new Date(new Date().getTime() + 60 * 60 * 24 * 1000),
+        sameSite: 'strict',
+      });
     }
   }, [user, cookies]);
 

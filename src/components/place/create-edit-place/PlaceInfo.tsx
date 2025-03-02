@@ -43,12 +43,14 @@ const PlaceInfo = ({ categoris }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              placeholder={'دسته بندی'}
               value={String(categoryId)}
               onValueChange={val => {
+                console.log(field.value, 'category_id');
+
                 field.onChange(val);
                 setValue('sub_category_id', '');
               }}
-              placeholder={'دسته بندی'}
             >
               {categoris.map(item => {
                 return (
@@ -66,13 +68,13 @@ const PlaceInfo = ({ categoris }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              placeholder={'زیر دسته بندی'}
               value={String(subCategoryId)}
               disabled={!Boolean(categoryId)}
               onValueChange={val => {
+                console.log(field.value, 'test');
                 field.onChange(val);
-                setValue('cityID', '');
               }}
-              placeholder={'زیر دسته بندی'}
             >
               {subCategory &&
                 subCategory.map(item => {
@@ -86,9 +88,9 @@ const PlaceInfo = ({ categoris }: Props) => {
           )}
         />
       </Flex>
-      <Controller name='website' control={control} disabled render={({ field }) => <TextField {...field} placeholder='Custom URL' aria-label='textFiled' />} />
-      <Controller name='basicInfoDescription' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات نقطه' aria-label='TextArea' />} />
-      <Controller name='basicInfosummary' control={control} render={({ field }) => <TextArea {...field} placeholder='خلاصه توضیحات' aria-label='TextArea' />} />
+      <Controller name='slug' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان یکتا' aria-label='textFiled' />} />
+      <Controller name='basicInfoDescription' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات تکمیلی' aria-label='TextArea' rows={6} />} />
+      <Controller name='basicInfosummary' control={control} render={({ field }) => <TextArea {...field} placeholder='خلاصه توضیحات' aria-label='TextArea' rows={6} />} />
     </Grid>
   );
 };

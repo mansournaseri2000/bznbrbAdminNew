@@ -4,7 +4,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { Flex, Modal, TextField } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
 import ModalHeader from '@/libs/shared/ModalHeader';
-import { Close } from '@/public/icon';
 
 type Props = {
   isOpen: boolean;
@@ -36,7 +35,6 @@ const FeatureModal = (props: Props) => {
             ? 'ویرایش دسته ویژگی'
             : ''
         }
-        icon={<Close />}
         handleClose={() => setIsOpen(false)}
       />
       <Flex width={'100%'} p={'4'} align={'center'} justify={'center'}>
