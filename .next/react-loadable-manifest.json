@@ -1,96 +1,43 @@
-<<<<<<< HEAD
-{}
-=======
 {
-  "app/(root)/comments/page.tsx -> react-responsive-pagination": {
-    "id": 94212,
-    "files": [
-      "static/chunks/8372.f0bb9e39c15da67a.js"
-    ]
-  },
-  "app/(root)/place/[...slug]/page.tsx -> @/components/place/create-edit-place/CreateAndEditPlaceRootComponent": {
-    "id": 19429,
-    "files": [
-      "static/css/ab699959edbc876f.css",
-      "static/chunks/6648-2ae15bcb8e9db446.js",
-      "static/chunks/7138-fb549812a7102d66.js",
-      "static/chunks/1705-9e7d0608d8cc58b6.js",
-      "static/chunks/2336-2cc19c30fd8d7848.js",
-      "static/chunks/341-e96ab361e45eaa24.js",
-      "static/chunks/3767.a77f1bf3ca0a87b2.js"
-    ]
-  },
   "src/components/data-management/article-management/create-and-edit-article/TextContent.tsx -> react-draft-wysiwyg": {
-    "id": 67602,
+    "id": "src/components/data-management/article-management/create-and-edit-article/TextContent.tsx -> react-draft-wysiwyg",
     "files": [
-      "static/chunks/f71da141.74890fd3f12d2702.js"
+      "static/chunks/_app-pages-browser_node_modules_react-draft-wysiwyg_dist_react-draft-wysiwyg_js.js"
     ]
   },
   "src/components/data-management/point-management/create-and-edit-point/CreateAndEditPoint.tsx -> @/components/place/create-edit-place/TravelTime": {
-    "id": 39224,
+    "id": "src/components/data-management/point-management/create-and-edit-point/CreateAndEditPoint.tsx -> @/components/place/create-edit-place/TravelTime",
     "files": []
   },
   "src/components/data-management/point-management/create-and-edit-point/CreateAndEditPoint.tsx -> @/components/place/create-edit-place/description/Description": {
-    "id": 49796,
+    "id": "src/components/data-management/point-management/create-and-edit-point/CreateAndEditPoint.tsx -> @/components/place/create-edit-place/description/Description",
     "files": []
   },
-  "src/components/employee/action-list/pagination/ActionListPagination.tsx -> react-responsive-pagination": {
-    "id": 94212,
-    "files": [
-      "static/chunks/8372.f0bb9e39c15da67a.js"
-    ]
-  },
-  "src/components/employee/pagination/EmployeePagination.tsx -> react-responsive-pagination": {
-    "id": 94212,
-    "files": [
-      "static/chunks/8372.f0bb9e39c15da67a.js"
-    ]
-  },
   "src/components/place/create-edit-place/CreateAndEditPlaceRootComponent.tsx -> @/components/place/create-edit-place/TravelTime": {
-    "id": 39224,
+    "id": "src/components/place/create-edit-place/CreateAndEditPlaceRootComponent.tsx -> @/components/place/create-edit-place/TravelTime",
     "files": []
   },
   "src/components/place/create-edit-place/CreateAndEditPlaceRootComponent.tsx -> @/components/place/create-edit-place/description/Description": {
-    "id": 49796,
+    "id": "src/components/place/create-edit-place/CreateAndEditPlaceRootComponent.tsx -> @/components/place/create-edit-place/description/Description",
     "files": []
   },
   "src/components/place/create-edit-place/description/Description.tsx -> react-draft-wysiwyg": {
-    "id": 67602,
+    "id": "src/components/place/create-edit-place/description/Description.tsx -> react-draft-wysiwyg",
     "files": [
-      "static/chunks/f71da141.74890fd3f12d2702.js"
+      "static/chunks/_app-pages-browser_node_modules_react-draft-wysiwyg_dist_react-draft-wysiwyg_js.js"
     ]
   },
   "src/components/place/create-edit-place/geographical-location/GeographicalLocationRoot.tsx -> ./PlaceMap": {
-    "id": 47120,
+    "id": "src/components/place/create-edit-place/geographical-location/GeographicalLocationRoot.tsx -> ./PlaceMap",
     "files": [
-      "static/css/d3e383b9ef67ddcb.css",
-      "static/chunks/d0deef33.a258e96be4bdf431.js",
-      "static/chunks/7120.1f9e053af704bf2c.js"
-    ]
-  },
-  "src/components/plans/user-plan/UserPlan.tsx -> @/components/plans/user-plan/map-view/MapView": {
-    "id": 6766,
-    "files": [
-      "static/css/d3e383b9ef67ddcb.css",
-      "static/chunks/d0deef33.a258e96be4bdf431.js",
-      "static/chunks/6766.35ab8ad38c9b11b4.js"
-    ]
-  },
-  "src/components/user/list/UserList.tsx -> @/libs/shared/Table": {
-    "id": 62188,
-    "files": []
-  },
-  "src/components/web-content/top-points/pagination/TopPointsPagination.tsx -> react-responsive-pagination": {
-    "id": 94212,
-    "files": [
-      "static/chunks/8372.f0bb9e39c15da67a.js"
+      "static/css/_app-pages-browser_src_components_place_create-edit-place_geographical-location_PlaceMap_tsx.css",
+      "static/chunks/_app-pages-browser_src_components_place_create-edit-place_geographical-location_PlaceMap_tsx.js"
     ]
   },
   "src/libs/shared/custom-pagination/CustomPagination.tsx -> react-responsive-pagination": {
-    "id": 94212,
+    "id": "src/libs/shared/custom-pagination/CustomPagination.tsx -> react-responsive-pagination",
     "files": [
-      "static/chunks/8372.f0bb9e39c15da67a.js"
+      "static/chunks/_app-pages-browser_node_modules_react-responsive-pagination_dist_index_js.js"
     ]
   }
 }
->>>>>>> 6c5182d67ecb924dcf5264c72c3f8ceffe12e8fe

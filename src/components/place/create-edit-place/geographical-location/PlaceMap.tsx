@@ -37,7 +37,7 @@ const PlaceMap = ({ location }: Props) => {
     <MapContainer
       doubleClickZoom={false}
       attributionControl={false}
-      scrollWheelZoom={false}
+      scrollWheelZoom={true}
       center={initialCenter}
       zoom={defaultZoom}
       style={{ height: '600px', width: '100%', borderRadius: '8px', zIndex: 1 }}
