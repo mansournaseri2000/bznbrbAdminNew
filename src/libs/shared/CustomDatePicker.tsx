@@ -9,8 +9,9 @@ import DatePicker, { CalendarProps, CustomComponentProps, DateObject, DatePicker
 import { styled } from 'styled-components';
 
 import { colorPalette } from '@/theme';
+import { typoVariant } from '@/theme/typo-variants';
 
-import { Flex } from '../primitives';
+import { Flex, Text } from '../primitives';
 import ErrorText from './ErrorText';
 
 /**
@@ -20,13 +21,15 @@ import ErrorText from './ErrorText';
 type DatePickerComponent = {
   onChangeValue: (dateObject: DateObject | DateObject[] | null) => void;
   errorText?: string;
+  label?: string;
+  selectedValue?: boolean;
   calendarPosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 } & CustomComponentProps &
   DatePickerProps &
   CalendarProps &
   React.HTMLAttributes<HTMLInputElement>;
 
-const CustomDatePicker = forwardRef<HTMLInputElement, DatePickerComponent>(({ onChangeValue, calendarPosition = 'bottom-right', errorText, ...rest }, ref) => {
+const CustomDatePicker = forwardRef<HTMLInputElement, DatePickerComponent>(({ onChangeValue, calendarPosition = 'bottom-right', errorText, label, selectedValue, ...rest }, ref) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -78,6 +81,14 @@ const CustomDatePicker = forwardRef<HTMLInputElement, DatePickerComponent>(({ on
   return (
     <Flex position={'relative'} width={'100%'}>
       <Root isError={Boolean(errorText)} position={'relative'} align={'center'} width={'100%'}>
+        {selectedValue && (
+          <Text
+            style={{ paddingInline: '8px', color: colorPalette.gray[10], position: 'absolute', top: '-10px', right: 12, backgroundColor: colorPalette.gray[1], borderRadius: 4 }}
+            {...typoVariant.body3}
+          >
+            {label}
+          </Text>
+        )}
         <DatePicker
           {...rest}
           {...ref}

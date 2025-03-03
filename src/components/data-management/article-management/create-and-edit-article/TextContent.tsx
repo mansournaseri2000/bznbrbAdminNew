@@ -79,8 +79,8 @@ const TextContent = () => {
 
   return (
     <Grid width={'100%'} gapY={'5'}>
-      <Controller name='brief' control={control} render={({ field }) => <TextArea {...field} placeholder='متن روی کارت' rows={4} />} />
-      <Controller name='summery' control={control} render={({ field }) => <TextArea {...field} placeholder='چکیده مقاله' rows={4} />} />
+      <Controller name='brief' control={control} render={({ field }) => <TextArea {...field} label='متن روی کارت' placeholder='متن روی کارت' selectedValue={Boolean(field.value)} rows={4} />} />
+      <Controller name='summery' control={control} render={({ field }) => <TextArea {...field} label='چکیده مقاله' placeholder='چکیده مقاله' selectedValue={Boolean(field.value)} rows={4} />} />
 
       <Grid>
         {items.map(item => {

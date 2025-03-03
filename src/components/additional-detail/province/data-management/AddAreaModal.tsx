@@ -47,8 +47,12 @@ const AddAreaModal = ({ setIsOpen }: Props) => {
   return (
     <>
       <Grid width={'100%'} p={'4'} mt={'12px'} gapY={'14px'}>
-        <Controller name='titleItem' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان جاذبه' />} />
-        <Controller name='descriptionItem' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیح جاذبه' rows={5} />} />
+        <Controller name='titleItem' control={control} render={({ field }) => <TextField {...field} label='عنوان جاذبه' placeholder='عنوان جاذبه' selectedValue={Boolean(field.value)} />} />
+        <Controller
+          name='descriptionItem'
+          control={control}
+          render={({ field }) => <TextArea {...field} label='توضیح جاذبه' placeholder='توضیح جاذبه' selectedValue={Boolean(field.value)} rows={5} />}
+        />
       </Grid>
       <ModalAction
         submitButtonText='ثبت '

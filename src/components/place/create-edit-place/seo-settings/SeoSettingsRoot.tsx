@@ -157,8 +157,16 @@ const SeoSettingsRoot = () => {
         )}
       </Flex>
       <Divider />
-      <Controller name='meta_title' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان صفحه ( متا تایتل )' aria-label='textFiled' />} />
-      <Controller name='meta_description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات متا' aria-label='TextArea' rows={5} />} />
+      <Controller
+        name='meta_title'
+        control={control}
+        render={({ field }) => <TextField {...field} label='عنوان صفحه ( متا تایتل )' placeholder='عنوان صفحه ( متا تایتل )' selectedValue={Boolean(field.value)} aria-label='textFiled' />}
+      />
+      <Controller
+        name='meta_description'
+        control={control}
+        render={({ field }) => <TextArea {...field} label='توضیحات متا' placeholder='توضیحات متا' selectedValue={Boolean(field.value)} aria-label='TextArea' rows={5} />}
+      />
       <Divider />
 
       <Box width={'40%'}>

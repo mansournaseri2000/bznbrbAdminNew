@@ -148,7 +148,7 @@ const EditCategoryModal = ({ data, setIsOpen }: Props) => {
    */
   return (
     <FormProvider {...methods}>
-      <Flex direction={'column'} align={'center'} p={'12px 16px'} gap={'4'}>
+      <Flex direction={'column'} align={'center'} p={'12px 16px'} gap={'18px'}>
         <Flex gap={'3'}>
           {/*
             Modal for add image
@@ -282,7 +282,9 @@ const EditCategoryModal = ({ data, setIsOpen }: Props) => {
             </Flex>
           )}
         </Flex>
-        <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='' style={{ width: '50%', margin: '0 auto' }} />} />
+        <Box width={'50%'}>
+          <Controller name='name' control={control} render={({ field }) => <TextField {...field} label='نام دسته بندی' placeholder='نام دسته بندی' selectedValue={Boolean(field.value)} />} />
+        </Box>
       </Flex>
       <ModalAction
         submitButtonText='ثبت '

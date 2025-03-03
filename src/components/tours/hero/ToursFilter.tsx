@@ -68,61 +68,69 @@ const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
     <>
       <Grid width={'100%'} p={'4'} gapY={'4'}>
         <Grid gapY={'4'}>
-          <Controller
-            name='provincesId'
-            control={control}
-            render={({ field }) => (
-              <SelectRoot
-                {...field}
-                lable='مبدا'
-                placeholder='استان'
-                value={String(field.value)}
-                onValueChange={val => {
-                  field.onChange(Number(val));
-                  setValue('cityId', '');
-                  setValue('page', 1);
-                }}
-              >
-                {province?.map(item => (
-                  <SelectItem key={item.id} value={String(item.id)}>
-                    {item.name}
-                  </SelectItem>
-                ))}
-              </SelectRoot>
-            )}
-          />
+          <Grid gapY={'4'}>
+            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12], paddingInlineStart: 8 }}>
+              مبدا
+            </Text>
+            <Controller
+              name='provincesId'
+              control={control}
+              render={({ field }) => (
+                <SelectRoot
+                  {...field}
+                  label='استان'
+                  placeholder='استان'
+                  selectedValue={Boolean(field.value)}
+                  value={String(field.value)}
+                  onValueChange={val => {
+                    field.onChange(Number(val));
+                    setValue('cityId', '');
+                    setValue('page', 1);
+                  }}
+                >
+                  {province?.map(item => (
+                    <SelectItem key={item.id} value={String(item.id)}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
+                </SelectRoot>
+              )}
+            />
 
-          <Controller
-            name='citiesId'
-            control={control}
-            render={({ field }) => (
-              <SelectRoot
-                {...field}
-                disabled={!Boolean(city)}
-                placeholder='شهر'
-                value={String(field.value)}
-                onValueChange={val => {
-                  field.onChange(val);
-                  setValue('page', 1);
-                }}
-              >
-                {city?.map(item => (
-                  <SelectItem key={item.id} value={String(item.id)}>
-                    {item.name}
-                  </SelectItem>
-                ))}
-              </SelectRoot>
-            )}
-          />
-          <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
-            بودجه
-          </Text>
-          {/* <Controller name='budgetStart' control={control} render={({ field }) => <CustomSearch {...field} placeholder='از' type='input' inputType='number' />} />
-          <Controller name='budgetEnd' control={control} render={({ field }) => <CustomSearch {...field} placeholder='تا' type='input' inputType='number' />} /> */}
-          <PriceField control={control} placeholder='از' name='budgetStart' />
-          <PriceField control={control} placeholder='تا' name='budgetEnd' />
-          <Flex direction={'column'} gap={'2'}>
-            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
+            <Controller
+              name='citiesId'
+              control={control}
+              render={({ field }) => (
+                <SelectRoot
+                  {...field}
+                  label='شهر'
+                  placeholder='شهر'
+                  selectedValue={Boolean(field.value)}
+                  disabled={!Boolean(city)}
+                  value={String(field.value)}
+                  onValueChange={val => {
+                    field.onChange(val);
+                    setValue('page', 1);
+                  }}
+                >
+                  {city?.map(item => (
+                    <SelectItem key={item.id} value={String(item.id)}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
+                </SelectRoot>
+              )}
+            />
+          </Grid>
+          <Grid gapY={'4'}>
+            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12], paddingInlineStart: 8 }}>
+              بودجه
+            </Text>
+            <PriceField control={control} placeholder='از' name='budgetStart' label='بودجه از' />
+            <PriceField control={control} placeholder='تا' name='budgetEnd' label='بودجه تا' />
+          </Grid>
+          <Flex direction={'column'} gap={'4'}>
+            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12], paddingInlineStart: 8 }}>
               تاریخ رفت
             </Text>
             <Grid gap={'16px'} columns={'2'}>
@@ -133,7 +141,9 @@ const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
                   <CustomDatePicker
                     {...item}
                     inputMode='none'
+                    label='از تاریخ'
                     placeholder='از تاریخ'
+                    selectedValue={Boolean(item.field.value)}
                     value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                     onChangeValue={(val: any) => {
                       const newDate = new Date(val);
@@ -150,10 +160,12 @@ const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
                 render={item => (
                   <CustomDatePicker
                     {...item}
+                    label='تا تاریخ'
+                    placeholder='تا تاریخ'
+                    selectedValue={Boolean(item.field.value)}
                     value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                     minDate={watch('departureDateStart')}
                     inputMode='none'
-                    placeholder='تا تاریخ'
                     onChangeValue={(val: any) => {
                       const newDate = new Date(val);
                       newDate.setHours(23, 59, 0, 0);
@@ -165,8 +177,8 @@ const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
               />
             </Grid>
           </Flex>
-          <Flex direction={'column'} gap={'2'}>
-            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
+          <Flex direction={'column'} gap={'4'}>
+            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12], paddingInlineStart: 8 }}>
               تاریخ برگشت
             </Text>
             <Grid gap={'16px'} columns={'2'}>
@@ -177,7 +189,9 @@ const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
                   <CustomDatePicker
                     {...item}
                     inputMode='none'
+                    label='از تاریخ'
                     placeholder='از تاریخ'
+                    selectedValue={Boolean(item.field.value)}
                     value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                     onChangeValue={(val: any) => {
                       const newDate = new Date(val);
@@ -196,8 +210,10 @@ const ToursFilter = ({ setIsOpen, province, onSubmit, isPending }: Props) => {
                     {...item}
                     value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                     inputMode='none'
-                    minDate={watch('returnDateStart')}
+                    label='تا تاریخ'
                     placeholder='تا تاریخ'
+                    selectedValue={Boolean(item.field.value)}
+                    minDate={watch('returnDateStart')}
                     onChangeValue={(val: any) => {
                       const newDate = new Date(val);
                       newDate.setHours(23, 59, 0, 0);

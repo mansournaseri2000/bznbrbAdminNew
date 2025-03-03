@@ -129,7 +129,7 @@ const CreatePlan = ({ provinces }: Props) => {
                 <Text {...typoVariant.paragraph2} style={{ color: colorPalette.gray[11] }}>
                   لطفا آدرس مبدا و مقصد سفر خود را وارد کنید
                 </Text>
-                <Grid gap={'2'}>
+                <Grid gap={'4'}>
                   <Text {...typoVariant.title2} style={{ color: colorPalette.gray[12], paddingRight: '12px' }}>
                     مبدا
                   </Text>
@@ -141,12 +141,14 @@ const CreatePlan = ({ provinces }: Props) => {
                         <SelectRoot
                           // isFill={Boolean(String(watch('origin.province')))}
                           {...field}
+                          label='استان'
+                          placeholder={'استان'}
+                          selectedValue={Boolean(field.value)}
                           value={String(watch('origin.province'))}
                           onValueChange={val => {
                             field.onChange(val);
                             setValue('origin.city', '');
                           }}
-                          placeholder={'استان'}
                           errorText={errors.origin?.province?.message}
                           // lable='استان'
                         >
@@ -167,13 +169,15 @@ const CreatePlan = ({ provinces }: Props) => {
                       render={({ field }) => (
                         <SelectRoot
                           {...field}
+                          label='شهرستان'
+                          placeholder='شهرستان'
+                          selectedValue={Boolean(field.value)}
                           disabled={!Boolean(provinceCity)}
                           value={String(watch('origin.city'))}
                           // isFill={Boolean(String(watch('origin.city')))}
                           onValueChange={val => {
                             field.onChange(val);
                           }}
-                          placeholder={'شهرستان'}
                           errorText={errors.origin?.city?.message}
 
                           // lable='شهر'
@@ -190,7 +194,7 @@ const CreatePlan = ({ provinces }: Props) => {
                     />
                   </Container>
                 </Grid>
-                <Grid gap={'8px'}>
+                <Grid gap={'4'}>
                   <Text {...typoVariant.title2} style={{ color: colorPalette.gray[12], paddingRight: '12px' }}>
                     مقصد
                   </Text>
@@ -201,6 +205,9 @@ const CreatePlan = ({ provinces }: Props) => {
                       render={({ field }) => (
                         <SelectRoot
                           {...field}
+                          label='استان'
+                          placeholder={'استان'}
+                          selectedValue={Boolean(field.value)}
                           value={String(watch('destination.province'))}
                           // isFill={Boolean(String(watch('destination.province')))}
                           onValueChange={val => {
@@ -208,7 +215,6 @@ const CreatePlan = ({ provinces }: Props) => {
                             setValue('destination.city', '');
                             setProvinceID(Number(val));
                           }}
-                          placeholder={'استان'}
                           errorText={errors.destination?.province?.message}
                         >
                           {provinces?.map(item => {
@@ -228,13 +234,15 @@ const CreatePlan = ({ provinces }: Props) => {
                       render={({ field }) => (
                         <SelectRoot
                           {...field}
+                          label='شهرستان'
+                          placeholder='شهرستان'
+                          selectedValue={Boolean(field.value)}
                           disabled={!Boolean(destinationCity)}
                           value={String(watch('destination.city'))}
                           // isFill={Boolean(String(watch('destination.city')))}
                           onValueChange={val => {
                             field.onChange(val);
                           }}
-                          placeholder={'شهرستان'}
                           errorText={errors.destination?.city?.message}
                         >
                           {destinationCity?.map(item => {
@@ -255,8 +263,10 @@ const CreatePlan = ({ provinces }: Props) => {
             {/* TIME AND DATE _______________________________________________________________________________ */}
             <BoxWrapper hero='کی بریم کی بیایم ؟'>
               <Grid columns={'2'} gap={'4'}>
-                <Flex direction={'column'} gap={'2'}>
-                  <Text style={{ paddingRight: '10px' }}>تاریخ و ساعت رفت</Text>
+                <Flex direction={'column'} gap={'4'}>
+                  <Text {...typoVariant.title2} style={{ paddingRight: '10px' }}>
+                    تاریخ و ساعت رفت
+                  </Text>
                   <Grid columns={'2'} gap={'24px'}>
                     <Controller
                       name={'startTime.date'}
@@ -265,7 +275,9 @@ const CreatePlan = ({ provinces }: Props) => {
                         <CustomDatePicker
                           minDate={new Date().setHours(0, 0, 0, 0)}
                           inputMode='none'
+                          label='تاریخ'
                           placeholder='تاریخ'
+                          selectedValue={Boolean(item.field.value)}
                           value={item.field.value as any}
                           onChangeValue={(val: any) => {
                             setValue('startTime.date', new Date(val));
@@ -280,12 +292,14 @@ const CreatePlan = ({ provinces }: Props) => {
                       control={control}
                       render={item => (
                         <CustomTimePicker
+                          label='ساعت'
+                          placeholder='ساعت'
+                          selectedValue={Boolean(item.field.value)}
                           defaultValue={''}
                           value={item.field.value as any}
                           minDate={areDatesSameOrCurrent(new Date().getTime(), new Date(watch('startTime.date') as any).getTime()) ? new Date(reduceOneHour()) : ''}
                           disabled={!watch('startTime.date')}
                           inputMode='none'
-                          placeholder='ساعت'
                           onChangeValue={(val: any) => {
                             setValue('startTime.time', new Date(val));
                           }}
@@ -294,20 +308,24 @@ const CreatePlan = ({ provinces }: Props) => {
                     />
                   </Grid>
                 </Flex>
-                <Flex direction={'column'} gap={'2'}>
-                  <Text style={{ paddingRight: '10px' }}>تاریخ و ساعت برگشت</Text>
+                <Flex direction={'column'} gap={'4'}>
+                  <Text {...typoVariant.title2} style={{ paddingRight: '10px' }}>
+                    تاریخ و ساعت برگشت
+                  </Text>
                   <Grid columns={'2'} gap={'24px'}>
                     <Controller
                       name={'endTime.date'}
                       control={control}
                       render={item => (
                         <CustomDatePicker
+                          label='تاریخ'
+                          placeholder='تاریخ'
+                          selectedValue={Boolean(item.field.value)}
                           value={item.field.value as any}
                           disabled={!Boolean(watch('startTime.date'))}
                           minDate={sample(new Date(watch('startTime.date') as any))}
                           maxDate={maxDate(watch('startTime.date'))}
                           inputMode='none'
-                          placeholder='تاریخ'
                           onChangeValue={(val: any) => {
                             setValue('endTime.date', new Date(val));
                           }}
@@ -319,10 +337,12 @@ const CreatePlan = ({ provinces }: Props) => {
                       control={control}
                       render={item => (
                         <CustomTimePicker
+                          label='ساعت'
+                          placeholder='ساعت'
+                          selectedValue={Boolean(item.field.value)}
                           value={item.field.value as any}
                           disabled={!Boolean(watch('endTime.date'))}
                           inputMode='none'
-                          placeholder='تاریخ'
                           onChangeValue={(val: any) => {
                             setValue('endTime.time', new Date(val));
                           }}
@@ -337,7 +357,7 @@ const CreatePlan = ({ provinces }: Props) => {
 
             <BoxWrapper hero='تنظیمات اضافه'>
               <Grid gap={'5'}>
-                <Grid gap={'2'}>
+                <Grid gap={'4'}>
                   <Text {...typoVariant.title2} style={{ color: colorPalette.gray[12], paddingRight: '12px' }}>
                     وسیله و اسکان
                   </Text>
@@ -348,12 +368,14 @@ const CreatePlan = ({ provinces }: Props) => {
                       render={({ field }) => (
                         <SelectRoot
                           {...field}
+                          label='وسیله سفر'
+                          placeholder={'وسیله سفر'}
+                          selectedValue={Boolean(field.value)}
                           value={String(watch('means_of_travel'))}
                           // isFill={Boolean(String(watch('means_of_travel')))}
                           onValueChange={val => {
                             field.onChange(val);
                           }}
-                          placeholder={'وسیله سفر'}
                           errorText={errors.means_of_travel?.message}
                         >
                           {means_of_travelItems?.map(item => {
@@ -372,12 +394,14 @@ const CreatePlan = ({ provinces }: Props) => {
                       render={({ field }) => (
                         <SelectRoot
                           {...field}
+                          label='محل اسکان'
+                          placeholder={'محل اسکان'}
+                          selectedValue={Boolean(field.value)}
                           value={String(watch('place_of_residence'))}
                           // isFill={Boolean(String(watch('place_of_residence')))}
                           onValueChange={val => {
                             field.onChange(val);
                           }}
-                          placeholder={'محل اسکان'}
                           errorText={errors.place_of_residence?.message}
                         >
                           {place_of_residence?.map(item => {
@@ -394,7 +418,7 @@ const CreatePlan = ({ provinces }: Props) => {
                 </Grid>
                 {/* Type_of_tourist_place _______________________________________________________________________________ */}
 
-                <Grid gap={'2'}>
+                <Grid gap={'4'}>
                   <Text {...typoVariant.title2} style={{ color: colorPalette.gray[12], paddingRight: '12px' }}>
                     گردشگری
                   </Text>
@@ -495,12 +519,14 @@ const CreatePlan = ({ provinces }: Props) => {
                       render={({ field }) => (
                         <SelectRoot
                           {...field}
+                          label='تعداد مسافران بزرگسال'
+                          placeholder={'تعداد مسافرین بزرگسال'}
+                          selectedValue={Boolean(field.value)}
                           value={String(watch('number_Of_Adult_Passengers'))}
                           // isFill={Boolean(String(watch('number_Of_Adult_Passengers')))}
                           onValueChange={val => {
                             field.onChange(val);
                           }}
-                          placeholder={'تعداد مسافرین بزرگسال'}
                           errorText={errors.number_Of_Adult_Passengers?.message}
                         >
                           {Number_Of_Passengers?.map(item => {
@@ -519,12 +545,14 @@ const CreatePlan = ({ provinces }: Props) => {
                       render={({ field }) => (
                         <SelectRoot
                           {...field}
+                          label='تعداد مسافرین کودک'
+                          placeholder={'تعداد مسافرین کودک'}
+                          selectedValue={Boolean(field.value)}
                           value={String(watch('number_Of_Child_Passengers'))}
                           // isFill={Boolean(String(watch('number_Of_Child_Passengers')))}
                           onValueChange={val => {
                             field.onChange(val);
                           }}
-                          placeholder={'تعداد مسافرین کودک'}
                           errorText={errors.number_Of_Child_Passengers?.message}
                         >
                           {Number_Of_Passengers?.map(item => {
@@ -546,12 +574,14 @@ const CreatePlan = ({ provinces }: Props) => {
                       render={({ field }) => (
                         <SelectRoot
                           {...field}
+                          label='تعداد مسافرین خردسال'
+                          placeholder={'تعداد مسافرین خردسال'}
+                          selectedValue={Boolean(field.value)}
                           value={String(watch('number_Of_Minor_Passengers'))}
                           // isFill={Boolean(String(watch('number_Of_Minor_Passengers')))}
                           onValueChange={val => {
                             field.onChange(val);
                           }}
-                          placeholder={'تعداد مسافرین خردسال'}
                           errorText={errors.number_Of_Minor_Passengers?.message}
                         >
                           {Number_Of_Passengers?.map(item => {

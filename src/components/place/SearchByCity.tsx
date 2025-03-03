@@ -119,7 +119,7 @@ const SearchByCity = ({ province }: Props) => {
                   setValue('city', '');
                 }}
                 placeholder={'استان'}
-                lable='استان'
+                label='استان'
               >
                 {province.map(item => {
                   return (
@@ -142,7 +142,7 @@ const SearchByCity = ({ province }: Props) => {
                   field.onChange(val);
                 }}
                 placeholder={'شهر'}
-                lable='شهر'
+                label='شهر'
               >
                 {city?.map(item => {
                   return (

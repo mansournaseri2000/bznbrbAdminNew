@@ -102,8 +102,12 @@ const TopCommentItem = (props: Props) => {
           <>
             <ModalHeader handleClose={() => setModalState({ ...modalState, isOpen: false })} title='ویرایش نظر برتر' />
             <Flex direction={'column'} gap={'14px'} p={'5'}>
-              <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان نقطه' style={{ width: '50%' }} />} />
-              <Controller name='content' control={control} render={({ field }) => <TextArea {...field} placeholder='متن نظر' rows={5} />} />
+              <Controller
+                name='name'
+                control={control}
+                render={({ field }) => <TextField {...field} label='عنوان نقطه' placeholder='عنوان نقطه' selectedValue={Boolean(field.value)} style={{ width: '50%' }} />}
+              />
+              <Controller name='content' control={control} render={({ field }) => <TextArea {...field} label='متن نظر' placeholder='متن نظر' selectedValue={Boolean(field.value)} rows={5} />} />
             </Flex>
             <ModalAction
               submitButtonText='ویرایش تغییرات'

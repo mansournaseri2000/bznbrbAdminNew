@@ -7,14 +7,14 @@ import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 
 type PopoverComponentProps = React.ComponentProps<typeof Popover.Root> & {
-  lable?: string;
+  label?: string;
   placeholder: string;
   style?: React.CSSProperties;
   disabled?: boolean;
 };
 
 export const PopoverRoot = forwardRef<React.ElementRef<typeof Popover.Root>, PopoverComponentProps>(
-  ({ placeholder, lable, disabled, style, ...props }: PopoverComponentProps | any, forwardedRef: ForwardedRef<React.ElementRef<typeof Popover.Root>>) => {
+  ({ placeholder, label, disabled, style, ...props }: PopoverComponentProps | any, forwardedRef: ForwardedRef<React.ElementRef<typeof Popover.Root>>) => {
     /**
      * const and variables
      * _______________________________________________________________________________
@@ -27,7 +27,7 @@ export const PopoverRoot = forwardRef<React.ElementRef<typeof Popover.Root>, Pop
     return (
       <Flex width={'100%'} direction={'column'} gap={'2'} style={style}>
         <Text style={{ paddingRight: '8px', color: colorPalette.gray[12] }} {...typoVariant.body1}>
-          {lable}
+          {label}
         </Text>
         <Popover.Root {...props} ref={forwardedRef}>
           <Popover.Trigger disabled={disabled}>

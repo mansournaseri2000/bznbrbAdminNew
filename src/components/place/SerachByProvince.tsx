@@ -115,7 +115,7 @@ const SerachByProvince = ({ province }: Props) => {
                   field.onChange(val);
                 }}
                 placeholder={'استان'}
-                lable='استان'
+                label='استان'
               >
                 {province.map(item => {
                   return (

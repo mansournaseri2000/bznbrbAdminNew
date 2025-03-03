@@ -31,8 +31,8 @@ const FilterContent = ({ province }: Props) => {
 
   return (
     <Grid width={'100%'} p={'4'} gapY={'4'}>
-      <Flex direction={'column'} gap={'2'}>
-        <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
+      <Flex direction={'column'} gap={'4'}>
+        <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12], paddingInlineStart: 8 }}>
           تاریخ رفت
         </Text>
         <Grid gap={'16px'} columns={'2'}>
@@ -43,7 +43,9 @@ const FilterContent = ({ province }: Props) => {
               <CustomDatePicker
                 {...item}
                 inputMode='none'
+                label='از تاریخ'
                 placeholder='از تاریخ'
+                selectedValue={Boolean(item.field.value)}
                 value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                 onChangeValue={(val: any) => {
                   const newDate = new Date(val);
@@ -60,10 +62,12 @@ const FilterContent = ({ province }: Props) => {
             render={item => (
               <CustomDatePicker
                 {...item}
+                label='تا تاریخ'
+                placeholder='تا تاریخ'
+                selectedValue={Boolean(item.field.value)}
                 value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                 minDate={watch('departureDateStart')}
                 inputMode='none'
-                placeholder='تا تاریخ'
                 onChangeValue={(val: any) => {
                   const newDate = new Date(val);
                   newDate.setHours(23, 59, 0, 0);
@@ -75,8 +79,8 @@ const FilterContent = ({ province }: Props) => {
           />
         </Grid>
       </Flex>
-      <Flex direction={'column'} gap={'2'}>
-        <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
+      <Flex direction={'column'} gap={'4'}>
+        <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12], paddingInlineStart: 8 }}>
           تاریخ برگشت
         </Text>
         <Grid gap={'16px'} columns={'2'}>
@@ -87,7 +91,9 @@ const FilterContent = ({ province }: Props) => {
               <CustomDatePicker
                 {...item}
                 inputMode='none'
+                label='از تاریخ'
                 placeholder='از تاریخ'
+                selectedValue={Boolean(item.field.value)}
                 value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                 onChangeValue={(val: any) => {
                   const newDate = new Date(val);
@@ -104,10 +110,12 @@ const FilterContent = ({ province }: Props) => {
             render={item => (
               <CustomDatePicker
                 {...item}
+                label='تا تاریخ'
+                placeholder='تا تاریخ'
+                selectedValue={Boolean(item.field.value)}
                 value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                 inputMode='none'
                 minDate={watch('returnDateStart')}
-                placeholder='تا تاریخ'
                 onChangeValue={(val: any) => {
                   const newDate = new Date(val);
                   newDate.setHours(23, 59, 0, 0);
@@ -119,8 +127,8 @@ const FilterContent = ({ province }: Props) => {
           />
         </Grid>
       </Flex>
-      <Grid gapY={'2'}>
-        <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
+      <Grid gapY={'4'}>
+        <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12], paddingInlineStart: 8 }}>
           مبدا
         </Text>
         <Controller
@@ -129,7 +137,9 @@ const FilterContent = ({ province }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='استان'
               placeholder='استان'
+              selectedValue={Boolean(field.value)}
               value={String(field.value)}
               onValueChange={val => {
                 field.onChange(Number(val));
@@ -152,7 +162,9 @@ const FilterContent = ({ province }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='شهر'
               placeholder='شهر'
+              selectedValue={Boolean(field.value)}
               disabled={!Boolean(sourceCity)}
               value={String(field.value)}
               onValueChange={val => {
@@ -169,8 +181,8 @@ const FilterContent = ({ province }: Props) => {
           )}
         />
       </Grid>
-      <Grid gapY={'2'}>
-        <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
+      <Grid gapY={'4'}>
+        <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12], paddingInlineStart: 8 }}>
           مقصد
         </Text>
         <Controller
@@ -179,7 +191,9 @@ const FilterContent = ({ province }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='استان'
               placeholder='استان'
+              selectedValue={Boolean(field.value)}
               value={String(field.value)}
               onValueChange={val => {
                 field.onChange(val);
@@ -202,8 +216,10 @@ const FilterContent = ({ province }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
-              disabled={!Boolean(departureCity)}
+              label='شهر'
               placeholder='شهر'
+              selectedValue={Boolean(field.value)}
+              disabled={!Boolean(departureCity)}
               value={String(field.value)}
               onValueChange={val => {
                 field.onChange(val);

@@ -54,6 +54,8 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   const { data: placeData, isLoading: placeIsLoading, isFetching: placeFetching } = editPlaceResult;
   const { data: articleByIdData, isLoading: articleByIdLoading, isFetching: articleByIdFetching } = articleByIdResult;
 
+  console.log(articleByIdData?.data.title);
+
   /**
    * Loading And Error
    * _______________________________________________________________________________
@@ -100,13 +102,13 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   const getTitle = () => {
     if (params.slug[0] === 'point-management') {
       if (status === 'create-point') return 'ساخت نقطه';
-      if (status === 'edit-point') return `ویرایش نقطه ${placeData?.name}`;
+      if (status === 'edit-point') return `ویرایش نقطه - ${placeData?.name}`;
       return 'لیست نقاط';
     }
 
     if (params.slug[0] === 'article-management') {
       if (status === 'create-article') return 'ساخت مقاله';
-      if (status === 'edit-article') return 'ویرایش مقاله';
+      if (status === 'edit-article') return ` ویرایش مقاله - ${articleByIdData?.data.title}`;
       return 'لیست مقالات';
     }
 

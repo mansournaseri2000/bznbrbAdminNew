@@ -83,12 +83,14 @@ const RoutingGuid = () => {
           render={({ field }) => (
             <TextArea
               {...field}
+              label={`شرح مسیر ${handleButtonNames(state)}`}
+              placeholder={`شرح مسیر ${handleButtonNames(state)}`}
+              selectedValue={Boolean(field.value)}
               value={content}
               onChange={e => {
                 field.onChange(e.target.value);
                 setContent(e.target.value);
               }}
-              placeholder={`شرح مسیر ${handleButtonNames(state)}`}
               rows={5}
             />
           )}
