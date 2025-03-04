@@ -36,6 +36,7 @@ export default function Layout({
                 <AuthProvider>{children}</AuthProvider>
               </Suspense>
             </Theme>
+            
             <Toast />
           </StyledComponentsRegistry>
         </ReactQueryProvider>
