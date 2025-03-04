@@ -292,7 +292,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='استان'
-                      lable='استان'
+                      label='استان'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(Number(val));
@@ -316,7 +316,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='شهرستان'
-                      lable='شهرستان'
+                      label='شهرستان'
                       disabled={!Boolean(city)}
                       value={String(field.value)}
                       onValueChange={val => {
@@ -352,7 +352,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='استان'
-                      lable='استان'
+                      label='استان'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(Number(val));
@@ -376,7 +376,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='شهرستان'
-                      lable='شهرستان'
+                      label='شهرستان'
                       disabled={!Boolean(originCity)}
                       value={String(field.value)}
                       onValueChange={val => {
@@ -412,7 +412,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='استان'
-                      lable='استان'
+                      label='استان'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(Number(val));
@@ -436,7 +436,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='شهرستان'
-                      lable='شهرستان'
+                      label='شهرستان'
                       disabled={!Boolean(destinationCity)}
                       value={String(field.value)}
                       onValueChange={val => {
@@ -460,7 +460,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
             * _______________________________________________________________________________
             */}
             {item === 'point_type' && (
-              <PopoverRoot lable='نوع نقطه' placeholder='نوع نقطه'>
+              <PopoverRoot label='نوع نقطه' placeholder='نوع نقطه'>
                 <CheckboxGroup isRow={false} items={serializeSubCategoriesData(PlaceType)} store='arrayTypes' />
               </PopoverRoot>
             )}
@@ -481,7 +481,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='دسته بندی اصلی'
-                      lable='دسته بندی اصلی'
+                      label='دسته بندی اصلی'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -520,7 +520,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='انتشار'
-                      lable='انتشار'
+                      label='انتشار'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -542,7 +542,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='وضعیت'
-                      lable='وضعیت'
+                      label='وضعیت'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -564,7 +564,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='تصویر اصلی'
-                      lable='تصویر اصلی'
+                      label='تصویر اصلی'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -586,7 +586,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='تصویر گالری'
-                      lable='تصویر گالری'
+                      label='تصویر گالری'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -608,7 +608,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='اطلاعات'
-                      lable='اطلاعات'
+                      label='اطلاعات'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -630,7 +630,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='موقعیت جغرافیایی'
-                      lable='موقعیت جغرافیایی'
+                      label='موقعیت جغرافیایی'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -652,7 +652,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='توضیحات'
-                      lable='توضیحات'
+                      label='توضیحات'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -674,7 +674,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='امکانات'
-                      lable='امکانات'
+                      label='امکانات'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -696,7 +696,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='تحلیل'
-                      lable='تحلیل'
+                      label='تحلیل'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -718,7 +718,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='سئو'
-                      lable='سئو'
+                      label='سئو'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -752,7 +752,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='انتشار'
-                      lable='انتشار'
+                      label='انتشار'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -773,7 +773,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='وضعیت'
-                      lable='وضعیت'
+                      label='وضعیت'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -794,7 +794,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='اطلاعات اولیه'
-                      lable='اطلاعات اولیه'
+                      label='اطلاعات اولیه'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -815,7 +815,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='محتویات متنی'
-                      lable='محتویات متنی'
+                      label='محتویات متنی'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -836,7 +836,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='نقاط مرتبط'
-                      lable='نقاط مرتبط'
+                      label='نقاط مرتبط'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -857,7 +857,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='سئو'
-                      lable='سئو'
+                      label='سئو'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -878,7 +878,7 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
                     <SelectRoot
                       {...field}
                       placeholder='تصویر اصلی'
-                      lable='تصویر اصلی'
+                      label='تصویر اصلی'
                       value={String(field.value)}
                       onValueChange={val => {
                         field.onChange(val);
@@ -896,8 +896,8 @@ const CustomFilter = ({ type, province, categories, PlaceType }: Props) => {
             )}
             {item === 'budget' && (
               <Grid gapY={'3'}>
-                <PriceField control={control} placeholder='از' name='budgetStart' lable='بودجه ' />
-                <PriceField control={control} placeholder='تا' name='budgetEnd' lable='بودجه ' />
+                <PriceField control={control} placeholder='از' name='budgetStart' label='بودجه ' />
+                <PriceField control={control} placeholder='تا' name='budgetEnd' label='بودجه ' />
               </Grid>
             )}
           </React.Fragment>

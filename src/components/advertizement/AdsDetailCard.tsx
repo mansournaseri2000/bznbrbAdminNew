@@ -203,7 +203,6 @@ const AdsDetailCard = ({ data }: Props) => {
         provinceId: data.provincesId,
         cityId: data.cityId,
         categoryId: data.categoryId,
-
       });
     }
   };
@@ -355,13 +354,17 @@ const AdsDetailCard = ({ data }: Props) => {
                   </Box>
 
                   <Grid width={'100%'} gap={'5'} columns={'3'}>
-                    <Controller name='sponsor' control={control} render={({ field }) => <TextField {...field} placeholder='نام اسپانسر' />} />
-                    <Controller name='website' control={control} render={({ field }) => <TextField {...field} placeholder='سایت' />} />
-                    <Controller name='socialMedia' control={control} render={({ field }) => <TextField {...field} placeholder='شبکه اجتماعی' />} />
+                    <Controller name='sponsor' control={control} render={({ field }) => <TextField {...field} label='نام اسپانسر' placeholder='نام اسپانسر' selectedValue={Boolean(field.value)} />} />
+                    <Controller name='website' control={control} render={({ field }) => <TextField {...field} label='سایت' placeholder='سایت' selectedValue={Boolean(field.value)} />} />
+                    <Controller
+                      name='socialMedia'
+                      control={control}
+                      render={({ field }) => <TextField {...field} label='شبکه اجتماعی' placeholder='شبکه اجتماعی' selectedValue={Boolean(field.value)} />}
+                    />
                   </Grid>
-                  <Controller name='alt' control={control} render={({ field }) => <TextField {...field} placeholder='متن جایگزین' />} />
-                  <Controller name='description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات تصویر' rows={6} />} />
-                  <Controller name='summery' control={control} render={({ field }) => <TextArea {...field} placeholder='شزح مختصر' rows={6} />} />
+                  <Controller name='alt' control={control} render={({ field }) => <TextField {...field} label='متن جایگزین' placeholder='متن جایگزین' selectedValue={Boolean(field.value)} />} />
+                  <Controller name='description' control={control} render={({ field }) => <TextArea {...field} label='توضیحات تصویر' placeholder='توضیحات تصویر' selectedValue={Boolean(field.value)} rows={6} />} />
+                  <Controller name='summery' control={control} render={({ field }) => <TextArea {...field} label='شرح مختصر' placeholder='شزح مختصر' selectedValue={Boolean(field.value)} rows={6} />} />
                 </>
               )}
             </Grid>

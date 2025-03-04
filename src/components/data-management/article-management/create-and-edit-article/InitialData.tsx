@@ -23,18 +23,20 @@ const InitialData = ({ categories, province }: Props) => {
 
   return (
     <Grid width={'100%'} gap={'14px'}>
-      <Controller name='on_titile' control={control} render={({ field }) => <TextField {...field} placeholder='رو تیتر' />} />
-      <Controller name='title' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان مقاله' />} />
-      <Controller name='slug' control={control} render={({ field }) => <TextField {...field} placeholder='Custom URL' />} />
+      <Controller name='on_titile' control={control} render={({ field }) => <TextField {...field} label='رو تیتر' placeholder='رو تیتر' selectedValue={Boolean(field.value)} />} />
+      <Controller name='title' control={control} render={({ field }) => <TextField {...field} label='عنوان مقاله' placeholder='عنوان مقاله' selectedValue={Boolean(field.value)} />} />
+      <Controller name='slug' control={control} render={({ field }) => <TextField {...field} label='Custom URL' selectedValue={Boolean(field.value)} placeholder='Custom URL' />} />
       <Grid width={'100%'} columns={'2'} gap={'14px'}>
-        <Controller name='writer' control={control} render={({ field }) => <TextField {...field} placeholder='نام نویسنده' />} />
-        <Controller name='source' control={control} render={({ field }) => <TextField {...field} placeholder='منبع' />} />
+        <Controller name='writer' control={control} render={({ field }) => <TextField {...field} label='نام نویسنده' selectedValue={Boolean(field.value)} placeholder='نام نویسنده' />} />
+        <Controller name='source' control={control} render={({ field }) => <TextField {...field} label='منبع' selectedValue={Boolean(field.value)} placeholder='منبع' />} />
         <Controller
           name='parentCategoryId'
           control={control}
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='دسته بندی'
+              selectedValue={Boolean(field.value)}
               placeholder='دسته بندی'
               value={String(field.value)}
               onValueChange={val => {
@@ -56,8 +58,10 @@ const InitialData = ({ categories, province }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='زیر دسته بندی'
+              selectedValue={Boolean(field.value)}
               placeholder='زیر دسته بندی'
-              disabled={!Boolean(watch("parentCategoryId"))}
+              disabled={!Boolean(watch('parentCategoryId'))}
               value={String(field.value)}
               onValueChange={val => {
                 field.onChange(val);
@@ -77,6 +81,8 @@ const InitialData = ({ categories, province }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='استان'
+              selectedValue={Boolean(field.value)}
               placeholder='استان'
               value={String(field.value)}
               onValueChange={val => {
@@ -98,6 +104,8 @@ const InitialData = ({ categories, province }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='شهرستان'
+              selectedValue={Boolean(field.value)}
               placeholder='شهرستان'
               disabled={!Boolean(provinceCities)}
               value={String(field.value)}

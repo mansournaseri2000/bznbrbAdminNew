@@ -40,7 +40,7 @@ const ArticleManagementHero = () => {
     <>
       <Grid width={'100%'} gapX={'5'} style={{ gridTemplateColumns: 'auto auto 3fr' }}>
         <IconButton colorVariant='BLUE' variant='soft' size={'4'} type='button' onClick={() => setIsOpen(true)}>
-          <Filter />
+          <Filter width={16} height={16} />
         </IconButton>
         <Button colorVariant='BLUE' type='button' variant='ghost' size={'4'} onClick={() => router.push('/data-management/article-management/create-article')}>
           <Flex gap={'2'} align={'center'}>

@@ -374,13 +374,15 @@ const ProvinceGallery = ({ gallery, constantData, ProvinceId }: Props) => {
                             render={({ field }) => (
                               <SelectRoot
                                 {...field}
+                                label='استان'
+                                placeholder={'استان'}
+                                selectedValue={Boolean(field.value)}
                                 value={String(watch('provinceId'))}
                                 onValueChange={val => {
                                   field.onChange(val);
                                   setValue('cityId', '');
                                   setValue('townId', '');
                                 }}
-                                placeholder={'استان'}
                               >
                                 {constantData.map((item: any) => {
                                   return (
@@ -398,13 +400,15 @@ const ProvinceGallery = ({ gallery, constantData, ProvinceId }: Props) => {
                             render={({ field }) => (
                               <SelectRoot
                                 {...field}
+                                label='شهرستان'
+                                placeholder={'شهرستان'}
+                                selectedValue={Boolean(field.value)}
                                 disabled={!Boolean(watch('provinceId'))}
                                 value={String(watch('cityId'))}
                                 onValueChange={val => {
                                   field.onChange(val);
                                   setValue('townId', '');
                                 }}
-                                placeholder={'شهرستان'}
                               >
                                 {city?.map((item: any) => {
                                   return (
@@ -422,12 +426,14 @@ const ProvinceGallery = ({ gallery, constantData, ProvinceId }: Props) => {
                             render={({ field }) => (
                               <SelectRoot
                                 {...field}
+                                label='شهر'
+                                placeholder={'شهر'}
+                                selectedValue={Boolean(field.value)}
                                 disabled={!Boolean(watch('provinceId')) || !Boolean(watch('cityId'))}
                                 value={String(watch('townId'))}
                                 onValueChange={val => {
                                   field.onChange(val);
                                 }}
-                                placeholder={'شهر'}
                               >
                                 {town?.map((item: any) => {
                                   return (
@@ -440,9 +446,17 @@ const ProvinceGallery = ({ gallery, constantData, ProvinceId }: Props) => {
                             )}
                           />
                         </Grid>
-                        <Controller name='alt' control={control} render={({ field }) => <TextField {...field} placeholder='متن جایگزین' />} />
-                        <Controller name='description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات تصویر' rows={6} />} />
-                        <Controller name='summery' control={control} render={({ field }) => <TextArea {...field} placeholder='شزح مختصر' rows={6} />} />
+                        <Controller name='alt' control={control} render={({ field }) => <TextField {...field} label='متن جایگزین' placeholder='متن جایگزین' selectedValue={Boolean(field.value)} />} />
+                        <Controller
+                          name='description'
+                          control={control}
+                          render={({ field }) => <TextArea {...field} label='توضیحات تصویر' placeholder='توضیحات تصویر' selectedValue={Boolean(field.value)} rows={6} />}
+                        />
+                        <Controller
+                          name='summery'
+                          control={control}
+                          render={({ field }) => <TextArea {...field} label='شرح مختصر' placeholder='شرح مختصر' selectedValue={Boolean(field.value)} rows={6} />}
+                        />
                       </>
                     )}
                   </>

@@ -72,7 +72,7 @@ const ArticleFilter = ({ province, categories, setIsOpen }: Props) => {
          * Time period
          * _______________________________________________________________________________
          */}
-        <Flex direction={'column'} gap={'2'}>
+        <Flex direction={'column'} gap={'4'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12], paddingInlineStart: 8 }}>
             بازه زمانی
           </Text>
@@ -84,7 +84,9 @@ const ArticleFilter = ({ province, categories, setIsOpen }: Props) => {
                 <CustomDatePicker
                   {...item}
                   inputMode='none'
+                  label='از تاریخ'
                   placeholder='از تاریخ'
+                  selectedValue={Boolean(item.field.value)}
                   value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                   onChangeValue={(val: any) => {
                     const newDate = new Date(val);
@@ -102,7 +104,9 @@ const ArticleFilter = ({ province, categories, setIsOpen }: Props) => {
                 <CustomDatePicker
                   {...item}
                   inputMode='none'
+                  label='تا تاریخ'
                   placeholder='تا تاریخ'
+                  selectedValue={Boolean(item.field.value)}
                   value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                   minDate={watch('created_atStart')}
                   onChangeValue={(val: any) => {
@@ -121,223 +125,256 @@ const ArticleFilter = ({ province, categories, setIsOpen }: Props) => {
           Point position
          * _______________________________________________________________________________
          *****/}
-        <Controller
-          name='provincesId'
-          control={control}
-          render={({ field }) => (
-            <SelectRoot
-              {...field}
-              lable='موقعیت'
-              placeholder='استان'
-              value={String(field.value)}
-              onValueChange={val => {
-                field.onChange(val);
-                setValue('citiesId', '');
-              }}
-            >
-              {province?.map(item => (
-                <SelectItem key={item.id} value={String(item.id)}>
-                  {item.name}
-                </SelectItem>
-              ))}
-            </SelectRoot>
-          )}
-        />
-        <Controller
-          name='citiesId'
-          control={control}
-          render={({ field }) => (
-            <SelectRoot
-              {...field}
-              placeholder='شهرستان'
-              disabled={!Boolean(city)}
-              value={String(field.value)}
-              onValueChange={val => {
-                field.onChange(val);
-              }}
-            >
-              {city?.map(item => (
-                <SelectItem key={item.id} value={String(item.id)}>
-                  {item.name}
-                </SelectItem>
-              ))}
-            </SelectRoot>
-          )}
-        />
+        <Grid gapY={'4'}>
+          <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12], paddingInlineStart: 8 }}>
+            موقعیت
+          </Text>
+          <Controller
+            name='provincesId'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                label='استان'
+                placeholder='استان'
+                selectedValue={Boolean(field.value)}
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                  setValue('citiesId', '');
+                }}
+              >
+                {province?.map(item => (
+                  <SelectItem key={item.id} value={String(item.id)}>
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='citiesId'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                label='شهرستان'
+                placeholder='شهرستان'
+                selectedValue={Boolean(field.value)}
+                disabled={!Boolean(city)}
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {city?.map(item => (
+                  <SelectItem key={item.id} value={String(item.id)}>
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+        </Grid>
         {/*****
          * Category Type
          * _______________________________________________________________________________
          *****/}
-        <Controller
-          name='parentCategoryId'
-          control={control}
-          render={({ field }) => (
-            <SelectRoot
-              {...field}
-              lable='دسته بندی'
-              placeholder='دسته بندی اصلی'
-              value={String(field.value)}
-              onValueChange={val => {
-                field.onChange(val);
-              }}
-            >
-              {categories.map(item => (
-                <SelectItem key={item.id} value={String(item.id)}>
-                  {item.name}
-                </SelectItem>
-              ))}
-            </SelectRoot>
-          )}
-        />
+        <Grid gapY={'4'}>
+          <Text {...typoVariant.body1} style={{ paddingInlineStart: 8 }}>
+            موقعیت
+          </Text>
 
-        <PopoverRoot placeholder='زیردسته بندی' disabled={!Boolean(subCategory)}>
-          <CheckboxGroup isRow={false} items={serializeSubCategoriesData(subCategory)} store='arrayCatIds' />
-        </PopoverRoot>
+          <Controller
+            name='parentCategoryId'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                label='دسته بندی اصلی'
+                placeholder='دسته بندی اصلی'
+                selectedValue={Boolean(field.value)}
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {categories.map(item => (
+                  <SelectItem key={item.id} value={String(item.id)}>
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+
+          <PopoverRoot placeholder='زیردسته بندی' disabled={!Boolean(subCategory)}>
+            <CheckboxGroup isRow={false} items={serializeSubCategoriesData(subCategory)} store='arrayCatIds' />
+          </PopoverRoot>
+        </Grid>
         {/*****
          * Status Types
          * _______________________________________________________________________________
          *****/}
-        <Controller
-          name='is_published'
-          control={control}
-          render={({ field }) => (
-            <SelectRoot
-              {...field}
-              placeholder='انتشار'
-              lable='انتشار'
-              value={String(field.value)}
-              onValueChange={val => {
-                field.onChange(val);
-              }}
-            >
-              {isPublishedOptions.map(item => (
-                <SelectItem key={item.id} value={String(item.value)}>
-                  {item.key}
-                </SelectItem>
-              ))}
-            </SelectRoot>
-          )}
-        />
-        <Controller
-          name='status'
-          control={control}
-          render={({ field }) => (
-            <SelectRoot
-              {...field}
-              placeholder='وضعیت'
-              value={String(field.value)}
-              onValueChange={val => {
-                field.onChange(val);
-              }}
-            >
-              {StatusFilterOption.map(item => (
-                <SelectItem key={item.id} value={String(item.value)}>
-                  {item.key}
-                </SelectItem>
-              ))}
-            </SelectRoot>
-          )}
-        />
-        <Controller
-          name='base'
-          control={control}
-          render={({ field }) => (
-            <SelectRoot
-              {...field}
-              placeholder='اطلاعات اولیه'
-              value={String(field.value)}
-              onValueChange={val => {
-                field.onChange(val);
-              }}
-            >
-              {booleanFilterOptions.map(item => (
-                <SelectItem key={item.id} value={String(item.value)}>
-                  {item.key}
-                </SelectItem>
-              ))}
-            </SelectRoot>
-          )}
-        />
-        <Controller
-          name='text'
-          control={control}
-          render={({ field }) => (
-            <SelectRoot
-              {...field}
-              placeholder='محتویات متنی'
-              value={String(field.value)}
-              onValueChange={val => {
-                field.onChange(val);
-              }}
-            >
-              {booleanFilterOptions.map(item => (
-                <SelectItem key={item.id} value={String(item.value)}>
-                  {item.key}
-                </SelectItem>
-              ))}
-            </SelectRoot>
-          )}
-        />
-        <Controller
-          name='related'
-          control={control}
-          render={({ field }) => (
-            <SelectRoot
-              {...field}
-              placeholder='نقاط مرتبط'
-              value={String(field.value)}
-              onValueChange={val => {
-                field.onChange(val);
-              }}
-            >
-              {booleanFilterOptions.map(item => (
-                <SelectItem key={item.id} value={String(item.value)}>
-                  {item.key}
-                </SelectItem>
-              ))}
-            </SelectRoot>
-          )}
-        />
-        <Controller
-          name='seo'
-          control={control}
-          render={({ field }) => (
-            <SelectRoot
-              {...field}
-              placeholder='سئو'
-              value={String(field.value)}
-              onValueChange={val => {
-                field.onChange(val);
-              }}
-            >
-              {booleanFilterOptions.map(item => (
-                <SelectItem key={item.id} value={String(item.value)}>
-                  {item.key}
-                </SelectItem>
-              ))}
-            </SelectRoot>
-          )}
-        />
-        <Controller
-          name='mainPic'
-          control={control}
-          render={({ field }) => (
-            <SelectRoot
-              {...field}
-              placeholder='تصویر اصلی'
-              value={String(field.value)}
-              onValueChange={val => {
-                field.onChange(val);
-              }}
-            >
-              {booleanFilterOptions.map(item => (
-                <SelectItem key={item.id} value={String(item.value)}>
-                  {item.key}
-                </SelectItem>
-              ))}
-            </SelectRoot>
-          )}
-        />
+        <Grid gapY={'4'}>
+          <Text {...typoVariant.body1} style={{ paddingInlineStart: 8 }}>
+            وضعیت
+          </Text>
+          <Controller
+            name='is_published'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                label='انتشار'
+                placeholder='انتشار'
+                selectedValue={Boolean(field.value)}
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {isPublishedOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='status'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                label='وضعیت'
+                placeholder='وضعیت'
+                selectedValue={Boolean(field.value)}
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {StatusFilterOption.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='base'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                label='اطلاعات اولیه'
+                placeholder='اطلاعات اولیه'
+                selectedValue={Boolean(field.value)}
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {booleanFilterOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='text'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                label='محتویات متنی'
+                placeholder='محتویات متنی'
+                selectedValue={Boolean(field.value)}
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {booleanFilterOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='related'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                label='نقاط مرتبط'
+                placeholder='نقاط مرتبط'
+                selectedValue={Boolean(field.value)}
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {booleanFilterOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='seo'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                label='سئو'
+                placeholder='سئو'
+                selectedValue={Boolean(field.value)}
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {booleanFilterOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+          <Controller
+            name='mainPic'
+            control={control}
+            render={({ field }) => (
+              <SelectRoot
+                {...field}
+                label='تصویر اصلی'
+                placeholder='تصویر اصلی'
+                selectedValue={Boolean(field.value)}
+                value={String(field.value)}
+                onValueChange={val => {
+                  field.onChange(val);
+                }}
+              >
+                {booleanFilterOptions.map(item => (
+                  <SelectItem key={item.id} value={String(item.value)}>
+                    {item.key}
+                  </SelectItem>
+                ))}
+              </SelectRoot>
+            )}
+          />
+        </Grid>
       </Grid>
       <ModalAction submitButtonText='اعمال فیلتر ها' closeButtonText='حذف فیلتر ها' onSubmit={() => addFilter()} onCloseButton={() => removeFilter()} />
     </>

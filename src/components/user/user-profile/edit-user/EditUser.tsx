@@ -53,7 +53,6 @@ const EditUser = ({ onClose, userId, data }: Props) => {
     },
     onError: err => {
       console.log(err);
-      console.log('NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
     },
   });
 
@@ -72,15 +71,17 @@ const EditUser = ({ onClose, userId, data }: Props) => {
         </Box>
       </Flex>
       <Grid columns={'2'} gap={'5'} px={'5'}>
-        <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='نام' />} />
-        <Controller name='last_name' control={control} render={({ field }) => <TextField {...field} placeholder='نام خانوادگی' />} />
+        <Controller name='name' control={control} render={({ field }) => <TextField {...field} label='نام' placeholder='نام' selectedValue={Boolean(field.value)} />} />
+        <Controller name='last_name' control={control} render={({ field }) => <TextField {...field} label='نام خانوادگی' placeholder='نام خانوادگی' selectedValue={Boolean(field.value)} />} />
         <Controller
           name='gender'
           control={control}
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='جنسیت'
               placeholder='جنسیت'
+              selectedValue={Boolean(field.value)}
               size={'3'}
               value={String(field.value)}
               onValueChange={val => {
@@ -101,7 +102,9 @@ const EditUser = ({ onClose, userId, data }: Props) => {
           render={item => (
             <CustomDatePicker
               inputMode='none'
+              label='تاریخ تولد'
               placeholder='تاریخ تولد'
+              selectedValue={Boolean(item.field.value)}
               value={item.field.value as any}
               onChangeValue={(val: any) => {
                 setValue('birthday', Number(new Date(val)));
@@ -110,8 +113,8 @@ const EditUser = ({ onClose, userId, data }: Props) => {
             />
           )}
         />
-        <Controller name='mobile' control={control} render={({ field }) => <TextField disabled {...field} placeholder='شماره تماس' />} />
-        <Controller name='email' control={control} render={({ field }) => <TextField {...field} placeholder='ایمیل' />} />
+        <Controller name='mobile' control={control} render={({ field }) => <TextField disabled {...field} label='شماره تماس' placeholder='شماره تماس' selectedValue={Boolean(field.value)} />} />
+        <Controller name='email' control={control} render={({ field }) => <TextField {...field} label='ایمیل' placeholder='ایمیل' selectedValue={Boolean(field.value)} />} />
       </Grid>
       <ModalAction
         submitButtonText='ثبت تغییرات'

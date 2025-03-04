@@ -98,6 +98,8 @@ const VerificationCode = () => {
           </Flex>
           <Flex direction={'column'} gap={'10px'}>
             <TextField
+              label='کد تایید'
+              selectedValue={Boolean(watch('verificationCode'))}
               type='number'
               errorText={errors.verificationCode?.message}
               autoFocus

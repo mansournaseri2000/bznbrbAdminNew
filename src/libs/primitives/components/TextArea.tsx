@@ -20,17 +20,23 @@ import { Grid, Text } from '../index';
  * _______________________________________________________________________________
  */
 type TextAreaComponentProps = {
-  title?: string;
+  label?: string;
+  selectedValue?: boolean;
   errorText?: string;
   placeholder: string;
 } & React.ComponentPropsWithoutRef<typeof RadixTextArea>;
 
-const TextArea = forwardRef<HTMLTextAreaElement, TextAreaComponentProps>(({ placeholder, errorText, title, ...rest }, ref) => {
+const TextArea = forwardRef<HTMLTextAreaElement, TextAreaComponentProps>(({ placeholder, errorText, label, selectedValue, ...rest }, ref) => {
   return (
     <Grid pb={'10px'} width={'100%'} position={'relative'}>
-      <Text style={{ paddingRight: '10px' }} {...typoVariant.body1}>
-        {title}
-      </Text>
+      {selectedValue && (
+        <Text
+          style={{ paddingInline: '8px', color: colorPalette.gray[10], position: 'absolute', top: '-10px', right: 12, backgroundColor: colorPalette.gray[1], borderRadius: 4 }}
+          {...typoVariant.body3}
+        >
+          {label}
+        </Text>
+      )}
       <StyledTextAreaRoot size={'3'} ref={ref} {...rest} placeholder={placeholder}></StyledTextAreaRoot>
       {errorText && <ErrorText text={errorText} />}
     </Grid>
@@ -45,7 +51,6 @@ const StyledTextAreaRoot = styled(RadixTextArea)`
   width: -webkit-fill-available;
   border: 1px solid ${colorPalette.gray[3]};
   border-radius: 8px;
-  /* min-height: 144px; */
   background-color: ${colorPalette.gray[1]};
 
   &.rt-TextAreaRoot:where(.rt-variant-surface) {
@@ -65,6 +70,7 @@ const StyledTextAreaRoot = styled(RadixTextArea)`
   }
 
   & .rt-TextAreaInput {
+    padding-block-start: 12px;
     &::placeholder {
       font-size: 12px;
     }

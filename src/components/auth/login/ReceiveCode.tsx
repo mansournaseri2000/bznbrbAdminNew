@@ -81,7 +81,9 @@ const ReceiveCode = () => {
             </Text>
             <Flex width={'100%'} direction={'column'} gap={'12px'}>
               <TextField
+                label='شماره تماس'
                 type='number'
+                selectedValue={Boolean(watch('mobileNumber'))}
                 errorText={errors.mobileNumber?.message}
                 autoFocus
                 id='mobileNumber'

@@ -19,20 +19,26 @@ import { Grid, Text } from '../index';
 type color = 'PINK' | 'BLACK' | 'BLUE';
 
 type TextFieldComponentProps = {
-  title?: string;
+  label?: string;
   errorText?: string;
   error?: boolean;
   placeholder: string;
   icon?: ReactNode; // Dynamic icon prop
   colorVariant?: color;
+  selectedValue?: boolean;
 } & React.ComponentPropsWithoutRef<typeof RadixTextField.Root>;
 
-const TextFieldComponent = forwardRef<HTMLInputElement, TextFieldComponentProps>(({ colorVariant = 'BLUE', placeholder, icon, errorText, title, error = false, ...rest }, ref) => {
+const TextFieldComponent = forwardRef<HTMLInputElement, TextFieldComponentProps>(({ colorVariant = 'BLUE', placeholder, icon, errorText, label, selectedValue, error = false, ...rest }, ref) => {
   return (
     <Grid pb={'10px'} width={'100%'} position={'relative'}>
-      <Text style={{ paddingRight: '10px' }} {...typoVariant.body1}>
-        {title}
-      </Text>
+      {selectedValue && (
+        <Text
+          style={{ paddingInline: '8px', color: colorPalette.gray[10], position: 'absolute', top: '-10px', right: 12, backgroundColor: colorPalette.gray[1], borderRadius: 4 }}
+          {...typoVariant.body3}
+        >
+          {label}
+        </Text>
+      )}
       <Root colorVariant={colorVariant} size={'3'} error={error} ref={ref} {...rest} placeholder={placeholder}>
         {icon && <RadixTextField.Slot>{icon}</RadixTextField.Slot>}
       </Root>

@@ -52,6 +52,11 @@ const AddComment = () => {
       }
     },
   });
+  /* 
+    ****
+    Services
+    ****_____________________________________________________________________________
+   */
   return (
     <>
       <Flex width={'100%'} justify={'center'} py={'79px'} align={'center'} style={{ backgroundColor: colorPalette.gray[2], border: `2px dashed ${colorPalette.blue[8]}`, borderRadius: 8 }}>
@@ -62,11 +67,20 @@ const AddComment = () => {
           </Flex>
         </Button>
       </Flex>
+      {/* 
+        ****
+        Modal
+        ****_____________________________________________________________________________
+      */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader handleClose={() => setIsOpen(false)} title='ثبت نظر برتر' />
         <Flex direction={'column'} gap={'14px'} p={'5'}>
-          <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان نقطه' style={{ width: '50%' }} />} />
-          <Controller name='content' control={control} render={({ field }) => <TextArea {...field} placeholder='متن نظر' rows={5} />} />
+          <Controller
+            name='name'
+            control={control}
+            render={({ field }) => <TextField {...field} label='عنوان نقطه' placeholder='عنوان نقطه' selectedValue={Boolean(field.value)} style={{ width: '50%' }} />}
+          />
+          <Controller name='content' control={control} render={({ field }) => <TextArea {...field} label='متن نظر' placeholder='متن نظر' selectedValue={Boolean(field.value)} rows={5} />} />
         </Flex>
         <ModalAction
           submitButtonText='ثبت نظر'

@@ -16,13 +16,14 @@ import { typoVariant } from '@/theme/typo-variants';
 
 type SelectCompnentProps = React.ComponentProps<typeof Select.Root> & {
   errorText?: string;
-  lable?: string;
+  label?: string;
   placeholder: string;
   style?: React.CSSProperties;
+  selectedValue?: boolean;
 };
 
 export const SelectRoot = forwardRef<React.ElementRef<typeof Select.Root>, SelectCompnentProps>(
-  ({ placeholder, errorText, lable, style, ...props }: SelectCompnentProps | any, forwardedRef: ForwardedRef<React.ElementRef<typeof Select.Root>>) => {
+  ({ placeholder, errorText, label, style, selectedValue, ...props }: SelectCompnentProps | any, forwardedRef: ForwardedRef<React.ElementRef<typeof Select.Root>>) => {
     /**
      * const and variables
      * _______________________________________________________________________________
@@ -34,15 +35,17 @@ export const SelectRoot = forwardRef<React.ElementRef<typeof Select.Root>, Selec
      */
     return (
       <Root {...props} gap={'4px'} width={'100%'} direction={'column'} position={'relative'}>
-        {/* <Text
-          style={{ paddingInline: '8px', color: colorPalette.gray[10], position: 'absolute', top: '-10px', right: 12, backgroundColor: colorPalette.gray[1], borderRadius: 4 }}
-          {...typoVariant.body3}
-        >
+        {selectedValue && (
+          <Text
+            style={{ paddingInline: '8px', color: colorPalette.gray[10], position: 'absolute', top: '-10px', right: 12, backgroundColor: colorPalette.gray[1], borderRadius: 4 }}
+            {...typoVariant.body3}
+          >
+            {label}
+          </Text>
+        )}
+        {/* <Text style={{ paddingInline: '8px', color: colorPalette.gray[12] }} {...typoVariant.body1}>
           {lable}
         </Text> */}
-        <Text style={{ paddingInline: '8px', color: colorPalette.gray[12] }} {...typoVariant.body1}>
-          {lable}
-        </Text>
         <Select.Root ref={forwardedRef} size={'3'} {...props}>
           <Select.Trigger placeholder={placeholder} />
           <Select.Content position='popper' style={{ maxHeight: '200px' }}>

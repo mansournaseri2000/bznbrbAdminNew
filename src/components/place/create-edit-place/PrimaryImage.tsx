@@ -173,8 +173,6 @@ const PrimaryImage = ({ picture, constant, placeData }: Props) => {
     }
   }, [watch('cityID'), watch('provinceId')]);
 
-  
-
   return (
     <>
       {!picture ? (
@@ -322,13 +320,15 @@ const PrimaryImage = ({ picture, constant, placeData }: Props) => {
                     render={({ field }) => (
                       <SelectRoot
                         {...field}
+                        label='استان'
+                        placeholder={'استان'}
+                        selectedValue={Boolean(field.value)}
                         value={String(watch('provinceId'))}
                         onValueChange={val => {
                           field.onChange(val);
                           setValue('cityID', '');
                           setValue('townId', '');
                         }}
-                        placeholder={'استان'}
                       >
                         {constant.provinces.map((item: any) => {
                           return (
@@ -346,13 +346,15 @@ const PrimaryImage = ({ picture, constant, placeData }: Props) => {
                     render={({ field }) => (
                       <SelectRoot
                         {...field}
+                        label='شهرستان'
+                        placeholder={'شهرستان'}
+                        selectedValue={Boolean(field.value)}
                         disabled={!Boolean(watch('provinceId'))}
                         value={String(watch('cityID'))}
                         onValueChange={val => {
                           field.onChange(val);
                           setValue('townId', '');
                         }}
-                        placeholder={'شهرستان'}
                       >
                         {city?.map((item: any) => {
                           return (
@@ -370,12 +372,14 @@ const PrimaryImage = ({ picture, constant, placeData }: Props) => {
                     render={({ field }) => (
                       <SelectRoot
                         {...field}
+                        label='شهر'
+                        placeholder={'شهر'}
+                        selectedValue={Boolean(field.value)}
                         disabled={!Boolean(watch('provinceId')) || !Boolean(watch('cityID'))}
                         value={String(watch('townId'))}
                         onValueChange={val => {
                           field.onChange(val);
                         }}
-                        placeholder={'شهر'}
                       >
                         {town?.map((item: any) => {
                           return (
@@ -388,9 +392,13 @@ const PrimaryImage = ({ picture, constant, placeData }: Props) => {
                     )}
                   />
                 </Grid>
-                <Controller name='alt' control={control} render={({ field }) => <TextField {...field} placeholder='متن جایگزین' />} />
-                <Controller name='description' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات تصویر' rows={6} />} />
-                <Controller name='brief' control={control} render={({ field }) => <TextArea {...field} placeholder='شزح مختصر' rows={6} />} />
+                <Controller name='alt' control={control} render={({ field }) => <TextField {...field} label='متن جایگزین' placeholder='متن جایگزین' selectedValue={Boolean(field.value)} />} />
+                <Controller
+                  name='description'
+                  control={control}
+                  render={({ field }) => <TextArea {...field} label='توضیحات تصویر' placeholder='توضیحات تصویر' selectedValue={Boolean(field.value)} rows={6} />}
+                />
+                <Controller name='brief' control={control} render={({ field }) => <TextArea {...field} label='شرح مختصر' placeholder='شرح مختصر' selectedValue={Boolean(field.value)} rows={6} />} />
               </>
             )}
           </Grid>

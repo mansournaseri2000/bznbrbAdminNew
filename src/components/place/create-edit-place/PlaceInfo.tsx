@@ -35,7 +35,11 @@ const PlaceInfo = ({ categoris }: Props) => {
    */
   return (
     <Grid height={'max-content'} gap={'16px'}>
-      <Controller name='name' control={control} render={({ field }) => <TextField {...field} placeholder='نام عنوان' aria-label='textFiled' />} />
+      <Controller
+        name='name'
+        control={control}
+        render={({ field }) => <TextField {...field} label='نام عنوان' placeholder='نام عنوان' selectedValue={Boolean(field.value)} aria-label='textFiled' />}
+      />
       <Flex gap={'20px'}>
         <Controller
           name='category_id'
@@ -43,7 +47,9 @@ const PlaceInfo = ({ categoris }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='دسته بندی'
               placeholder={'دسته بندی'}
+              selectedValue={Boolean(field.value)}
               value={String(categoryId)}
               onValueChange={val => {
                 console.log(field.value, 'category_id');
@@ -68,7 +74,9 @@ const PlaceInfo = ({ categoris }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='زیر دسته بندی'
               placeholder={'زیر دسته بندی'}
+              selectedValue={Boolean(field.value)}
               value={String(subCategoryId)}
               disabled={!Boolean(categoryId)}
               onValueChange={val => {
@@ -88,9 +96,21 @@ const PlaceInfo = ({ categoris }: Props) => {
           )}
         />
       </Flex>
-      <Controller name='slug' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان یکتا' aria-label='textFiled' />} />
-      <Controller name='basicInfoDescription' control={control} render={({ field }) => <TextArea {...field} placeholder='توضیحات تکمیلی' aria-label='TextArea' rows={6} />} />
-      <Controller name='basicInfosummary' control={control} render={({ field }) => <TextArea {...field} placeholder='خلاصه توضیحات' aria-label='TextArea' rows={6} />} />
+      <Controller
+        name='slug'
+        control={control}
+        render={({ field }) => <TextField {...field} label='عنوان یکتا' placeholder='عنوان یکتا' selectedValue={Boolean(field.value)} aria-label='textFiled' />}
+      />
+      <Controller
+        name='basicInfoDescription'
+        control={control}
+        render={({ field }) => <TextArea {...field} label='توضیحات تکمیلی' placeholder='توضیحات تکمیلی' selectedValue={Boolean(field.value)} aria-label='TextArea' rows={6} />}
+      />
+      <Controller
+        name='basicInfosummary'
+        control={control}
+        render={({ field }) => <TextArea {...field} label='خلاصه توضیحات' placeholder='خلاصه توضیحات' selectedValue={Boolean(field.value)} aria-label='TextArea' rows={6} />}
+      />
     </Grid>
   );
 };

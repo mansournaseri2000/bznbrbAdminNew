@@ -117,10 +117,20 @@ const DataManagement = () => {
       <Grid width={'100%'} gapY={'5'}>
         <SimpleWrapper2 hero='اطلاعات' type='changeAble'>
           <Grid width={'100%'} gapY={'14px'}>
-            <Controller name='titleOfDetail' control={control} render={({ field }) => <TextField {...field} placeholder='عنوان' />} />
-            <Controller name='famousPerson' control={control} render={({ field }) => <TextField {...field} placeholder='شخصیت برجسته' />} />
-            <Controller name='infoDescription' control={control} render={({ field }) => <TextField {...field} placeholder='متن صفحه استان' />} />
-            <Button size={'4'} variant='ghost' style={{ width: 'fit-content' }} onClick={() => setModalState({ isOpen: true, key: 'add' })} disabled={provinceAreData?.AreaDetails.length === 3}>
+            <Controller name='titleOfDetail' control={control} render={({ field }) => <TextField {...field} label='عنوان' placeholder='عنوان' selectedValue={Boolean(field.value)} />} />
+            <Controller name='famousPerson' control={control} render={({ field }) => <TextField {...field} label='شخصیت برجسته' placeholder='شخصیت برجسته' selectedValue={Boolean(field.value)} />} />
+            <Controller
+              name='infoDescription'
+              control={control}
+              render={({ field }) => <TextField {...field} label='متن صفحه استان' placeholder='متن صفحه استان' selectedValue={Boolean(field.value)} />}
+            />
+            <Button
+              size={'4'}
+              variant='ghost'
+              style={{ width: 'fit-content', marginBlockEnd: 10 }}
+              onClick={() => setModalState({ isOpen: true, key: 'add' })}
+              disabled={provinceAreData?.AreaDetails.length === 3}
+            >
               <Flex align={'center'} gap={'2'}>
                 <PlusIcon width={16} height={16} style={{ color: colorPalette.blue[10] }} />
                 <Text {...typoVariant.body1}> افزودن جاذبه</Text>
@@ -135,12 +145,12 @@ const DataManagement = () => {
                   <Controller
                     name={`areaDetails.${index}.titleItem`}
                     control={control}
-                    render={({ field }) => <TextField {...field} placeholder='عنوان جاذبه' defaultValue={item.titleItem} readOnly />}
+                    render={({ field }) => <TextField {...field} label='عنوان جاذبه' placeholder='عنوان جاذبه' defaultValue={item.titleItem} selectedValue={Boolean(field.value)} readOnly />}
                   />
                   <Controller
                     name={`areaDetails.${index}.descriptionItem`}
                     control={control}
-                    render={({ field }) => <TextField {...field} placeholder='توضیح جاذبه' defaultValue={item.descriptionItem} readOnly />}
+                    render={({ field }) => <TextField {...field} label='توضیح جاذبه' placeholder='توضیح جاذبه' selectedValue={Boolean(field.value)} defaultValue={item.descriptionItem} readOnly />}
                   />
                   <IconButton
                     size={'3'}

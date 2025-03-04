@@ -73,12 +73,14 @@ const GeographicalLocationRoot = ({ province, constant }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='استان'
+              placeholder={'استان'}
+              selectedValue={Boolean(field.value)}
               value={String(provinceId)}
               onValueChange={val => {
                 field.onChange(val);
                 setValue('cityID', '');
               }}
-              placeholder={'استان'}
             >
               {province.map(item => {
                 return (
@@ -96,12 +98,14 @@ const GeographicalLocationRoot = ({ province, constant }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='شهرستان'
+              placeholder={'شهرستان'}
+              selectedValue={Boolean(field.value)}
               disabled={!Boolean(provinceId)}
               value={String(cityID)}
               onValueChange={val => {
                 field.onChange(val);
               }}
-              placeholder={'شهرستان'}
             >
               {city?.map(item => {
                 return (
@@ -119,12 +123,14 @@ const GeographicalLocationRoot = ({ province, constant }: Props) => {
           render={({ field }) => (
             <SelectRoot
               {...field}
+              label='شهر'
+              placeholder={'شهر'}
+              selectedValue={Boolean(field.value)}
               disabled={!Boolean(watch('provinceId')) || !Boolean(watch('cityID'))}
               value={String(watch('townId'))}
               onValueChange={val => {
                 field.onChange(val);
               }}
-              placeholder={'شهر'}
             >
               {town?.map((item: any) => {
                 return (
@@ -138,14 +144,30 @@ const GeographicalLocationRoot = ({ province, constant }: Props) => {
         />
       </Grid>
       <Grid columns={'3'} gap={'20px'}>
-        <Controller name='tell' control={control} render={({ field }) => <TextField {...field} placeholder='تلفن' aria-label='textFiled' />} />
-        <Controller name='website' control={control} render={({ field }) => <TextField {...field} placeholder='وب سایت' aria-label='textFiled' />} />
-        <Controller name='email' control={control} render={({ field }) => <TextField {...field} placeholder='ایمیل' aria-label='textFiled' />} />
+        <Controller name='tell' control={control} render={({ field }) => <TextField {...field} label='تلفن' placeholder='تلفن' selectedValue={Boolean(field.value)} aria-label='textFiled' />} />
+        <Controller
+          name='website'
+          control={control}
+          render={({ field }) => <TextField {...field} label='وب سایت' placeholder='وب سایت' selectedValue={Boolean(field.value)} aria-label='textFiled' />}
+        />
+        <Controller name='email' control={control} render={({ field }) => <TextField {...field} label='ایمیل' placeholder='ایمیل' selectedValue={Boolean(field.value)} aria-label='textFiled' />} />
       </Grid>
-      <Controller name='address' control={control} render={({ field }) => <TextField {...field} placeholder='آدرس متنی' aria-label='textFiled' />} />
+      <Controller
+        name='address'
+        control={control}
+        render={({ field }) => <TextField {...field} label='آدرس متنی' placeholder='آدرس متنی' selectedValue={Boolean(field.value)} aria-label='textFiled' />}
+      />
       <Grid gap={'24px'} columns={'2'}>
-        <Controller name='lng' control={control} render={({ field }) => <TextField type='number' {...field} placeholder='طول جغرافیایی' aria-label='textFiled' />} />
-        <Controller name='lat' control={control} render={({ field }) => <TextField {...field} type='number' placeholder='عرض جغرافیایی' aria-label='textFiled' />} />
+        <Controller
+          name='lng'
+          control={control}
+          render={({ field }) => <TextField type='number' {...field} label='طول جغرافیایی' placeholder='طول جغرافیایی' selectedValue={Boolean(field.value)} aria-label='textFiled' />}
+        />
+        <Controller
+          name='lat'
+          control={control}
+          render={({ field }) => <TextField {...field} type='number' label='عرض جغرافیایی' placeholder='عرض جغرافیایی' selectedValue={Boolean(field.value)} aria-label='textFiled' />}
+        />
       </Grid>
       <PlaceMap location={Boolean(lat) || Boolean(lng) ? [Number(lat), Number(lng)] : [0, 0]} />
     </Grid>

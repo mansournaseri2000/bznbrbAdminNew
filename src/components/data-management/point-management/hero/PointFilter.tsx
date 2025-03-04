@@ -92,7 +92,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
          * Time period
          * _______________________________________________________________________________
          *****/}
-        <Grid gapY={'2'}>
+        <Grid gapY={'4'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             بازه زمانی
           </Text>
@@ -103,6 +103,8 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
               render={item => (
                 <CustomDatePicker
                   {...item}
+                  label='از تاریخ'
+                  selectedValue={Boolean(item.field.value)}
                   inputMode='none'
                   placeholder='از تاریخ'
                   value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
@@ -122,6 +124,8 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
                 <CustomDatePicker
                   {...item}
                   inputMode='none'
+                  label='تا تاریخ'
+                  selectedValue={Boolean(item.field.value)}
                   placeholder='تا تاریخ'
                   value={Boolean(item.field.value) ? new Date(item.field.value).toISOString() : ''}
                   minDate={watch('startDate')}
@@ -141,7 +145,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
         Point position
        * _______________________________________________________________________________
        *****/}
-        <Grid gapY={'2'}>
+        <Grid gapY={'4'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             موقعیت نقطه
           </Text>
@@ -151,6 +155,8 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='استان'
+                selectedValue={Boolean(field.value)}
                 placeholder='استان'
                 value={String(field.value)}
                 onValueChange={val => {
@@ -173,6 +179,8 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='شهرستان'
+                selectedValue={Boolean(field.value)}
                 placeholder='شهرستان'
                 disabled={!Boolean(city)}
                 value={String(field.value)}
@@ -195,14 +203,15 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
          * Point Type
          * _______________________________________________________________________________
          *****/}
-        <PopoverRoot lable='نوع نقطه' placeholder='نوع نقطه'>
+
+        <PopoverRoot label='نوع نقطه' placeholder='نوع نقطه'>
           <CheckboxGroup isRow={false} items={serializeSubCategoriesData(PlaceType)} store='arrayTypes' />
         </PopoverRoot>
         {/*****
          * Category Type
          * _______________________________________________________________________________
          *****/}
-        <Grid gapY={'2'}>
+        <Grid gapY={'4'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             دسته بندی
           </Text>
@@ -212,6 +221,8 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='دسته بندی'
+                selectedValue={Boolean(field.value)}
                 placeholder='دسته بندی اصلی'
                 value={String(field.value)}
                 onValueChange={val => {
@@ -229,7 +240,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             )}
           />
 
-          <PopoverRoot placeholder='زیردسته بندی' disabled={!Boolean(subCategory)}>
+          <PopoverRoot placeholder='زیردسته بندی' disabled={!Boolean(subCategory)} style={{ marginBlockStart: '-8px' }}>
             <CheckboxGroup isRow={false} items={serializeSubCategoriesData(subCategory)} store='arrayCatIds' />
           </PopoverRoot>
         </Grid>
@@ -237,7 +248,7 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
          * Status Types
          * _______________________________________________________________________________
          *****/}
-        <Grid gapY={'2'}>
+        <Grid gapY={'4'}>
           <Text {...typoVariant.body1} style={{ color: colorPalette.gray[12] }}>
             وضعیت
           </Text>
@@ -247,7 +258,9 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='انتشار'
                 placeholder='انتشار'
+                selectedValue={Boolean(field.value)}
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
@@ -268,7 +281,9 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='وضعیت'
                 placeholder='وضعیت'
+                selectedValue={Boolean(field.value)}
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
@@ -289,7 +304,9 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='تصویر اصلی'
                 placeholder='تصویر اصلی'
+                selectedValue={Boolean(field.value)}
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
@@ -310,7 +327,9 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='تصویر گالری'
                 placeholder='تصویر گالری'
+                selectedValue={Boolean(field.value)}
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
@@ -331,7 +350,9 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='اطلاعات'
                 placeholder='اطلاعات'
+                selectedValue={Boolean(field.value)}
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
@@ -352,7 +373,9 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='موقعیت جغرافیایی'
                 placeholder='موقعیت جغرافیایی'
+                selectedValue={Boolean(field.value)}
                 value={String(field.value)}
                 onValueChange={val => {
                   field.onChange(val);
@@ -373,6 +396,8 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='توضیحات'
+                selectedValue={Boolean(field.value)}
                 placeholder='توضیحات'
                 value={String(field.value)}
                 onValueChange={val => {
@@ -394,6 +419,8 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='امکانات'
+                selectedValue={Boolean(field.value)}
                 placeholder='امکانات'
                 value={String(field.value)}
                 onValueChange={val => {
@@ -415,6 +442,8 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='تحلیل'
+                selectedValue={Boolean(field.value)}
                 placeholder='تحلیل'
                 value={String(field.value)}
                 onValueChange={val => {
@@ -436,6 +465,8 @@ const PointFilter = ({ province, categories, PlaceType, setIsOpen }: Props) => {
             render={({ field }) => (
               <SelectRoot
                 {...field}
+                label='سئو'
+                selectedValue={Boolean(field.value)}
                 placeholder='سئو'
                 value={String(field.value)}
                 onValueChange={val => {
