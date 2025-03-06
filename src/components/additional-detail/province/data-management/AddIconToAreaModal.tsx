@@ -9,7 +9,7 @@ import ImagePicker2 from '@/libs/shared/ImagePicker2';
 import ItemWithUploader from '@/libs/shared/item-with-uploader/ItemWithUploader';
 import ModalAction from '@/libs/shared/ModalAction';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
-import Uploader from '@/libs/shared/uploader/Uploader';
+import UploaderCard from '@/libs/shared/uploader/UploaderCard';
 import { AreaDetail } from '@/types/additional-detail/additional-detail';
 
 type Props = {
@@ -40,10 +40,9 @@ const AddIconToAreaModal = ({ setIsOpen, data }: Props) => {
     },
   });
 
-  console.log(data,"data");
-  console.log(watch(),"dfsdafdf");
-  
-  
+  console.log(data, 'data');
+  console.log(watch(), 'dfsdafdf');
+
   /*
    *** JSX_________________________________________________________________________________________________________________________________________________________________
    */
@@ -54,7 +53,7 @@ const AddIconToAreaModal = ({ setIsOpen, data }: Props) => {
           <ItemWithUploader resetStore='isIcon' type='svg' localPath={`${watch('localIconPath')}`} filePath={data?.pathItem} isOrigin={watch('isIcon')} />
         ) : (
           <ImagePicker2 resetStore='isIcon' name='iconPath' localPath='localIconPath'>
-            <Uploader type='icon' />
+            <UploaderCard type='icon' />
           </ImagePicker2>
         )}
       </Flex>

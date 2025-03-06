@@ -6,6 +6,7 @@ import { Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 
 import { AuthProvider, ReactQueryProvider, StyledComponentsRegistry } from '@/libs/providers';
+import ProgressProvider from '@/libs/providers/ProgressProvider';
 import Toast from '@/libs/shared/toast/Toast';
 import { Yekan } from '@/theme/font.config';
 import '@/theme/globals.css';
@@ -13,7 +14,7 @@ import '@/theme/theme.config.css';
 
 export const metadata: Metadata = {
   icons: {
-    icon:'/favicon.ico'
+    icon: '/favicon.ico',
   },
   title: 'پنل بزنیم بیرون',
   description:
@@ -27,13 +28,14 @@ export default function Layout({
 }>) {
   return (
     <html className={Yekan.variable} lang='fa' dir='rtl'>
-      
       <body>
         <ReactQueryProvider>
           <StyledComponentsRegistry>
             <Theme radius='large' scaling='100%'>
               <Suspense>
-                <AuthProvider>{children}</AuthProvider>
+                <AuthProvider>
+                  <ProgressProvider>{children}</ProgressProvider>
+                </AuthProvider>
               </Suspense>
             </Theme>
             <Toast />

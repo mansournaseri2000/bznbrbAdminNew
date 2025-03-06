@@ -88,7 +88,7 @@ const AddComment = () => {
           onCloseButton={() => setIsOpen(false)}
           onSubmit={() => createCommentMutate()}
           isLoading={createCommentPending}
-          disabled={watch('name').length === 0 && watch('content').length === 0}
+          // disabled={watch('name').length === 0 && watch('content').length === 0}
         />
       </Modal>
     </>

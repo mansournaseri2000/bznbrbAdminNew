@@ -2,14 +2,14 @@ import React from 'react';
 
 import { useParams, useRouter } from 'next/navigation';
 
+import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 
 import { getCitiesList } from '@/api/advertizement';
 import { Flex, Grid } from '@/libs/primitives';
+import { ToastError } from '@/libs/shared/toast/Toast';
 
 import AdsManagmentListCard from '../AdsManagmentListCard';
-import { Spinner } from '@radix-ui/themes';
-import { ToastError } from '@/libs/shared/toast/Toast';
 
 const CitiesListRoot = () => {
   /**
@@ -24,7 +24,7 @@ const CitiesListRoot = () => {
    * services
    * _______________________________________________________________________________
    */
-  const { data,isLoading,isFetching,isError } = useQuery({ queryKey: ['cities-list'], queryFn: async () => await getCitiesList(Number(provinceId)) });
+  const { data, isLoading, isFetching, isError } = useQuery({ queryKey: ['cities-list'], queryFn: async () => await getCitiesList(Number(provinceId)) });
 
   /**
    * Hooks and Methods
@@ -36,19 +36,19 @@ const CitiesListRoot = () => {
     return '';
   };
 
-    /**
+  /**
    * Loading and Error
    * _______________________________________________________________________________
    */
-    if (isLoading || isFetching) {
-      return (
-        <Flex width={'100%'} height={'90vh'} justify={'center'} align={'center'}>
-          <Spinner style={{ scale: 2 }} />
-        </Flex>
-      );
-    }
-  
-    if (!data || isError) return ToastError('مشکلی پیش آمده است . لطفا مجددا تلاش کنید');
+  if (isLoading || isFetching) {
+    return (
+      <Flex width={'100%'} height={'90vh'} justify={'center'} align={'center'}>
+        <Spinner style={{ scale: 2 }} />
+      </Flex>
+    );
+  }
+
+  if (!data || isError) return ToastError('مشکلی پیش آمده است . لطفا مجددا تلاش کنید');
 
   /**
    * JSX
@@ -62,7 +62,7 @@ const CitiesListRoot = () => {
           type='other'
           lable={item.label}
           latestUpdatedAt={item.latestUpdatedAt}
-          space={item.space}
+          space={item.freeSpace}
           handleRedirectAdsManagment={() => router.push(handleRedirectAds(Number(item.key)))}
         />
       ))}

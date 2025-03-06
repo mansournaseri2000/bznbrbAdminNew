@@ -68,7 +68,7 @@ const ProvincesListRoot = () => {
           type='provinces'
           lable={item.label}
           latestUpdatedAt={item.latestUpdatedAt}
-          space={item.space}
+          space={item.freeSpace}
           handleRedirectAdsManagment={() => router.push(handleRedirectAds(Number(item.key)))}
           handleRedirectCities={() => router.push(handleRedirectCities(Number(item.key)))}
         />

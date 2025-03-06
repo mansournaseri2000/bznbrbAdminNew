@@ -11,7 +11,7 @@ const encodedCredentials = Buffer.from(credentials).toString('base64');
 // baseURL: 'https://uploader.darkube.app',
 
 export const AdminUploaderImage = axios.create({
-  baseURL: 'https://uploader.darkube.app',
+  baseURL: 'https://uploader.bezanimbiroon.ir',
   // baseURL: 'http://37.32.8.14:3005/v1/',
   headers: {
     'Content-Type': 'application/json',

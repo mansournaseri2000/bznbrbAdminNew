@@ -17,8 +17,7 @@ export default function AdvertizementTrips({ params }: { params: { slug: string[
    * Const and Variables
    * _______________________________________________________________________________
    */
-  // const isShowProvinceList = (Boolean(params.slug[2]) === false && Boolean(params.slug[1]) === false && params.slug[0] === 'planner_trips') || params.slug[0] === 'tours';
-  // const isShowProvinceListAds = (params.slug[2] !== 'cities' && params.slug[1] === 'provinces' && Boolean(params.slug[2]) === true && params.slug[0] === 'planner_trips') || params.slug[0] === 'tours';
+
   const isShowProvinceList = (params.slug[0] === 'planner_trips' && !params.slug[1] && !params.slug[2]) || (params.slug[0] === 'tours' && !params.slug[1] && !params.slug[2]);
 
   const isShowProvinceListAds =

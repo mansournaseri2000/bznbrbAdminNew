@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next-nprogress-bar';
 
 import { ColumnDef } from '@tanstack/react-table';
 
@@ -27,7 +27,7 @@ type PlansListProps = {
 };
 
 const PlansList = (props: PlansListProps) => {
-  const router = useRouter();
+  const { push } = useRouter();
   const columns: ColumnDef<PlansListDetail>[] = [
     {
       accessorKey: 'index',
@@ -104,7 +104,7 @@ const PlansList = (props: PlansListProps) => {
         const item = row.original;
         const handleClick = (e: React.MouseEvent) => {
           e.preventDefault();
-          router.push(`/plans/user-plan/${item.tripId}`);
+          push(`/plans/user-plan/${item.tripId}`);
         };
         return (
           <Flex width={'100%'} height={'100%'} align={'center'} justify={'center'}>

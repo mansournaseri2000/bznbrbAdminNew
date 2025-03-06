@@ -9,7 +9,7 @@ type Props = {
   type: 'pic' | 'icon';
 };
 
-const Uploader = ({ type }: Props) => {
+const UploaderCard = ({ type }: Props) => {
   return (
     <Flex
       width={'100%'}
@@ -39,4 +39,4 @@ const Uploader = ({ type }: Props) => {
   );
 };
 
-export default Uploader;
+export default UploaderCard;

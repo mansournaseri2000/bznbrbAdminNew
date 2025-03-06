@@ -65,7 +65,7 @@ const OtherListRoot = () => {
           type='other'
           lable={item.label}
           latestUpdatedAt={item.latestUpdatedAt}
-          space={item.space}
+          space={item.freeSpace}
           handleRedirectAdsManagment={() => router.push(handleRedirectAds(Number(item.key)))}
         />
       ))}
