@@ -60,6 +60,7 @@ const CitiesManagement = () => {
           </Flex>
         </Flex>
         <AccordionWrapper
+          isOpen
           hero='تبریز'
           withEdit
           onEdit={e => {

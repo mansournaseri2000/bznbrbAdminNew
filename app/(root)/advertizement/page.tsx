@@ -2,8 +2,7 @@
 
 import React from 'react';
 
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from '@bprogress/next';
 import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 

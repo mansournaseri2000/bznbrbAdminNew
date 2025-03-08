@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from '@bprogress/next';
+import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 
@@ -15,7 +15,6 @@ import { Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { ArticleSDetail } from '@/types/data-management/article';
-import { Spinner } from '@radix-ui/themes';
 
 interface ArticleDetail {
   title: string;

@@ -15,6 +15,12 @@ export const middleware = async (request: NextRequest) => {
   //   return NextResponse.redirect(new URL('/auth/login/receiveCode', request.url).toString());
   // }
 
+  const referer = request.headers.get('referer') || 'No Referer';
+  console.log('Referer:', referer); // Logs in Vercel / Server logs
+  console.log("test monitoring______________________________________________________________________________________");
+  
+
+  response.headers.set('X-Captured-Referer', referer);
   return response;
 };
 

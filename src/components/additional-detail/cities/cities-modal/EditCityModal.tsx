@@ -41,6 +41,8 @@ const EditCityModal = ({ setIsOpen, data }: Props) => {
   const { control, watch, setValue } = methods;
   const queryClient = useQueryClient();
 
+  console.log(data, 'EditCityModalEditCityModalEditCityModal');
+
   /**
    * Services
    * _______________________________________________________________________________

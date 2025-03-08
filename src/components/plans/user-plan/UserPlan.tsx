@@ -4,8 +4,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
+import { useRouter } from '@bprogress/next';
 import { Spinner } from '@radix-ui/themes';
 
 // import { useQuery } from '@tanstack/react-query';

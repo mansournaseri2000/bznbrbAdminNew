@@ -172,7 +172,7 @@ const PointDetailRoot = () => {
          *
          * _______________________________________________________________________________
          */}
-        <AccordionWrapper hero='اصلاح اطلاعات ارسال شده'>
+        <AccordionWrapper isOpen hero='اصلاح اطلاعات ارسال شده'>
           {improveContentData?.PlaceImproveContent.length !== 0 ? (
             <>
               {improveContentData?.PlaceImproveContent.map((item, index) => (
@@ -221,7 +221,7 @@ const PointDetailRoot = () => {
          * Routing Guide for send route
          * _______________________________________________________________________________
          */}
-        <AccordionWrapper hero='راهنمای مسیر ارسال شده'>
+        <AccordionWrapper isOpen hero='راهنمای مسیر ارسال شده'>
           {pointData?.PlaceTravelMethodSuggestions.length !== 0 ? (
             <Flex justify={'between'} gap={'20px'} pr={'8px'}>
               {pointData?.PlaceTravelMethodSuggestions.length !== 0 && <div style={{ height: 'auto', width: '1px', borderRight: '1px dashed #0000003c' }} />}

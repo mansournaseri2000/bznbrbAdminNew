@@ -3,8 +3,8 @@
 import React from 'react';
 
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
 
+import { useRouter } from '@bprogress/next';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { Box, Button, Flex, Text } from '@/libs/primitives';

@@ -3,8 +3,8 @@
 import { useState } from 'react';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
+import { useRouter } from '@bprogress/next';
 import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 

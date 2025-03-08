@@ -2,8 +2,7 @@
 
 import React from 'react';
 
-import { useRouter } from 'next-nprogress-bar';
-
+import { useRouter } from '@bprogress/next';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { Button, Flex, Text } from '@/libs/primitives';

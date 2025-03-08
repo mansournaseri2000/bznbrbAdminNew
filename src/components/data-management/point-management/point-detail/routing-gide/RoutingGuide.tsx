@@ -3,9 +3,9 @@
 import { useState } from 'react';
 
 import Image from 'next/image';
-// import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
+// import Image from 'next/image';
+import { useRouter } from '@bprogress/next';
 import styled from 'styled-components';
 import Cookies from 'universal-cookie';
 

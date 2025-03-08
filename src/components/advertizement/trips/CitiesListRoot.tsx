@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
+import { useRouter } from '@bprogress/next';
 import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 

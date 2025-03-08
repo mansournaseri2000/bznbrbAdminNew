@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
 
+import { useRouter } from '@bprogress/next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

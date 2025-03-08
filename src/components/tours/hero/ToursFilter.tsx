@@ -3,7 +3,7 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@bprogress/next';
 
 import { Flex, Grid, SelectItem, SelectRoot, Text } from '@/libs/primitives';
 // import CustomSearch from '@/libs/shared/custom-search/CustomSearch';

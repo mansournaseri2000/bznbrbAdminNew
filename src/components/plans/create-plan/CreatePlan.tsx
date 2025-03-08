@@ -3,8 +3,7 @@
 import React from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from '@bprogress/next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CaretDownIcon } from '@radix-ui/react-icons';
 import { Popover, Spinner } from '@radix-ui/themes';

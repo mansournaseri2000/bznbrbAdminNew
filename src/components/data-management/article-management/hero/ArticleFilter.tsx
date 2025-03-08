@@ -1,8 +1,7 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from '@bprogress/next';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { booleanFilterOptions, isPublishedOptions, StatusFilterOption } from '@/constants/data-management';

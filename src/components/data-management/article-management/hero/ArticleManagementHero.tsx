@@ -3,8 +3,9 @@
 import React, { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
+import { useRouter } from '@bprogress/next';
 import { useQuery } from '@tanstack/react-query';
 
 import { getAllPlacesConstants } from '@/api/place';

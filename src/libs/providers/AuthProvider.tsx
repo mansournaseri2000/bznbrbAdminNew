@@ -2,8 +2,7 @@
 
 import React, { createContext, ReactNode, useContext, useEffect, useReducer } from 'react';
 
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from '@bprogress/next';
 import Cookies from 'universal-cookie';
 
 // Define the User type

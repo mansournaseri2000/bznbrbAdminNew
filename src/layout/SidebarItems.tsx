@@ -45,7 +45,7 @@ const SidebarItems = (props: Props) => {
    */
   return (
     <Container>
-      <Link href={path && type === 'collapse' ? path : ''}>
+      <Link href={path && type === 'collapse' ? path : ''} data-disable-nprogress={true}>
         <Flex width={'100%'} minWidth={'50px'} gap={'2'} px={'4'} py={'11px'} align={'center'} style={{ backgroundColor: currentRoute ? colorPalette.blue[9] : 'transparent', borderRadius: 12 }}>
           <StyledIcon isActive={currentRoute as any}>
             <Icon />

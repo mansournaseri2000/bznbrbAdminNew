@@ -2,8 +2,7 @@
 
 import React from 'react';
 
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from '@bprogress/next';
 import styled from 'styled-components';
 
 import { Flex, IconButton, Text } from '@/libs/primitives';

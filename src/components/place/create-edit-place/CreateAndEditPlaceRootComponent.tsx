@@ -4,8 +4,8 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
+import { useRouter } from '@bprogress/next';
 import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -305,7 +305,7 @@ const CreateAndEditPlaceRootComponent = ({ placeConstant, status, placeID, place
           <AnalysisRoot
             constants={placeConstant}
             tripLimitations={placeConstant ? placeConstant.tripLimitations : []}
-            seasons={placeConstant ? seasons : [] as any}
+            seasons={placeConstant ? seasons : ([] as any)}
             tripDatas={placeConstant ? placeConstant.tripDatas : []}
             Categories={placeConstant?.categories ? placeConstant.categories : []}
           />

@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import imageCompression from 'browser-image-compression';
@@ -18,12 +19,14 @@ import { colorPalette } from '@/theme';
 type Props = {
   setIsOpen: React.Dispatch<React.SetStateAction<{ isOpen: boolean; key: 'edit-town' }>>;
   data: any;
+  cityID: number;
 };
 
-const EditTownModal = ({ setIsOpen, data }: Props) => {
+const EditTownModal = ({ setIsOpen, data, cityID }: Props) => {
   //   /*
   //    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
   //    */
+
   const methods = useForm({
     defaultValues: {
       imageFile: null,
@@ -39,6 +42,9 @@ const EditTownModal = ({ setIsOpen, data }: Props) => {
   });
   const { control, watch, setValue } = methods;
   const queryClient = useQueryClient();
+  const params = useParams();
+
+  console.log(data, 'datadatadata');
 
   /**
    * Services
@@ -47,11 +53,11 @@ const EditTownModal = ({ setIsOpen, data }: Props) => {
 
   // ******  image and svg uploader services  ******
 
-  const { mutate: uploadImageMutate, isSuccess: uploadImageSuccess } = useMutation({
+  const { mutate: uploadImageMutate, isIdle: uploadImageSuccess } = useMutation({
     mutationFn: async (body: TownUploaderParams) => await UploadImageForTown(body),
   });
 
-  const { mutate: uploadIconMutate, isSuccess: uploadIconSuccess } = useMutation({
+  const { mutate: uploadIconMutate, isIdle: uploadIconSuccess } = useMutation({
     mutationFn: async (body: TownUploaderParams) => await UploadIconForTown(body),
   });
 
@@ -70,6 +76,8 @@ const EditTownModal = ({ setIsOpen, data }: Props) => {
             position: 'picture',
             type: 'TOWN',
           });
+          queryClient.invalidateQueries({ queryKey: ['cities', params.slug[2]] });
+          queryClient.invalidateQueries({ queryKey: ['single-city', cityID] });
         }
 
         if (localIcon) {
@@ -79,6 +87,8 @@ const EditTownModal = ({ setIsOpen, data }: Props) => {
             position: 'vector',
             type: 'TOWN',
           });
+          queryClient.invalidateQueries({ queryKey: ['cities', params.slug[2]] });
+          queryClient.invalidateQueries({ queryKey: ['single-city'] });
         }
 
         ToastSuccess('شهرستان مورد نظر با موفقیت ویرایش شد');
@@ -133,8 +143,9 @@ const EditTownModal = ({ setIsOpen, data }: Props) => {
 
   useEffect(() => {
     if (uploadImageSuccess || uploadIconSuccess) {
-      queryClient.invalidateQueries({ queryKey: ['cities'] });
-      queryClient.invalidateQueries({ queryKey: ['single-city'] });
+      // queryClient.invalidateQueries({ queryKey: ['cities', data.id] });
+      // queryClient.invalidateQueries({ queryKey: ['single-city', data.id] });
+      console.log(uploadImageSuccess, uploadIconSuccess);
     }
   }, [uploadImageSuccess, uploadIconSuccess]);
   /**
@@ -177,7 +188,12 @@ const EditTownModal = ({ setIsOpen, data }: Props) => {
              _______________________________________________________________________________
              */
             <Box width={'160px'} height={'160px'} position={'relative'} style={{ border: `1px dashed ${colorPalette.blue[8]}`, borderRadius: 8 }}>
-              <Image src={watch('isResetPic') === false ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${watch('pic')}` : watch('localPic')} alt='' fill style={{ objectFit: 'cover', borderRadius: 8 }} />
+              <Image
+                src={watch('isResetPic') === false ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${watch('pic')}` : watch('isResetPic') && watch('localPic') !== 'NULL' && watch('localPic')}
+                alt=''
+                fill
+                style={{ objectFit: 'cover', borderRadius: 8 }}
+              />
               <Controller
                 name='pic'
                 control={control}
@@ -241,7 +257,7 @@ const EditTownModal = ({ setIsOpen, data }: Props) => {
               <Image
                 width={64}
                 height={64}
-                src={watch('isResetIcon') === false ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${watch('icon')}` : watch('localIcon')}
+                src={watch('isResetIcon') === false ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${watch('icon')}` : watch('isResetIcon') && watch('localIcon') !== 'NULL' && watch('localIcon')}
                 alt=''
                 style={{ objectFit: 'cover', borderRadius: 8 }}
               />
