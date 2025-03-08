@@ -2,8 +2,9 @@
 
 import React from 'react';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
+import { useRouter } from '@bprogress/next';
 import { Spinner } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 
@@ -68,7 +69,7 @@ const ProvincesListRoot = () => {
           type='provinces'
           lable={item.label}
           latestUpdatedAt={item.latestUpdatedAt}
-          space={item.space}
+          space={item.freeSpace}
           handleRedirectAdsManagment={() => router.push(handleRedirectAds(Number(item.key)))}
           handleRedirectCities={() => router.push(handleRedirectCities(Number(item.key)))}
         />

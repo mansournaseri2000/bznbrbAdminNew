@@ -63,7 +63,7 @@ const ImproveContentPoint = ({ id }: Props) => {
           {data?.PlaceImproveContent?.map((item, index) => (
             <ImproveContentCard
               key={index}
-              state={index}
+              index={index}
               {...(item as any)}
               type='point_detail'
               onDelete={() => {

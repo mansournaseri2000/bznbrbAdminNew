@@ -103,6 +103,7 @@ const FeatureItems = forwardRef<HTMLDivElement, FeatureItemsProps>((props, ref) 
     <>
       <Grid width={'100%'} gapY={'5'} ref={ref} onClick={onSelect}>
         <AccordionWrapper
+          isOpen
           hero={name}
           withEdit
           withDelete
@@ -134,7 +135,7 @@ const FeatureItems = forwardRef<HTMLDivElement, FeatureItemsProps>((props, ref) 
               ) : (
                 <>
                   {singleFeatureData?.features.map(item => (
-                    <ChipsItem type='feature' key={item.id} label={item.name} hasMedia={item.hasMedia} id={item.id} data={item} />
+                    <ChipsItem cityID={1} type='feature' key={item.id} label={item.name} hasMedia={item.hasMedia} id={item.id} data={item} />
                   ))}
                 </>
               )}

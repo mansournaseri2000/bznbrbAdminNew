@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@bprogress/next';
 
 import { Button, Flex, Text } from '@/libs/primitives';
 import { colorPalette } from '@/theme';

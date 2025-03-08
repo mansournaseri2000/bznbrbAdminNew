@@ -24,30 +24,75 @@ export const getCityListById = async (id: number) => {
   return res.data.data;
 };
 
+// export const createAd = async (params: CreateAdBody) => {
+//   const formData = new FormData();
+
+//   formData.append('type', params.type);
+//   formData.append('description', params.description);
+//   formData.append('page', params.page);
+//   formData.append('holder', params.holder);
+//   formData.append('alt', params.alt);
+
+//   formData.append('summery', params.summery);
+//   formData.append('file', params.file);
+//   formData.append('website', params.website);
+//   formData.append('socialMedia', params.socialMedia);
+//   formData.append('sponsor', params.sponsor);
+//   formData.append('provinceId', params.provinceId ? params.provinceId.toString() : '');
+//   formData.append('cityId', params.cityId ? params.cityId.toString() : '');
+//   formData.append('townId', params.townId ? params.townId.toString() : '');
+//   formData.append('categoryId', params.categoryId ? params.categoryId.toString() : '');
+
+//   const res = await AdminUploaderImage.post<ApiData<{ data: string }>>('admin/uploads/image', formData, {
+//     headers: {
+//       'Content-Type': 'multipart/form-data',
+//     },
+//   });
+//   return res.data;
+// };
+
 export const createAd = async (params: CreateAdBody) => {
   const formData = new FormData();
 
-  formData.append('type', params.type);
-  formData.append('description', params.description);
-  formData.append('page', params.page);
-  formData.append('holder', params.holder);
-  formData.append('alt', params.alt);
-  formData.append('slug', params.slug);
-  formData.append('summery', params.summery);
+  const baseFields = {
+    type: params.type,
+    description: params.description,
+    page: params.page,
+    holder: params.holder,
+    alt: params.alt,
+    summery: params.summery,
+    website: params.website,
+    socialMedia: params.socialMedia,
+    sponsor: params.sponsor,
+  };
+
+  Object.entries(baseFields).forEach(([key, value]) => {
+    if (value) {
+      formData.append(key, value.toString());
+    }
+  });
+
   formData.append('file', params.file);
-  formData.append('website', params.website);
-  formData.append('socialMedia', params.socialMedia);
-  formData.append('sponsor', params.sponsor);
-  formData.append('provinceId', params.provinceId ? params.provinceId.toString() : '');
-  formData.append('cityId', params.cityId ? params.cityId.toString() : '');
-  formData.append('townId', params.townId ? params.townId.toString() : '');
-  formData.append('categoryId', params.categoryId ? params.categoryId.toString() : '');
+
+  const optionalFields = {
+    provinceId: params.provinceId,
+    cityId: params.cityId,
+    townId: params.townId,
+    categoryId: params.categoryId,
+  };
+
+  Object.entries(optionalFields).forEach(([key, value]) => {
+    if (value !== null && value !== undefined) {
+      formData.append(key, value.toString());
+    }
+  });
 
   const res = await AdminUploaderImage.post<ApiData<{ data: string }>>('admin/uploads/image', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
+
   return res.data;
 };
 

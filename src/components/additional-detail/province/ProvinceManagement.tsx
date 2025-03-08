@@ -25,7 +25,6 @@ const ProvinceManagement = () => {
       </Flex>
     );
 
-  console.log('DATA', provinceData);
   return (
     <Grid width={'100%'} columns={'2'} gap={'5'}>
       {provinceData?.map(item => (

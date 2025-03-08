@@ -24,6 +24,8 @@ type CitiesItemsResponse = citiesDetailForProvince & {
   selected: boolean;
   onSelect: VoidFunction;
   currentIndex: number;
+  isOpen: boolean;
+  selectedId: number;
 };
 
 type modalStateType = {
@@ -35,7 +37,7 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
-  const { name, id, hasMedia, onSelect, selected } = props;
+  const { name, id, hasMedia, onSelect, isOpen, selectedId } = props;
 
   const [modalState, setModalState] = useState<modalStateType>({ isOpen: false, key: 'edit' });
   const methods = useForm({ defaultValues: { name: '' } });
@@ -48,11 +50,7 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
    */
 
   // *****  GET Service  *****
-  const {
-    data: cityData,
-    isLoading: cityLoading,
-    isFetching: cityFetching,
-  } = useQuery({ queryKey: ['single-city', id], queryFn: async () => getCitiesByProvinceId(id), initialData: props as any, enabled: selected });
+  const { data: cityData, isLoading: cityLoading, isFetching: cityFetching } = useQuery({ queryKey: ['single-city', selectedId,], queryFn: async () => getCitiesByProvinceId(selectedId) });
 
   // *****  POST And DELETE Service  *****
 
@@ -92,12 +90,14 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
       ToastError('نام شهر نمی‌تواند خالی باشد');
       return;
     }
-    if (cityData.children.some((item: any) => item.name === townItem)) {
+    if (cityData?.children.some((item: any) => item.name === townItem)) {
       ToastError('این شهر از قبل وجود دارد');
       return;
     }
     addTownMutate();
   };
+
+  console.log(cityData, 'cityDatacityDatacityData');
 
   /**
    * JSX
@@ -107,6 +107,7 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
     <>
       <Grid width={'100%'} gapY={'5'} ref={ref} onClick={onSelect}>
         <AccordionWrapper
+          isOpen={isOpen}
           hero={name}
           withEdit
           withDelete
@@ -136,8 +137,8 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
               </Flex>
             ) : (
               <Flex width={'100%'} align={'center'} gap={'5'} wrap={'wrap'}>
-                {cityData.children.map((item: any) => (
-                  <ChipsItem type='town' key={item.id} label={item.name} hasMedia={item.hasMedia} id={item.id} data={item} />
+                {cityData?.children.map((item: any) => (
+                  <ChipsItem type='town' key={item.id} label={item.name} cityID={selectedId} hasMedia={item.hasMedia} id={item.id} data={item} />
                 ))}
               </Flex>
             )}
@@ -155,7 +156,7 @@ const CityItems = forwardRef<HTMLDivElement, CitiesItemsResponse>((props, ref) =
         {modalState.key === 'edit' && Boolean(cityData) && (
           <>
             <ModalHeader title={'ویرایش شهرستان'} handleClose={() => setModalState({ ...modalState, isOpen: false })} />
-            <EditCityModal setIsOpen={() => setModalState({ key: 'edit', isOpen: false })} data={cityData ?? { name: '', id: null }} />
+            <EditCityModal setIsOpen={() => setModalState({ key: 'edit', isOpen: false })} data={cityData as any} />
           </>
         )}
         {/*

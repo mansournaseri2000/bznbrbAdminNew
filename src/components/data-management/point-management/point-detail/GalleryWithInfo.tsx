@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
+import { useRouter } from '@bprogress/next';
 import { Skeleton } from '@radix-ui/themes';
 import styled from 'styled-components';
 

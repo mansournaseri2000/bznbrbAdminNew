@@ -116,6 +116,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
         }}
       >
         <AccordionWrapper
+          isOpen
           hero={name}
           withEdit
           withDelete
@@ -147,7 +148,7 @@ const CategoryItems = forwardRef<HTMLDivElement, CategoryItemsProps>((props, ref
               ) : (
                 <>
                   {singleCategoryData?.children.map(item => (
-                    <ChipsItem type='category' key={item.id} label={item.name} hasMedia={item.hasMedia} id={item.id} data={item} />
+                    <ChipsItem cityID={1} type='category' key={item.id} label={item.name} hasMedia={item.hasMedia} id={item.id} data={item} />
                   ))}
                 </>
               )}

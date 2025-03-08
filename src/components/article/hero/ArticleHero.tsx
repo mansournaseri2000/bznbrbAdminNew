@@ -3,7 +3,7 @@
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@bprogress/next';
 
 import { Button, Grid, TextField } from '@/libs/primitives';
 

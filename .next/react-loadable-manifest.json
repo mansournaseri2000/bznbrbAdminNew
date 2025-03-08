@@ -9,12 +9,13 @@
     "id": 19429,
     "files": [
       "static/css/ab699959edbc876f.css",
-      "static/chunks/6648-2ae15bcb8e9db446.js",
-      "static/chunks/7138-fb549812a7102d66.js",
+      "static/chunks/3397-b93c64b35df88e08.js",
+      "static/chunks/6648-1eb2ad678db62d38.js",
+      "static/chunks/7138-fec75e18178be834.js",
       "static/chunks/1705-9e7d0608d8cc58b6.js",
       "static/chunks/2336-c97e1d281f413013.js",
-      "static/chunks/341-bfcef4b1fada7acd.js",
-      "static/chunks/3767.a77f1bf3ca0a87b2.js"
+      "static/chunks/341-3881cc4a987ae8f5.js",
+      "static/chunks/6273.10b78de03081b6c1.js"
     ]
   },
   "src/components/data-management/article-management/create-and-edit-article/TextContent.tsx -> react-draft-wysiwyg": {

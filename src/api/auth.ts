@@ -1,5 +1,4 @@
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from '@bprogress/next';
 import { useMutation } from '@tanstack/react-query';
 import Cookies from 'universal-cookie';
 

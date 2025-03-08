@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@bprogress/next';
 
 import { Button, Flex, IconButton, Text } from '@/libs/primitives';
 import { convertTimestampToPersianDate } from '@/libs/utils/convertTimestampToPersianDate';

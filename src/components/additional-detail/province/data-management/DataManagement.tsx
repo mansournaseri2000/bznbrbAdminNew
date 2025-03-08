@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
+import { useRouter } from '@bprogress/next';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQuery } from '@tanstack/react-query';

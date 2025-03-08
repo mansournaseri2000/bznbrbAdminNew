@@ -24,6 +24,7 @@ type Props = {
   id: number;
   data: any;
   type: 'category' | 'feature' | 'town';
+  cityID: number;
 };
 
 type ModalStateType = {
@@ -31,12 +32,13 @@ type ModalStateType = {
   key: 'edit-subCategory' | 'delete-subCategory' | 'edit-feature' | 'delete-feature' | 'edit-town' | 'delete-town';
 };
 
-const ChipsItem = ({ label, hasMedia, type, id, data }: Props) => {
+const ChipsItem = ({ label, hasMedia, type, id, data, cityID }: Props) => {
   /*
    *** Variables and constant_________________________________________________________________________________________________________________________________________________________________
    */
   const [modalState, setModalState] = useState<ModalStateType>({ key: 'edit-subCategory', isOpen: false });
   const queryClient = useQueryClient();
+
   /* 
     ****
     Services
@@ -112,6 +114,7 @@ const ChipsItem = ({ label, hasMedia, type, id, data }: Props) => {
         break;
     }
   };
+
   /* 
     ****
     JSX
@@ -209,7 +212,7 @@ const ChipsItem = ({ label, hasMedia, type, id, data }: Props) => {
         {modalState.key === 'edit-town' && (
           <>
             <ModalHeader title='ویرایش شهر' handleClose={() => setModalState({ ...modalState, isOpen: false })} />
-            <EditTownModal setIsOpen={() => setModalState({ key: 'edit-town', isOpen: false })} data={data} />
+            <EditTownModal setIsOpen={() => setModalState({ key: 'edit-town', isOpen: false })} data={data} cityID={cityID} />
           </>
         )}
 

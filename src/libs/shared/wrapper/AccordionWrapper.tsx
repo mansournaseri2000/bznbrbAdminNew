@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import { motion, Variants } from 'framer-motion';
 import styled from 'styled-components';
@@ -21,6 +21,7 @@ type AccordionWrapperProps = {
   onDelete?: (e: any) => void;
   hasMedia?: boolean;
   children: React.ReactNode;
+  isOpen: boolean;
 };
 
 const containerVariants: Variants = {
@@ -29,15 +30,11 @@ const containerVariants: Variants = {
 };
 
 const AccordionWrapper = (props: AccordionWrapperProps) => {
-  const { hero, children, withEdit = false, withButton = false, withDelete = false, isDisableDelete = false, onEdit, onButtonSubmit, onDelete, hasMedia } = props;
-  const [isOpen, setIsOpen] = useState(false);
+  const { hero, children, withEdit = false, withButton = false, withDelete = false, isDisableDelete = false, onEdit, onButtonSubmit, onDelete, hasMedia, isOpen } = props;
 
-  const toggleAccordion = () => {
-    setIsOpen(!isOpen);
-  };
   return (
     <Wrapper isOpen={isOpen}>
-      <Flex className='style' width={'100%'} justify={'between'} align={'center'} p={'8px 16px'} onClick={toggleAccordion}>
+      <Flex className='style' width={'100%'} justify={'between'} align={'center'} p={'8px 16px'}>
         <Flex gap={'2'} align={'center'}>
           {hasMedia && <HasMedia width={14.13} height={14.13} />}
           <Text style={{ color: colorPalette.gray[11], fontWeight: 700, fontSize: '16px', lineHeight: '24px' }}>{hero}</Text>

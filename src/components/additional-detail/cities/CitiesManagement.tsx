@@ -26,6 +26,7 @@ const CitiesManagement = () => {
   const [selectedItem, setSelectedItem] = useState<number | null>(null);
   const params = useParams();
   const provinceId = Number(params.slug[2]);
+
   /*
    *** Services_________________________________________________________________________________________________________________________________________________________________
    */
@@ -34,7 +35,7 @@ const CitiesManagement = () => {
     isLoading: citiesLoading,
     isFetching: citiesFetching,
     isError: citiesError,
-  } = useQuery({ queryKey: ['cities'], queryFn: async () => await getAllProvincesById(provinceId) });
+  } = useQuery({ queryKey: ['cities', provinceId], queryFn: async () => await getAllProvincesById(provinceId) });
   /*
    *** Loading_________________________________________________________________________________________________________________________________________________________________
    */
@@ -61,9 +62,19 @@ const CitiesManagement = () => {
             </Flex>
           </Button>
         </Flex>
-        {citiesData?.children.map((item, index) => (
-          <CityItems key={item.id} selected={selectedItem === item.id} onSelect={() => setSelectedItem(item.id)} currentIndex={index} {...item} />
-        ))}
+        {citiesData?.children.map((item, index) => {
+          return (
+            <CityItems
+              selectedId={Number(selectedItem)}
+              key={item.id}
+              selected={selectedItem === item.id}
+              isOpen={selectedItem === item.id}
+              onSelect={() => setSelectedItem(item.id)}
+              currentIndex={index}
+              {...item}
+            />
+          );
+        })}
       </Flex>
       {/* 
       ***

@@ -11,7 +11,7 @@ export default function Test() {
       <BoxWrapper hero='تست نرم افزار'>
         <Flex>sw</Flex>
       </BoxWrapper>
-      <AccordionWrapper hero='تست'>s</AccordionWrapper>
+      <AccordionWrapper isOpen hero='تست'>s</AccordionWrapper>
       {/* <CustomPagination
         current={1}
         total={4}

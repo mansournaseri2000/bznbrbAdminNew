@@ -11,7 +11,7 @@ import { editCategory, Param, UploadIcon, UploadImage } from '@/api/additional-d
 import { Box, Flex, IconButton, TextField } from '@/libs/primitives';
 import ModalAction from '@/libs/shared/ModalAction';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
-import Uploader from '@/libs/shared/uploader/Uploader';
+import UploaderCard from '@/libs/shared/uploader/UploaderCard';
 import { Update } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { ChildrenDetail } from '@/types/additional-detail/additional-detail';
@@ -164,7 +164,7 @@ const EditSubCategoryModal = ({ data, setIsOpen }: Props) => {
                     {({ getRootProps, getInputProps }) => (
                       <div {...getRootProps()}>
                         <input type='file' {...getInputProps()} />
-                        <Uploader type='pic' />
+                        <UploaderCard type='pic' />
                       </div>
                     )}
                   </Dropzone>
@@ -232,7 +232,7 @@ const EditSubCategoryModal = ({ data, setIsOpen }: Props) => {
                       <div {...getRootProps()}>
                         <input type='file' {...getInputProps()} />
 
-                        <Uploader type='icon' />
+                        <UploaderCard type='icon' />
                       </div>
                     )}
                   </Dropzone>

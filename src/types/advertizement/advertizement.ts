@@ -73,16 +73,15 @@ export interface CreateAdBody {
   page: string;
   holder: string;
   alt: string;
-  slug: string;
   summery: string;
   file: File;
   website: string;
   socialMedia: string;
   sponsor: string;
-  townId: number | null;
-  provinceId: number | null;
-  cityId: number | null;
-  categoryId: number | null;
+  townId?: number | null;
+  provinceId?: number | null;
+  cityId?: number | null;
+  categoryId?: number | null;
 }
 
 export interface EditADsBody {
@@ -91,7 +90,7 @@ export interface EditADsBody {
   alt: string;
   description: string;
   summery: string;
-  townId: number | null;
+
   website: string;
   socialMedia: string;
   sponsor: string;
