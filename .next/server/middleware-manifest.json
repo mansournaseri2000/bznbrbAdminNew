@@ -11,16 +11,16 @@
       "page": "/",
       "matchers": [
         {
-          "regexp": "^\\/panel(?:\\/(_next\\/data\\/[^/]{1,}))?\\/panel(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(.json)?[\\/#\\?]?$",
-          "originalSource": "/panel/:path*"
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(.json)?[\\/#\\?]?$",
+          "originalSource": "/:path*"
         }
       ],
       "wasm": [],
       "assets": [],
       "environments": {
-        "previewModeId": "8032eb0b2be5cae9208d7bc7abb0559b",
-        "previewModeSigningKey": "dbc0a4f7c8e2cce22044dbf6faf3c359ead0273910b34b6ce2e6c9432a567179",
-        "previewModeEncryptionKey": "e6ffe7aba37af69122bf6112c9843230200bb56c8bc3410e94193041f17c6add"
+        "previewModeId": "1abb4e6b6d298114eac1542b9cdfed25",
+        "previewModeSigningKey": "2b4ddd1c2b2c3cff86c3b1c0dc2cbf75f5851f7e7c09ae2126d5ce9a325f9e78",
+        "previewModeEncryptionKey": "fad6d9de4726cb21deec0eaab674f0aa8bbb05264b0ccff178cb79e5ab1cd59e"
       }
     }
   },
