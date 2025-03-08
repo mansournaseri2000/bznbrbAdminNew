@@ -17,13 +17,12 @@ export const middleware = async (request: NextRequest) => {
 
   const referer = request.headers.get('referer') || 'No Referer';
   console.log('Referer:', referer); // Logs in Vercel / Server logs
-  console.log("test monitoring______________________________________________________________________________________");
-  
+  console.log('test monitoring______________________________________________________________________________________');
 
   response.headers.set('X-Captured-Referer', referer);
   return response;
 };
 
 export const config = {
-  matcher: '/:path*',
+  matcher: '/panel/:path*',
 };
