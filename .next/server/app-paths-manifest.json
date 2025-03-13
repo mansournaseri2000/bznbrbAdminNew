@@ -1,26 +1,7 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/(root)/additional-detail/[...slug]/page": "app/(root)/additional-detail/[...slug]/page.js",
-  "/(root)/advertizement/trip/[...slug]/page": "app/(root)/advertizement/trip/[...slug]/page.js",
-  "/(root)/advertizement/page": "app/(root)/advertizement/page.js",
-  "/(root)/advertizement/other/[...slug]/page": "app/(root)/advertizement/other/[...slug]/page.js",
   "/(auth)/auth/login/[slug]/page": "app/(auth)/auth/login/[slug]/page.js",
-  "/(root)/employee/employee-info/page": "app/(root)/employee/employee-info/page.js",
-  "/(root)/comments/page": "app/(root)/comments/page.js",
-  "/(root)/confirmations/[...slug]/page": "app/(root)/confirmations/[...slug]/page.js",
-  "/(root)/advertizement/[slug]/page": "app/(root)/advertizement/[slug]/page.js",
-  "/(root)/dev/page": "app/(root)/dev/page.js",
-  "/(root)/data-management/[...slug]/page": "app/(root)/data-management/[...slug]/page.js",
-  "/(root)/contact-us/page": "app/(root)/contact-us/page.js",
-  "/(root)/error/page": "app/(root)/error/page.js",
-  "/(root)/plans/[...slug]/page": "app/(root)/plans/[...slug]/page.js",
-  "/(root)/employee/page": "app/(root)/employee/page.js",
-  "/(root)/plans/page": "app/(root)/plans/page.js",
-  "/(root)/test/page": "app/(root)/test/page.js",
-  "/(root)/place/[...slug]/page": "app/(root)/place/[...slug]/page.js",
-  "/(root)/tours/page": "app/(root)/tours/page.js",
-  "/(root)/web-content/[slug]/page": "app/(root)/web-content/[slug]/page.js",
-  "/(root)/user/[slug]/page": "app/(root)/user/[slug]/page.js",
   "/(root)/page": "app/(root)/page.js",
-  "/(root)/user/page": "app/(root)/user/page.js"
+  "/(root)/plans/page": "app/(root)/plans/page.js",
+  "/(root)/data-management/[...slug]/page": "app/(root)/data-management/[...slug]/page.js"
 }
