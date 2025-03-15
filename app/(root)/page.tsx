@@ -1,4 +1,5 @@
+import { redirect } from 'next/navigation';
+
 export default function Home() {
-  // redirect('/data-management/point-management');
-  return <h1>dfsdf</h1>;
+  redirect('/data-management/point-management');
 }
