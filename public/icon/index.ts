@@ -29,6 +29,7 @@ export { default as ImageIcon } from './ImageIcon';
 export { default as Layers } from './Layers';
 export { default as Like } from './Like';
 export { default as ListBullet } from './ListBullet';
+export { default as MenuIcon } from './MenuIcon';
 export { default as Navigation } from './Navigation';
 export { default as Pencil } from './Pencil';
 export { default as Person } from './Person';

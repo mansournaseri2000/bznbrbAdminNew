@@ -1,11 +1,5 @@
 {
   "pages": {
-    "/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/layout.css",
-      "static/chunks/app/layout.js"
-    ],
     "/(root)/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -16,6 +10,12 @@
       "static/chunks/main-app.js",
       "static/css/app/(root)/layout.css",
       "static/chunks/app/(root)/layout.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
     ],
     "/(auth)/auth/login/[slug]/page": [
       "static/chunks/webpack.js",

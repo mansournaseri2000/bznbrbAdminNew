@@ -4,12 +4,17 @@ import { ReactNode } from 'react';
 
 import styled from 'styled-components';
 
+import { Grid } from '@/libs/primitives';
+
 import Sidebar from './Sidebar';
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
-      <Sidebar />
+      <Grid display={{ initial: 'none', sm: 'grid' }}>
+        <Sidebar isMobile={false} />
+      </Grid>
+
       <Main>{children}</Main>
     </>
   );

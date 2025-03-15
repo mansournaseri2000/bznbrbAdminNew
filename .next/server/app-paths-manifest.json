@@ -1,7 +1,7 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/(auth)/auth/login/[slug]/page": "app/(auth)/auth/login/[slug]/page.js",
-  "/(root)/page": "app/(root)/page.js",
   "/(root)/plans/page": "app/(root)/plans/page.js",
-  "/(root)/data-management/[...slug]/page": "app/(root)/data-management/[...slug]/page.js"
+  "/(root)/data-management/[...slug]/page": "app/(root)/data-management/[...slug]/page.js",
+  "/(root)/page": "app/(root)/page.js"
 }

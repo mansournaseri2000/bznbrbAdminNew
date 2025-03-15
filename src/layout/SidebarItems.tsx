@@ -14,6 +14,7 @@ import { typoVariant } from '@/theme/typo-variants';
 import { SidebarOptionsDetail } from '@/types/layout/sidebar';
 
 type Props = SidebarOptionsDetail & {
+  isMobile: boolean;
   isExpanded?: boolean;
   activeSegment: string;
 };
@@ -28,7 +29,7 @@ const SidebarItems = (props: Props) => {
    * const and variables
    * _______________________________________________________________________________
    */
-  const { isExpanded, text, Icon, type, items, path, activeSegment } = props;
+  const { isExpanded, text, Icon, type, items, path, activeSegment, isMobile } = props;
   const [isOpen, setIsOpen] = useState(false);
   const currentRoute = type === 'collapse' ? activeSegment === path?.substring(1) : items?.some(item => activeSegment === item.path.split('/')[1]);
 
@@ -52,15 +53,15 @@ const SidebarItems = (props: Props) => {
           </StyledIcon>
           <CollapseWrapper
             animate={{
-              maxWidth: isExpanded ? '100%' : '1px',
-              opacity: isExpanded ? 1 : 0,
+              maxWidth: isExpanded || isMobile ? '100%' : '1px',
+              opacity: isExpanded || isMobile ? 1 : 0,
             }}
             initial={{ maxWidth: '0px', opacity: 0 }}
             transition={{
               maxWidth: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
               opacity: { duration: 0.2, ease: 'easeInOut' },
             }}
-            style={{ width: isExpanded ? '100%' : 'auto' }}
+            style={{ width: isExpanded || isMobile ? '100%' : 'auto' }}
           >
             <Flex width={'100%'} align={'center'} justify={'between'}>
               <Text {...typoVariant.body3} style={{ color: currentRoute ? colorPalette.gray[1] : colorPalette.gray[11] }}>
