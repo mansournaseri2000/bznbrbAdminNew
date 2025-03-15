@@ -11,7 +11,7 @@ const encodedCredentials = Buffer.from(credentials).toString('base64');
 // baseURL: 'https://uploader.darkube.app',
 
 export const AdminUploaderImage = axios.create({
-  baseURL: 'https://uploader.bezanimbiroon.ir',
+  baseURL: `${process.env.NEXT_PUBLIC_BASE_URL_image}`,
   // baseURL: 'http://37.32.8.14:3005/v1/',
   headers: {
     'up-auth': `Basic ${encodedCredentials}`,
@@ -21,7 +21,7 @@ export const AdminUploaderImage = axios.create({
 
 // Create an instance of axios
 export const ApiManager = axios.create({
-  baseURL: 'https://api-admin-dev.darkube.app/v1/',
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   // baseURL: 'http://37.32.8.14:3005/v1/',
   headers: {
     'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export const ApiManager = axios.create({
 });
 
 export const ApiManagerV2 = axios.create({
-  baseURL: 'https://api-admin-dev.darkube.app/v1/',
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   // baseURL: 'http://37.32.8.14:3005/v2/',
   headers: {
     'up-auth': `Basic ${encodedCredentials}`,

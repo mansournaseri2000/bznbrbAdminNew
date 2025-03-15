@@ -6,7 +6,7 @@ const credentials = `${username}:${password}`;
 const encodedCredentials = Buffer.from(credentials).toString('base64');
 
 export const clientApiManagerV2 = axios.create({
-  baseURL: 'https://api-admin-dev.darkube.app/v1/',
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   headers: {
     'up-auth': `Basic ${encodedCredentials}`,
     'Content-Type': 'application/json',
