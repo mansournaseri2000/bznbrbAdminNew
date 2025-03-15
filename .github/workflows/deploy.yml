@@ -44,4 +44,6 @@ jobs:
               -p 8090:8090 \
               -e NEXT_PUBLIC_BASE_URL_image=${{ secrets.NEXT_PUBLIC_BASE_URL_image }} \
               -e NEXT_PUBLIC_PASSWORD=${{ secrets.NEXT_PUBLIC_PASSWORD }} \
-              -e NEXT_PUBLIC_USERNAME=${{ secrets.NEXT_PUBLIC_USERNAME }}
+              -e NEXT_PUBLIC_USERNAME=${{ secrets.NEXT_PUBLIC_USERNAME }} \
+              --name bznfront bznfront
+
