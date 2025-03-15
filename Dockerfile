@@ -1,6 +1,6 @@
 FROM node:20-alpine AS build 
 
-WORKDIR /usr/src/app 
+WORKDIR /home/ubuntu/bznbrbAdminNew
 
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"] 
 
@@ -14,7 +14,7 @@ FROM node:20-alpine
 
 ENV NODE_ENV=production 
 
-WORKDIR /usr/src/app 
+WORKDIR /home/ubuntu/bznbrbAdminNew
 
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"] 
 
@@ -28,9 +28,8 @@ COPY --from=build /usr/src/app/next.config.js ./next.config.js
 
 EXPOSE 8090 
 
-RUN chown -R node /usr/src/app 
+RUN chown -R node /home/ubuntu/bznbrbAdminNew
 
 USER node 
-
 
 CMD ["npm", "start"]
