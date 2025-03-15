@@ -31,4 +31,6 @@ jobs:
             git fetch origin
             git reset --hard origin/main-action
             git pull origin main-action
+            sudo docker build -t bznfront .
+
           EOF
