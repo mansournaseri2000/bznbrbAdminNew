@@ -22,6 +22,7 @@ jobs:
           chmod 700 ~/.ssh
           ssh-keyscan 37.32.24.253 >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
+          
 
       - name: Build Docker image
         run: |
