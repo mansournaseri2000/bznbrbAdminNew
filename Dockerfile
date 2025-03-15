@@ -4,7 +4,7 @@ WORKDIR /home/ubuntu/bznbrbAdminNew
 
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"] 
 
-RUN npm install --silent 
+RUN npm install --force
 
 COPY . . 
 
