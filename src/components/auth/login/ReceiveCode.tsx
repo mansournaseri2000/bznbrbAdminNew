@@ -77,7 +77,7 @@ const ReceiveCode = () => {
               <AuthLog width={'164px'} height={'124px'} />
             </Box>
             <Text {...typoVariant.paragraph1} style={{ color: colorPalette.gray[11] }}>
-              برای ورود به حساب کاربری شماره موبایل خود را وارد کنید.
+               ورود به حساب کاربری شماره موبایل خود را وارد کنید.
             </Text>
             <Flex width={'100%'} direction={'column'} gap={'12px'}>
               <TextField
