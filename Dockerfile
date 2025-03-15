@@ -1,8 +1,8 @@
-FROM node:lts-alpine
+FROM node:20-alpine AS build
 ENV NODE_ENV=production
 WORKDIR /app
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --legacy-peer-deps --production --silent && mv node_modules ../
+RUN npm install --legacy-peer-deps --production --force && mv node_modules ../
 COPY . .
 EXPOSE 8090
 RUN chown -R node /app
