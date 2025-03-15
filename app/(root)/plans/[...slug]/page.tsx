@@ -50,7 +50,7 @@ const PlansDetail = ({ params }: { params: { slug: string[] } }) => {
   return (
     <Flex direction={'column'}>
       <Header title={type === 'create-plan' ? 'ساخت برنامه' : 'برنامه'} isNavigation />
-      <Box p={'24px 110px 40px 40px '}>{renderElement()}</Box>
+      <Box p={{ initial: '24px 24px 40px 40px', lg: '24px 110px 40px 40px ' }}>{renderElement()}</Box>
     </Flex>
   );
 };

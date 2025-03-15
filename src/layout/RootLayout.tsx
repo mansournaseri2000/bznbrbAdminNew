@@ -11,7 +11,7 @@ import Sidebar from './Sidebar';
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
-      <Grid display={{ initial: 'none', sm: 'grid' }}>
+      <Grid display={{ initial: 'none', lg: 'grid' }}>
         <Sidebar isMobile={false} />
       </Grid>
 

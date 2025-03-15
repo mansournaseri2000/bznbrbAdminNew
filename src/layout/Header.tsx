@@ -13,7 +13,7 @@ import { Boxshadow, colorPalette } from '@/theme';
 import { breakpoints } from '@/theme/breakpoints';
 import { typoVariant } from '@/theme/typo-variants';
 
-import Sidebar from './Sidebar';
+import MobileSidebar from './MobileSidebar';
 
 type HeaderProps = {
   title: string;
@@ -29,25 +29,29 @@ const Header = (props: HeaderProps) => {
     setIsOpen(prevState => !prevState);
   };
   return (
-    <Root>
-      <Container>
-        <HamburgerButton variant='surface' onClick={toggleDrawer}>
-          <MenuIcon />
-        </HamburgerButton>
-        <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11] }}>
-          {title}
-        </Text>
-        {isNavigation && (
-          <IconButton size={'3'} variant='surface' onClick={() => router.back()}>
-            <TriangleLeft color='#373737' />
-          </IconButton>
-        )}
-      </Container>
+    <>
+      <Root>
+        <Container>
+          <Flex align={"center"} gap={"16px"}>
+            <HamburgerButton variant='surface' onClick={toggleDrawer}>
+              <MenuIcon />
+            </HamburgerButton>
+            <Text {...typoVariant.title1} style={{ color: colorPalette.gray[11] }}>
+              {title}
+            </Text>
+          </Flex>
 
-      <DrawerStyle open={isOpen} onClose={toggleDrawer} direction='right' className=''>
-        <Sidebar isMobile />
+          {isNavigation && (
+            <IconButton size={'3'} variant='surface' onClick={() => router.back()}>
+              <TriangleLeft color='#373737' />
+            </IconButton>
+          )}
+        </Container>
+      </Root>
+      <DrawerStyle open={isOpen} onClose={toggleDrawer} direction='right'>
+        <MobileSidebar isMobile />
       </DrawerStyle>
-    </Root>
+    </>
   );
 };
 
@@ -63,7 +67,7 @@ const Root = styled.header`
   background-color: ${colorPalette.gray[1]};
   box-shadow: ${Boxshadow.shadow1};
   z-index: 10;
-  @media (min-width: ${breakpoints.tablet}) {
+  @media (min-width: ${breakpoints.desktop}) {
     padding: 14.5px 100px 14.5px 24px;
   }
 `;
@@ -79,7 +83,7 @@ const Container = styled(Flex)`
 
 const HamburgerButton = styled(IconButton)`
   display: flex;
-  @media (min-width: ${breakpoints.tablet}) {
+  @media (min-width: ${breakpoints.desktop}) {
     display: none;
   }
 `;

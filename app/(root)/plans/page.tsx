@@ -86,7 +86,7 @@ export default function Plans({
   return (
     <Flex direction={'column'}>
       <Header title='لیست برنامه ها' isNavigation />
-      <Box pr={'90px'}>
+      <Box pr={{ initial: '8px', lg: '90px' }}>
         <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>

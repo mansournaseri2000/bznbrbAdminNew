@@ -52,7 +52,7 @@ export default function Support() {
   return (
     <Flex direction={'column'}>
       <Header title='پشتیبانی' isNavigation />
-      <Box p={'24px 110px 40px 40px '}>
+      <Box p={{ initial: '24px 24px 40px 40px', lg: '24px 110px 40px 40px ' }}>
         <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
           <Grid width={'100%'} gapY={'5'}>
             {data.allContactRequests.length === 0 ? (
