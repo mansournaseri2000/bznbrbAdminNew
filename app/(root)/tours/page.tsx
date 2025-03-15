@@ -85,7 +85,7 @@ export default function ToursPage({
   return (
     <Flex direction={'column'}>
       <Header title='لیست تورها' isNavigation={false} />
-      <Box pr={'80px'}>
+      <Box pr={{ initial: '8px', lg: '80px' }}>
         <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>

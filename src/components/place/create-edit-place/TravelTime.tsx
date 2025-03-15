@@ -161,7 +161,7 @@ const TravelTime = () => {
             <Flex justify={'between'} align={'center'}>
               <Text>{dayNames[item.dayOfWeek as keyof typeof dayNames]}</Text>
             </Flex>
-            <Grid gap={'34px'} columns={'2'}>
+            <Grid gap={'34px'} columns={{ initial: '1', md: '2' }}>
               <RadioGroup.Root
                 defaultValue={item.type} // Set initial value from data
                 name={item.dayOfWeek} // Unique name for each day's RadioGroup

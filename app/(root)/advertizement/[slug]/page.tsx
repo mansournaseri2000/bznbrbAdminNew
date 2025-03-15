@@ -163,7 +163,7 @@ export default function AdvertizementPageTypes({ params }: { params: { slug: str
     <>
       <Flex direction={'column'}>
         <Header title={handleHeader()} isNavigation />
-        <Box p={'24px 110px 40px 40px '}>
+        <Box p={{ initial: '24px 24px 40px 40px', lg: '24px 110px 40px 40px' }}>
           <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
             <Grid gapY={'5'}>
               {data.length === 0 ? (

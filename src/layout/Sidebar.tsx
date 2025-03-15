@@ -17,7 +17,11 @@ import { typoVariant } from '@/theme/typo-variants';
 
 import SidebarItems from './SidebarItems';
 
-const Sidebar = () => {
+type Props = {
+  isMobile: boolean;
+};
+
+const Sidebar = ({ isMobile }: Props) => {
   /**
    * const and variables
    * _______________________________________________________________________________
@@ -30,6 +34,7 @@ const Sidebar = () => {
    * Hooks and Methods
    * _______________________________________________________________________________
    */
+
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
   };
@@ -38,23 +43,12 @@ const Sidebar = () => {
    * _______________________________________________________________________________
    */
   return (
-    <motion.div
-      onHoverStart={() => setIsExpanded(true)}
-      onHoverEnd={() => setIsExpanded(false)}
-      initial={{ width: '80px' }}
-      animate={{ width: isExpanded ? '260px' : '80px' }}
+    <SidebarWrapper
+      onHoverStart={!isMobile ? () => setIsExpanded(true) : undefined}
+      onHoverEnd={!isMobile ? () => setIsExpanded(false) : undefined}
+      initial={{ width: isMobile ? '260px' : '80px' }}
+      animate={{ width: isExpanded || isMobile ? '260px' : '80px' }}
       transition={{ duration: 0.3 }}
-      style={{
-        position: 'fixed',
-        right: '0',
-        top: '0',
-        bottom: '0',
-        backgroundColor: colorPalette.gray[2],
-        border: `1px solid ${colorPalette.gray[6]}`,
-        overflowY: 'auto',
-        borderRadius: '16px 0px 0px 16px',
-        zIndex: 100,
-      }}
     >
       <Container mx={'auto'} height={'100%'}>
         <Grid width={'100%'}>
@@ -63,8 +57,8 @@ const Sidebar = () => {
               <ProfileLogo width={'48px'} height={'32px'} />
               <CollapseWrapper
                 animate={{
-                  maxWidth: isExpanded ? '100%' : '1px',
-                  opacity: isExpanded ? 1 : 0,
+                  maxWidth: isExpanded || isMobile ? '100%' : '1px',
+                  opacity: isExpanded || isMobile ? 1 : 0,
                 }}
                 initial={{ maxWidth: '0px', opacity: 0 }}
                 transition={{
@@ -76,7 +70,7 @@ const Sidebar = () => {
               </CollapseWrapper>
             </Link>
             {sidebarOptions.map((item, index) => (
-              <SidebarItems key={index} {...(item as any)} isExpanded={isExpanded} activeSegment={activeSegment} />
+              <SidebarItems key={index} {...(item as any)} isExpanded={isExpanded} activeSegment={activeSegment} isMobile={isMobile} />
             ))}
           </Flex>
         </Grid>
@@ -86,8 +80,8 @@ const Sidebar = () => {
               <Exit width={'16px'} height={'16px'} />
               <CollapseWrapper
                 animate={{
-                  maxWidth: isExpanded ? '100%' : '1px',
-                  opacity: isExpanded ? 1 : 0,
+                  maxWidth: isExpanded || isMobile ? '100%' : '1px',
+                  opacity: isExpanded || isMobile ? 1 : 0,
                 }}
                 initial={{ maxWidth: '0px', opacity: 0 }}
                 transition={{
@@ -103,11 +97,23 @@ const Sidebar = () => {
           </Flex>
         </Grid>
       </Container>
-    </motion.div>
+    </SidebarWrapper>
   );
 };
 
 export default Sidebar;
+
+const SidebarWrapper = styled(motion.div)`
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: ${colorPalette.gray[2]};
+  border: 1px solid ${colorPalette.gray[6]};
+  overflow-y: auto;
+  border-radius: 16px 0px 0px 16px;
+  z-index: 100;
+`;
 
 const Container = styled(Grid)`
   overflow-x: hidden;

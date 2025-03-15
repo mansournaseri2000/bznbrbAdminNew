@@ -118,7 +118,7 @@ const DataManagement = ({ params }: { params: { slug: string[] } }) => {
   return (
     <Flex direction={'column'}>
       <Header title={getTitle()} isNavigation />
-      <Box p={'24px 280px 40px 40px '}>
+      <Box p={{ initial: '24px 40px', sm: '24px 24px 40px 40px', lg: '24px 280px 40px 40px ' }}>
         <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
           {renderElement()}
         </Grid>

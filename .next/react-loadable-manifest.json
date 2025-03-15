@@ -10,11 +10,11 @@
     "files": [
       "static/css/ab699959edbc876f.css",
       "static/chunks/3397-b93c64b35df88e08.js",
-      "static/chunks/6648-1eb2ad678db62d38.js",
       "static/chunks/7138-fec75e18178be834.js",
+      "static/chunks/6648-1eb2ad678db62d38.js",
       "static/chunks/1705-9e7d0608d8cc58b6.js",
-      "static/chunks/2336-cd76662bb4e85013.js",
-      "static/chunks/341-3881cc4a987ae8f5.js",
+      "static/chunks/9051-7663c28ccc596262.js",
+      "static/chunks/341-18e83408228217cc.js",
       "static/chunks/6273.10b78de03081b6c1.js"
     ]
   },
@@ -71,7 +71,7 @@
     "files": [
       "static/css/d3e383b9ef67ddcb.css",
       "static/chunks/d0deef33.a258e96be4bdf431.js",
-      "static/chunks/6766.35ab8ad38c9b11b4.js"
+      "static/chunks/6766.8873eaac42eb7d37.js"
     ]
   },
   "src/components/user/list/UserList.tsx -> @/libs/shared/Table": {

@@ -47,7 +47,7 @@ export default function AdsPages() {
   return (
     <Flex direction={'column'}>
       <Header title='مدیریت تبلیغات' isNavigation />
-      <Box p={'24px 110px 40px 40px '}>
+      <Box p={{ initial: '24px 24px 40px 40px ', lg: '24px 110px 40px 40px ' }}>
         <Grid width={'100%'} maxWidth={'1920px'} mx={'auto'}>
           <Grid width={'100%'} columns={{ initial: '1', sm: '2' }} gap={'5'}>
             {data.map((item, index) => (

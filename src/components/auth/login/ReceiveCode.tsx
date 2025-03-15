@@ -97,7 +97,7 @@ const ReceiveCode = () => {
                   }
                 }}
               />
-              <Button variant='soft' disabled={errors.mobileNumber ? true : false} type='submit' size={'4'}>
+              <Button variant='soft' disabled={errors.mobileNumber ? true : false} type='submit' size={'4'} style={{  zIndex: '1000' }}>
                 {mobileRegisterIsPending ? (
                   <Spinner />
                 ) : (
