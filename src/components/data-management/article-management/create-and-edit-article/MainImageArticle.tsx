@@ -174,6 +174,12 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
     }
   }, [watch('cityID'), watch('provinceId')]);
 
+  const handleCopyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      ToastSuccess('لینک با موفقیت کپی شد!');
+    });
+  };
+
   /**
    * template
    * _______________________________________________________________________________
@@ -209,8 +215,8 @@ const MainImageArticle = ({ constant, picture, articleData }: Props) => {
             <Image src={`${process.env.NEXT_PUBLIC_BASE_URL_image}${picture}`} alt='تصویر شاخص' fill style={{ borderRadius: 8 }} />
           </Box>
           <Flex direction={'column'} gap={'2'}>
-            <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11] }}>
-              {picture}
+            <Text onClick={() => handleCopyToClipboard(`${process.env.NEXT_PUBLIC_BASE_URL_image2}${picture}`)} {...typoVariant.body1} style={{ color: colorPalette.gray[11], cursor: 'pointer' }}>
+              {`${process.env.NEXT_PUBLIC_BASE_URL_image2}${picture}`}
             </Text>
             <Controller name='alt' control={control} render={({ field }) => <TextField {...field} readOnly placeholder='Alt Text' style={{ borderRadius: 12 }} />} />
             <Controller name='description' control={control} render={({ field }) => <TextArea {...field} readOnly placeholder='توضیحات تصویر' rows={6} style={{ borderRadius: 12 }} />} />

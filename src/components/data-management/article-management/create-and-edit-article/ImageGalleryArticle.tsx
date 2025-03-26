@@ -58,6 +58,11 @@ const ImageGalleryArticle = ({ articleId, constant }: Props) => {
     },
   });
 
+  const handleCopyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      ToastSuccess('لینک با موفقیت کپی شد!');
+    });
+  };
   /**
    * hooks and methods
    * _______________________________________________________________________________
@@ -116,8 +121,12 @@ const ImageGalleryArticle = ({ articleId, constant }: Props) => {
                   <Image src={`${process.env.NEXT_PUBLIC_BASE_URL_image}${item.path}`} alt='تصویر نقطه' fill style={{ borderRadius: 8 }} />
                 </Box>
                 <Flex direction={'column'} gap={'2'}>
-                  <Text {...typoVariant.body1} style={{ color: colorPalette.gray[11], marginTop: '10px' }}>
-                    {item.path}
+                  <Text
+                    onClick={() => handleCopyToClipboard(`${process.env.NEXT_PUBLIC_BASE_URL_image2}${item.path}`)}
+                    {...typoVariant.body1}
+                    style={{ color: colorPalette.gray[11], marginTop: '10px', cursor: 'pointer' }}
+                  >
+                    {`${process.env.NEXT_PUBLIC_BASE_URL_image2}${item.path}`}
                   </Text>
                   <Flex direction={'column'} mt={'12px'}>
                     <TextField readOnly value={item.alt} placeholder='Alt Text' style={{ borderRadius: 12 }} />
