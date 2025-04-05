@@ -2,7 +2,7 @@
 
 const nextConfig = {
   reactStrictMode: false,
-  basePath: '/panel', // ✅ Added basePath here
+  basePath: '/panel2', // ✅ Added basePath here
   images: {
     domains: ['780.ir', 'website-cms.780.ir', '37.32.8.14', 'uploader.bezanimbiroon.ir'],
     remotePatterns: [
