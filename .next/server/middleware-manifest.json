@@ -11,16 +11,16 @@
       "page": "/",
       "matchers": [
         {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(.json)?[\\/#\\?]?$",
+          "regexp": "^\\/panel(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(.json)?[\\/#\\?]?$",
           "originalSource": "/:path*"
         }
       ],
       "wasm": [],
       "assets": [],
       "environments": {
-        "previewModeId": "e03cc614bf58de9c07e7dd185e77e02a",
-        "previewModeSigningKey": "a1b52ac8e94cd39a0f586a87fb7a3c522d0f454bbd2b337e7e07d379fceaddc6",
-        "previewModeEncryptionKey": "b7606865d611e7cc9209512905cde5c03242185108dfa7116e93794dcd1027da"
+        "previewModeId": "6510311e7afa96c999cfb9961151a66c",
+        "previewModeSigningKey": "afbfe95de70386a2441541e7ec240bc5543017100723d191f4b974ad477b7600",
+        "previewModeEncryptionKey": "8a81ce146835fac802673b9c0ce883b260059437a0a7db57b0c8efba013ea8a5"
       }
     }
   },
