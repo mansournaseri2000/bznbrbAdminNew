@@ -11,14 +11,13 @@ const encodedCredentials = Buffer.from(credentials).toString('base64');
 // Create an instance of axios
 export const DevApiManager = axios.create({
   baseURL: 'https://api-admin-dev.darkube.app/v1/',
-  // baseURL: 'http://37.32.8.14:3005/v1/',
   headers: {
     'up-auth': `Basic ${encodedCredentials}`,
   },
 });
 
 export const UploaderApiManager = axios.create({
-  baseURL: 'https://uploader.bezanimbiroon.ir/admin/uploads/',
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
     'up-auth': `Basic ${encodedCredentials}`,

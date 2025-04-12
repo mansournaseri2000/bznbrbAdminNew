@@ -159,7 +159,7 @@ export const provinceUploder = async (params: provinceUploderBody) => {
   formData.append('file', params.file);
   formData.append('provinceId', params.provinceId.toString());
 
-  const res = await UploaderApiManager.post<ApiData<{ data: string }>>('image', formData, {
+  const res = await UploaderApiManager.post<ApiData<{ data: string }>>('admin/uploads/image', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
