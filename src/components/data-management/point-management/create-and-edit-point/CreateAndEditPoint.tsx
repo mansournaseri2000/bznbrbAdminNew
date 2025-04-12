@@ -356,7 +356,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
 
             cityID: '',
             provinceId: '',
-            townId: '',
+            townId: "",
             tell: '',
             website: '',
             email: '',
