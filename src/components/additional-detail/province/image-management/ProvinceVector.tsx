@@ -9,7 +9,6 @@ import Image from 'next/image';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import imageCompression from 'browser-image-compression';
 
 import { deleteProvinceItems, provinceUploder, provinceUploderBody } from '@/api/additional-detail';
 import { Box, Button, Flex, Grid, Heading, IconButton, Modal, Text } from '@/libs/primitives';
@@ -86,28 +85,28 @@ const ProvinceVector = ({ vector, id }: Props) => {
    * methods
    * _______________________________________________________________________________
    */
-  const compressImage = async (file: File) => {
-    if (file.type === 'image/svg+xml') {
-      return file;
-    }
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 800,
-      useWebWorker: true,
-    };
+  // const compressImage = async (file: File) => {
+  //   if (file.type === 'image/svg+xml') {
+  //     return file;
+  //   }
+  //   const options = {
+  //     maxSizeMB: 1,
+  //     maxWidthOrHeight: 800,
+  //     useWebWorker: true,
+  //   };
 
-    try {
-      return await imageCompression(file, options);
-    } catch (error) {
-      console.error('Image compression error:', error);
-      return file;
-    }
-  };
+  //   try {
+  //     return await imageCompression(file, options);
+  //   } catch (error) {
+  //     console.error('Image compression error:', error);
+  //     return file;
+  //   }
+  // };
 
   const onDrop = async (files: File[], onChange: (value: File) => void) => {
     if (files && files[0]) {
       const selectedImage = files[0];
-      const compressedImage = await compressImage(selectedImage);
+      const compressedImage = selectedImage;
       onChange(URL.createObjectURL(compressedImage) as any);
       setValue('localPic', URL.createObjectURL(compressedImage) as any);
       setValue('isReset', false);
@@ -129,7 +128,7 @@ const ProvinceVector = ({ vector, id }: Props) => {
         <Grid p={'10px'} gapY={'10px'}>
           <Flex width={'100%'} align={'center'} justify={'center'}>
             <Box width={'179px'} height={'288px'} position={'relative'}>
-              <Image src={vector ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${vector}` : ''} alt='' fill />
+              <Image fill src={vector ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${vector}` : ''} alt='' style={{ objectFit: 'contain' }} />
             </Box>
           </Flex>
           <Flex align={'center'} justify={'end'} gap={'4'}>
@@ -236,7 +235,7 @@ const ProvinceVector = ({ vector, id }: Props) => {
                           )}
                         />
                       </Flex>
-                      <Image src={watch('isReset') ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${vector}` : watch('localPic')} alt='' fill style={{ borderRadius: 8 }} />
+                      <Image fill src={watch('isReset') ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${vector}` : watch('localPic')} alt='' style={{ borderRadius: 8, objectFit: 'contain' }} />
                     </Box>
                   </>
                 )}

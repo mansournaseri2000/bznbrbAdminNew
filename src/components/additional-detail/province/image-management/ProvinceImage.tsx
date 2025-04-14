@@ -120,7 +120,7 @@ const ProvinceImage = ({ image, id }: Props) => {
         <Grid p={'10px'} gapY={'10px'}>
           <Flex width={'100%'} align={'center'} justify={'center'}>
             <Box width={'100%'} height={'288px'} position={'relative'}>
-              <Image src={image ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${image}` : ''} alt='' fill style={{ borderRadius: '8px' }} />
+              <Image fill src={image ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${image}` : ''} alt='' style={{ borderRadius: '8px', objectFit: 'contain' }} />
             </Box>
           </Flex>
           <Flex align={'center'} justify={'end'} gap={'4'}>
@@ -226,7 +226,7 @@ const ProvinceImage = ({ image, id }: Props) => {
                       )}
                     />
                   </Flex>
-                  <Image src={watch('isReset') ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${image}` : watch('localPic')} alt='' fill style={{ borderRadius: 8 }} />
+                  <Image fill src={watch('isReset') ? `${process.env.NEXT_PUBLIC_BASE_URL_image}${image}` : watch('localPic')} alt='' style={{ borderRadius: 8, objectFit: 'contain' }} />
                 </Box>
               </>
             )}
