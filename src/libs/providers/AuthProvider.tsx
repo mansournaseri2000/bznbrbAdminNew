@@ -65,20 +65,20 @@ export const AuthProvider: React.FC<UserProviderProps> = ({ children }) => {
     if (user?.token) {
       cookies.set('token', user.token, {
         path: '/',
-        maxAge: 365 * 50,
+        maxAge: 365 * 24 * 60 * 60, // 1 year in seconds
         secure: true,
         partitioned: true,
-        expires: new Date(new Date().getTime() + 60 * 60 * 24 * 1000),
-        sameSite: 'strict',
+        expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year in milliseconds
+        sameSite: 'lax',
       });
     } else {
       cookies.remove('token', {
         path: '/',
-        maxAge: 365 * 50,
+        maxAge: 365 * 24 * 60 * 60, // 1 year in seconds
         secure: true,
         partitioned: true,
-        expires: new Date(new Date().getTime() + 60 * 60 * 24 * 1000),
-        sameSite: 'strict',
+        expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year in milliseconds
+        sameSite: 'lax',
       });
     }
   }, [user, cookies]);

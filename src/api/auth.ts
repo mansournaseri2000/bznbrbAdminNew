@@ -58,11 +58,11 @@ export const useGetCheckOtp = ({ cookies }: { cookies: Cookies }) => {
       if (data.status === true) {
         cookies.set('token', data.data, {
           path: '/',
-          maxAge: 365 * 50,
+          maxAge: 365 * 24 * 60 * 60, // 1 year in seconds
           secure: true,
           partitioned: true,
-          expires: new Date(new Date().getTime() + 60 * 60 * 24 * 1000),
-          sameSite: 'strict',
+          expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year in milliseconds
+          sameSite: 'lax',
         });
         cookies.remove('mobile-number');
         ToastSuccess('شما با موفقیت وارد پنل شدید');
