@@ -286,7 +286,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
   };
 
   const queryClient = useQueryClient();
-  const { push, back } = useRouter();
+  const { back } = useRouter();
   const methods = useForm<fomrData | any>({
     resolver: yupResolver(validationSchema),
     defaultValues:
@@ -356,7 +356,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
 
             cityID: '',
             provinceId: '',
-            townId: "",
+            townId: '',
             tell: '',
             website: '',
             email: '',
@@ -411,7 +411,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
         ToastSuccess('اطلاعات شما با موفقیت ویرایش شد');
         queryClient.invalidateQueries({ queryKey: ['place'] });
         queryClient.invalidateQueries({ queryKey: ['all-places'] });
-        push('/data-management/point-management');
+        // push('/data-management/point-management');
       } else {
         ToastError('لطفا دوباره امتحان نمایید');
       }
@@ -427,7 +427,7 @@ const CreateAndEditPoint = ({ placeConstant, status, placeID, placeData }: Props
       if (data.statusCode === 201) {
         ToastSuccess('اطلاعات شما با موفقیت ثبت شد');
         queryClient.invalidateQueries({ queryKey: ['all-places'] });
-        push('/data-management/point-management');
+        // push('/data-management/point-management');
       } else {
         ToastError(String(data.message));
       }
