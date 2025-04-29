@@ -1,0 +1,10 @@
+services:
+  bznbrbadminnew:
+    image: bznbrbadminnew
+    build:
+      context: .next
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8090:8090
