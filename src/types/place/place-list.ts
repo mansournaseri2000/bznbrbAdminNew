@@ -14,6 +14,7 @@ export interface AllFilteredPlacesDetail {
   parentCategory?: string;
   isPlaceInfoComplete: boolean;
   isPublished?: boolean;
+  slug: string;
   // pictrues: Pictrue[];
 }
 

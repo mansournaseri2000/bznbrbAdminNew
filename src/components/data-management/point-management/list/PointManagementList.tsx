@@ -2,22 +2,21 @@
 
 import React, { useState } from 'react';
 
+import { useRouter } from '@bprogress/next';
 // import Image from 'next/image';
-
-
 import { Spinner } from '@radix-ui/themes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
+import styled from 'styled-components';
 
 import { removePlace } from '@/api/confirmations';
 import { Box, Button, Flex, Grid, IconButton, Modal, Text } from '@/libs/primitives';
 import { Table } from '@/libs/shared';
 import { ToastError, ToastSuccess } from '@/libs/shared/toast/Toast';
-import { Trash } from '@/public/icon';
+import { PaperPlane, Trash } from '@/public/icon';
 import { colorPalette } from '@/theme';
 import { typoVariant } from '@/theme/typo-variants';
 import { AllFilteredPlacesDetail } from '@/types/place/place-list';
-import { useRouter } from '@bprogress/next';
 
 interface PointListDetail {
   id: number;
@@ -28,6 +27,7 @@ interface PointListDetail {
   category: string;
   isPlaceInfoComplete: boolean;
   status: boolean;
+  slug: string;
 }
 
 type Props = {
@@ -60,6 +60,8 @@ const PointManagementList = (props: Props) => {
       setIsOpen(false);
     },
   });
+
+  console.log(props.data, 'datadatadatadatadata');
 
   const columns: ColumnDef<PointListDetail>[] = [
     {
@@ -194,6 +196,27 @@ const PointManagementList = (props: Props) => {
       },
     },
     {
+      id: 'remove',
+      cell: ({ row }) => {
+        const item = row.original;
+        const handleClick = (e: React.MouseEvent) => {
+          e.preventDefault();
+
+          if (Boolean(item.slug) === false) {
+            ToastError('آدرس این آیتم هنوز ساخته نشده است');
+            return;
+          } else {
+            router.push(`https://bezanimbiroon.ir/place/${item.slug}`);
+          }
+        };
+        return (
+          <IconButton variant='solid' size={'3'} type='button' colorVariant='BLUE' onClick={handleClick}>
+            <PaperPlanIcon />
+          </IconButton>
+        );
+      },
+    },
+    {
       id: 'details',
       cell: ({ row }) => {
         const item = row.original;
@@ -233,3 +256,9 @@ const PointManagementList = (props: Props) => {
 };
 
 export default PointManagementList;
+
+const PaperPlanIcon = styled(PaperPlane)`
+  path {
+    fill: ${colorPalette.blue[11]};
+  }
+`;

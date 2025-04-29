@@ -10,7 +10,7 @@ import { Spinner } from '@radix-ui/themes';
 import { ContentState, convertFromHTML, convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 
-import { Button, Flex, Grid, Text } from '@/libs/primitives';
+import { Grid, Text } from '@/libs/primitives';
 import { Detail } from '@/types/place/place-constant';
 
 const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), {
@@ -26,14 +26,12 @@ const Description = ({ details }: Props) => {
   const { setValue, getValues } = useFormContext();
   const PlaceDetails = useWatch({ name: 'PlaceDetails' });
 
-  const [key, setKey] = useState<{ id: number; name: string }>(details[0]);
-
   const [editorStates, setEditorStates] = useState(
     details.reduce((acc, field) => {
-      const detail = PlaceDetails?.find((detail: { detailId: number }) => detail.detailId === field.id);
+      const existingDetail = PlaceDetails?.find((detail: { detailId: number }) => detail.detailId === field.id);
 
-      if (detail && detail.descriptions) {
-        const blocksFromHTML = convertFromHTML(detail.descriptions);
+      if (existingDetail?.descriptions) {
+        const blocksFromHTML = convertFromHTML(existingDetail.descriptions);
         const contentState = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
         acc[field.id] = EditorState.createWithContent(contentState);
       } else {
@@ -44,21 +42,17 @@ const Description = ({ details }: Props) => {
     }, {} as { [key: number]: EditorState })
   );
 
-  // Function to handle editor state change and update descriptions dynamically
   const handleEditorStateChange = (id: number, newState: EditorState) => {
     setEditorStates(prev => ({
       ...prev,
       [id]: newState,
     }));
 
-    // Convert editor content to HTML
     const contentState = newState.getCurrentContent();
     const descriptions = draftToHtml(convertToRaw(contentState)).trim();
 
-    // Prevent updating if content is empty
     if (descriptions === '<p></p>' || descriptions === '') return;
 
-    // Update PlaceDetails in react-hook-form
     const updatedDetails = getValues('PlaceDetails') || [];
     const updatedIndex = updatedDetails.findIndex((detail: { detailId: number }) => detail.detailId === id);
 
@@ -72,19 +66,14 @@ const Description = ({ details }: Props) => {
   };
 
   return (
-    <>
-      <Grid height={'max-content'} gap={'16px'} pb={'20px'}>
-        {/* Render the tabs for editor fields */}
-        <Flex py={'24px'} gap={'8px'} overflowX={'scroll'}>
-          {details.map(item => (
-            <Button type='button' key={item.id} onClick={() => setKey(item)} variant={key.name === item.name ? 'soft' : 'solid'} size={'4'}>
-              <Text>{item.name}</Text>
-            </Button>
-          ))}
-        </Flex>
+    <Grid height='max-content' gap='24px' pb='24px' style={{ padding: '16px' }}>
+      {/* Render ALL editors */}
+      {details.map(item => (
+        <Grid key={item.id} gap='8px'>
+          <Text as='label' size='4' weight='bold'>
+            {item.name}
+          </Text>
 
-        {/* Render the selected editor */}
-        <Grid gap={'16px'}>
           <Editor
             editorStyle={{
               minHeight: '144px',
@@ -102,19 +91,19 @@ const Description = ({ details }: Props) => {
                 defaultFontFamily: 'IRANSansXFaNum-Regular',
               },
               remove: {
-                show: false, // Explicitly enable the remove formatting button
+                show: false,
               },
             }}
-            editorState={editorStates[key.id]}
+            editorState={editorStates[item.id]}
             toolbarClassName='toolbarClassName'
             wrapperClassName='wrapperClassName'
             editorClassName='editorClassName'
-            onEditorStateChange={newState => handleEditorStateChange(key.id, newState)}
-            placeholder={key.name}
+            onEditorStateChange={newState => handleEditorStateChange(item.id, newState)}
+            placeholder={item.name}
           />
         </Grid>
-      </Grid>
-    </>
+      ))}
+    </Grid>
   );
 };
 

@@ -31,6 +31,7 @@ export { default as Like } from './Like';
 export { default as ListBullet } from './ListBullet';
 export { default as MenuIcon } from './MenuIcon';
 export { default as Navigation } from './Navigation';
+export { default as PaperPlane } from './PaperPlane';
 export { default as Pencil } from './Pencil';
 export { default as Person } from './Person';
 export { default as ProcessTrip } from './ProcessTrip';
