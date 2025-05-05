@@ -1,50 +1,50 @@
-name: Deploy to VM
+# name: Deploy to VM
 
-on:
-  push:
-    branches:
-      - main-action
+# on:
+#   push:
+#     branches:
+#       - main-action
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Install sshpass
-        run: sudo apt-get update && sudo apt-get install -y sshpass
+#       - name: Install sshpass
+#         run: sudo apt-get update && sudo apt-get install -y sshpass
 
-      - name: Add remote key
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          ssh-keyscan 37.32.24.253 >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
+#       - name: Add remote key
+#         run: |
+#           mkdir -p ~/.ssh
+#           chmod 700 ~/.ssh
+#           ssh-keyscan 37.32.24.253 >> ~/.ssh/known_hosts
+#           chmod 600 ~/.ssh/known_hosts
           
 
-      - name: Build Docker image
-        run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh ubuntu@37.32.24.253 << 'EOF'
-            cd /home/ubuntu/bznbrbAdminNew
-            sudo docker stop bznfront || true
-            sudo docker rm bznfront || true
-            sudo docker image rm -f bznfront || true
-            git fetch origin
-            git reset --hard origin/main-action
-            git pull origin main-action
-            sudo docker build -t bznfront .
+#       - name: Build Docker image
+#         run: |
+#           sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh ubuntu@37.32.24.253 << 'EOF'
+#             cd /home/ubuntu/bznbrbAdminNew
+#             sudo docker stop bznfront || true
+#             sudo docker rm bznfront || true
+#             sudo docker image rm -f bznfront || true
+#             git fetch origin
+#             git reset --hard origin/main-action
+#             git pull origin main-action
+#             sudo docker build -t bznfront .
 
-          EOF
-      - name: Deploy Docker container
-        run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh ubuntu@37.32.24.253 << 'EOF'
-            sudo docker run -d \
-              -p 8090:8090 \
-              -e NEXT_PUBLIC_BASE_URL_image=${{ secrets.NEXT_PUBLIC_BASE_URL_image }} \
-              -e NEXT_PUBLIC_PASSWORD=${{ secrets.NEXT_PUBLIC_PASSWORD }} \
-              -e NEXT_PUBLIC_USERNAME=${{ secrets.NEXT_PUBLIC_USERNAME }} \
-              --name bznfront bznfront
+#           EOF
+#       - name: Deploy Docker container
+#         run: |
+#           sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh ubuntu@37.32.24.253 << 'EOF'
+#             sudo docker run -d \
+#               -p 8090:8090 \
+#               -e NEXT_PUBLIC_BASE_URL_image=${{ secrets.NEXT_PUBLIC_BASE_URL_image }} \
+#               -e NEXT_PUBLIC_PASSWORD=${{ secrets.NEXT_PUBLIC_PASSWORD }} \
+#               -e NEXT_PUBLIC_USERNAME=${{ secrets.NEXT_PUBLIC_USERNAME }} \
+#               --name bznfront bznfront
               
 
